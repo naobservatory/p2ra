@@ -9,7 +9,10 @@ import math
 # Introduction and and Pathogen Characteristics
 # ============================
 
-background = """Herpes Simplex Virus 1 is a very common herpesvirus that causes oral herpes (CDC, https://www.hopkinsmedicine.org/health/conditions-and-diseases/herpes-hsv1-and-hsv2), manifesting as cold sores or fever blisters (https://www.hopkinsmedicine.org/health/conditions-and-diseases/herpes-hsv1-and-hsv2). After initial infection and potential symptoms, most HSV-1 infections persist lifelong."""
+background = """Herpes Simplex Virus 1 is a very common herpesvirus that causes oral herpes (CDC, https://www.
+hopkinsmedicine.org/health/conditions-and-diseases/herpes-hsv1-and-hsv2), manifesting as cold sores or fever
+blisters (https://www.hopkinsmedicine.org/health/conditions-and-diseases/herpes-hsv1-and-hsv2). After initial
+infection and potential symptoms, most HSV-1 infections persist lifelong."""
 
 
 pathogen_characteristics = {
@@ -32,7 +35,10 @@ prevalence_variables = {
 		"source": "https://web.archive.org/web/20220707050306/https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm"
 		},
 
-	# In a 2015 study, 50 individuals self-collected tear and saliva samples twice daily which was tested for HSV 1 DNA. Individuals reported no prior ocular (eye) herpetic infection, but 23 reported prior herpetic disease. The sample alse skewed toward African Americans (n=37; 78%). Across the 50-day study period, 49 out of 50 subjects shed HSV DNA atleast once.
+	# In a 2015 study, 50 individuals self-collected tear and saliva samples twice daily which was tested for HSV 1
+	# DNA. Individuals reported no prior ocular (eye) herpetic infection, but 23 reported prior herpetic disease.
+	# The sample alse skewed toward African Americans (n=37; 78%). Across the 50-day study period, 49 out of 50
+	# subjects shed HSV DNA atleast once.
 
 	"tear_and_saliva_prevalence": {
 		"percentage": 0.98, #percentage prevalence
