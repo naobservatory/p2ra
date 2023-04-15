@@ -14,25 +14,27 @@ infection and potential symptoms, most HSV-1 infections persist lifelong."""
 
 
 pathogen_chars = {
-    "na_type": NAType.DNA,
-    "enveloped_non_enveloped": enveloped.non_enveloped,
-    "taxid": 10298,
+    "pathogen_name": "Herpes Simplex Virus 1",
+    "pathogen_acronym": "HSV-1",
+    "na_type": NAType.DNA.value,
+    "enveloped_non_enveloped": enveloped.non_enveloped.value,
+    "ncbi_taxid": 10298,
 }
 
 
 prevalence_vars = {
     # In a the 2015-2016 NHANES survey, the seroprevalence of HSV-1 was 49.6% in sample of 3710 people:
     "prevalence_var_1": {
-        "name": "cdc_2015_2016_nhanes_seroprevalence",
-        "data_type": "measurement",
+        "variable_name": "cdc_2015_2016_nhanes_seroprevalence",
+        "variable_type": "measurement",
         "percentage": 0.496,
         "number_of_participants": 3710,
         "source": "https://web.archive.org/web/20220707050306/https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm",
     },
     # Based on the seroprevalence data above, the CDC estimated the prevalence of HSV-1:
     "prevalence_var_2": {
-        "name": "cdc_2015_2016_nhanes_estimate",
-        "data_type": "external_estimate",
+        "variable_name": "cdc_2015_2016_nhanes_estimate",
+        "variable_type": "external_estimate",
         "percentage": 0.478,
         "confidence_interval": (0.4281, 0.5277),
         "source": "https://www.cdc.gov/nchs/data/databriefs/db304_table.pdf#page=1",
@@ -42,8 +44,8 @@ prevalence_vars = {
     # DNA. 23 Individuals reported prior herpetic disease The sample alse skewed toward African Americans (n=37; 78%).
     # Across the 50-day study period, 49 out of 50 subjects shed HSV DNA atleast once.
     "prevalence_var_3": {
-        "name": "tear_and_saliva_prevalence",
-        "data_type": "measurement",
+        "variable_name": "tear_and_saliva_prevalence",
+        "variable_type": "measurement",
         "percentage": 0.98,  # percentage prevalence
         "number_of_participants": 50,  # Number of people tested
         "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1200985/#:~:text=Frequency%20of%20HSV%2D1%20DNA%20shedding%20over,swab%20data%20(subjects%2030%2C%2038%20not%20available).",
