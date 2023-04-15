@@ -4,8 +4,6 @@ from enum import Enum
 
 #Defining an enumerator for a pathogen's nucleic acid type
 class NAType(Enum):
-	dna = 'DNA'
-	rna = 'RNA'
 	DNA = 'DNA'
 	RNA = 'RNA'
 

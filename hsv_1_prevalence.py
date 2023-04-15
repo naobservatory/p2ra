@@ -74,7 +74,7 @@ def calculate_aggregate_prevalence(prevalence_variables):
 	return aggregate_prevalence
 
 
-aggregate_prevalence = calculate_weighted_prevalence(prevalence_variables)
+aggregate_prevalence = calculate_aggregate_prevalence(prevalence_variables)
 
 # Making variables and functions available to other scripts
 __all__ = ['pathogen_characteristics','prevalence_variables', 'aggregate_prevalence', 'background', 'calculate']
