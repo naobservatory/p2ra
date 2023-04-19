@@ -38,6 +38,18 @@ class PrevalenceVariable:
     source: str
     country: str
     state: str = None
+    county: str = None
     number_of_participants: int = None
     confidence_interval: Tuple[float, float] = None
     methods: str = None
+
+
+@dataclass
+class PrevalenceEstimator:
+    value: float
+    value_type: str
+    source: str
+    country: str
+    year: int
+    state: str = None
+    county: str = None
