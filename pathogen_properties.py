@@ -48,8 +48,10 @@ class PrevalenceVariable:
 class PrevalenceEstimator:
     value: float
     value_type: str
+    unit: str
     source: str
     country: str
-    year: int
     state: str = None
     county: str = None
+    start_date: str = None
+    end_date: str = None

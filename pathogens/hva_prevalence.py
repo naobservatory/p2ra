@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import sys
 
 sys.path.append("..")
@@ -7,8 +6,7 @@ from p2ra_prevalences.pathogen_properties import *
 import math
 
 background = """Hepatitis A is a vaccine-preventable liver-infection caused by the hepatitis A virus. In the US,
-it's mostly spread by individual contact. There is little seasonal variance in Hepatitis A incidence (https://www.cdc.gov/vaccines/pubs/pinkbook/hepa.html#:~:text=There%20is%20no%20appreciable%20seasonal%20variation%20in%20hepatitis%20A%20incidence.%20In%20the%20prevaccine%20era%2C%20cyclic%20increases%20in%20reported%20acute%20cases%20were%20observed%20every%2010%20to%2015%20years%20and%20were%20characterized%20by%20large%20community%20outbreaks%20of%20disease.).
-Viral shedding persists for 1 to 3 weeks."""
+it's mostly spread by individual contact. There is little seasonal variance in Hepatitis A incidence (https://www.cdc.gov/vaccines/pubs/pinkbook/hepa.html). Viral shedding persists for 1 to 3 weeks."""
 
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA.value,
@@ -16,53 +14,87 @@ pathogen_chars = PathogenChars(
     taxid=208726,
 )
 
-prevalence_estimators = {
-    "us_incidence_2018": PrevalenceEstimator(
-        value: 12,474,
-        value_type: yearly_incidence,
-        
-
-prevalence_vars = {
-    "us_incidence_rate_2018": PrevalenceVariable(
-        variable_type=VariableType.MEASUREMENT.value,
-        incidence_rate=3.8,
+prevalence_est = {  # prevalence estimators
+    "us_incidence_absolute_2018": PrevalenceEstimator(
+        value=12474,
+        unit="cases",
+        value_type="incidence_absolute",
         country="United States",
         source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/index.htm",
+        start_date="2018-01-01",
+        end_date="2018-12-31",
     ),
-    "us_average_prevalence": PrevalenceVariable(
-        variable_type=VariableType.CALCULATED.value,
-        prevalence=0.14,
+    "us_population_2018": PrevalenceEstimator(
+        value=326.8 * 1e6,
+        unit="people",
+        value_type="population",
         country="United States",
-        source="[please fill in manually]",
+        source="https://www.google.com/search?q=us+population+2018&oq=us+population+2018&aqs=chrome.0.69i59j0i512j0i22i30l6j0i390i650l2.5937j1j7&sourceid=chrome&ie=UTF-8",
+        start_date="2018-01-01",
+        end_date="2018-12-31",
     ),
-    "washington_state_incidence_rate": PrevalenceVariable(
-        variable_type=VariableType.MEASUREMENT.value,
-        incidence_rate=[0.4, 0.4, 0.5],
+    "hva_shedding_duration": PrevalenceEstimator(
+        value=14,
+        unit="days",
+        value_type="shedding_duration",
         country="United States",
-        state="Washington",
-        source="https://www.doh.wa.gov/DataandStatisticalReports/DiseasesandChronicConditions/HepatitisA",
+        source="https://www.cdc.gov/vaccines/pubs/pinkbook/hepa.html#:~:text=Viral%20shedding%20persists%20for%201%20to%203%20weeks.",
     ),
-    "king_county_incidence_rate": PrevalenceVariable(
-        variable_type=VariableType.MEASUREMENT.value,
-        incidence_rate=[0.5, 0.6],
-        country="United States",
-        state="Washington",
-        county="King",
-        source="[please fill in manually]",
-    ),
-    "king_county_prevalence": PrevalenceVariable(
-        variable_type=VariableType.CALCULATED.value,
-        prevalence=0.04,
+    "king_county_incidence_rate_2017": PrevalenceEstimator(
+        value=0.5,
+        unit="cases_per_100k",
+        value_type="incidence_rate",
         country="United States",
         state="Washington",
         county="King",
-        source="[please fill in manually]",
+        start_date="2017-01-01",
+        end_date="2017-12-31",
+        source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
     ),
-    "nhanes_seroprevalence": PrevalenceVariable(
-        variable_type=VariableType.MEASUREMENT.value,
-        percentage=0.54,
-        number_of_participants=8153,
+    "king_county_incidence_rate_2018": PrevalenceEstimator(
+        value=0.6,
+        unit="cases_per_100k",
+        value_type="incidence_rate",
         country="United States",
-        source="https://www.cdc.gov/nchs/nhanes/",
+        state="Washington",
+        county="King",
+        start_date="2018-01-01",
+        end_date="2018-12-31",
+        source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
+    ),
+}
+
+
+def calculate_prevalence_from_incidence_rate(
+    incidence_rate: float, shedding_duration: int
+) -> float:
+    prevalence = incidence_rate * (shedding_duration / 365)
+    return prevalence
+
+
+def calculate_prevalence_from_absolute_incidence(
+    absolute_incidence: int, population: int, shedding_duration: int
+) -> float:
+
+    incidence_rate = (absolute_incidence / population) * 100000
+
+    prevalence = incidence_rate * (shedding_duration / 365)
+
+    return prevalence
+
+
+prevalence_vars = {
+    "us_prevalence_2018": calculate_prevalence_from_absolute_incidence(
+        prevalence_est["us_incidence_absolute_2018"].value,
+        prevalence_est["us_population_2018"].value,
+        prevalence_est["hva_shedding_duration"].value,
+    ),
+    "king_county_prevalence_2017": calculate_prevalence_from_incidence_rate(
+        prevalence_est["king_county_incidence_rate_2017"].value,
+        prevalence_est["hva_shedding_duration"].value,
+    ),
+    "king_county_prevalence_2018": calculate_prevalence_from_incidence_rate(
+        prevalence_est["king_county_incidence_rate_2018"].value,
+        prevalence_est["hva_shedding_duration"].value,
     ),
 }
