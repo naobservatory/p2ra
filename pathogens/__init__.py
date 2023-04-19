@@ -1,0 +1,11 @@
+import os
+import importlib
+
+pathogens = {}
+for pathogen_fname in os.listdir(os.path.abspath(os.path.dirname(__file__))):
+    pathogen_name, ext = os.path.splitext(os.path.basename(pathogen_fname))
+    if pathogen_name == "__init__": continue
+    if ext != ".py": continue
+
+    pathogens[pathogen_name] = importlib.import_module(
+        "pathogens.%s" % pathogen_name)
