@@ -19,3 +19,9 @@ Files
 ### Testing
 
 Run `./test.py`
+
+### Presubmit
+
+Before creating a PR or submitting code, run `./check.sh`.  It will run tests
+than check your types and formatting.  This also runs automatically on GitHub
+when you make PRs, but it's much faster to catch problems locally first.
