@@ -1,6 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass
-from typing import Optional, Tuple, List
+from typing import Optional
 
 # Enums, short for enumerations, are a data type in Python used to represent a set of named values,
 # which are typically used to define a set of related constants with unique names.
@@ -40,13 +40,13 @@ class Variable:
     state: Optional[str] = None
     county: Optional[str] = None
     number_of_participants: Optional[int] = None
-    confidence_interval: Optional[Tuple[float, float]] = None
+    confidence_interval: Optional[tuple[float, float]] = None
     methods: Optional[str] = None
     start_date: Optional[str] = None
     end_date: Optional[str] = None
 
     # Remember to recursively consider each input's inputs if defined.
-    inputs: Optional[List["Variable"]] = None
+    inputs: Optional[list["Variable"]] = None
 
 
 @dataclass(kw_only=True)
