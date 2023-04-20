@@ -11,27 +11,19 @@ class TestPathogens(unittest.TestCase):
         self.assertIn("hsv_1", pathogens.pathogens)
 
     def test_properties_exist(self):
-        for pathogen in pathogens.pathogens:
-            with self.subTest(pathogen=pathogen):
-                self.assertIsInstance(
-                    pathogens.pathogens[pathogen].background, str
-                )
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                self.assertIsInstance(pathogen.background, str)
+                self.assertIsInstance(pathogen.pathogen_chars, PathogenChars)
 
-                self.assertIsInstance(
-                    pathogens.pathogens[pathogen].pathogen_chars, PathogenChars
-                )
-
-                for variable_name, variable in pathogens.pathogens[
-                    pathogen
-                ].variables.items():
+                for variable_name, variable in pathogen.variables.items():
                     with self.subTest(variable=variable_name):
                         self.assertIsInstance(variable, Variable)
 
-                for estimate_name, estimate in (
-                    pathogens.pathogens[pathogen]
-                    .estimate_prevalences()
-                    .items()
-                ):
+                for (
+                    estimate_name,
+                    estimate,
+                ) in pathogen.estimate_prevalences().items():
                     with self.subTest(estimate=estimate_name):
                         self.assertIsInstance(estimate, Prevalence)
 
