@@ -24,34 +24,34 @@ class VariableType(Enum):
     NAO_ESTIMATE = "nao_estimate"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class PathogenChars:
     na_type: NAType
     enveloped: Enveloped
     taxid: int
 
 
-@dataclass
+@dataclass(kw_only=True)
 class PrevalenceVariable:
     variable_type: VariableType
     percentage: float
     source: str
     country: str
-    state: str = None
-    county: str = None
-    number_of_participants: int = None
-    confidence_interval: Tuple[float, float] = None
-    methods: str = None
+    state: Optional[str] = None
+    county: Optional[str] = None
+    number_of_participants: Optional[int] = None
+    confidence_interval: Optional[Tuple[float, float]] = None
+    methods: Optional[str] = None
 
 
-@dataclass
+@dataclass(kw_only=True)
 class PrevalenceEstimator:
     value: float
     value_type: str
     unit: str
     source: str
     country: str
-    state: str = None
-    county: str = None
-    start_date: str = None
-    end_date: str = None
+    state: Optional[str] = None
+    county: Optional[str] = None
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None

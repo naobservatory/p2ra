@@ -10,22 +10,22 @@ infection and potential symptoms, most HSV-1 infections persist lifelong."""
 
 
 pathogen_chars = PathogenChars(
-    na_type=NAType.DNA.value,
-    enveloped=Enveloped.NON_ENVELOPED.value,
+    na_type=NAType.DNA,
+    enveloped=Enveloped.NON_ENVELOPED,
     taxid=10298,
 )
 
 
 prevalence_vars = {
     "cdc_2015_2016_nhanes_seroprevalence": PrevalenceVariable(
-        variable_type=VariableType.MEASUREMENT.value,
+        variable_type=VariableType.MEASUREMENT,
         percentage=0.496,
         number_of_participants=3710,
         country="United States",
         source="https://web.archive.org/web/20220707050306/https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm",
     ),
     "cdc_2015_2016_nhanes_estimate": PrevalenceVariable(
-        variable_type=VariableType.EXTERNAL_ESTIMATE.value,
+        variable_type=VariableType.EXTERNAL_ESTIMATE,
         percentage=0.478,
         country="United States",
         confidence_interval=(0.4281, 0.5277),
@@ -33,7 +33,7 @@ prevalence_vars = {
         methods="https://www.cdc.gov/nchs/products/databriefs/db304.htm#:~:text=Data%20for%20this,p%20%3C%200.05",
     ),
     "tear_and_saliva_prevalence": PrevalenceVariable(
-        variable_type=VariableType.MEASUREMENT.value,
+        variable_type=VariableType.MEASUREMENT,
         percentage=0.98,
         number_of_participants=50,
         country="United States",
