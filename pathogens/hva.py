@@ -12,15 +12,16 @@ pathogen_chars = PathogenChars(
 variables = {
     "us_incidence_absolute_2018": IncidenceAbsolute(
         annual_infections=12474,
+        confidence_interval=(17500, 27400),
         country="United States",
-        source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/index.htm",
+        source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/HepA.htm",
         start_date="2018-01-01",
         end_date="2018-12-31",
     ),
     "us_population_2018": Population(
         people=326.8 * 1e6,
         country="United States",
-        source="https://www.google.com/search?q=us+population+2018",
+        source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/HepA.htm",
         start_date="2018-01-01",
         end_date="2018-12-31",
     ),
@@ -29,6 +30,24 @@ variables = {
         confidence_interval=(7, 21),
         country="United States",
         source="https://www.cdc.gov/vaccines/pubs/pinkbook/hepa.html#:~:text=Viral%20shedding%20persists%20for%201%20to%203%20weeks.",
+    ),
+    "king_county_absolute_2017": IncidenceAbsolute(
+        annual_infections=11,
+        country="United States",
+        state="Washington",
+        county="King",
+        start_date="2017-01-01",
+        end_date="2017-12-31",
+        source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
+    ),
+    "king_county_absolute_2018": IncidenceAbsolute(
+        annual_infections=14,
+        country="United States",
+        state="Washington",
+        county="King",
+        start_date="2018-01-01",
+        end_date="2018-12-31",
+        source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
     ),
     "king_county_confirmed_cases_rate_2017": IncidenceRate(
         annual_infections_per_100k=0.5,
@@ -39,10 +58,8 @@ variables = {
         end_date="2017-12-31",
         source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
     ),
-    "king_county_confirmed_cases_rate_2018": PrevalenceEstimator(
-        value=0.6,
-        unit="cases_per_100k",
-        value_type="incidence_rate",
+    "king_county_confirmed_cases_rate_2018": IncidenceRate(
+        annual_infections_per_100k == 0.6,
         country="United States",
         state="Washington",
         county="King",
