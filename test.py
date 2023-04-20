@@ -21,19 +21,10 @@ class TestPathogens(unittest.TestCase):
                     pathogens.pathogens[pathogen].pathogen_chars, PathogenChars
                 )
 
-                for variable_name, variable in pathogens.pathogens[
+                for prevalence_var_name, prevalence_var in pathogens.pathogens[
                     pathogen
-                ].variables.items():
-                    with self.subTest(variable=variable_name):
-                        self.assertIsInstance(variable, Variable)
-
-                for estimate_name, estimate in (
-                    pathogens.pathogens[pathogen]
-                    .estimate_prevalences()
-                    .items()
-                ):
-                    with self.subTest(estimate=estimate_name):
-                        self.assertIsInstance(estimate, Prevalence)
+                ].prevalence_vars.items():
+                    self.assertIsInstance(prevalence_var, PrevalenceVariable)
 
 
 if __name__ == "__main__":
