@@ -37,11 +37,11 @@ class PrevalenceVariable:
     percentage: float
     source: str
     country: str
-    state: str = None
-    county: str = None
-    number_of_participants: int = None
-    confidence_interval: Tuple[float, float] = None
-    methods: str = None
+    state: Optional[str] = None
+    county: Optional[str] = None
+    number_of_participants: Optional[int] = None
+    confidence_interval: Optional[Tuple[float, float]] = None
+    methods: Optional[str] = None
 
 
 @dataclass
@@ -51,5 +51,5 @@ class PrevalenceEstimator:
     source: str
     country: str
     year: int
-    state: str = None
-    county: str = None
+    state: Optional[str] = None
+    county: Optional[str] = None
