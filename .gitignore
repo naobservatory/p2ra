@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Sandbox Jupiter Notebook
+sandbox.ipynb
+
 # C extensions
 *.so
 
