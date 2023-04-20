@@ -33,6 +33,8 @@ class PathogenChars:
 
 @dataclass(kw_only=True)
 class Variable:
+    """An external piece of data"""
+
     source: Optional[str] = None
     country: Optional[str] = None
     state: Optional[str] = None
@@ -49,12 +51,15 @@ class Variable:
 
 @dataclass(kw_only=True)
 class Population(Variable):
+    """A number of people"""
+
     people: float
 
 
 @dataclass(kw_only=True)
 class Prevalence(Variable):
-    # What fraction of people are currently sick.
+    """What fraction of people have this pathogen at some moment"""
+
     infections_per_100k: float
 
 
@@ -65,7 +70,8 @@ class SheddingDuration(Variable):
 
 @dataclass(kw_only=True)
 class IncidenceRate(Variable):
-    # What fraction of people get sick each year.
+    """What fraction of people get this pathogen annually"""
+
     annual_infections_per_100k: float
 
     def to_prevalence(self, shedding_duration: SheddingDuration) -> Prevalence:
@@ -79,7 +85,8 @@ class IncidenceRate(Variable):
 
 @dataclass(kw_only=True)
 class IncidenceAbsolute(Variable):
-    # How many people get sick annually.
+    """How many people get this pathogen annually"""
+
     annual_infections: float
 
     def to_rate(self, population: Population) -> IncidenceRate:
