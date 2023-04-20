@@ -19,9 +19,9 @@ variables = {
         end_date="2018-12-31",
     ),
     "us_population_2018": Population(
-        people=326.8 * 1e6,
+        people=327.2 * 1e6,
         country="United States",
-        source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/HepA.htm",
+        source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
         start_date="2018-01-01",
         end_date="2018-12-31",
     ),
@@ -59,7 +59,7 @@ variables = {
         source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
     ),
     "king_county_confirmed_cases_rate_2018": IncidenceRate(
-        annual_infections_per_100k == 0.6,
+        annual_infections_per_100k=0.6,
         country="United States",
         state="Washington",
         county="King",
