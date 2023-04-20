@@ -59,7 +59,7 @@ class Prevalence(Variable):
 
 
 @dataclass(kw_only=True)
-class Duration(Variable):
+class SheddingDuration(Variable):
     days: float
 
 
@@ -68,7 +68,7 @@ class IncidenceRate(Variable):
     # What fraction of people get sick each year.
     annual_infections_per_100k: float
 
-    def to_prevalence(self, shedding_duration: Duration) -> Prevalence:
+    def to_prevalence(self, shedding_duration: SheddingDuration) -> Prevalence:
         return Prevalence(
             infections_per_100k=self.annual_infections_per_100k
             * shedding_duration.days

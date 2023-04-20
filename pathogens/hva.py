@@ -24,7 +24,7 @@ variables = {
         start_date="2018-01-01",
         end_date="2018-12-31",
     ),
-    "hva_shedding_duration": Duration(
+    "hva_shedding_duration": SheddingDuration(
         days=14,
         country="United States",
         source="https://www.cdc.gov/vaccines/pubs/pinkbook/hepa.html#:~:text=Viral%20shedding%20persists%20for%201%20to%203%20weeks.",
