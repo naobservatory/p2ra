@@ -1,7 +1,11 @@
 from pathogen_properties import *
 
-background = """Hepatitis A is a vaccine-preventable liver-infection caused by the hepatitis A virus. In the US,
-it's mostly spread by individual contact. There is little seasonal variance in Hepatitis A incidence (https://www.cdc.gov/vaccines/pubs/pinkbook/hepa.html). Viral shedding persists for 1 to 3 weeks."""
+background = """Hepatitis A is a vaccine-preventable liver-infection caused by
+the hepatitis A virus. In the US, it's mostly spread by individual contact.
+There is little seasonal variance in Hepatitis A incidence (https://www.cdc.
+gov/vaccines/pubs/pinkbook/hepa.html). Viral shedding persists for 1 to 3
+weeks."""
+
 
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
