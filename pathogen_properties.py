@@ -1,5 +1,5 @@
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
 from typing import Optional
 
 # Enums, short for enumerations, are a data type in Python used to represent a set of named values,
@@ -57,15 +57,39 @@ class Population(Variable):
 
 
 @dataclass(kw_only=True)
+class Scalar(Variable):
+    scalar: float
+
+
+@dataclass(kw_only=True)
 class Prevalence(Variable):
     """What fraction of people have this pathogen at some moment"""
 
     infections_per_100k: float
 
+    def scale(self, scalar: Scalar) -> "Prevalence":
+        return Prevalence(
+            infections_per_100k=self.infections_per_100k * scalar.scalar,
+            inputs=[self, scalar],
+        )
+
 
 @dataclass(kw_only=True)
 class SheddingDuration(Variable):
     days: float
+
+
+@dataclass(kw_only=True)
+class Number(Variable):
+    """Generic number.  Use this for weird one-off things
+
+    If some concept is being used by more than two estimates it should get a
+    more specific Variable subclass."""
+
+    number: float
+
+    def per(self, other: "Number") -> Scalar:
+        return Scalar(scalar=self.number / other.number, inputs=[self, other])
 
 
 @dataclass(kw_only=True)
