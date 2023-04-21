@@ -67,38 +67,40 @@ def estimate_prevalences():
             bits = line.strip().split("\t")
             county = bits[5]
 
-        # In the tsv file, cumulative case counts start at column 11 with
-        # counts for 2020-01-22.
-        case_counts = [int(x) for x in bits[11:]]
-        day = datetime.date.fromisoformat("2020-01-22")
+            # In the tsv file, cumulative case counts start at column 11 with
+            # counts for 2020-01-22.
+            case_counts = [int(x) for x in bits[11:]]
+            day = datetime.date.fromisoformat("2020-01-22")
 
-        # For computing a 7-day centered moving average.  We want a moving
-        # average because case reporting is not uniform over the week.
-        latest = [0] * 7
+            # For computing a 7-day centered moving average.  We want a moving
+            # average because case reporting is not uniform over the week.
+            latest = [0] * 7
 
-        for prev_case_count, case_count in zip(case_counts, case_counts[1:]):
-            # increment day at the beginning because zip means case_count never
-            # takes in the initial value.
-            day = day + datetime.timedelta(days=1)
+            for prev_case_count, case_count in zip(
+                case_counts, case_counts[1:]
+            ):
+                # increment day at the beginning because zip means case_count never
+                # takes in the initial value.
+                day = day + datetime.timedelta(days=1)
 
-            # case counts are cumulative, but we want daily cases
-            delta = case_count - prev_case_count
-            latest.pop(0)
-            latest.append(delta)
+                # case counts are cumulative, but we want daily cases
+                delta = case_count - prev_case_count
+                latest.pop(0)
+                latest.append(delta)
 
-            cases = IncidenceAbsolute(
-                annual_infections=sum(latest) * 52,
-                country="United States",
-                state="California",
-                county=county,
-                # centered moving average
-                # https://www.jefftk.com/p/careful-with-trailing-averages
-                date=str(day - datetime.timedelta(days=3)),
-            )
-            estimates.append(
-                cases.to_rate(county_populations[county])
-                .to_prevalence(shedding_duration)
-                .scale(underreporting)
-            )
+                cases = IncidenceAbsolute(
+                    annual_infections=sum(latest) * 52,
+                    country="United States",
+                    state="California",
+                    county=county,
+                    # centered moving average
+                    # https://www.jefftk.com/p/careful-with-trailing-averages
+                    date=str(day - datetime.timedelta(days=3)),
+                )
+                estimates.append(
+                    cases.to_rate(county_populations[county])
+                    .to_prevalence(shedding_duration)
+                    .scale(underreporting)
+                )
 
         return estimates
