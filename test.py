@@ -14,6 +14,7 @@ class TestPathogens(unittest.TestCase):
         for pathogen_name, pathogen in pathogens.pathogens.items():
             with self.subTest(pathogen=pathogen_name):
                 self.assertIsInstance(pathogen.background, str)
+
                 self.assertIsInstance(pathogen.pathogen_chars, PathogenChars)
 
                 for estimate in pathogen.estimate_prevalences():
