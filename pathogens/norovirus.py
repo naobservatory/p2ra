@@ -1,6 +1,6 @@
 from pathogen_properties import *
 
-background = """Norivirus in a GI infection, mostly spread through personal
+background = """Norovirus in a GI infection, mostly spread through personal
 contact."""
 
 
