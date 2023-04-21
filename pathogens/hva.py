@@ -35,7 +35,7 @@ hva_shedding_duration: SheddingDuration(
 )
 
 incidence_underreporting_scalar: Scalar(
-    scalar= 1 / 0.59
+    scalar=1 / 0.59,
     confidence_interval=(1 / 0.32, 1 / 0.84),
     country="United States",
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4906888/#:~:text=Diagnosed%20hepatitis%20A,clear%20reporting%20responsibilities.",
@@ -83,18 +83,19 @@ king_county_confirmed_cases_rate_2018: IncidenceRate(
 )
 
 
-
 def estimate_prevalences():
     return {
-        us_prevalence_2018: us_incidence_absolute_2018
-        .to_rate(us_population_2018)
-        .to_prevalence(hva_shedding_duration),
-        king_county_prevalence_2017:
-            king_county_confirmed_cases_rate_2015
-        .to_prevalence(hva_shedding_duration).scale(
-            incidence_underreporting_scalar),
-        king_county_prevalence_2018:
-            king_county_confirmed_cases_rate_2018
-        .to_prevalence(hva_shedding_duration).scale(
-            incidence_underreporting_scalar),
+        us_prevalence_2018: us_incidence_absolute_2018.to_rate(
+            us_population_2018
+        ).to_prevalence(hva_shedding_duration),
+        king_county_prevalence_2017: king_county_confirmed_cases_rate_2015.to_prevalence(
+            hva_shedding_duration
+        ).scale(
+            incidence_underreporting_scalar
+        ),
+        king_county_prevalence_2018: king_county_confirmed_cases_rate_2018.to_prevalence(
+            hva_shedding_duration
+        ).scale(
+            incidence_underreporting_scalar
+        ),
     }
