@@ -13,7 +13,7 @@ In python, run `import pathogens` and then iterate over `pathogens.pathogens`.
 Each pathogen implements an `estimate_prevalences` method which gives one or
 more estimates.
 
-Run `./summarize.py` to get an overeview of the data.
+Run `./summarize.py` to get an overview of the data.
 
 ### Development
 
