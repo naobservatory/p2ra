@@ -14,7 +14,7 @@ pathogen_chars = PathogenChars(
 
 
 cdc_2015_2016_nhanes_seroprevalence = Prevalence(
-    infections_per_100k=0.496 * 100000,
+    infections_per_100k=0.496 * 100_000,
     number_of_participants=3710,
     start_date="2015",
     end_date="2016",
@@ -22,8 +22,8 @@ cdc_2015_2016_nhanes_seroprevalence = Prevalence(
     source="https://web.archive.org/web/20220707050306/https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm",
 )
 cdc_2015_2016_nhanes_estimate = Prevalence(
-    infections_per_100k=0.478 * 100000,
-    confidence_interval=(0.4281 * 100000, 0.5277 * 100000),
+    infections_per_100k=0.478 * 100_000,
+    confidence_interval=(0.4281 * 100_000, 0.5277 * 100_000),
     country="United States",
     start_date="2015",
     end_date="2016",
@@ -32,7 +32,7 @@ cdc_2015_2016_nhanes_estimate = Prevalence(
 )
 
 tear_and_saliva_prevalence = Prevalence(
-    infections_per_100k=0.98 * 100000,
+    infections_per_100k=0.98 * 100_000,
     number_of_participants=50,
     country="United States",
     state="Louisiana",
