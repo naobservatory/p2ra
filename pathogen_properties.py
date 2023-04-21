@@ -1,7 +1,6 @@
 import os.path
-from enum import Enum
-
 from dataclasses import dataclass
+from enum import Enum
 from typing import Optional
 
 # Enums, short for enumerations, are a data type in Python used to represent a set of named values,
