@@ -1,5 +1,5 @@
-import os
 import importlib
+import os
 
 pathogens = {}
 for pathogen_fname in os.listdir(os.path.dirname(__file__)):
