@@ -18,7 +18,6 @@ class TestPathogens(unittest.TestCase):
 
                 for estimate in pathogen.estimate_prevalences():
                     self.assertIsInstance(estimate, Prevalence)
->>>>>>> jefftk-normal-vars
 
 
 if __name__ == "__main__":
