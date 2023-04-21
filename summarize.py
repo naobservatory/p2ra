@@ -12,10 +12,11 @@ def start(pathogen_names):
             continue
 
         print(pathogen_name)
+        skipped = 0
         for n, estimate in enumerate(pathogen.estimate_prevalences()):
             if n > MAX_ESTIMATES_FOR_PATHOGEN:
-                print("  ...")
-                break
+                skipped += 1
+                continue
             print(
                 "  %.2f per 100k (%s; %s)"
                 % (
@@ -24,6 +25,8 @@ def start(pathogen_names):
                     estimate.summarize_date(),
                 )
             )
+        if skipped:
+            print("  + %s more" % skipped)
 
 
 if __name__ == "__main__":
