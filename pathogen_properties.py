@@ -42,6 +42,9 @@ class Variable:
     number_of_participants: Optional[int] = None
     confidence_interval: Optional[tuple[float, float]] = None
     methods: Optional[str] = None
+    # Either supply date, or start_date and end_date.
+    # Dates can be any of: YYYY, YYYY-MM, or YYYY-MM-DD.
+    date: Optional[str] = None
     start_date: Optional[str] = None
     end_date: Optional[str] = None
 
@@ -71,6 +74,19 @@ class Prevalence(Variable):
         return Prevalence(
             infections_per_100k=self.infections_per_100k * scalar.scalar,
             inputs=[self, scalar],
+        )
+
+
+@dataclass(kw_only=True)
+class PrevalenceAbsolute(Variable):
+    """How many people had this pathogen at some moment"""
+
+    infections: float
+
+    def to_rate(self, population: Population) -> Prevalence:
+        return Prevalence(
+            infections_per_100k=self.infections * 100000 / population.people,
+            inputs=[self, population],
         )
 
 
