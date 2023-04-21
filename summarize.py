@@ -11,7 +11,14 @@ def start(pathogen_names):
 
         print(pathogen_name)
         for estimate in pathogen.estimate_prevalences():
-            print("  %.2f per 100k" % estimate.infections_per_100k)
+            print(
+                "  %.2f per 100k (%s; %s)"
+                % (
+                    estimate.infections_per_100k,
+                    estimate.summarize_location(),
+                    estimate.summarize_date(),
+                )
+            )
 
 
 if __name__ == "__main__":
