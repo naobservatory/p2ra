@@ -24,3 +24,11 @@ if ! black --check --diff --quiet .; then
 fi
 echo OK
 
+# if this fails with "isort: command not found" you need to install isort 
+#    python3 -m pip install isort
+echo Running isort to check import sorting...
+if ! isort --check --quiet .; then
+    echo FAIL: import sorting 
+    exit 1
+fi
+echo OK
