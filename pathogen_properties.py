@@ -1,3 +1,4 @@
+import os.path
 from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
@@ -50,6 +51,83 @@ class Variable:
 
     # Remember to recursively consider each input's inputs if defined.
     inputs: Optional[list["Variable"]] = None
+
+    def _location(self):
+        bits = []
+        if self.county:
+            bits.append(self.county)
+        if self.state:
+            bits.append(self.state)
+        if self.country:
+            bits.append(self.country)
+        return ", ".join(bits)
+
+    def _collect_locations(self, all_locations):
+        location = self._location()
+        if location:
+            all_locations.add(location)
+        if self.inputs:
+            for variable in self.inputs:
+                variable._collect_locations(all_locations)
+
+    def summarize_location(self, all_locations=None):
+        all_locations = set()
+        self._collect_locations(all_locations)
+        return "; ".join(sorted(all_locations))
+
+    def _collect_dates(self, all_dates):
+        for date in [self.date, self.start_date, self.end_date]:
+            if date:
+                all_dates.add(date)
+        if self.inputs:
+            for variable in self.inputs:
+                variable._collect_dates(all_dates)
+
+    def summarize_date(self):
+        all_dates = set()
+        self._collect_dates(all_dates)
+
+        start_dates = set()
+        end_dates = set()
+
+        for date in all_dates:
+            if len(date) == 4:
+                start_dates.add("%s-01-01" % date)
+                end_dates.add("%s-12-31" % date)
+            elif len(date) == 7:
+                start_dates.add("%s-01" % date)
+                # Not technically correct, since some months are shorter, but
+                # should be clear enough.
+                end_dates.add("%s-31" % date)
+            else:
+                start_dates.add(date)
+                end_dates.add(date)
+
+        if not start_dates and not end_dates:
+            return "no date"
+
+        start_date = min(start_dates)
+        end_date = max(end_dates)
+
+        if start_date == end_date:
+            return start_date
+
+        start_year = start_date[:4]
+        end_year = end_date[:4]
+
+        if start_year != end_year:
+            return "%s to %s" % (start_year, end_year)
+
+        if start_date.endswith("-01-01") and end_date.endswith("-12-31"):
+            return start_year
+
+        start_month = start_date[5:7]
+        end_month = start_date[5:7]
+
+        if start_month != end_month:
+            return start_year
+
+        return "%s to %s" % (start_date, end_date)
 
 
 @dataclass(kw_only=True)
@@ -136,3 +214,7 @@ class IncidenceAbsolute(Variable):
             / population.people,
             inputs=[self, population],
         )
+
+
+def prevalence_data_filename(filename):
+    return os.path.join(os.path.dirname(__file__), "prevalence-data", filename)

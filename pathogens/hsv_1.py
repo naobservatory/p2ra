@@ -17,7 +17,9 @@ cdc_2015_2016_nhanes_seroprevalence = Prevalence(
     infections_per_100k=0.496 * 100_000,
     number_of_participants=3710,
     start_date="2015",
+
     end_date="2016",
+
     country="United States",
     source="https://web.archive.org/web/20220707050306/https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm",
 )
