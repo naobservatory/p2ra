@@ -36,11 +36,15 @@ rothman_period_outbreaks = Number(
     number=13 / 5,  # 13 outbreaks over 5 months
     country="United States",
     source="https://www.cdc.gov/norovirus/reporting/norostat/data-table.html",
+    start_date="2020-08-01",
+    end_date="2020-12-31",
 )
 normal_year_outbreaks = Number(
     number=1246 / 12,  # 1246 outbreaks over one year
     country="United States",
     source="https://www.cdc.gov/norovirus/reporting/norostat/data-table.html",
+    start_date="2012",
+    end_date="2022",
 )
 
 
