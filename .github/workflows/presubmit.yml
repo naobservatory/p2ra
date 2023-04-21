@@ -8,5 +8,5 @@ jobs:
         with:
             python-version: '3.11'
       - uses: actions/checkout@v3
-      - run: python3 -m pip install mypy black
+      - run: python3 -m pip install -r requirements-dev.txt
       - run: ./check.sh
