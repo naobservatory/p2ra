@@ -76,7 +76,7 @@ def estimate_prevalences():
         .to_rate(variables["us_population_2018"])
         .to_prevalence(variables["hva_shedding_duration"]),
         "king_county_2017": variables[
-            "king_county_confirmed_cases_rate_2017"
+            "king_county_confirmed_cases_rate_2015"
         ].to_prevalence(variables["hva_shedding_duration"]),
         "king_county_2018": variables[
             "king_county_confirmed_cases_rate_2018"
