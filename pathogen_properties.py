@@ -1,3 +1,4 @@
+import os.path
 from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
@@ -213,3 +214,7 @@ class IncidenceAbsolute(Variable):
             / population.people,
             inputs=[self, population],
         )
+
+
+def prevalence_data_filename(filename):
+    return os.path.join(os.path.dirname(__file__), "prevalence-data", filename)
