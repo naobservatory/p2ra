@@ -88,19 +88,26 @@ def estimate_prevalences():
                 latest.pop(0)
                 latest.append(delta)
 
+                # centered moving average
+                # https://www.jefftk.com/p/careful-with-trailing-averages
+                date = str(day - datetime.timedelta(days=3))
                 cases = IncidenceAbsolute(
                     annual_infections=sum(latest) * 52,
                     country="United States",
                     state="California",
                     county=county,
-                    # centered moving average
-                    # https://www.jefftk.com/p/careful-with-trailing-averages
-                    date=str(day - datetime.timedelta(days=3)),
+                    date=date,
                 )
                 estimates.append(
                     cases.to_rate(county_populations[county])
                     .to_prevalence(shedding_duration)
                     .scale(underreporting)
+                    .target(
+                        country="United States",
+                        state="California",
+                        county=county,
+                        date=date,
+                    )
                 )
 
         return estimates

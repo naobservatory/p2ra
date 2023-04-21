@@ -48,6 +48,7 @@ class Variable:
     date: Optional[str] = None
     start_date: Optional[str] = None
     end_date: Optional[str] = None
+    is_target: Optional[bool] = False
 
     # Remember to recursively consider each input's inputs if defined.
     inputs: Optional[list["Variable"]] = None
@@ -66,7 +67,7 @@ class Variable:
         location = self._location()
         if location:
             all_locations.add(location)
-        if self.inputs:
+        if self.inputs and not self.is_target:
             for variable in self.inputs:
                 variable._collect_locations(all_locations)
 
@@ -79,7 +80,7 @@ class Variable:
         for date in [self.date, self.start_date, self.end_date]:
             if date:
                 all_dates.add(date)
-        if self.inputs:
+        if self.inputs and not self.is_target:
             for variable in self.inputs:
                 variable._collect_dates(all_dates)
 
@@ -152,6 +153,14 @@ class Prevalence(Variable):
         return Prevalence(
             infections_per_100k=self.infections_per_100k * scalar.scalar,
             inputs=[self, scalar],
+        )
+
+    def target(self, **kwargs) -> "Prevalence":
+        return Prevalence(
+            infections_per_100k=self.infections_per_100k,
+            inputs=[self],
+            is_target=True,
+            **kwargs
         )
 
 
