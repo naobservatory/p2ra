@@ -1,0 +1,2 @@
+pystan~=3.6
+numpy
