@@ -3,6 +3,8 @@ import sys
 
 import pathogens
 
+MAX_ESTIMATES_FOR_PATHOGEN = 5
+
 
 def start(pathogen_names):
     for pathogen_name, pathogen in pathogens.pathogens.items():
@@ -10,7 +12,10 @@ def start(pathogen_names):
             continue
 
         print(pathogen_name)
-        for estimate in pathogen.estimate_prevalences():
+        for n, estimate in enumerate(pathogen.estimate_prevalences()):
+            if n > MAX_ESTIMATES_FOR_PATHOGEN:
+                print("  ...")
+                break
             print(
                 "  %.2f per 100k (%s; %s)"
                 % (
