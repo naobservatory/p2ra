@@ -67,18 +67,21 @@ def estimate_prevalences():
             bits = line.strip().split("\t")
             county = bits[5]
 
+        # In the tsv file, cumulative case counts start at column 11 with
+        # counts for 2020-01-22.
+        case_counts = [int(x) for x in bits[11:]]
         day = datetime.date.fromisoformat("2020-01-22")
+
         # For computing a 7-day centered moving average.  We want a moving
         # average because case reporting is not uniform over the week.
         latest = [0] * 7
-
-        case_counts = [int(x) for x in bits[11:]]
 
         for prev_case_count, case_count in zip(case_counts, case_counts[1:]):
             # increment day at the beginning because zip means case_count never
             # takes in the initial value.
             day = day + datetime.timedelta(days=1)
 
+            # case counts are cumulative, but we want daily cases
             delta = case_count - prev_case_count
             latest.pop(0)
             latest.append(delta)
