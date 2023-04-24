@@ -17,7 +17,7 @@ pathogen_chars = PathogenChars(
 
 
 cdc_2015_2016_nhanes_seroprevalence = Prevalence(
-    infections_per_100k=0.102 * 100_000,
+    infections_per_100k=478 / 3710 * 100_000,
     number_of_participants=3710,
     country="United States",
     start_date="2015",
@@ -47,11 +47,48 @@ cdc_2015_2016_nhanes_estimate = Prevalence(
 )
 
 
-us_population_2018 = Population(
-    people=327.2 * 1e6,
+stratified_us_pop = {
+    "15-19": Population(
+        people=21_445_493,
+        date="2018",
+        country="United States",
+        source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+    ),
+    "20-24": Population(
+        people=21_717_962,
+        date="2018",
+        country="United States",
+        source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+    ),
+    "25-34": Population(
+        people=45_344_674,
+        date="2018",
+        country="United States",
+        source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+    ),
+    "35-44": Population(
+        people=41_498_453,
+        date="2018",
+        country="United States",
+        source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+    ),
+    "45-54": Population(
+        people=41_605_244,
+        date="2018",
+        country="United States",
+        source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+    ),
+}
+
+us_population_2008_18_to_49yo = Population(
+    people=stratified_us_pop["15-19"].people * 0.6
+    + stratified_us_pop["20-24"].people
+    + stratified_us_pop["25-34"].people
+    + stratified_us_pop["35-44"].people
+    + stratified_us_pop["45-54"].people * 0.5,
+    date="2018",
     country="United States",
     source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
-    date="2018",
 )
 
 
@@ -59,5 +96,5 @@ def estimate_prevalences():
     return [
         cdc_2015_2016_nhanes_seroprevalence,
         cdc_2015_2016_nhanes_estimate,
-        cdc_2018_nhanes_estimate.to_rate(us_population_2018),
+        cdc_2018_nhanes_estimate.to_rate(us_population_2018_18_to_49yo),
     ]
