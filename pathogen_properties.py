@@ -42,7 +42,7 @@ class Variable:
     county: Optional[str] = None
     number_of_participants: Optional[int] = None
     confidence_interval: Optional[tuple[float, float]] = None
-    coverage_probability_perc_point: Optional[float] = None
+    coverage_probability: Optional[float] = None
     methods: Optional[str] = None
     # Either supply date, or start_date and end_date.
     # Dates can be any of: YYYY, YYYY-MM, or YYYY-MM-DD.
