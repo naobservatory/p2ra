@@ -23,6 +23,7 @@ shedding_duration = SheddingDuration(
 underreporting = Scalar(
     scalar=4.0,
     confidence_interval=(3.4, 4.7),
+    coverage_probability_perc_point=95,
     country="United States",
     start_date="2020-02",
     end_date="2021-09",
