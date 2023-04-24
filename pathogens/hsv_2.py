@@ -80,7 +80,7 @@ stratified_us_pop = {
     ),
 }
 
-us_population_2008_18_to_49yo = Population(
+us_population_2018_18_to_49yo = Population(
     people=stratified_us_pop["15-19"].people * 0.6
     + stratified_us_pop["20-24"].people
     + stratified_us_pop["25-34"].people
