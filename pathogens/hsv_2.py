@@ -29,12 +29,12 @@ cdc_2015_2016_nhanes_seroprevalence = Prevalence(
 cdc_2018_nhanes_estimate = PrevalenceAbsolute(
     infections=18.6 * 1e6,
     confidence_interval=(18.1 * 1e6, 19.0 * 1e6),
+    coverage_probability=0.5,
     date="2018",
     country="United States",
     source="https://journals.lww.com/stdjournal/Fulltext/2021/04000/Estimates_of_the_Prevalence_and_Incidence_of.9.aspx#:~:text=In%202018%2C%20there,that%20are%20genital.",
     methods="https://journals.lww.com/stdjournal/Fulltext/2021/04000/Estimates_of_the_Prevalence_and_Incidence_of.9.aspx#:~:text=genital%20infections%20burden.-,METHODS,-We%20estimated%20the",
 )
-
 
 cdc_2015_2016_nhanes_estimate = Prevalence(
     infections_per_100k=0.121 * 100_000,
