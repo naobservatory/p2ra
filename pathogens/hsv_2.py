@@ -1,9 +1,12 @@
 from pathogen_properties import *
 
-background = """Herpes Simplex Virus 2 is a common herpesvirus that causes genital herpes and is largely sexually transmited. Most HSV-2 infections persist lifelong (CDC, https://www.
-hopkinsmedicine.org/health/conditions-and-diseases/herpes-hsv1-and-hsv2), manifesting as cold sores or fever
-blisters (https://www.hopkinsmedicine.org/health/conditions-and-diseases/herpes-hsv1-and-hsv2). After initial
-infection and potential symptoms, most HSV-1 infections persist lifelong."""
+background = """Herpes Simplex Virus 2 is a common herpesvirus that causes
+genital herpes and is largely sexually transmited. Most HSV-2 infections
+persist lifelong (CDC, https://www.hopkinsmedicine.org/health/
+conditions-and-diseases/herpes-hsv1-and-hsv2), manifesting as cold sores or
+fever blisters (https://www.hopkinsmedicine.org/health/conditions-and-diseases/
+herpes-hsv1-and-hsv2). After initial infection and potential symptoms, most
+HSV-1 infections persist lifelong."""
 
 
 pathogen_chars = PathogenChars(
