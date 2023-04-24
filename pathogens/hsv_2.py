@@ -28,7 +28,6 @@ cdc_2015_2016_nhanes_estimate = Prevalence(
     infections_per_100k=0.121 * 100_000,
     country="United States",
     confidence_interval=(0.0966 * 100_000, 0.1495 * 100_000),
-    country="United States",
     start_date="2015",
     end_date="2016",
     source="https://www.cdc.gov/nchs/data/databriefs/db304_table.pdf?#page=3",
