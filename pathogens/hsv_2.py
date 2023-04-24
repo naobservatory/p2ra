@@ -11,7 +11,7 @@ HSV-1 infections persist lifelong."""
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
-    enveloped=Enveloped.NON_ENVELOPED,
+    enveloped=Enveloped.ENVELOPED,
     taxid=10310,
 )
 
