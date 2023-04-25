@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import json
+from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import NewType
@@ -42,6 +45,24 @@ def load_sample_counts(mgs_dir: Path) -> dict[TaxID, dict[Sample, int]]:
     }
 
 
+@dataclass
+class TaxTree:
+    taxid: TaxID
+    children: list[TaxTree] = field(default_factory=list)
+
+
+def _parse_taxtree(input: list) -> TaxTree:
+    taxid = TaxID(int(input[0]))
+    children = input[1:]
+    return TaxTree(taxid=taxid, children=[_parse_taxtree(c) for c in children])
+
+
+def load_tax_tree(mgs_dir: Path) -> TaxTree:
+    with open(mgs_dir / "human_virus_tree.json") as data_file:
+        data = json.load(data_file)
+    return _parse_taxtree(data)
+
+
 pathogen = "sars_cov_2"
 taxid = pathogens[pathogen].pathogen_chars.taxid
 print(taxid)
@@ -56,3 +77,6 @@ for k, v in sample_attribs.items():
     print(v)
 counts = load_sample_counts(data_dir)
 print(counts[taxid])
+
+taxtree = load_tax_tree(data_dir)
+print(taxtree)
