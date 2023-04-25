@@ -10,7 +10,7 @@ weeks."""
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=208726,
+    taxid=TaxID(208726),
 )
 
 
