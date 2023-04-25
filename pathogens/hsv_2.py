@@ -17,8 +17,8 @@ pathogen_chars = PathogenChars(
 
 
 cdc_2015_2016_nhanes_seroprevalence = Prevalence(
-    infections_per_100k=478 / 3710 * 100_000,
-    number_of_participants=3710,
+    infections_per_100k=478 / 2815 * 100_000,
+    number_of_participants=2815,
     country="United States",
     start_date="2015",
     end_date="2016",
@@ -88,7 +88,7 @@ us_population_2018_18_to_49yo = Population(
     + stratified_us_pop["45-54"].people * 0.5,
     date="2018",
     country="United States",
-    source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+    inputs=list(stratified_us_pop.values()),
 )
 
 
