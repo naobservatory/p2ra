@@ -32,7 +32,7 @@ per100k = Scalar(
     scalar=100000,
 )
 
-reciprocal_days_per_year = Scalar(
+reciprocal_days_in_a_year = Scalar(
     scalar=1 / 365,
 )
 
