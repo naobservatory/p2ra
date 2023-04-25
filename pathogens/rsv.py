@@ -42,5 +42,5 @@ CA_population = Scalar(
 
 def estimate_prevalences():
         return[
-            RSV_pandemic_decrease * california_positive_tests_fall_2021 * disease_duration / testing_interval / CA_population * 100
+            RSV_pandemic_decrease.scalar * california_positive_tests_fall_2021.scalar * disease_duration.scalar / testing_interval.scalar / CA_population.scalar * 100000
          ]
