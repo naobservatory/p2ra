@@ -88,13 +88,13 @@ def get_subtree(taxtree: TaxTree, taxid: TaxID) -> TaxTree | None:
 def count_reads(
     taxtree: TaxTree, sample_counts: SampleCounts
 ) -> Counter[Sample]:
-    if taxtree.taxid in sample_counts:
-        c = Counter(sample_counts[taxtree.taxid])
-    else:
-        c = Counter()
     return sum(
-        (count_reads(child, sample_counts) for child in taxtree.children),
-        start=c,
+        (
+            Counter(sample_counts[t.taxid])
+            for t in taxtree
+            if t.taxid in sample_counts
+        ),
+        start=Counter(),
     )
 
 
