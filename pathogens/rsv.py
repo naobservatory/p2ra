@@ -10,11 +10,13 @@ pathogen_chars = PathogenChars(
 )
 
 # positive tests in california during fall 2021
-california_positive_tests_fall_2021 = Scalar(
-        scalar = 6400000,
+california_positive_tests_fall_2021 = PrevalenceAbsolute(
+        infections = 6400000,
         country="United States",
         state = "California",
         date = "8/21 - 12/18, 2020",
+        start_date= "8/21",
+        end_date="12/18",
         source="https://www.cdc.gov/surveillance/nrevss/images/rsvstate/RSV14NumCent5AVG_StateCA.htm",
 )
 
@@ -36,11 +38,12 @@ disease_duration = Scalar(
         source = "https://www.cdc.gov/rsv/about/symptoms.html#:~:text=Most%20RSV%20infections%20go%20away%20on%20their%20own%20in%20a%20week%20or%20two.",
 )    
 
-CA_population = Scalar(
-        scalar=40000000,
+CA_population = Population(
+        people=39000000,
 )    
 
 def estimate_prevalences():
         return[
-            RSV_pandemic_decrease.scalar * california_positive_tests_fall_2021.scalar * disease_duration.scalar / testing_interval.scalar / CA_population.scalar * 100000
+        
+        california_positive_tests_fall_2021.to_rate(CA_population).scale(RSV_pandemic_decrease) * (disease_duration.scalar) / testing_interval.scalar * 100000
          ]
