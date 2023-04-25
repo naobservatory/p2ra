@@ -1,6 +1,9 @@
 import json
+from datetime import date
 from pathlib import Path
-from typing import Any, NewType
+from typing import NewType
+
+from pydantic import BaseModel
 
 from pathogen_properties import TaxID
 from pathogens import pathogens
@@ -14,7 +17,12 @@ def load_samples(mgs_dir: Path, bioproject: str) -> list[Sample]:
     return [Sample(s) for s in data[bioproject]]
 
 
-SampleAttributes = dict[str, str]
+class SampleAttributes(BaseModel):
+    country: str
+    location: str
+    fine_location: str | None = None
+    date: date
+    reads: int
 
 
 def load_sample_attributes(
@@ -22,7 +30,7 @@ def load_sample_attributes(
 ) -> dict[Sample, SampleAttributes]:
     with open(mgs_dir / "metadata_samples.json") as samples_file:
         data = json.load(samples_file)
-    return {s: data[s] for s in samples}
+    return {s: SampleAttributes(**data[s]) for s in samples}
 
 
 def load_sample_counts(mgs_dir: Path) -> dict[TaxID, dict[Sample, int]]:
