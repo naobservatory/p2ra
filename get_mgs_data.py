@@ -58,9 +58,6 @@ class TaxTree:
     taxid: TaxID
     children: list[TaxTree] = field(default_factory=list)
 
-    def __getitem__(self, taxid: TaxID) -> TaxTree | None:
-        return get_subtree(self, taxid)
-
     def _helper(self, depth: int) -> str:
         _spacer = "."
         return f"{_spacer * depth}{self.taxid}\n" + "".join(
@@ -70,18 +67,22 @@ class TaxTree:
     def __str__(self) -> str:
         return self._helper(0)
 
+    def __iter__(self):
+        yield self
+        for child in self.children:
+            yield from child
+
+    def __getitem__(self, taxid: TaxID) -> TaxTree | None:
+        return get_subtree(self, taxid)
+
 
 def get_subtree(taxtree: TaxTree, taxid: TaxID) -> TaxTree | None:
     """Depth-first search for taxid"""
-    if taxtree.taxid == taxid:
-        return taxtree
+    for subtree in taxtree:
+        if subtree.taxid == taxid:
+            return subtree
     else:
-        for child in taxtree.children:
-            subtree = get_subtree(child, taxid)
-            if subtree:
-                return subtree
-        else:
-            return None
+        return None
 
 
 def count_reads(
@@ -121,7 +122,6 @@ for pathogen in ["sars_cov_2", "norovirus"]:
     print(pathogen)
     taxid = pathogens[pathogen].pathogen_chars.taxid
     subtree = taxtree[taxid]
-
     if subtree:
         virus_counts = count_reads(subtree, counts)
         print("All", sum(virus_counts[s] for s in samples), sep="\t")
