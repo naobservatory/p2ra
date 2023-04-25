@@ -61,6 +61,15 @@ class TaxTree:
     def __getitem__(self, taxid: TaxID) -> TaxTree | None:
         return get_subtree(self, taxid)
 
+    def _helper(self, depth: int) -> str:
+        _spacer = "."
+        return f"{_spacer * depth}{self.taxid}\n" + "".join(
+            c._helper(depth + 1) for c in self.children
+        )
+
+    def __str__(self) -> str:
+        return self._helper(0)
+
 
 def get_subtree(taxtree: TaxTree, taxid: TaxID) -> TaxTree | None:
     """Depth-first search for taxid"""
