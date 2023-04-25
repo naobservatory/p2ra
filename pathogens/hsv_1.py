@@ -14,7 +14,7 @@ pathogen_chars = PathogenChars(
 
 
 cdc_2015_2016_nhanes_seroprevalence = Prevalence(
-    infections_per_100k=0.496 * 100_000,
+    infections_per_100k=THIS_SHOULDNT_WORK * 100_000,
     number_of_participants=3710,
     start_date="2015",
     end_date="2016",
