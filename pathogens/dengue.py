@@ -11,16 +11,16 @@ pathogen_chars = PathogenChars(
     taxid=12814,
 )
 
-california_reported_cases = Scalar(
-        scalar = 86,
+california_reported_cases = PrevalenceAbsolute(
+        infections = 86,
         country="United States",
         state = "California",
         date = "2020",
         source="https://www.cdph.ca.gov/Programs/CID/DCDC/CDPH%20Document%20Library/TravelAssociatedCasesofDengueVirusinCA.pdf",
 )
 
-CA_population = Scalar(
-        scalar = 40000000,
+CA_population = Population(
+        people = 40000000,
 )
 # disease duration in days
 disease_duration = Scalar(
@@ -30,5 +30,5 @@ disease_duration = Scalar(
 
 def estimate_prevalences():
     return[
-        disease_duration.scalar*california_reported_cases.scalar/365/CA_population.scalar*100000
+        disease_duration.scalar*california_reported_cases.infections/365/CA_population.people*100000
     ]
