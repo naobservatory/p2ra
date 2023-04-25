@@ -20,7 +20,8 @@ california_reported_cases = PrevalenceAbsolute(
 )
 
 CA_population = Population(
-        people = 40000000,
+        people = 39000000,
+        tag = "California-2020"
 )
 # disease duration in days
 disease_duration = Scalar(
