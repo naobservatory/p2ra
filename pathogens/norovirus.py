@@ -7,7 +7,7 @@ contact."""
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=142786,
+    taxid=TaxID(142786),
 )
 
 

@@ -7,7 +7,7 @@ weakens the immune system."""
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.ENVELOPED,
-    taxid=11676,
+    taxid=TaxID(11676),
 )
 
 # Controlled HIV has basically no sheddding, and we're really only interested
