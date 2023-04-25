@@ -1,0 +1,12 @@
+name: Presubmit
+on: [push]
+jobs:
+  Presubmit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v4
+        with:
+            python-version: '3.11'
+      - uses: actions/checkout@v3
+      - run: python3 -m pip install -r requirements-dev.txt
+      - run: ./check.sh
