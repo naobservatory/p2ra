@@ -88,13 +88,19 @@ def get_subtree(tree: Tree[T], val: T) -> Tree[T] | None:
         return None
 
 
-def parse_tree(input: list) -> Tree:
-    return Tree(data=input[0], children=[parse_tree(c) for c in input[1:]])
+def tree_from_list(input: list) -> Tree:
+    return Tree(data=input[0], children=[tree_from_list(c) for c in input[1:]])
+
+
+# TODO: Test that these are inverse functions
+def tree_to_list(tree: Tree) -> list:
+    return list(tree.data, *(tree_to_list(c) for c in tree.children))
 
 
 S = TypeVar("S")
 
 
+# TODO: Test map rules
 def map_tree(tree: Tree[T], f: Callable[[T], S]) -> Tree[S]:
     return Tree(f(tree.data), [map_tree(c, f) for c in tree.children])
 
@@ -102,7 +108,7 @@ def map_tree(tree: Tree[T], f: Callable[[T], S]) -> Tree[S]:
 def load_tax_tree(mgs_dir: Path) -> Tree[TaxID]:
     with open(mgs_dir / "dashboard/human_virus_tree.json") as data_file:
         data = json.load(data_file)
-    return map_tree(parse_tree(data), lambda x: TaxID(int(x)))
+    return map_tree(tree_from_list(data), lambda x: TaxID(int(x)))
 
 
 def make_count_tree(
