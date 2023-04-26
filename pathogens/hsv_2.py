@@ -54,30 +54,35 @@ stratified_us_pop = {
         date="2018",
         country="United States",
         source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+        tag="15-19yo_us_population",
     ),
     "20-24": Population(
         people=21_717_962,
         date="2018",
         country="United States",
         source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+        tag="20-24yo_us_population",
     ),
     "25-34": Population(
         people=45_344_674,
         date="2018",
         country="United States",
         source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+        tag="25-34yo_us_population",
     ),
     "35-44": Population(
         people=41_498_453,
         date="2018",
         country="United States",
         source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+        tag="35-44yo_us_population",
     ),
     "45-54": Population(
         people=41_605_244,
         date="2018",
         country="United States",
         source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+        tag="45-54yo_us_population",
     ),
 }
 
