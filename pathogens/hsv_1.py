@@ -8,8 +8,8 @@ infection and potential symptoms, most HSV-1 infections persist lifelong."""
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
-    enveloped=Enveloped.NON_ENVELOPED,
-    taxid=10298,
+    enveloped=Enveloped.ENVELOPED,
+    taxid=TaxID(10298),
 )
 
 

@@ -33,7 +33,9 @@ particular order.
 Handle incoming reviews at least twice a day (morning and afternoon) -- slow
 reviews add a lot of friction.  As a PR author you can avoid this friction by
 creating another branch that diverges from the code you have under review; ask
-Jeff to show you how if you're interested.
+Jeff to show you how if you're interested.  Configure [notification
+routing](https://github.com/settings/notifications/custom_routing) on github so
+that work-related notifications go to your work account.
 
 #### Testing
 
@@ -44,3 +46,15 @@ Run `./test.py`
 Before creating a PR or submitting code, run `./check.sh`.  It will run tests
 than check your types and formatting.  This also runs automatically on GitHub
 when you make PRs, but it's much faster to catch problems locally first.
+
+#### Installing pystan
+
+Pystan should be installed along with the other requirements when you run:
+```
+python -m pip install -r requirements-dev.txt"
+```
+However, on some non-Linux systems (including M2 Macbooks), one of `pystan`'s dependencies,`httpstan`, may fail to install.
+To get around this problem, you can [install httpstan from source](https://httpstan.readthedocs.io/en/latest/installation.html#installation-from-source).
+Once it is built and installed, you can then install the requirements file as above.
+(Note that you can clone the `httpstan` repo anywhere on your computer.
+I recommend doing it outside of the `p2ra` repo directory to that git doesn't try to track it.)
