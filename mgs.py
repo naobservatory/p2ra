@@ -106,6 +106,9 @@ class Tree(Generic[T]):
     def __getitem__(self, val: T) -> Tree[T] | None:
         return self.get_subtree(val)
 
+    def __contains__(self, item: T) -> bool:
+        return not (self[item] is None)
+
     def get_subtree(self, val: T) -> Tree[T] | None:
         """Depth-first search for taxid"""
         for subtree in self:

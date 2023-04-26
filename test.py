@@ -2,6 +2,7 @@
 
 import unittest
 
+import mgs
 import pathogens
 from pathogen_properties import *
 
@@ -30,6 +31,39 @@ class TestPathogens(unittest.TestCase):
 
                 for estimate in pathogen.estimate_prevalences():
                     self.assertIsInstance(estimate, Prevalence)
+
+
+class TestMGS(unittest.TestCase):
+    repo = mgs.GitHubRepo(
+        user="naobservatory", repo="mgs-pipeline", branch="main"
+    )
+
+    def test_load_bioprojects(self):
+        bps = mgs.load_bioprojects(self.repo)
+        # Rothman
+        self.assertIn(mgs.BioProject("PRJNA729801"), bps)
+
+    def test_load_sample_attributes(self):
+        samples = mgs.load_sample_attributes(self.repo)
+        # Randomly picked Rothman sample
+        self.assertIn(mgs.Sample("SRR14530726"), samples)
+
+    def test_load_sample_counts(self):
+        sample_counts = mgs.load_sample_counts(self.repo)
+        for p in ["sars_cov_2", "hiv"]:
+            with self.subTest(pathogen=p):
+                self.assertIn(
+                    pathogens.pathogens[p].pathogen_chars.taxid,
+                    sample_counts,
+                )
+
+    def test_load_tax_tree(self):
+        tree = mgs.load_tax_tree(self.repo)
+        for p in ["sars_cov_2", "hiv", "norovirus"]:
+            with self.subTest(pathogen=p):
+                self.assertIn(
+                    pathogens.pathogens[p].pathogen_chars.taxid, tree
+                )
 
 
 if __name__ == "__main__":
