@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
+from collections import Counter
 
 import mgs
 import pathogens
@@ -65,6 +66,15 @@ class TestMGS(unittest.TestCase):
                 self.assertIn(
                     pathogens.pathogens[p].pathogen_chars.taxid, tree
                 )
+
+    def test_count_reads(self):
+        taxtree = Tree(mgs.TaxID(0), [Tree(mgs.TaxID(i)) for i in range(1, 3)])
+        sample_counts = {
+            mgs.TaxID(0): {mgs.Sample("a"): 4},
+            mgs.TaxID(1): {mgs.Sample("a"): 2, mgs.Sample("b"): 3},
+        }
+        expected = Counter({mgs.Sample("a"): 6, mgs.Sample("b"): 3})
+        self.assertEqual(mgs.count_reads(taxtree, sample_counts), expected)
 
 
 class TestTree(unittest.TestCase):
