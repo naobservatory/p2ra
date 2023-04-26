@@ -6,7 +6,7 @@ from collections import Counter
 import mgs
 import pathogens
 from pathogen_properties import *
-from tree import Tree, tree_from_list
+from tree import Tree
 
 
 class TestPathogens(unittest.TestCase):
@@ -101,8 +101,8 @@ class TestTree(unittest.TestCase):
             self.assertIn(i, self.node)
 
     def test_parse_inverse(self):
-        self.assertEqual(self.node, tree_from_list(self.node.to_list()))
-        self.assertEqual(self.leaf, tree_from_list(self.leaf.to_list()))
+        self.assertEqual(self.node, Tree.tree_from_list(self.node.to_list()))
+        self.assertEqual(self.leaf, Tree.tree_from_list(self.leaf.to_list()))
 
     def test_map_id(self):
         self.assertEqual(self.node, self.node.map(lambda x: x))

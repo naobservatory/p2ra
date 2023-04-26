@@ -1,16 +1,14 @@
 import json
 import urllib.request
 from collections import Counter
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import date
 from typing import NewType, Optional
 
 from pydantic import BaseModel
 
 from pathogen_properties import TaxID
-from tree import Tree, tree_from_list
-
-repo_url = "https://raw.githubusercontent.com/naobservatory/mgs-pipeline/main/"
+from tree import Tree
 
 
 @dataclass
@@ -18,16 +16,12 @@ class GitHubRepo:
     user: str
     repo: str
     branch: str
-    url: str = field(init=False)
-
-    def __post_init__(self):
-        self.url = (
-            f"https://raw.githubusercontent.com/"
-            f"{self.user}/{self.repo}/{self.branch}/"
-        )
 
     def get_file(self, path: str) -> str:
-        file_url = self.url + path
+        file_url = (
+            f"https://raw.githubusercontent.com/"
+            f"{self.user}/{self.repo}/{self.branch}/{path}"
+        )
         with urllib.request.urlopen(file_url) as response:
             if response.status == 200:
                 return response.read()
@@ -81,7 +75,7 @@ def load_sample_counts(repo: GitHubRepo) -> SampleCounts:
 
 def load_tax_tree(repo: GitHubRepo) -> Tree[TaxID]:
     data = json.loads(repo.get_file("dashboard/human_virus_tree.json"))
-    return tree_from_list(data).map(lambda x: TaxID(int(x)))
+    return Tree.tree_from_list(data).map(lambda x: TaxID(int(x)))
 
 
 def make_count_tree(

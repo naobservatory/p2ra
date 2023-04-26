@@ -46,6 +46,8 @@ class Tree(Generic[T]):
     def map(self, f: Callable[[T], S]) -> Tree[S]:
         return Tree(f(self.data), [c.map(f) for c in self.children])
 
-
-def tree_from_list(input: list) -> Tree:
-    return Tree(data=input[0], children=[tree_from_list(c) for c in input[1:]])
+    @staticmethod
+    def tree_from_list(input: list) -> Tree:
+        return Tree(
+            data=input[0], children=[Tree.tree_from_list(c) for c in input[1:]]
+        )
