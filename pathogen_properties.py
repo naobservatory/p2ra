@@ -1,7 +1,7 @@
 import os.path
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
+from typing import NewType, Optional
 
 # Enums, short for enumerations, are a data type in Python used to represent a set of named values,
 # which are typically used to define a set of related constants with unique names.
@@ -25,11 +25,14 @@ class VariableType(Enum):
     NAO_ESTIMATE = "nao_estimate"
 
 
+TaxID = NewType("TaxID", int)
+
+
 @dataclass(kw_only=True)
 class PathogenChars:
     na_type: NAType
     enveloped: Enveloped
-    taxid: int
+    taxid: TaxID
 
 
 @dataclass(kw_only=True)
@@ -136,6 +139,9 @@ class Population(Variable):
     """A number of people"""
 
     people: float
+    # Make this specific enough that you won't accidentally pair it with the
+    # wrong absolute prevalence or incidence.
+    tag: str
 
 
 @dataclass(kw_only=True)
@@ -169,8 +175,12 @@ class PrevalenceAbsolute(Variable):
     """How many people had this pathogen at some moment"""
 
     infections: float
+    # Make this specific enough that you won't accidentally pair it with the
+    # wrong population.
+    tag: str
 
     def to_rate(self, population: Population) -> Prevalence:
+        assert self.tag == population.tag
         return Prevalence(
             infections_per_100k=self.infections * 100000 / population.people,
             inputs=[self, population],
@@ -215,8 +225,12 @@ class IncidenceAbsolute(Variable):
     """How many people get this pathogen annually"""
 
     annual_infections: float
+    # Make this specific enough that you won't accidentally pair it with the
+    # wrong population.
+    tag: str
 
     def to_rate(self, population: Population) -> IncidenceRate:
+        assert self.tag == population.tag
         return IncidenceRate(
             annual_infections_per_100k=self.annual_infections
             * 100000

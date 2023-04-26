@@ -7,7 +7,7 @@ contact."""
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=142786,
+    taxid=TaxID(142786),
 )
 
 
@@ -15,15 +15,16 @@ cases = IncidenceAbsolute(
     annual_infections=20e6,
     confidence_interval=(19e6, 21e6),
     country="United States",
+    tag="us",
     source="https://www.cdc.gov/norovirus/trends-outbreaks/burden-US.html",
 )
 
 us_population = Population(
     people=333_287_557,
     country="United States",
+    date="2022-07-01",
+    tag="us",
     source="https://www.census.gov/quickfacts/fact/table/US/PST045221",
-    start_date="2022-07-01",
-    end_date="2022-07-01",
 )
 
 shedding_duration = SheddingDuration(
