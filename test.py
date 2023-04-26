@@ -5,6 +5,7 @@ import unittest
 import mgs
 import pathogens
 from pathogen_properties import *
+from tree import Tree, tree_from_list
 
 
 class TestPathogens(unittest.TestCase):
@@ -64,6 +65,48 @@ class TestMGS(unittest.TestCase):
                 self.assertIn(
                     pathogens.pathogens[p].pathogen_chars.taxid, tree
                 )
+
+
+class TestTree(unittest.TestCase):
+    leaf = Tree(0)
+    node = Tree(0, [Tree(x) for x in range(1, 3)])
+
+    def test_iter(self):
+        for i, t in zip(range(1), self.leaf):
+            self.assertEqual(i, t.data)
+        for i, t in zip(range(3), self.node):
+            self.assertEqual(i, t.data)
+
+    def test_get_item(self):
+        self.assertEqual(self.leaf, self.leaf[0])
+        self.assertIsNone(self.leaf[1])
+        self.assertEqual(self.node, self.node[0])
+        for i in range(3):
+            self.assertIsNotNone(self.node[i])
+        self.assertIsNone(self.node[3])
+
+    def test_contains(self):
+        self.assertIn(0, self.leaf)
+        for i in range(3):
+            self.assertIn(i, self.node)
+
+    def test_parse_inverse(self):
+        self.assertEqual(self.node, tree_from_list(self.node.to_list()))
+        self.assertEqual(self.leaf, tree_from_list(self.leaf.to_list()))
+
+    def test_map_id(self):
+        self.assertEqual(self.node, self.node.map(lambda x: x))
+        self.assertEqual(self.leaf, self.leaf.map(lambda x: x))
+
+    def test_map_composition(self):
+        f = lambda x: x + 1
+        g = lambda x: 2 * x
+        self.assertEqual(
+            self.node.map(f).map(g), self.node.map(lambda x: g(f(x)))
+        )
+        self.assertEqual(
+            self.leaf.map(f).map(g), self.leaf.map(lambda x: g(f(x)))
+        )
 
 
 if __name__ == "__main__":

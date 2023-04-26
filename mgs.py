@@ -1,15 +1,14 @@
-from __future__ import annotations
-
 import json
 import urllib.request
 from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date
-from typing import Callable, Generic, NewType, Optional, TypeVar
+from typing import NewType, Optional
 
 from pydantic import BaseModel
 
 from pathogen_properties import TaxID
+from tree import Tree, tree_from_list
 
 repo_url = "https://raw.githubusercontent.com/naobservatory/mgs-pipeline/main/"
 
@@ -78,56 +77,6 @@ def load_sample_counts(repo: GitHubRepo) -> SampleCounts:
         TaxID(int(taxid)): {Sample(sample): n for sample, n in counts.items()}
         for taxid, counts in data.items()
     }
-
-
-T = TypeVar("T")
-S = TypeVar("S")
-
-
-@dataclass
-class Tree(Generic[T]):
-    data: T
-    children: list[Tree[T]] = field(default_factory=list)
-
-    def _helper(self, depth: int) -> str:
-        _spacer = "."
-        return f"{_spacer * depth}{self.data}\n" + "".join(
-            c._helper(depth + 1) for c in self.children
-        )
-
-    def __str__(self) -> str:
-        return self._helper(0)
-
-    def __iter__(self):
-        yield self
-        for child in self.children:
-            yield from child
-
-    def __getitem__(self, val: T) -> Tree[T] | None:
-        return self.get_subtree(val)
-
-    def __contains__(self, item: T) -> bool:
-        return not (self[item] is None)
-
-    def get_subtree(self, val: T) -> Tree[T] | None:
-        """Depth-first search for taxid"""
-        for subtree in self:
-            if subtree.data == val:
-                return subtree
-        else:
-            return None
-
-    def to_list(self) -> list:
-        return [self.data] + [c.to_list() for c in self.children]
-
-    # TODO: Test map rules
-    def map(self, f: Callable[[T], S]) -> Tree[S]:
-        return Tree(f(self.data), [c.map(f) for c in self.children])
-
-
-# TODO: Test that these are inverse functions
-def tree_from_list(input: list) -> Tree:
-    return Tree(data=input[0], children=[tree_from_list(c) for c in input[1:]])
 
 
 def load_tax_tree(repo: GitHubRepo) -> Tree[TaxID]:
