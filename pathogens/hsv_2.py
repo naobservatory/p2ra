@@ -32,6 +32,7 @@ cdc_2018_nhanes_estimate = PrevalenceAbsolute(
     coverage_probability=0.5,
     date="2018",
     country="United States",
+    tag="18-49yo_us_population",
     source="https://journals.lww.com/stdjournal/Fulltext/2021/04000/Estimates_of_the_Prevalence_and_Incidence_of.9.aspx#:~:text=In%202018%2C%20there,that%20are%20genital.",
     methods="https://journals.lww.com/stdjournal/Fulltext/2021/04000/Estimates_of_the_Prevalence_and_Incidence_of.9.aspx#:~:text=genital%20infections%20burden.-,METHODS,-We%20estimated%20the",
 )
@@ -88,6 +89,7 @@ us_population_2018_18_to_49yo = Population(
     + stratified_us_pop["45-54"].people * 0.5,
     date="2018",
     country="United States",
+    tag="18-49yo_us_population",
     inputs=list(stratified_us_pop.values()),
 )
 
