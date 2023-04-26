@@ -24,10 +24,10 @@ if __name__ == "__main__":
         if not subtree:
             continue
         virus_counts = mgs.count_reads(subtree, counts)
-        print("All", sum(virus_counts[s] for s in samples), sep="\t")
+        print(" All", sum(virus_counts[s] for s in samples), sep="\t")
         for fine_loc in fine_locs:
             print(
-                fine_loc,
+                f" {fine_loc}",
                 sum(
                     virus_counts[s]
                     for s in samples
