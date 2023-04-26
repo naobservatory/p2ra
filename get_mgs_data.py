@@ -77,6 +77,7 @@ def load_sample_counts(repo: GitHubRepo) -> SampleCounts:
 
 
 T = TypeVar("T")
+S = TypeVar("S")
 
 
 @dataclass
@@ -99,45 +100,38 @@ class Tree(Generic[T]):
             yield from child
 
     def __getitem__(self, val: T) -> Tree[T] | None:
-        return get_subtree(self, val)
+        return self.get_subtree(val)
+
+    def get_subtree(self, val: T) -> Tree[T] | None:
+        """Depth-first search for taxid"""
+        for subtree in self:
+            if subtree.data == val:
+                return subtree
+        else:
+            return None
+
+    def to_list(self) -> list:
+        return [self.data] + [c.to_list() for c in self.children]
+
+    # TODO: Test map rules
+    def map(self, f: Callable[[T], S]) -> Tree[S]:
+        return Tree(f(self.data), [c.map(f) for c in self.children])
 
 
-def get_subtree(tree: Tree[T], val: T) -> Tree[T] | None:
-    """Depth-first search for taxid"""
-    for subtree in tree:
-        if subtree.data == val:
-            return subtree
-    else:
-        return None
-
-
+# TODO: Test that these are inverse functions
 def tree_from_list(input: list) -> Tree:
     return Tree(data=input[0], children=[tree_from_list(c) for c in input[1:]])
 
 
-# TODO: Test that these are inverse functions
-def tree_to_list(tree: Tree) -> list:
-    return list(tree.data, *(tree_to_list(c) for c in tree.children))
-
-
-S = TypeVar("S")
-
-
-# TODO: Test map rules
-def map_tree(tree: Tree[T], f: Callable[[T], S]) -> Tree[S]:
-    return Tree(f(tree.data), [map_tree(c, f) for c in tree.children])
-
-
 def load_tax_tree(repo: GitHubRepo) -> Tree[TaxID]:
     data = json.loads(repo.get_file("dashboard/human_virus_tree.json"))
-    return map_tree(tree_from_list(data), lambda x: TaxID(int(x)))
+    return tree_from_list(data).map(lambda x: TaxID(int(x)))
 
 
 def make_count_tree(
     taxtree: Tree[TaxID], sample_counts: SampleCounts
 ) -> Tree[tuple[TaxID, Counter[Sample]]]:
-    return map_tree(
-        taxtree,
+    return taxtree.map(
         lambda taxid: (taxid, Counter(sample_counts[taxid]))
         if taxid in sample_counts
         else (taxid, Counter()),
