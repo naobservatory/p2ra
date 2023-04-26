@@ -99,23 +99,31 @@ def map_tree(tree: Tree[T], f: Callable[[T], S]) -> Tree[S]:
     return Tree(f(tree.data), [map_tree(c, f) for c in tree.children])
 
 
-def count_reads(
-    taxtree: Tree[TaxID], sample_counts: SampleCounts
-) -> Counter[Sample]:
-    return sum(
-        (
-            Counter(sample_counts[t.data])
-            for t in taxtree
-            if t.data in sample_counts
-        ),
-        start=Counter(),
-    )
-
-
 def load_tax_tree(mgs_dir: Path) -> Tree[TaxID]:
     with open(mgs_dir / "dashboard/human_virus_tree.json") as data_file:
         data = json.load(data_file)
     return map_tree(parse_tree(data), lambda x: TaxID(int(x)))
+
+
+def make_count_tree(
+    taxtree: Tree[TaxID], sample_counts: SampleCounts
+) -> Tree[tuple[TaxID, Counter[Sample]]]:
+    return map_tree(
+        taxtree,
+        lambda taxid: (taxid, Counter(sample_counts[taxid]))
+        if taxid in sample_counts
+        else (taxid, Counter()),
+    )
+
+
+def count_reads(
+    taxtree: Tree[TaxID], sample_counts: SampleCounts
+) -> Counter[Sample]:
+    count_tree = make_count_tree(taxtree, sample_counts)
+    return sum(
+        (elem.data[1] for elem in count_tree),
+        start=Counter(),
+    )
 
 
 bioproject = "PRJNA729801"  # Rothman
