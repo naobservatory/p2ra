@@ -1,5 +1,11 @@
+#!/usr/bin/env python3
+
+from collections import Counter
 import numpy as np  # type: ignore
 import stan  # type: ignore
+import mgs
+
+from pathogens import pathogens
 
 
 def naive_ra_at_one_percent(
@@ -32,56 +38,67 @@ model {
 }
 """
 
-# Norovirus data from Rothman
-all_reads_millions = [40, 166, 6.7, 79, 42, 103, 97, 41, 86]
-all_reads = [int(x * 1e6) for x in all_reads_millions]
-n_studies = len(all_reads)
-relative_abundance = [
-    2.5e-8,
-    2.9e-6,
-    0.0,
-    2.5e-8,
-    1.9e-7,
-    1.1e-6,
-    7.1e-7,
-    4.4e-6,
-    6.7e-7,
-]
-virus_reads = [
-    round(tot * ra) for tot, ra in zip(all_reads, relative_abundance)
-]
-assert len(virus_reads) == n_studies
-norovirus_prevalence_per100k = 0.8
-mu = np.log(norovirus_prevalence_per100k)
-sigma = 1.0
+if __name__ == "__main__":
+    repo = mgs.GitHubRepo(
+        user="naobservatory", repo="mgs-pipeline", branch="main"
+    )
+    bp_data = mgs.load_bioprojects(repo)
+    sample_data = mgs.load_sample_attributes(repo)
+    counts = mgs.load_sample_counts(repo)
+    taxtree = mgs.load_tax_tree(repo)
 
-naive = naive_ra_at_one_percent(
-    virus_reads, all_reads, norovirus_prevalence_per100k
-)
+    bioproject = mgs.BioProject("PRJNA729801")  # Rothman
+    samples = bp_data[bioproject]
+    sample_attribs = {s: sample_data[s] for s in samples}
+    all_reads = Counter()
+    for attribs in sample_attribs.values():
+        all_reads[attribs.fine_location] += attribs.reads
+    studies = all_reads.keys()
 
+    pathogen = "norovirus"
+    taxid = pathogens[pathogen].pathogen_chars.taxid
+    subtree = taxtree[taxid]
+    assert subtree is not None
 
-data = {
-    "J": n_studies,
-    "y": virus_reads,
-    "n": all_reads,
-    "mu": mu,
-    "sigma": sigma,
-}
-seed = 1
-posterior = stan.build(stan_code, data=data, random_seed=seed)
-fit = posterior.sample(num_chains=4, num_samples=1000)
-ra_at_one_percent = np.exp(fit["b"]) * 1e3
-percentiles = [5, 25, 50, 75, 95]
-sep = "\t\t"
-title = "Relative abundance of norovirus at 1% prevalence"
-print("-" * len(title))
-print(title)
-print("-" * len(title))
-print("Naive estimate:")
-print(f"{naive:0.5f}")
-print("Posterior quantiles:")
-print(*(f"{p}%" for p in percentiles), sep=sep)
-print(
-    *(f"{x:0.5f}" for x in np.percentile(ra_at_one_percent, percentiles)),
-    sep=sep,
-)
+    samples_by_study = {
+        study: [s for s in samples if sample_attribs[s].fine_location == study]
+        for study in studies
+    }
+
+    virus_counts = mgs.count_reads(subtree, counts)
+    virus_reads = {
+        study: sum(virus_counts[s] for s in samples_by_study[study])
+        for study in studies
+    }
+
+    estimates = pathogens[pathogen].estimate_prevalences()
+    prevalence_per100k = estimates[0].infections_per_100k
+    mu = np.log(prevalence_per100k)
+    sigma = 1.0
+
+    data = {
+        "J": len(studies),
+        "y": [virus_reads[s] for s in studies],
+        "n": [all_reads[s] for s in studies],
+        "mu": mu,
+        "sigma": sigma,
+    }
+    naive = naive_ra_at_one_percent(data["y"], data["n"], np.exp(data["mu"]))
+    seed = 1
+    posterior = stan.build(stan_code, data=data, random_seed=seed)
+    fit = posterior.sample(num_chains=4, num_samples=1000)
+    ra_at_one_percent = np.exp(fit["b"]) * 1e3
+    percentiles = [5, 25, 50, 75, 95]
+    sep = "\t\t"
+    title = "Relative abundance of norovirus at 1% prevalence"
+    print("-" * len(title))
+    print(title)
+    print("-" * len(title))
+    print("Naive estimate:")
+    print(f"{naive:0.5f}")
+    print("Posterior quantiles:")
+    print(*(f"{p}%" for p in percentiles), sep=sep)
+    print(
+        *(f"{x:0.5f}" for x in np.percentile(ra_at_one_percent, percentiles)),
+        sep=sep,
+    )
