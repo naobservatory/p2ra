@@ -40,27 +40,32 @@ class GitHubRepo:
                 )
 
 
+BioProject = NewType("BioProject", str)
 Sample = NewType("Sample", str)
 
 
-def load_samples(repo: GitHubRepo, bioproject: str) -> list[Sample]:
+def load_bioprojects(repo: GitHubRepo) -> dict[BioProject, list[Sample]]:
     data = json.loads(repo.get_file("dashboard/metadata_bioprojects.json"))
-    return [Sample(s) for s in data[bioproject]]
+    return {
+        BioProject(bp): [Sample(s) for s in samples]
+        for bp, samples in data.items()
+    }
 
 
 class SampleAttributes(BaseModel):
     country: str
     location: str
     fine_location: Optional[str] = None
-    date: date
+    # Fixme: Not all the dates are real dates
+    date: date | str
     reads: int
 
 
-def load_sample_attributes(
-    repo: GitHubRepo, samples: list[Sample]
-) -> dict[Sample, SampleAttributes]:
+def load_sample_attributes(repo: GitHubRepo) -> dict[Sample, SampleAttributes]:
     data = json.loads(repo.get_file("dashboard/metadata_samples.json"))
-    return {s: SampleAttributes(**data[s]) for s in samples}
+    return {
+        Sample(s): SampleAttributes(**attribs) for s, attribs in data.items()
+    }
 
 
 SampleCounts = dict[TaxID, dict[Sample, int]]
@@ -148,17 +153,20 @@ def count_reads(
     )
 
 
-bioproject = "PRJNA729801"  # Rothman
 repo = GitHubRepo(user="naobservatory", repo="mgs-pipeline", branch="main")
-samples = load_samples(repo, bioproject)
-sample_attribs = load_sample_attributes(repo, samples)
-fine_locs = set(sample_attribs[s].fine_location for s in samples)
+bp_data = load_bioprojects(repo)
+sample_data = load_sample_attributes(repo)
 counts = load_sample_counts(repo)
 taxtree = load_tax_tree(repo)
 
-for pathogen in ["sars_cov_2", "norovirus"]:
-    print(pathogen)
-    taxid = pathogens[pathogen].pathogen_chars.taxid
+bioproject = BioProject("PRJNA729801")  # Rothman
+samples = bp_data[bioproject]
+sample_attribs = {s: sample_data[s] for s in samples}
+fine_locs = set(sample_attribs[s].fine_location for s in samples)
+
+for pathogen_name, pathogen in pathogens.items():
+    print(pathogen_name)
+    taxid = pathogen.pathogen_chars.taxid
     subtree = taxtree[taxid]
     if subtree:
         virus_counts = count_reads(subtree, counts)
