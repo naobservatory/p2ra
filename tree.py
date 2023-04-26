@@ -12,14 +12,14 @@ class Tree(Generic[T]):
     data: T
     children: list[Tree[T]] = field(default_factory=list)
 
-    def _helper(self, depth: int) -> str:
+    def _str_helper(self, depth: int) -> str:
         _spacer = "."
         return f"{_spacer * depth}{self.data}\n" + "".join(
-            c._helper(depth + 1) for c in self.children
+            c._str_helper(depth + 1) for c in self.children
         )
 
     def __str__(self) -> str:
-        return self._helper(0)
+        return self._str_helper(0)
 
     def __iter__(self):
         yield self
