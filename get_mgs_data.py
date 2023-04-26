@@ -5,7 +5,7 @@ from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
-from typing import NewType
+from typing import Callable, Generic, NewType, TypeVar
 
 from pydantic import BaseModel
 
@@ -53,14 +53,17 @@ def load_sample_counts(mgs_dir: Path) -> SampleCounts:
     }
 
 
+T = TypeVar("T")
+
+
 @dataclass
-class TaxTree:
-    taxid: TaxID
-    children: list[TaxTree] = field(default_factory=list)
+class Tree(Generic[T]):
+    data: T
+    children: list[Tree[T]] = field(default_factory=list)
 
     def _helper(self, depth: int) -> str:
         _spacer = "."
-        return f"{_spacer * depth}{self.taxid}\n" + "".join(
+        return f"{_spacer * depth}{self.data}\n" + "".join(
             c._helper(depth + 1) for c in self.children
         )
 
@@ -72,42 +75,47 @@ class TaxTree:
         for child in self.children:
             yield from child
 
-    def __getitem__(self, taxid: TaxID) -> TaxTree | None:
-        return get_subtree(self, taxid)
+    def __getitem__(self, val: T) -> Tree[T] | None:
+        return get_subtree(self, val)
 
 
-def get_subtree(taxtree: TaxTree, taxid: TaxID) -> TaxTree | None:
+def get_subtree(tree: Tree[T], val: T) -> Tree[T] | None:
     """Depth-first search for taxid"""
-    for subtree in taxtree:
-        if subtree.taxid == taxid:
+    for subtree in tree:
+        if subtree.data == val:
             return subtree
     else:
         return None
 
 
+def parse_tree(input: list) -> Tree:
+    return Tree(data=input[0], children=[parse_tree(c) for c in input[1:]])
+
+
+S = TypeVar("S")
+
+
+def map_tree(tree: Tree[T], f: Callable[[T], S]) -> Tree[S]:
+    return Tree(f(tree.data), [map_tree(c, f) for c in tree.children])
+
+
 def count_reads(
-    taxtree: TaxTree, sample_counts: SampleCounts
+    taxtree: Tree[TaxID], sample_counts: SampleCounts
 ) -> Counter[Sample]:
     return sum(
         (
-            Counter(sample_counts[t.taxid])
+            Counter(sample_counts[t.data])
             for t in taxtree
-            if t.taxid in sample_counts
+            if t.data in sample_counts
         ),
         start=Counter(),
     )
 
 
-def _parse_taxtree(input: list) -> TaxTree:
-    taxid = TaxID(int(input[0]))
-    children = input[1:]
-    return TaxTree(taxid=taxid, children=[_parse_taxtree(c) for c in children])
-
-
-def load_tax_tree(mgs_dir: Path) -> TaxTree:
+def load_tax_tree(mgs_dir: Path) -> Tree[TaxID]:
     with open(mgs_dir / "dashboard/human_virus_tree.json") as data_file:
         data = json.load(data_file)
-    return _parse_taxtree(data)
+    return map_tree(parse_tree(data), lambda x: TaxID(int(x)))
 
 
 bioproject = "PRJNA729801"  # Rothman
