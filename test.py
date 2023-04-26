@@ -100,9 +100,20 @@ class TestTree(unittest.TestCase):
         for i in range(3):
             self.assertIn(i, self.node)
 
+    def test_to_list(self):
+        self.assertEqual(self.leaf.to_list(), [0])
+        self.assertEqual(self.node.to_list(), [0, [1], [2]])
+
     def test_parse_inverse(self):
         self.assertEqual(self.node, Tree.tree_from_list(self.node.to_list()))
         self.assertEqual(self.leaf, Tree.tree_from_list(self.leaf.to_list()))
+
+    def test_map(self):
+        f = lambda x: x + 1
+        self.assertEqual(self.leaf.map(f), Tree(1))
+        self.assertEqual(
+            self.node.map(f), Tree(f(0), [Tree(f(x)) for x in range(1, 3)])
+        )
 
     def test_map_id(self):
         self.assertEqual(self.node, self.node.map(lambda x: x))
