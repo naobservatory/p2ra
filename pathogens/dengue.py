@@ -24,7 +24,7 @@ california_reported_cases = IncidenceAbsolute(
 CA_population = Population(
     people=39538245,
     tag="California-2020",
-    date = "2020-04"
+    date="2020-04",
     source="https://www.census.gov/quickfacts/CA",
 )
 # disease duration in days
