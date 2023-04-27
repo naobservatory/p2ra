@@ -184,6 +184,8 @@ class PrevalenceAbsolute(Variable):
     """How many people had this pathogen at some moment"""
 
     infections: float
+    active: Active
+
     # Make this specific enough that you won't accidentally pair it with the
     # wrong population.
     tag: str
