@@ -10,6 +10,12 @@ from pydantic import BaseModel
 from pathogen_properties import TaxID
 from tree import Tree
 
+MGS_REPO_DEFAULTS = {
+    "user": "naobservatory",
+    "repo": "mgs-pipeline",
+    "branch": "47e2025f35168d3f414ae62928f6a14dd3f7c23d",
+}
+
 
 @dataclass
 class GitHubRepo:
@@ -109,9 +115,9 @@ class MGSData:
 
     @staticmethod
     def from_repo(
-        user="naobservatory",
-        repo="mgs-pipeline",
-        branch="47e2025f35168d3f414ae62928f6a14dd3f7c23d",
+        user=MGS_REPO_DEFAULTS["user"],
+        repo=MGS_REPO_DEFAULTS["repo"],
+        branch=MGS_REPO_DEFAULTS["branch"],
     ):
         repo = GitHubRepo(user, repo, branch)
         return MGSData(
