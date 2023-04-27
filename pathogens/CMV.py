@@ -21,6 +21,8 @@ Germany_prevalence = Prevalence(
     infections_per_100k=57000,
     country="Germany",
     date="2002-2013",
+    active=Active.LATENT,
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6059406/",
 )
 
 # Specifically, "over 50% of people in the US have been infected with CMV by age 40." 40 is around the average age in the US, so this implies a prevalence of around 50%
@@ -31,14 +33,20 @@ US_prevalence = Prevalence(
     date="Current",
 )
 
-NorthAmerica_Europe_Prevalence = Prevalence(
+US_Europe_Prevalence = Prevalence(
     infections_per_100k=90000,
     source="https://pubmed.ncbi.nlm.nih.gov/20564615/",
     date="2010",
 )
 
-# Since the US-specific number is non-exact and lower, and the North America / Europe estimate is much higher and includes a very different set of countries, I think it makes sense to take the Germany estimate of 57000 per 100k
+# Since the US-specific number is non-exact and lower, and the US / Europe estimate is much higher and includes a very different set of countries, I think it makes sense to take the Germany estimate of 57000 per 100k
+
+
+adult_shedding = Scalar(
+    scalar=90,
+    source="https://pubmed.ncbi.nlm.nih.gov/15529253",
+)
 
 
 def estimate_prevalences():
-    return [Germany_prevalence]
+    return [Germany_prevalence, Germany_prevalence]
