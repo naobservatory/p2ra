@@ -30,7 +30,6 @@ RSV_pandemic_decrease = Scalar(
     source="https://www.dovepress.com/the-impact-of-the-covid-19-pandemic-on-respiratory-syncytial-virus-inf-peer-reviewed-fulltext-article-IDR#ref-cit0015",
 )
 
-# how many days does RSV usually shed for
 shedding_duration = SheddingDuration(
     days=14.1,
     source="https://academic.oup.com/aje/article/190/12/2536/6313422",
