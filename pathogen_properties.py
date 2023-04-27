@@ -25,6 +25,11 @@ class VariableType(Enum):
     NAO_ESTIMATE = "nao_estimate"
 
 
+class Active(Enum):
+    ACTIVE = "Active"
+    LATENT = "Latent"
+
+
 TaxID = NewType("TaxID", int)
 
 
@@ -154,12 +159,14 @@ class Scalar(Variable):
 class Prevalence(Variable):
     """What fraction of people have this pathogen at some moment"""
 
+    active: Active
     infections_per_100k: float
 
     def scale(self, scalar: Scalar) -> "Prevalence":
         return Prevalence(
             infections_per_100k=self.infections_per_100k * scalar.scalar,
             inputs=[self, scalar],
+            active=self.active,
         )
 
     def target(self, **kwargs) -> "Prevalence":
@@ -167,7 +174,8 @@ class Prevalence(Variable):
             infections_per_100k=self.infections_per_100k,
             inputs=[self],
             is_target=True,
-            **kwargs
+            active=self.active,
+            **kwargs,
         )
 
 
@@ -176,6 +184,8 @@ class PrevalenceAbsolute(Variable):
     """How many people had this pathogen at some moment"""
 
     infections: float
+    active: Active
+
     # Make this specific enough that you won't accidentally pair it with the
     # wrong population.
     tag: str
@@ -185,6 +195,7 @@ class PrevalenceAbsolute(Variable):
         return Prevalence(
             infections_per_100k=self.infections * 100000 / population.people,
             inputs=[self, population],
+            active=self.active,
         )
 
 
@@ -218,6 +229,7 @@ class IncidenceRate(Variable):
             * shedding_duration.days
             / 365,
             inputs=[self, shedding_duration],
+            active=Active.ACTIVE,
         )
 
 
