@@ -16,9 +16,9 @@ california_positive_tests_fall_2021 = IncidenceAbsolute(
     annual_infections=6400000 * 365 / 119,
     country="United States",
     state="California",
-    date="8/21 - 12/18, 2020",
-    start_date="8/21",
-    end_date="12/18",
+    date="2020",
+    start_date="2020-08-21",
+    end_date="2020-12-18",
     source="https://www.cdc.gov/surveillance/nrevss/images/rsvstate/RSV14NumCent5AVG_StateCA.htm",
     tag="california fall 2020",
 )
