@@ -37,7 +37,9 @@ class TestPathogens(unittest.TestCase):
 
 class TestMGS(unittest.TestCase):
     repo = mgs.GitHubRepo(
-        user="naobservatory", repo="mgs-pipeline", branch="main"
+        user="naobservatory",
+        repo="mgs-pipeline",
+        branch="47e2025f35168d3f414ae62928f6a14dd3f7c23d",
     )
 
     def test_load_bioprojects(self):
