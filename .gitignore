@@ -132,7 +132,9 @@ dmypy.json
 .pyre/
 
 # VSCode
+p2ra.code-workspace
 p2ra_prevalences.code-workspace
+../../p2ra_prevalences.code-workspace
 .vscode/
 # Mac OS
 .DS_Store

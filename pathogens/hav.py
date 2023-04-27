@@ -6,6 +6,7 @@ There is little seasonal variance in Hepatitis A incidence (https://www.cdc.
 gov/vaccines/pubs/pinkbook/hepa.html). Viral shedding persists for 1 to 3
 weeks."""
 
+# TODO: Add case surveillance data: https://wonder.cdc.gov/nndss/static/2019/annual/2019-table2h.html
 
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
