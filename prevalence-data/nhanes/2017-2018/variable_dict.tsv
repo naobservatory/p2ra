@@ -1,0 +1,738 @@
+Variable Name	Variable Description	Data File Name	Data File Description	Begin Year	EndYear	Component	Use Constraints
+SEQN	Respondent sequence number.	UCFLOW_J	Urine Flow Rate	2017	2018	Laboratory	None
+URDFLOW1	Urine #1 Flow Rate (mL/min)	UCFLOW_J	Urine Flow Rate	2017	2018	Laboratory	None
+URDFLOW2	Urine #2 Flow Rate (mL/min)	UCFLOW_J	Urine Flow Rate	2017	2018	Laboratory	None
+URDFLOW3	Urine #3 Flow Rate (mL/min)	UCFLOW_J	Urine Flow Rate	2017	2018	Laboratory	None
+URDTIME1	The time between last urination and the first urine sample collection in minutes	UCFLOW_J	Urine Flow Rate	2017	2018	Laboratory	None
+URDTIME2	The time between the first and second urine sample collections in minutes	UCFLOW_J	Urine Flow Rate	2017	2018	Laboratory	None
+URDTIME3	The time between the second and third urine sample collections in minutes	UCFLOW_J	Urine Flow Rate	2017	2018	Laboratory	None
+URXVOL1	The volume of urine collection #1 (mL)	UCFLOW_J	Urine Flow Rate	2017	2018	Laboratory	None
+URXVOL2	The volume of urine collection #2 (mL)	UCFLOW_J	Urine Flow Rate	2017	2018	Laboratory	None
+URXVOL3	The volume of urine collection #3 (mL)	UCFLOW_J	Urine Flow Rate	2017	2018	Laboratory	None
+PHAALCHR	The time (in hours) the examinee last drank alcohol such as beer, wine, or liquor.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHAALCMN	The time (in minutes) the examinee last drank alcohol such as beer, wine, or liquor.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHAANTHR	The time (in hours) the examinee last had antacids, laxatives or anti-diarrheals.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHAANTMN	The time (in minutes) the examinee last had antacids, laxatives or anti-diarrheals.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHACOFHR	The time (in hours) since the examinee last drank coffee or tea with cream or sugar.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHACOFMN	The time (in minutes) since the examinee last drank coffee or tea with cream or sugar.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHAFSTHR	The time (in hours) between when the examinee last ate or drank anything other than water and the time of the venipuncture.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHAFSTMN	The time (in minutes) between when the examinee last ate or drank anything other than water and the time of the venipuncture.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHAGUMHR	The time (in hours) the examinee last had gum, breath mints, lozenges or cough drops, or other cough or cold remedies.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHAGUMMN	The time (in minutes) the examinee last had gum, breath mints, lozenges or cough drops, or other cough or cold remedies.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHASUPHR	The time (in hours) the examinee last had dietary supplements such as vitamins and minerals.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHASUPMN	The time (in minutes) the examinee last had dietary supplements such as vitamins and minerals.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHDSESN	Session in which SP was examined	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHQ020	Coffee or tea with cream or sugar? [Include milk or non-dairy creamers.]	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHQ030	Alcohol, such as beer, wine, or liquor?	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHQ040	Gum, breath mints, lozenges or cough drops, or other cough or cold remedies?	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHQ050	Antacids, laxatives, or anti-diarrheals?	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+PHQ060	Dietary supplements such as vitamins and minerals? [Include multivitamins and single nutrient supplements.]	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	FASTQX_J	Fasting Questionnaire	2017	2018	Laboratory	None
+LBXGH	Glycohemoglobin (%)	GHB_J	Glycohemoglobin	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	GHB_J	Glycohemoglobin	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	ALB_CR_J	Albumin & Creatinine - Urine	2017	2018	Laboratory	None
+URDACT	Albumin creatinine ratio (mg/g)	ALB_CR_J	Albumin & Creatinine - Urine	2017	2018	Laboratory	None
+URDUCRLC	Creatinine, urine comment code	ALB_CR_J	Albumin & Creatinine - Urine	2017	2018	Laboratory	None
+URDUMALC	Albumin, urine comment code	ALB_CR_J	Albumin & Creatinine - Urine	2017	2018	Laboratory	None
+URXCRS	Creatinine, urine (umol/L)	ALB_CR_J	Albumin & Creatinine - Urine	2017	2018	Laboratory	None
+URXUCR	Creatinine, urine (mg/dL)	ALB_CR_J	Albumin & Creatinine - Urine	2017	2018	Laboratory	None
+URXUMA	Albumin, urine (ug/mL)	ALB_CR_J	Albumin & Creatinine - Urine	2017	2018	Laboratory	None
+URXUMS	Albumin, urine (mg/L)	ALB_CR_J	Albumin & Creatinine - Urine	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	UCPREG_J	Urine Pregnancy Test	2017	2018	Laboratory	None
+URXPREG	Urine Pregnancy Result	UCPREG_J	Urine Pregnancy Test	2017	2018	Laboratory	None
+LBXHIV1	HIV-1 antibody	HIV_J	HIV Antibody Test	2017	2018	Laboratory	None
+LBXHIV2	HIV-2 antibody	HIV_J	HIV Antibody Test	2017	2018	Laboratory	None
+LBXHIVC	HIV-1, 2 Combo Test	HIV_J	HIV Antibody Test	2017	2018	Laboratory	None
+LBXHNAT	HIV Confirmatory Test	HIV_J	HIV Antibody Test	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	HIV_J	HIV Antibody Test	2017	2018	Laboratory	None
+LBXHA	Hepatitis A antibody	HEPA_J	Hepatitis A	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	HEPA_J	Hepatitis A	2017	2018	Laboratory	None
+LBXHBS	Hepatitis B Surface Antibody	HEPB_S_J	Hepatitis B: Surface Antibody	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	HEPB_S_J	Hepatitis B: Surface Antibody	2017	2018	Laboratory	None
+LBDHBG	Hepatitis B surface antigen	HEPBD_J	Hepatitis B: Core antibody, Surface antigen, and Hepatitis D antibody	2017	2018	Laboratory	None
+LBDHD	Hepatitis D antibody (anti-HDV)	HEPBD_J	Hepatitis B: Core antibody, Surface antigen, and Hepatitis D antibody	2017	2018	Laboratory	None
+LBXHBC	Hepatitis B core antibody	HEPBD_J	Hepatitis B: Core antibody, Surface antigen, and Hepatitis D antibody	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	HEPBD_J	Hepatitis B: Core antibody, Surface antigen, and Hepatitis D antibody	2017	2018	Laboratory	None
+LBDHCI	Hepatitis C Antibody (confirmed)	HEPC_J	Hepatitis C: RNA (HCV-RNA), Confirmed Antibody (INNO-LIA), & Genotype	2017	2018	Laboratory	None
+LBXHCG	Hepatitis C Genotype	HEPC_J	Hepatitis C: RNA (HCV-RNA), Confirmed Antibody (INNO-LIA), & Genotype	2017	2018	Laboratory	None
+LBXHCR	Hepatitis C RNA	HEPC_J	Hepatitis C: RNA (HCV-RNA), Confirmed Antibody (INNO-LIA), & Genotype	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	HEPC_J	Hepatitis C: RNA (HCV-RNA), Confirmed Antibody (INNO-LIA), & Genotype	2017	2018	Laboratory	None
+LBDHEG	Hepatitis E IgG (anti-HEV)	HEPE_J	Hepatitis E: IgG & IgM Antibodies	2017	2018	Laboratory	None
+LBDHEM	Hepatitis E IgM (anti-HEV)	HEPE_J	Hepatitis E: IgG & IgM Antibodies	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	HEPE_J	Hepatitis E: IgG & IgM Antibodies	2017	2018	Laboratory	None
+LBDBANO	Basophils number (1000 cells/uL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBDEONO	Eosinophils number (1000 cells/uL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBDLYMNO	Lymphocyte number (1000 cells/uL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBDMONO	Monocyte number (1000 cells/uL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBDNENO	Segmented neutrophils number (1000 cell/uL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXBAPCT	Basophils percent (%)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXEOPCT	Eosinophils percent (%)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXHCT	Hematocrit (%)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXHGB	Hemoglobin (g/dL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXLYPCT	Lymphocyte percent (%)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXMC	Mean cell hemoglobin concentration (g/dL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXMCHSI	Mean cell hemoglobin (pg)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXMCVSI	Mean cell volume (fL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXMOPCT	Monocyte percent (%)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXMPSI	Mean platelet volume (fL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXNEPCT	Segmented neutrophils percent (%)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXNRBC	Nucleated red blood cells	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXPLTSI	Platelet count (1000 cells/uL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXRBCSI	Red blood cell count (million cells/uL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXRDW	Red cell distribution width (%)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBXWBCSI	White blood cell count (1000 cells/uL)	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	CBC_J	Complete Blood Count with 5-Part Differential	2017	2018	Laboratory	None
+LBDHRPLC	High-Sensitivity C-Reactive Protein (hs-CRP) Comment Code	HSCRP_J	High-Sensitivity C-Reactive Protein	2017	2018	Laboratory	None
+LBXHSCRP	High-Sensitivity C-Reactive Protein (hs-CRP) (mg/L)	HSCRP_J	High-Sensitivity C-Reactive Protein	2017	2018	Laboratory	None
+SEQN	Respondent Sequence Number	HSCRP_J	High-Sensitivity C-Reactive Protein	2017	2018	Laboratory	None
+LBDTCSI	Total Cholesterol (mmol/L)	TCHOL_J	Cholesterol - Total	2017	2018	Laboratory	None
+LBXTC	Total Cholesterol (mg/dL)	TCHOL_J	Cholesterol - Total	2017	2018	Laboratory	None
+SEQN	Respondent Sequence Number	TCHOL_J	Cholesterol - Total	2017	2018	Laboratory	None
+LBDHDD	Direct HDL-Cholesterol (mg/dL)	HDL_J	Cholesterol - High - Density Lipoprotein (HDL)	2017	2018	Laboratory	None
+LBDHDDSI	Direct HDL-Cholesterol (mmol/L)	HDL_J	Cholesterol - High - Density Lipoprotein (HDL)	2017	2018	Laboratory	None
+SEQN	Respondent Sequence Number	HDL_J	Cholesterol - High - Density Lipoprotein (HDL)	2017	2018	Laboratory	None
+LBDSALSI	Albumin, refrigerated serum(g/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSATLC	Alanine Aminotransferase (ALT) Comment Code	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSBUSI	Blood Urea Nitrogen (mmol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSCASI	Total Calcium (mmol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSCHSI	Total Cholesterol, refrigerated serum (mmol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSCRSI	Creatinine, refrigerated serum (umol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSGBSI	Globulin (g/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSGLSI	Glucose, refrigerated serum (mmol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSGTLC	Gamma Glutamyl Transferase (GGT) Comment Code	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSIRSI	Iron, refrigerated serum (umol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSPHSI	Phosphorus (mmol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSTBLC	Total Bilirubin Comment Code	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSTBSI	Total Bilirubin (umol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSTPSI	Total Protein (g/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSTRSI	Triglycerides, refrigerated serum (mmol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDSUASI	Uric acid (umol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSAL	Albumin, refrigerated serum (g/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSAPSI	Alkaline Phosphatase (ALP) (IU/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSASSI	Aspartate Aminotransferase (AST) (U/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSATSI	Alanine Aminotransferase (ALT) (U/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSBU	Blood Urea Nitrogen (mg/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSC3SI	Bicarbonate (mmol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSCA	Total Calcium (mg/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSCH	Total Cholesterol, refrigerated serum (mg/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSCK	Creatine Phosphokinase (CPK) (IU/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSCLSI	Chloride (mmol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSCR	Creatinine, refrigerated serum (mg/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSGB	Globulin (g/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSGL	Glucose, refrigerated serum (mg/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSGTSI	Gamma Glutamyl Transferase (GGT) (IU/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSIR	Iron, refrigerated serum (ug/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSKSI	Potassium (mmol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSLDSI	Lactate Dehydrogenase (LDH) (IU/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSNASI	Sodium (mmol/L)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSOSSI	Osmolality (mmol/Kg)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSPH	Phosphorus (mg/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSTB	Total Bilirubin (mg/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSTP	Total Protein (g/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSTR	Triglycerides, refrigerated serum (mg/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBXSUA	Uric acid (mg/dL)	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+SEQN	Respondent Sequence Number	BIOPRO_J	Standard Biochemistry Profile	2017	2018	Laboratory	None
+LBDIRNSI	Iron frozen, Serum (umol/L)	FETIB_J	Iron Status - Serum	2017	2018	Laboratory	None
+LBDPCT	Transferrin Saturation (%)	FETIB_J	Iron Status - Serum	2017	2018	Laboratory	None
+LBDTIB	Total Iron Binding Capacity TIBC (ug/dL)	FETIB_J	Iron Status - Serum	2017	2018	Laboratory	None
+LBDTIBSI	Total Iron Binding Capacity (TIBC) (umol/L)	FETIB_J	Iron Status - Serum	2017	2018	Laboratory	None
+LBDUIBLC	Unsaturated Iron Binding Capacity (UIBC), Serum Comment Code	FETIB_J	Iron Status - Serum	2017	2018	Laboratory	None
+LBDUIBSI	Unsaturated Iron Binding Capacity (UIBC), Serum (umol/L)	FETIB_J	Iron Status - Serum	2017	2018	Laboratory	None
+LBXIRN	Iron frozen, Serum (ug/dL)	FETIB_J	Iron Status - Serum	2017	2018	Laboratory	None
+LBXUIB	Unsaturated Iron Binding Capacity (UIBC), Serum (ug/dL)	FETIB_J	Iron Status - Serum	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	FETIB_J	Iron Status - Serum	2017	2018	Laboratory	None
+LBDBCDLC	Blood cadmium comment code	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBDBCDSI	Blood cadmium (nmol/L)	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBDBMNLC	Blood manganese comment code	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBDBMNSI	Blood manganese (nmol/L)	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBDBPBLC	Blood lead comment code	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBDBPBSI	Blood lead (umol/L)	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBDBSELC	Blood selenium comment code	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBDBSESI	Blood selenium (umol/L)	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBDTHGLC	Blood mercury, total comment code	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBDTHGSI	Blood mercury, total (nmol/L)	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBXBCD	Blood cadmium (ug/L)	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBXBMN	Blood manganese (ug/L)	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBXBPB	Blood lead (ug/dL)	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBXBSE	Blood selenium(ug/L)	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBXTHG	Blood mercury, total (ug/L)	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	PBCD_J	Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood	2017	2018	Laboratory	None
+LBDBCOLC	Cobalt Comment Code	CRCO_J	Chromium & Cobalt	2017	2018	Laboratory	None
+LBDBCOSI	Cobalt (nmol/L)	CRCO_J	Chromium & Cobalt	2017	2018	Laboratory	None
+LBDBCRLC	Chromium Comment Code	CRCO_J	Chromium & Cobalt	2017	2018	Laboratory	None
+LBDBCRSI	Chromium (nmol/L)	CRCO_J	Chromium & Cobalt	2017	2018	Laboratory	None
+LBXBCO	Cobalt (ug/L)	CRCO_J	Chromium & Cobalt	2017	2018	Laboratory	None
+LBXBCR	Chromium (ug/L)	CRCO_J	Chromium & Cobalt	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	CRCO_J	Chromium & Cobalt	2017	2018	Laboratory	None
+LBDBGELC	Mercury, ethyl comment code	IHGEM_J	Mercury: Inorganic, Ethyl and Methyl - Blood	2017	2018	Laboratory	None
+LBDBGESI	Mercury, ethyl (nmol/L)	IHGEM_J	Mercury: Inorganic, Ethyl and Methyl - Blood	2017	2018	Laboratory	None
+LBDBGMLC	Mercury, methyl comment code	IHGEM_J	Mercury: Inorganic, Ethyl and Methyl - Blood	2017	2018	Laboratory	None
+LBDBGMSI	Mercury, methyl (nmol/L)	IHGEM_J	Mercury: Inorganic, Ethyl and Methyl - Blood	2017	2018	Laboratory	None
+LBDIHGLC	Mercury, inorganic comment code	IHGEM_J	Mercury: Inorganic, Ethyl and Methyl - Blood	2017	2018	Laboratory	None
+LBDIHGSI	Mercury, inorganic (nmol/L)	IHGEM_J	Mercury: Inorganic, Ethyl and Methyl - Blood	2017	2018	Laboratory	None
+LBXBGE	Mercury, ethyl (ug/L)	IHGEM_J	Mercury: Inorganic, Ethyl and Methyl - Blood	2017	2018	Laboratory	None
+LBXBGM	Mercury, methyl (ug/L)	IHGEM_J	Mercury: Inorganic, Ethyl and Methyl - Blood	2017	2018	Laboratory	None
+LBXIHG	Inorganic mercury, blood (ug/L)	IHGEM_J	Mercury: Inorganic, Ethyl and Methyl - Blood	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	IHGEM_J	Mercury: Inorganic, Ethyl and Methyl - Blood	2017	2018	Laboratory	None
+LBXIGG	Cytomegalovirus (CMV) IgG	CMV_J	Cytomegalovirus IgG & IgM Antibodies - Serum	2017	2018	Laboratory	None
+LBXIGGA	Cytomegalovirus (CMV) IgG avidity	CMV_J	Cytomegalovirus IgG & IgM Antibodies - Serum	2017	2018	Laboratory	None
+LBXIGM	Cytomegalovirus (CMV) IgM	CMV_J	Cytomegalovirus IgG & IgM Antibodies - Serum	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	CMV_J	Cytomegalovirus IgG & IgM Antibodies - Serum	2017	2018	Laboratory	None
+LBXHE2	Herpes Simplex Virus Type 2	HSV_J_R	Herpes Simplex Virus Type-2 - Youth	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number	HSV_J_R	Herpes Simplex Virus Type-2 - Youth	2017	2018	Laboratory	RDC Only
+LBXHE1	Herpes Simplex Virus Type 1	HSVA_J_R	Herpes Simplex Virus Type-1 and Type-2	2017	2018	Laboratory	RDC Only
+LBXHE2	Herpes Simplex Virus Type 2	HSVA_J_R	Herpes Simplex Virus Type-1 and Type-2	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number	HSVA_J_R	Herpes Simplex Virus Type-1 and Type-2	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number	MGEA_J_R	Mycoplasma genitalium - Urine - Adult	2017	2018	Laboratory	RDC Only
+URXMYGE	Mycoplasma genitalium, Urine	MGEA_J_R	Mycoplasma genitalium - Urine - Adult	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number	MGEN_J_R	Mycoplasma genitalium - Urine - Youth	2017	2018	Laboratory	RDC Only
+URXMYGE	Mycoplasma genitalium, Urine	MGEN_J_R	Mycoplasma genitalium - Urine - Youth	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number.	TRIA_J_R	Trichomonas - Urine - Adult	2017	2018	Laboratory	RDC Only
+URXUTRI	Trichomonas, Urine	TRIA_J_R	Trichomonas - Urine - Adult	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number.	TRIC_J_R	Trichomonas - Urine - Youth	2017	2018	Laboratory	RDC Only
+URXUTRI	Trichomonas, Urine	TRIC_J_R	Trichomonas - Urine - Youth	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number.	CHLA_J_R	Chlamydia - Urine - Adult	2017	2018	Laboratory	RDC Only
+URXUCL	Chlamydia, Urine	CHLA_J_R	Chlamydia - Urine - Adult	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number	CHLM_J_R	Chlamydia - Urine - Youth	2017	2018	Laboratory	RDC Only
+URXUCL	Chlamydia, Urine	CHLM_J_R	Chlamydia - Urine - Youth	2017	2018	Laboratory	RDC Only
+LBDGLUSI	Fasting Glucose (mmol/L)	GLU_J	Plasma Fasting Glucose	2017	2018	Laboratory	None
+LBXGLU	Fasting Glucose (mg/dL)	GLU_J	Plasma Fasting Glucose	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	GLU_J	Plasma Fasting Glucose	2017	2018	Laboratory	None
+WTSAF2YR	Fasting Subsample 2 Year MEC Weight	GLU_J	Plasma Fasting Glucose	2017	2018	Laboratory	None
+LBDCOTLC	Cotinine, Serum Comment Code	COT_J	Cotinine and Hydroxycotinine - Serum	2017	2018	Laboratory	None
+LBDHCTLC	Hydroxycotinine, Serum Comment Code	COT_J	Cotinine and Hydroxycotinine - Serum	2017	2018	Laboratory	None
+LBXCOT	Cotinine, Serum (ng/mL)	COT_J	Cotinine and Hydroxycotinine - Serum	2017	2018	Laboratory	None
+LBXHCT	Hydroxycotinine, Serum (ng/mL)	COT_J	Cotinine and Hydroxycotinine - Serum	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	COT_J	Cotinine and Hydroxycotinine - Serum	2017	2018	Laboratory	None
+LBDINLC	Insulin Comment Code	INS_J	Insulin	2017	2018	Laboratory	None
+LBDINSI	Insulin (pmol/L)	INS_J	Insulin	2017	2018	Laboratory	None
+LBXIN	Insulin (uU/mL)	INS_J	Insulin	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	INS_J	Insulin	2017	2018	Laboratory	None
+WTSAF2YR	Fasting Subsample 2 Year MEC Weight	INS_J	Insulin	2017	2018	Laboratory	None
+LBDFERSI	Ferritin (ug/L)	FERTIN_J	Ferritin	2017	2018	Laboratory	None
+LBXFER	Ferritin (ng/mL)	FERTIN_J	Ferritin	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	FERTIN_J	Ferritin	2017	2018	Laboratory	None
+LBDVICLC	Vitamin C comment code	VIC_J	Vitamin C	2017	2018	Laboratory	None
+LBDVICSI	Vitamin C (umol/L)	VIC_J	Vitamin C	2017	2018	Laboratory	None
+LBXVIC	Vitamin C (mg/dL)	VIC_J	Vitamin C	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	VIC_J	Vitamin C	2017	2018	Laboratory	None
+LBDLDL	LDL-Cholesterol, Friedewald equation (mg/dL). LBDLDL = (LBXTC-(LBDHDD + LBXTR/5), round to 0 decimal places) for LBXTR less than 400 mg/dL, and missing for LBXTR greater than 400 mg/dL. LBDHDD from public release file HDL_J	TRIGLY_J	Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides	2017	2018	Laboratory	None
+LBDLDLM	LDL-Cholesterol, Martin-Hopkins equation (mg/dL). LBDLDLM = (LBXTC-(LBDHDD + LBXTR/Adjustable Factor), round to 0 decimal places) for LBXTR less than 400 mg/dL, and missing for LBXTR greater than 400 mg/dL. LBDHDD from public release file HDL_J	TRIGLY_J	Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides	2017	2018	Laboratory	None
+LBDLDLN	LBDLDLN = (LBXTC/0.948 – LBDHDD/0.971 – (LBXTR/8.56 + (LBXTR * (LBXTC – LBDHDD))/2140 – LBXTR^2/16100) – 9.44), round 0 decimal places) for LBXTR less than 800 mg/dL, and missing for LBXTR GE 800 mg/dL. ^2 stands for power=2, or squared. LBDHDD from public release file HDL_J	TRIGLY_J	Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides	2017	2018	Laboratory	None
+LBDLDLSI	LDL-Cholesterol, Friedewald equation (mmol/L)	TRIGLY_J	Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides	2017	2018	Laboratory	None
+LBDLDMSI	LDL-Cholesterol, Martin-Hopkins equation (mmol/L)	TRIGLY_J	Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides	2017	2018	Laboratory	None
+LBDLDNSI	LDL-Cholesterol, NIH equation 2 (mmol/L)	TRIGLY_J	Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides	2017	2018	Laboratory	None
+LBDTRSI	Triglyceride (mmol/L)	TRIGLY_J	Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides	2017	2018	Laboratory	None
+LBXTR	Triglyceride (mg/dL)	TRIGLY_J	Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	TRIGLY_J	Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides	2017	2018	Laboratory	None
+WTSAF2YR	Fasting Subsample 2 Year MEC Weight	TRIGLY_J	Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides	2017	2018	Laboratory	None
+LBDRFO	RBC folate (ng/mL)	FOLATE_J	Folate - RBC	2017	2018	Laboratory	None
+LBDRFOSI	RBC folate (nmol/L)	FOLATE_J	Folate - RBC	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	FOLATE_J	Folate - RBC	2017	2018	Laboratory	None
+WTFOL2YR	Folate and Folate Forms Weight	FOLATE_J	Folate - RBC	2017	2018	Laboratory	None
+LBDFOT	Serum total folate (ng/mL)	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBDFOTSI	Serum total folate (nmol/L)	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBDSF1LC	5-Methyl-tetrahydrofolic comment code	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBDSF2LC	Folic acid comment code	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBDSF3LC	5-Formyl-tetrahydrofolate comment code	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBDSF4LC	Tetrahydrofolate comment code	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBDSF5LC	5,10-Methenyl-tetrahydrofolate comment code	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBDSF6LC	Mefox oxidation product comment code	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBXSF1SI	5-Methyl-tetrahydrofolate (nmol/L)	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBXSF2SI	Folic acid (nmol/L)	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBXSF3SI	5-Formyl-tetrahydrofolate (nmol/L)	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBXSF4SI	Tetrahydrofolate (nmol/L)	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBXSF5SI	5,10-Methenyl-tetrahydrofolate (nmol/L)	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+LBXSF6SI	Mefox oxidation product (nmol/L)	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+WTFOL2YR	Folate and Folate Forms Weight	FOLFMS_J	Folate Forms - Total & Individual - Serum	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URDUA3LC	Urinary Arsenous acid comment code	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URDUA5LC	Urinary Arsenic acid comment code	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URDUABLC	Urinary Arsenobetaine comment code	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URDUACLC	Urinary Arsenocholine comment code	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URDUDALC	Urinary Dimethylarsinic acid comment code	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URDUMMAL	Urinary Monomethylarsonic acid comment code	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URXUAB	Urinary Arsenobetaine (ug/L)	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URXUAC	Urinary Arsenocholine (ug/L)	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URXUAS3	Urinary Arsenous acid (ug/L)	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URXUAS5	Urinary Arsenic acid (ug/L)	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URXUDMA	Urinary Dimethylarsinic acid (ug/L)	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+URXUMMA	Urinary Monomethylarsonic acid (ug/L)	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+WTSA2YR	Subsample A weights	UAS_J	Arsenics - Speciated - Urine	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	UTAS_J	Arsenic - Total - Urine	2017	2018	Laboratory	None
+URDUASLC	Arsenic, Total - Urine Comment Code	UTAS_J	Arsenic - Total - Urine	2017	2018	Laboratory	None
+URXUAS	Arsenic, Total - Urine (ug/L)	UTAS_J	Arsenic - Total - Urine	2017	2018	Laboratory	None
+WTSA2YR	Subsample A weights	UTAS_J	Arsenic - Total - Urine	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URDUBALC	Urinary Barium Comment Code	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URDUCDLC	Urinary Cadmium Comment Code	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URDUCOLC	Urinary Cobalt Comment Code	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URDUCSLC	Urinary Cesium Comment Code	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URDUMNLC	Urinary Mn Comment Code	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URDUMOLC	Urinary Molybdenum Comment Code	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URDUPBLC	Urinary Lead Comment Code	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URDUSBLC	Urinary Antimony Comment Code	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URDUSNLC	USN Comment Code	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URDUTLLC	Urinary Thallium Comment Code	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URDUTULC	Urinary Tungsten Comment Code	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URXUBA	Barium, urine (ug/L)	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URXUCD	Cadmium, urine (ug/L)	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URXUCO	Cobalt, urine (ug/L)	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URXUCS	Cesium, urine (ug/L)	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URXUMN	Manganese, urine (ug/L)	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URXUMO	Molybdenum, urine (ug/L)	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URXUPB	Lead, urine (ug/L)	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URXUSB	Antimony, urine (ug/L)	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URXUSN	Tin, urine (ug/L)	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URXUTL	Thallium, urine (ug/L)	UM_J	Metals - Urine	2017	2018	Laboratory	None
+URXUTU	Tungsten, urine (ug/L)	UM_J	Metals - Urine	2017	2018	Laboratory	None
+WTSA2YR	Subsample A weights	UM_J	Metals - Urine	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	UCM_J	Chromium - Urine	2017	2018	Laboratory	None
+URDUCMLC	Chromium, Urine Comment Code	UCM_J	Chromium - Urine	2017	2018	Laboratory	None
+URXUCM	Chromium, Urine (ug/L)	UCM_J	Chromium - Urine	2017	2018	Laboratory	None
+WTSA2YR	Subsample A weights	UCM_J	Chromium - Urine	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	UHG_J	Mercury: Inorganic - Urine	2017	2018	Laboratory	None
+URDUHGLC	Mercury, Urine Comment Code	UHG_J	Mercury: Inorganic - Urine	2017	2018	Laboratory	None
+URXUHG	Urine Mercury (ug/L)	UHG_J	Mercury: Inorganic - Urine	2017	2018	Laboratory	None
+WTSA2YR	Subsample A weights	UHG_J	Mercury: Inorganic - Urine	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	UNI_J	Nickel - Urine	2017	2018	Laboratory	None
+URDUNILC	Nickel, Urine Comment Code	UNI_J	Nickel - Urine	2017	2018	Laboratory	None
+URXUNI	Nickel, Urine (ug/L)	UNI_J	Nickel - Urine	2017	2018	Laboratory	None
+WTSA2YR	Subsample A weights	UNI_J	Nickel - Urine	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	UIO_J	Iodine - Urine	2017	2018	Laboratory	None
+URDUIOLC	Iodine, urine comment code	UIO_J	Iodine - Urine	2017	2018	Laboratory	None
+URXUIO	Iodine, urine (ug/L)	UIO_J	Iodine - Urine	2017	2018	Laboratory	None
+WTSA2YR	Subsample A weights	UIO_J	Iodine - Urine	2017	2018	Laboratory	None
+LBD2DFLC	Blood 2,5-Dimethylfuran Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBD4CELC	Blood 1,1,1,2-Tetrachloroethane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDV06LC	Blood Hexane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDV07LC	Blood Heptane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDV08LC	Blood Octane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDV1DLC	Blood 1,2-Dichlorobenzene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDV2ALC	Blood 1,2-Dichloroethane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDV3BLC	Blood 1,3-Dichlorobenzene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDV4CLC	Blood Tetrachloroethene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVBFLC	Blood Bromoform Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVBMLC	Blood Bromodichloromethane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVBZLC	Blood Benzene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVC6LC	Blood Cyclohexane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVCBLC	Blood Chlorobenzene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVCFLC	Blood Chloroform Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVCMLC	Blood Dibromochloromethane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVCTLC	Blood Carbon Tetrachloride Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVDBLC	Blood 1,4-Dichlorobenzene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVDELC	Blood 1,2-Dibromoethane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVEALC	Blood Ethyl Acetate Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVEBLC	Blood Ethylbenzene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVECLC	Blood Chloroethane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVEELC	Blood Diethyl Ether Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVFNLC	Blood Furan Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVFTLC	Blood aaa-Trifluorotoluene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVHTLC	Blood Tetrahydrofuran Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVIBLC	Blood Isobutyronitrile Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVIPLC	Blood Isopropylbenzene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVMCLC	Blood Methylene Chloride Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVMELC	Blood Methyl-tert-butyl ether (MTBE) Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVMKLC	Blood Methyl Isobutyl Ketone Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVMPLC	Blood Methylcyclopentane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVNBLC	Blood Nitrobenzene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVOXLC	Blood o-Xylene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVTCLC	Blood Trichloroethene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVTELC	Blood 1,1,1-Trichloroethane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVTPLC	Blood 1,2,3-Trichloropropane Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVVBLC	Blood Vinyl Bromide Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVXYLC	Blood m-/p-Xylene Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDVZBLC	Blood Benzonitrile Comment Code	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBX2DF	Blood 2,5-Dimethylfuran (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBX4CE	Blood 1,1,1,2-Tetrachloroethane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXV06	Blood Hexane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXV07N	Blood Heptane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXV08N	Blood Octane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXV1D	Blood 1,2-Dichlorobenzene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXV2A	Blood 1,2-Dichloroethane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXV3B	Blood 1,3-Dichlorobenzene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXV4C	Blood Tetrachloroethene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVBF	Blood Bromoform (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVBM	Blood Bromodichloromethane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVBZ	Blood Benzene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVBZN	Blood Benzonitrile (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVC6	Blood Cyclohexane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVCB	Blood Chlorobenzene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVCF	Blood Chloroform (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVCM	Blood Dibromochloromethane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVCT	Blood Carbon Tetrachloride (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVDB	Blood 1,4-Dichlorobenzene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVDE	Blood 1,2-Dibromoethane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVDEE	Blood Diethyl Ether (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVEA	Blood Ethyl Acetate (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVEB	Blood Ethylbenzene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVEC	Blood Chloroethane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVFN	Blood Furan (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVIBN	Blood Isobutyronitrile (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVIPB	Blood Isopropylbenzene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVMC	Blood Methylene Chloride (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVMCP	Blood Methylcyclopentane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVME	Blood Methyl-tert-butyl ether (MTBE) (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVMIK	Blood Methyl Isobutyl Ketone (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVNB	Blood Nitrobenzene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVOX	Blood o-Xylene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVTC	Blood Trichloroethene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVTE	Blood 1,1,1-Trichloroethane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVTFT	Blood aaa-Trifluorotoluene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVTHF	Blood Tetrahydrofuran (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVTP	Blood 1,2,3-Trichloropropane (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVVB	Blood Vinyl Bromide (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBXVXY	Blood m-/p-Xylene (ng/mL)	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+WTSVOC2Y	VOC Subsample Weight	VOCWB_J	Volatile Organic Compounds and Trihalomethanes/MTBE - Blood	2017	2018	Laboratory	None
+LBDBPBLC	Blood lead comment code	PBY_J_R	Lead - Blood - Youth	2017	2018	Laboratory	RDC Only
+LBDBPBSI	Blood lead (umol/L)	PBY_J_R	Lead - Blood - Youth	2017	2018	Laboratory	RDC Only
+LBXBPB	Blood lead (ug/dL)	PBY_J_R	Lead - Blood - Youth	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number	PBY_J_R	Lead - Blood - Youth	2017	2018	Laboratory	RDC Only
+LBDBFOAL	Branch perfluorooctanoic acid isomers Comment Code	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBDMFOSL	Perfluoromethylheptane sulfonic acid isomers (Sm-PFOS) Comment Code	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBDMPAHL	2-(N-methylperfluoroctanesulfonamido)acetic acid (Me-PFOSA-AcOH) Comment Code	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBDNFOAL	n-perfluorooctanoic acid (n-PFOA) Comment Code	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBDNFOSL	n-perfluorooctane sulfonic acid (n-PFOS) Comment Code	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBDPFDEL	Perfluorodecanoic acid (PFDeA) Comment Code	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBDPFHSL	Perfluorohexane sulfonic acid (PFHxS) Comment Code	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBDPFNAL	Perfluorononanoic acid (PFNA) Comment Code	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBDPFUAL	Perfluoroundecanoic acid (PFUA) Comment Code	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBXBFOA	Branch perfluorooctanoic acid isomers (Sb-PFOA) (ng/mL)	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBXMFOS	Perfluoromethylheptane sulfonic acid isomers (Sm-PFOS) (ng/mL)	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBXMPAH	2-(N-methylperfluoroctanesulfonamido)acetic acid (Me-PFOSA-AcOH) (ng/mL)	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBXNFOA	n-perfluorooctanoic acid (n-PFOA) (ng/mL)	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBXNFOS	n-perfluorooctane sulfonic acid (n-PFOS) (ng/mL)	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBXPFDE	Perfluorodecanoic acid (PFDeA) (ng/mL)	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBXPFHS	Perfluorohexane sulfonic acid (PFHxS) (ng/mL)	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBXPFNA	Perfluorononanoic acid (PFNA) (ng/mL)	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+LBXPFUA	Perfluoroundecanoic acid (PFUA) (ng/mL)	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+WTSB2YR	Subsample B weights	PFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDCNPLC	Mono(carboxynonyl) phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDCOPLC	Mono(carboxyoctyl) phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDECPLC	Mono-2-ethyl-5-carboxypentyl phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDEPCLC	Mono-2-ethyl-5-carboxypentylterephthalate Comment Code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDHIBLC	Mono-2-hydroxy-iso-butyl phthalate Comment Code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMBPLC	Mono-n-butyl phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMC1LC	Mono-(3-carboxypropyl) phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMCHLC	Cyclohexane 1,2-dicarboxylic acid monohydroxy isononyl ester comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMCOLC	Cyclohexane-1,2-dicarboxylic acid-mono(carboxyoctyl) ester phthalate Comment Code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMEPLC	Mono-ethyl phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMHBLC	Mono-3-hydroxy-n-butyl phthalate Comment Code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMHHLC	Mono-(2-ethyl-5-hydroxyhexyl) phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMHPLC	Mono-(2-ethyl)-hexyl phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMHTLC	Mono-2-ethyl-5-hydroxyhexylterephthalate Comment Code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMIBLC	Mono-isobutyl phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMNPLC	Mono-isononyl phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMOHLC	Mono-(2-ethyl-5-oxohexyl) phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMONLC	Monooxoisononyl phthalate Comment Code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URDMZPLC	Mono-benzyl phthalate comment code	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXCNP	Mono(carboxynonyl) Phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXCOP	Mono(carboxyoctyl) Phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXECP	Mono-2-ethyl-5-carboxypentyl phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXECPT	Mono-2-ethyl-5-carboxypentylterephthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXHIBP	Mono-2-hydroxy-iso-butyl phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMBP	Mono-n-butyl phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMC1	Mono-(3-carboxypropyl) phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMCOH	Cyclohexane-1,2-dicarboxylic acid-mono(carboxyoctyl) ester phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMEP	Mono-ethyl phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMHBP	Mono-3-hydroxy-n-butyl phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMHH	Mono-(2-ethyl-5-hydroxyhexyl) phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMHHT	Mono-2-ethyl-5-hydroxyhexylterephthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMHNC	Cyclohexane 1,2-dicarboxylic acid monohydroxy isononyl ester (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMHP	Mono-(2-ethyl)-hexyl phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMIB	Mono-isobutyl phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMNP	Mono-isononyl phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMOH	Mono-(2-ethyl-5-oxohexyl) phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMONP	Mono-oxoisononyl phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+URXMZP	Mono-benzyl phthalate (ng/mL)	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+WTSB2YR	Environmental B 2-year weights	PHTHTE_J	Phthalates and Plasticizers Metabolites - Urine	2017	2018	Laboratory	None
+LBDR06	HPV type 6	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR11	HPV type 11	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR16	HPV type 16	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR18	HPV type 18	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR26	HPV type 26	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR31	HPV type 31	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR33	HPV type 33	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR35	HPV type 35	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR39	HPV type 39	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR40	HPV type 40	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR42	HPV type 42	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR45	HPV type 45	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR51	HPV type 51	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR52	HPV type 52	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR53	HPV type 53	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR54	HPV type 54	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR55	HPV type 55	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR56	HPV type 56	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR58	HPV type 58	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR59	HPV type 59	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR61	HPV type 61	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR62	HPV type 62	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR64	HPV type 64	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR66	HPV type 66	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR67	HPV type 67	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR68	HPV type 68	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR69	HPV type 69	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR70	HPV type 70	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR71	HPV type 71	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR72	HPV type 72	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR73	HPV type 73	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR81	HPV type 81	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR82	HPV type 82	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR83	HPV type 83	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR84	HPV type 84	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR89	HPV type 89	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDRHP	Roche LA high positive globin control	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDRLP	Roche LA low positive globin control	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDRPCR	Roche HPV linear array (LA) summary result	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDRPI	HPV type IS39	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number.	HPVS_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Youth	2017	2018	Laboratory	RDC Only
+LBDR06	HPV type 6	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR11	HPV type 11	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR16	HPV type 16	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR18	HPV type 18	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR26	HPV type 26	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR31	HPV type 31	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR33	HPV type 33	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR35	HPV type 35	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR39	HPV type 39	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR40	HPV type 40	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR42	HPV type 42	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR45	HPV type 45	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR51	HPV type 51	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR52	HPV type 52	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR53	HPV type 53	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR54	HPV type 54	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR55	HPV type 55	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR56	HPV type 56	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR58	HPV type 58	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR59	HPV type 59	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR61	HPV type 61	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR62	HPV type 62	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR64	HPV type 64	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR66	HPV type 66	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR67	HPV type 67	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR68	HPV type 68	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR69	HPV type 69	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR70	HPV type 70	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR71	HPV type 71	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR72	HPV type 72	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR73	HPV type 73	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR81	HPV type 81	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR82	HPV type 82	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR83	HPV type 83	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR84	HPV type 84	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDR89	HPV type 89	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDRHP	Roche LA high positive globin control	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDRLP	Roche LA low positive globin control	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDRPCR	Roche HPV linear array (LA) summary result	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBDRPI	HPV type IS39	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number.	HPVW_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array - Adults	2017	2018	Laboratory	RDC Only
+LBXHP2C	Cobas HPV Swab High Risk	HPWC_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Cobas High-Risk - Adults	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number.	HPWC_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Cobas High-Risk - Adults	2017	2018	Laboratory	RDC Only
+LBXHP2C	Cobas HPV Swab High Risk	HPVC_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Cobas High-Risk - Youth	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number.	HPVC_J_R	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Cobas High-Risk - Youth	2017	2018	Laboratory	RDC Only
+SEQN	Respondent sequence number	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+SSCLPF	Chlorohexadecafluorooxanonane sulfonate	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+SSCLPFL	Chlorohexadecafluorooxanonane sulfonate comment code	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+SSDONA	Dodecafluoro-3H-4,8-dioxanoate	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+SSDONAL	Dodecafluoro-3H-4,8-dioxanoate comment code	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+SSFHPS	Perfluoro-1-heptanesulfonate	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+SSFHPSL	Perfluoro-1-heptanesulfonate comment code	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+SSGENX	GenX	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+SSGENXL	GenX comment code	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+SSPFHA	Perfluorohexanoate	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+SSPFHAL	Perfluorohexanoate comment code	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+WTSSBJ2Y	Surplus specimen 2 year weights B for 2017-2018	SSPFAS_J	Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	UM_J_R	Lead (Youth), Strontium, and Uranium	2017	2018	Laboratory	RDC Only
+URDUPBLC	Urinary Lead Comment Code	UM_J_R	Lead (Youth), Strontium, and Uranium	2017	2018	Laboratory	RDC Only
+URDUSRLC	USR Comment Code	UM_J_R	Lead (Youth), Strontium, and Uranium	2017	2018	Laboratory	RDC Only
+URDUURLC	Urinary Uranium Comment Code	UM_J_R	Lead (Youth), Strontium, and Uranium	2017	2018	Laboratory	RDC Only
+URXUPB	Lead, urine (ug/L)	UM_J_R	Lead (Youth), Strontium, and Uranium	2017	2018	Laboratory	RDC Only
+URXUSR	Strontium, urine (ug/L)	UM_J_R	Lead (Youth), Strontium, and Uranium	2017	2018	Laboratory	RDC Only
+URXUUR	Uranium, urine (ug/L)	UM_J_R	Lead (Youth), Strontium, and Uranium	2017	2018	Laboratory	RDC Only
+WTSA2YR	Subsample A Weights	UM_J_R	Lead (Youth), Strontium, and Uranium	2017	2018	Laboratory	RDC Only
+LBDTFRSI	Transferrin receptor (nmol/L)	TFR_J	Transferrin Receptor	2017	2018	Laboratory	None
+LBXTFR	Transferrin receptor (mg/L)	TFR_J	Transferrin Receptor	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	TFR_J	Transferrin Receptor	2017	2018	Laboratory	None
+LBDALCLC	alpha-carotene comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDALCSI	alpha-carotene (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDARYLC	alpha-crypotoxanthin comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDARYSI	alpha-crypotoxanthin (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDBECLC	trans-beta-carotene comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDBECSI	trans-beta-carotene (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDCBCLC	cis-beta-carotene comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDCBCSI	cis-beta-carotene (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDCRYLC	beta-cryptoxanthin comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDCRYSI	beta-cryptoxanthin (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDGTCLC	gamma-tocopherol comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDGTCSI	gamma-tocopherol (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDLCCLC	Total Lycopene comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDLCCSI	Total Lycopene (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDLUZLC	Lutein and zeaxanthin comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDLUZSI	Lutein and zeaxanthin (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDLYCLC	trans-lycopene comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDLYCSI	trans-lycopene (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDRPLLC	Retinyl palmitate comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDRPLSI	Retinyl palmitate (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDRSTLC	Retinyl stearate comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDRSTSI	Retinyl stearate (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDVIALC	Retinol comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDVIASI	Retinol (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDVIELC	alpha-tocopherol comment code	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBDVIESI	alpha-tocopherol (umol/L)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXALC	alpha-carotene (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXARY	alpha-crypotoxanthin (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXBEC	trans-beta-carotene (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXCBC	cis-beta-carotene (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXCRY	beta-cryptoxanthin (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXGTC	gamma-tocopherol (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXLCC	Total Lycopene (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXLUZ	Lutein and zeaxanthin (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXLYC	trans-lycopene (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXRPL	Retinyl palmitate (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXRST	Retinyl stearate (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXVIA	Retinol (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+LBXVIE	alpha-tocopherol (ug/dL)	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	VITAEC_J	Vitamin A, Vitamin E & Carotenoids	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URDOP1LC	Dimethylphosphate Comment Code	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URDOP2LC	Diethylphosphate Comment Code	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URDOP3LC	Dimethylthiophosphate Comment Code	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URDOP4LC	Diethylthiophosphate Comment Code	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URDOP5LC	Dimethyldithiophosphate Comment Code	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URDOP6LC	Diethyldithiophosphate Comment Code	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URXOP1	Dimethylphosphate (ng/mL)	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URXOP2	Diethylphosphate (ng/mL)	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URXOP3	Dimethylthiophosphate (ng/mL)	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URXOP4	Diethylthiophosphate (ng/mL)	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URXOP5	Dimethyldithiophosphate (ng/mL)	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+URXOP6	Diethyldithiophosphate (ng/mL)	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+WTSB2YR	Environmental Subsample B Weights	OPD_J	Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URDBBALC	2,3,4,5-tetrabromobenzoic Acid Comment Code	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URDBCPLC	Bis (1-chloro-2-propyl) Phosphate Comment Code	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URDBDCLC	Bis (1,3-dichloro-2-propyl) Phosphate Comment Code	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URDCEPLC	Bis-2-chloroethyl Phosphate Comt Code	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URDDPHLC	Diphenyl Phosphate Comment Code	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URDDUPLC	Dibutyl Phosphate Comment Code	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URXBCEP	Bis-2-chloroethyl Phosphate	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URXBCPP	Bis (1-chloro-2-propyl) Phosphate	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URXBDCP	Bis (1,3-dichloro-2-propyl) Phosphate	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URXDBUP	Dibutyl Phosphate	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URXDPHP	Diphenyl Phosphate	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+URXTBBA	2,3,4,5-tetrabromobenzoic Acid	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+WTSB2YR	Environmental B 2-year weights	FR_J	Flame Retardants - Urine	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDANBLC	Anabasine, urine Comment Code	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDANTLC	Anatabine, urine Comment Code	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDCOTLC	Cotinine, urine Comment Code	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDCOXLC	Cotinine-N-oxide, urine Comment Code	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDHCTLC	Hydroxycotinine, urine Comment Code	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDHPBLC	4-hydroxy-4-(3-pyridyl) butanoic acid, urine Comment Code	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDNCTLC	Nornicotine, urine Comment Code	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDNICLC	Nicotine, urine Comment Code	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDNOXLC	Nicotine 1'-Oxide, urine Comment Code	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDTNE2	Total Nicotine Equivalents (TNE) - 2 (nmol/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDTNE3	Total Nicotine Equivalents (TNE) - 3 (nmol/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDTNE6	Total Nicotine Equivalents (TNE) - 6 (nmol/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URDTNE7	Total Nicotine Equivalents (TNE) - 7 (nmol/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URXANBT	Anabasine, urine (ng/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URXANTT	Anatabine, urine (ng/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URXCOTT	Cotinine, urine (ng/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URXCOXT	Cotinine-N-oxide, urine (ng/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URXHCTT	Hydroxycotinine, urine (ng/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URXHPBT	4-hydroxy-4-(3-pyridyl) butanoic acid, urine (ng/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URXNICT	Nicotine, urine (ng/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URXNNCT	Nornicotine, urine (ng/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+URXNOXT	Nicotine 1'-Oxide, urine (ng/mL)	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+WTSA2YR	Subsample A Weight	UCOT_J	Cotinine, Hydroxycotinine, & Other Nicotine Metabolites and Analogs - Urine	2017	2018	Laboratory	None
+LBDVD2LC	25-hydroxyvitamin D2 comment code	VID_J	Vitamin D	2017	2018	Laboratory	None
+LBDVD3LC	25-hydroxyvitamin D3 comment code	VID_J	Vitamin D	2017	2018	Laboratory	None
+LBDVE3LC	epi-25-hydroxyvitamin D3 comment code	VID_J	Vitamin D	2017	2018	Laboratory	None
+LBDVIDLC	25-hydroxyvitamin D2 + D3 comment code	VID_J	Vitamin D	2017	2018	Laboratory	None
+LBXVD2MS	25-hydroxyvitamin D2 (nmol/L)	VID_J	Vitamin D	2017	2018	Laboratory	None
+LBXVD3MS	25-hydroxyvitamin D3 (nmol/L)	VID_J	Vitamin D	2017	2018	Laboratory	None
+LBXVE3MS	epi-25-hydroxyvitamin D3 (nmol/L)	VID_J	Vitamin D	2017	2018	Laboratory	None
+LBXVIDMS	25-hydroxyvitamin D2 + D3	VID_J	Vitamin D	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	VID_J	Vitamin D	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	PERNT_J	Perchlorate, Nitrate & Thiocyanate - Urine	2017	2018	Laboratory	None
+URDNO3LC	Nitrate, urine Comment Code	PERNT_J	Perchlorate, Nitrate & Thiocyanate - Urine	2017	2018	Laboratory	None
+URDSCNLC	Thiocyanate, urine Comment Code	PERNT_J	Perchlorate, Nitrate & Thiocyanate - Urine	2017	2018	Laboratory	None
+URDUP8LC	Perchlorate, urine Comment Code	PERNT_J	Perchlorate, Nitrate & Thiocyanate - Urine	2017	2018	Laboratory	None
+URXNO3	Nitrate, urine (ng/mL)	PERNT_J	Perchlorate, Nitrate & Thiocyanate - Urine	2017	2018	Laboratory	None
+URXSCN	Thiocyanate, urine (ng/mL)	PERNT_J	Perchlorate, Nitrate & Thiocyanate - Urine	2017	2018	Laboratory	None
+URXUP8	Perchlorate, urine (ng/mL)	PERNT_J	Perchlorate, Nitrate & Thiocyanate - Urine	2017	2018	Laboratory	None
+WTSA2YR	Subsample A Weights	PERNT_J	Perchlorate, Nitrate & Thiocyanate - Urine	2017	2018	Laboratory	None
+SEQN	Respondent Sequence Number	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URD2MHLC	2-methylhippuric acid comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URD34MLC	3-methylhippuric acid & 4-methylhippuric acid comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDAAMLC	N-acetyl-S-(2-carbamoylethyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDAMCLC	N-acetyl-S-(N-methylcarbamoyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDATCLC	2-amnothiazolne-4-carbxylic acid comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDBMALC	N-acetyl-S-(benzyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDBPMLC	N-acetyl-S-(n-propyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDCEMLC	N-acetyl-S- (2-carboxyethyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDCYALC	N-Acetyl-S-(1-cyano-2-hydroxyethyl)-L-cysteine (CYHA) comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDCYMLC	N-acetyl-S-(2-cyanoethyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDDHBLC	N-acetyl-S-(3,4-dihidroxybutyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDGAMLC	N-acetyl-S-(2-carbamoyl-2-hydroxyethyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDHEMLC	N-acetyl-S-(2-hydroxyethyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDHP2LC	N-acetyl-S- (2-hydroxypropyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDHPMLC	N-acetyl-S- (3-hydroxypropyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDMADLC	Mandelic acid comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDMB3LC	N-acetyl-S- (4-hydroxy-2-butenyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDPHELC	N-acetyl-S-(phenyl-2-hydroxyethyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDPHGLC	Phenylglyoxylic acid comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDPM3LC	N-Acetyl-S-(4-hydroxy-2-methyl-2-buten-1-yl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDPMMLC	N-acetyl-S-(3-hydroxypropyl-1-methyl)-L-cysteine comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URDTTCLC	2-Thoxothazlidne-4-carbxylic comment code	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URX2MH	2-methylhippuric acid (ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URX34M	3-methylhippuric acid & 4-methylhippuric acid(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXAAM	N-acetyl-S-(2-carbamoylethyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXAMC	N-acetyl-S-(N-methylcarbamoyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXATC	2-aminothiazoline-4-carboxylic acid(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXBMA	N-acetyl-S-(benzyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXBPM	N-acetyl-S-(n-propyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXCEM	N-acetyl-S-(2-carboxyethyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXCYHA	N-Acetyl-S-(1-cyano-2-hydroxyethyl)-L-cysteine (CYHA) (ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXCYM	N-acetyl-S-(2-cyanoethyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXDHB	N-acetyl-S-(3,4-dihidroxybutyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXGAM	N-acetyl-S-(2-carbamoyl-2-hydroxyethyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXHEM	N-acetyl-S-(2-hydroxyethyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXHP2	N-acetyl-S- (2-hydroxypropyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXHPM	N-acetyl-S- (3-hydroxypropyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXIPM3	N-Acetyl-S-(4-hydroxy-2-methyl-2-buten-1-yl)-L-cysteine (ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXMAD	Mandelic acid(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXMB3	N-acetyl-S- (4-hydroxy-2-butenyl)-L-cysteine (ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXPHE	N-acetyl-S-(phenyl-2-hydroxyethyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXPHG	Phenylglyoxylic acid(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXPMM	N-acetyl-S-(3-hydroxypropyl-1-methyl)-L-cysteine(ng/mL)	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+URXTTC	2-Thioxothiazolidine-4-carboxylic acid	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+WTSA2YR	Subsample A Weights	UVOC_J	Volatile Organic Compound (VOC) Metabolites - Urine	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+SSHMFA	5-Hydroxymethyl-2-furancarboxylic acid (ng/mL)	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+SSHMFAL	5-Hydroxymethyl-2-furancarboxylic acid comment code	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+SSHMFG	5-Hydroxymethyl-2-furoylglycine (ng/mL)	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+SSHMFGL	5-Hydroxymethyl-2-furoylglycine comment code	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+SSMUCA	trans, trans-Muconic acid (ng/mL)	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+SSMUCAL	trans, trans-Muconic acid comment code	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+SSN2FG	N-2-Furoylglycine (ng/mL)	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+SSN2FGL	N-2-Furoylglycine comment code	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+SSPHMA	Phenylmercapturic acid (ng/mL)	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+SSPHMAL	Phenylmercapturic acid comment code	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+WTSSAJ2Y	Surplus specimen 2 year weights A for 2017-2018	SSUVOC_J	Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)	2017	2018	Laboratory	None
+LBDEOALC	Ethylene Oxide comment code	ETHOX_J	Ethylene Oxide	2017	2018	Laboratory	None
+LBXEOA	Ethylene Oxide (pmol/g Hb)	ETHOX_J	Ethylene Oxide	2017	2018	Laboratory	None
+SEQN	Respondent sequence number	ETHOX_J	Ethylene Oxide	2017	2018	Laboratory	None
+WTSA2YR	Subsample A weights	ETHOX_J	Ethylene Oxide	2017	2018	Laboratory	None
+SEQN	Respondent sequence number.	SSFR_J	Flame Retardants - Urine (Surplus)	2017	2018	Laboratory	None
+SSBPPP	4-((tert-butyl)phenyl)phenyl phosphate (µg/L)	SSFR_J	Flame Retardants - Urine (Surplus)	2017	2018	Laboratory	None
+SSBPPPL	4-((tert-butyl)phenyl)phenyl phosphate (µg/L) comment code	SSFR_J	Flame Retardants - Urine (Surplus)	2017	2018	Laboratory	None
+SSIPPP	2-((isopropyl)phenyl)phenyl phosphate (µg/L)	SSFR_J	Flame Retardants - Urine (Surplus)	2017	2018	Laboratory	None
+SSIPPPL	2-((isopropyl)phenyl)phenyl phosphate (µg/L) comment code	SSFR_J	Flame Retardants - Urine (Surplus)	2017	2018	Laboratory	None
+WTSSBJ2Y	Surplus specimen 2 year weights B for 2017-2018	SSFR_J	Flame Retardants - Urine (Surplus)	2017	2018	Laboratory	None
