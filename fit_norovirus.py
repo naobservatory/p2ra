@@ -4,22 +4,18 @@ from collections import Counter
 
 import numpy as np  # type: ignore
 
-import mgs
+from mgs import MGSData, count_reads
 import stats
 from pathogens import pathogens
 
 if __name__ == "__main__":
-    repo = mgs.GitHubRepo(
-        user="naobservatory", repo="mgs-pipeline", branch="main"
-    )
-    bp_data = mgs.load_bioprojects(repo)
-    sample_data = mgs.load_sample_attributes(repo)
-    counts = mgs.load_sample_counts(repo)
-    taxtree = mgs.load_tax_tree(repo)
+    bioproject = "PRJNA729801"  # Rothman
+    pathogen = "norovirus"
 
-    bioproject = mgs.BioProject("PRJNA729801")  # Rothman
-    samples = bp_data[bioproject]
-    sample_attribs = {s: sample_data[s] for s in samples}
+    mgs_data = MGSData.from_repo()
+    samples = mgs_data.samples_by_bioproject(bioproject)
+
+    sample_attribs = {s: mgs_data.samples[s] for s in samples}
 
     all_reads: Counter[str] = Counter()
     for attribs in sample_attribs.values():
@@ -32,12 +28,11 @@ if __name__ == "__main__":
         for study in studies
     }
 
-    pathogen = "norovirus"
     taxid = pathogens[pathogen].pathogen_chars.taxid
-    subtree = taxtree[taxid]
+    subtree = mgs_data.tax_tree[taxid]
     assert subtree is not None
 
-    virus_counts = mgs.count_reads(subtree, counts)
+    virus_counts = count_reads(subtree, mgs_data.read_counts)
     virus_reads = {
         study: sum(virus_counts[s] for s in samples_by_study[study])
         for study in studies

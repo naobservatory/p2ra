@@ -96,3 +96,24 @@ def count_reads(
         (elem.data[1] for elem in count_tree),
         start=Counter(),
     )
+
+
+@dataclass
+class MGSData:
+    bioprojects: dict[BioProject, list[Sample]]
+    samples: dict[Sample, SampleAttributes]
+    read_counts: SampleCounts
+    tax_tree: Tree[TaxID]
+
+    @staticmethod
+    def from_repo(user="naobservatory", repo="mgs-pipeline", branch="main"):
+        repo = GitHubRepo(user, repo, branch)
+        return MGSData(
+            bioprojects=load_bioprojects(repo),
+            samples=load_sample_attributes(repo),
+            read_counts=load_sample_counts(repo),
+            tax_tree=load_tax_tree(repo),
+        )
+
+    def samples_by_bioproject(self, bioproject: str) -> list[Sample]:
+        return self.bioprojects[BioProject(bioproject)]
