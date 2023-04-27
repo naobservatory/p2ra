@@ -108,7 +108,11 @@ class MGSData:
     tax_tree: Tree[TaxID]
 
     @staticmethod
-    def from_repo(user="naobservatory", repo="mgs-pipeline", branch="main"):
+    def from_repo(
+        user="naobservatory",
+        repo="mgs-pipeline",
+        branch="47e2025f35168d3f414ae62928f6a14dd3f7c23d",
+    ):
         repo = GitHubRepo(user, repo, branch)
         return MGSData(
             bioprojects=load_bioprojects(repo),
