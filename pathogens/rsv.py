@@ -1,6 +1,9 @@
 from pathogen_properties import *
 
-background = """Respiratory syncytial virus, or RSV, is a common respiratory virus that usually causes mild, cold-like symptoms. Most people recover in a week or two, but RSV can be serious, especially for infants and older adults. RSV is the most common cause of bronchiolitis (inflammation of the small airways in the lung) and pneumonia (infection of the lungs) in children younger than 1 year of age in the United States."""
+background = """Respiratory syncytial virus, or RSV, is a common respiratory virus that usually causes mild, cold-like symptoms.
+Most people recover in a week or two, but RSV can be serious, especially for infants and older adults. 
+RSV is the most common cause of bronchiolitis (inflammation of the small airways in the lung) and pneumonia (infection of the lungs)
+ in children younger than 1 year of age in the United States."""
 
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
@@ -8,20 +11,16 @@ pathogen_chars = PathogenChars(
     taxid=12814,
 )
 
-# positive tests in california during fall 2021
-california_positive_tests_fall_2021 = PrevalenceAbsolute(
-    infections=6400000,
+# tests were collected across 119 days, so multiply by 365/119 for yearly
+california_positive_tests_fall_2021 = IncidenceAbsolute(
+    annual_infections=6400000 * 365 / 119,
     country="United States",
     state="California",
     date="8/21 - 12/18, 2020",
     start_date="8/21",
     end_date="12/18",
     source="https://www.cdc.gov/surveillance/nrevss/images/rsvstate/RSV14NumCent5AVG_StateCA.htm",
-)
-
-# across how many days were the 6.4 million samples positive
-reciprocal_testing_interval = Scalar(
-    scalar=119,
+    tag="california fall 2020",
 )
 
 # What percent of RSV cases remained during the pandemic, compared to pre/post-pandemic?
@@ -31,26 +30,22 @@ RSV_pandemic_decrease = Scalar(
     source="https://www.dovepress.com/the-impact-of-the-covid-19-pandemic-on-respiratory-syncytial-virus-inf-peer-reviewed-fulltext-article-IDR#ref-cit0015",
 )
 
-# how many days does RSV usually last for
-disease_duration = Scalar(
-    scalar=10,
-    source="https://www.cdc.gov/rsv/about/symptoms.html#:~:text=Most%20RSV%20infections%20go%20away%20on%20their%20own%20in%20a%20week%20or%20two.",
+# how many days does RSV usually shed for
+shedding_duration = SheddingDuration(
+    days=14.1,
+    source="https://academic.oup.com/aje/article/190/12/2536/6313422",
 )
 
 CA_population = Population(
-    people=39000000,
-)
-
-per100k = Scalar(
-    scalar=100000,
+    people=39538245,
+    source="https://www.census.gov/quickfacts/CA",
+    tag="california fall 2020",
 )
 
 
 def estimate_prevalences():
     return [
         california_positive_tests_fall_2021.to_rate(CA_population)
+        .to_prevalence(shedding_duration)
         .scale(RSV_pandemic_decrease)
-        .scale(disease_duration)
-        .scale(reciprocal_testing_interval)
-        .scale(per100k)
     ]
