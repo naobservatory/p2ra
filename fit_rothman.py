@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from textwrap import dedent
 
 import numpy as np  # type: ignore
 
@@ -12,33 +13,31 @@ def geom_mean(x: np.ndarray) -> float:
 
 
 def _format_number(x: float) -> str:
-    return f"{x:.1e}"
+    return f"{x:6.1e}"
 
 
 def print_summary(
     pathogen: str, naive_ra_per100: float, model_ra_per100: np.ndarray
 ) -> None:
+    title = f"{pathogen} relative abundance at 1% prevalence"
     percentiles = [5, 25, 50, 75, 95]
-    sep = "\t\t"
-    title = f"Relative abundance of {pathogen} at 1% prevalence"
-    print("-" * len(title))
-    print(title)
-    print("-" * len(title))
-    print("Naive estimate:")
-    print(_format_number(naive_ra_per100))
-    print("Posterior arithmetic mean:")
-    print(_format_number(np.mean(model_ra_per100)))
-    print("Posterior geometric mean:")
-    print(_format_number(geom_mean(model_ra_per100)))
-    print("Posterior quantiles:")
-    print(*(f"{p:>6}%" for p in percentiles), sep=sep)
-    print(
-        *(
-            _format_number(x)
-            for x in np.percentile(model_ra_per100, percentiles)
-        ),
-        sep=sep,
-    )
+    percentile_values = np.percentile(model_ra_per100, percentiles)
+    sep = " " * 4
+    output = f"""
+    {"-" * len(title)}
+    {title}
+    {"-" * len(title)}
+    Naive estimate:
+    {_format_number(naive_ra_per100)}
+    Posterior arithmetic mean:
+    {_format_number(np.mean(model_ra_per100))}
+    Posterior geometric mean:
+    {_format_number(geom_mean(model_ra_per100))}
+    Posterior quantiles:
+    {sep.join(f"{p:>6}%" for p in percentiles)}
+    {sep.join(_format_number(x) for x in percentile_values)}
+    """
+    print(dedent(output))
 
 
 per100k_to_per100 = 1e5 / 1e2
@@ -75,7 +74,6 @@ if __name__ == "__main__":
             std_log_prevalence=1.0,
             random_seed=1,
         )
-        # TODO: Wrap the model fit so that we aren't exposed to stan variables like b
+        # TODO: Wrap the model fit so that we aren't exposed to stan variables
         model_ra_per100 = per100k_to_per100 * np.exp(fit["b"])
         print_summary(pathogen_name, naive_ra_per100, model_ra_per100)
-        print()
