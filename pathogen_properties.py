@@ -1,4 +1,7 @@
+import calendar
+import datetime
 import os.path
+import re
 from dataclasses import dataclass
 from enum import Enum
 from typing import NewType, Optional
@@ -49,13 +52,67 @@ class Variable:
     methods: Optional[str] = None
     # Either supply date, or start_date and end_date.
     # Dates can be any of: YYYY, YYYY-MM, or YYYY-MM-DD.
+    # Don't read these -- always use the parsed versions instead.
     date: Optional[str] = None
     start_date: Optional[str] = None
     end_date: Optional[str] = None
+    parsed_start: Optional[datetime.date] = None
+    parsed_end: Optional[datetime.date] = None
     is_target: Optional[bool] = False
 
     # Remember to recursively consider each input's inputs if defined.
     inputs: Optional[list["Variable"]] = None
+
+    def __post_init__(self):
+        if self.date and (self.start_date or self.end_date):
+            raise Exception("If you have start/end don't set date.")
+        if (self.start_date and not self.end_date) or (
+            self.end_date and not self.start_date
+        ):
+            raise Exception("Start and end must go together.")
+        start = self.start_date
+        end = self.end_date
+        if self.date:
+            start = end = self.date
+        if start and not self.parsed_start:
+            self.parsed_start = self._parse_date(start, "start")
+        if end and not self.parsed_end:
+            self.parsed_end = self._parse_date(end, "end")
+
+        if (
+            self.parsed_start
+            and self.parsed_end
+            and self.parsed_start > self.parsed_end
+        ):
+            raise Exception("Start date can't be after end date")
+
+    def _parse_date(self, date: str, start_or_end: str) -> datetime.date:
+        y, m, d = None, None, None
+        if y_match := re.findall("^(\d\d\d\d)$", date):
+            (y,) = y_match
+        elif ym_match := re.findall("^(\d\d\d\d)-(\d\d)$", date):
+            ((y, m),) = ym_match
+        elif ymd_match := re.findall("^(\d\d\d\d)-(\d\d)-(\d\d)$", date):
+            ((y, m, d),) = ymd_match
+        else:
+            raise Exception("Unknown date format %s" % date)
+
+        y = int(y)
+
+        if m:
+            m = int(m)
+        else:
+            m = {"start": 1, "end": 12}[start_or_end]
+
+        if d:
+            d = int(d)
+        else:
+            if start_or_end == "start":
+                d = 1
+            else:
+                _, d = calendar.monthrange(int(y), int(m))
+
+        return datetime.date(y, m, d)
 
     def _location(self):
         bits = []
@@ -80,57 +137,40 @@ class Variable:
         self._collect_locations(all_locations)
         return "; ".join(sorted(all_locations))
 
-    def _collect_dates(self, all_dates):
-        for date in [self.date, self.start_date, self.end_date]:
+    def _collect_dates(self, all_dates: set[datetime.date]):
+        for date in [self.parsed_start, self.parsed_end]:
             if date:
                 all_dates.add(date)
         if self.inputs and not self.is_target:
             for variable in self.inputs:
                 variable._collect_dates(all_dates)
 
-    def summarize_date(self):
-        all_dates = set()
+    def summarize_date(self) -> str:
+        all_dates: set[datetime.date] = set()
         self._collect_dates(all_dates)
 
-        start_dates = set()
-        end_dates = set()
-
-        for date in all_dates:
-            if len(date) == 4:
-                start_dates.add("%s-01-01" % date)
-                end_dates.add("%s-12-31" % date)
-            elif len(date) == 7:
-                start_dates.add("%s-01" % date)
-                # Not technically correct, since some months are shorter, but
-                # should be clear enough.
-                end_dates.add("%s-31" % date)
-            else:
-                start_dates.add(date)
-                end_dates.add(date)
-
-        if not start_dates and not end_dates:
+        if not all_dates:
             return "no date"
 
-        start_date = min(start_dates)
-        end_date = max(end_dates)
+        start_date = min(all_dates)
+        end_date = max(all_dates)
 
         if start_date == end_date:
-            return start_date
+            return str(start_date)
 
-        start_year = start_date[:4]
-        end_year = end_date[:4]
+        if start_date.year != end_date.year:
+            return "%s to %s" % (start_date.year, end_date.year)
 
-        if start_year != end_year:
-            return "%s to %s" % (start_year, end_year)
+        if (
+            start_date.month == 1
+            and start_date.day == 1
+            and end_date.month == 12
+            and end_date.day == 12
+        ):
+            return str(start_date.year)
 
-        if start_date.endswith("-01-01") and end_date.endswith("-12-31"):
-            return start_year
-
-        start_month = start_date[5:7]
-        end_month = start_date[5:7]
-
-        if start_month != end_month:
-            return start_year
+        if start_date.month != end_date.month:
+            return str(start_date.year)
 
         return "%s to %s" % (start_date, end_date)
 
@@ -167,7 +207,7 @@ class Prevalence(Variable):
             infections_per_100k=self.infections_per_100k,
             inputs=[self],
             is_target=True,
-            **kwargs
+            **kwargs,
         )
 
 
