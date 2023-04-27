@@ -1,7 +1,7 @@
 import os.path
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
+from typing import NewType, Optional
 
 # Enums, short for enumerations, are a data type in Python used to represent a set of named values,
 # which are typically used to define a set of related constants with unique names.
@@ -25,11 +25,14 @@ class VariableType(Enum):
     NAO_ESTIMATE = "nao_estimate"
 
 
+TaxID = NewType("TaxID", int)
+
+
 @dataclass(kw_only=True)
 class PathogenChars:
     na_type: NAType
     enveloped: Enveloped
-    taxid: int
+    taxid: TaxID
 
 
 @dataclass(kw_only=True)
@@ -42,6 +45,7 @@ class Variable:
     county: Optional[str] = None
     number_of_participants: Optional[int] = None
     confidence_interval: Optional[tuple[float, float]] = None
+    coverage_probability: Optional[float] = None
     methods: Optional[str] = None
     # Either supply date, or start_date and end_date.
     # Dates can be any of: YYYY, YYYY-MM, or YYYY-MM-DD.

@@ -9,7 +9,7 @@ background = """SARS-CoV-2 is an airborne coronavirus, responsible for the
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.ENVELOPED,
-    taxid=2697049,
+    taxid=TaxID(2697049),
 )
 
 shedding_duration = SheddingDuration(
@@ -23,6 +23,7 @@ shedding_duration = SheddingDuration(
 underreporting = Scalar(
     scalar=4.0,
     confidence_interval=(3.4, 4.7),
+    coverage_probability=0.95,
     country="United States",
     start_date="2020-02",
     end_date="2021-09",
