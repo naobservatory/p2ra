@@ -89,8 +89,10 @@ def make_count_tree(
 
 
 def count_reads(
-    taxtree: Tree[TaxID], sample_counts: SampleCounts
+    taxtree: Tree[TaxID] | None, sample_counts: SampleCounts
 ) -> Counter[Sample]:
+    if taxtree is None:
+        return Counter()
     count_tree = make_count_tree(taxtree, sample_counts)
     return sum(
         (elem.data[1] for elem in count_tree),
@@ -101,7 +103,7 @@ def count_reads(
 @dataclass
 class MGSData:
     bioprojects: dict[BioProject, list[Sample]]
-    samples: dict[Sample, SampleAttributes]
+    sample_attrs: dict[Sample, SampleAttributes]
     read_counts: SampleCounts
     tax_tree: Tree[TaxID]
 
@@ -110,10 +112,24 @@ class MGSData:
         repo = GitHubRepo(user, repo, branch)
         return MGSData(
             bioprojects=load_bioprojects(repo),
-            samples=load_sample_attributes(repo),
+            sample_attrs=load_sample_attributes(repo),
             read_counts=load_sample_counts(repo),
             tax_tree=load_tax_tree(repo),
         )
 
-    def samples_by_bioproject(self, bioproject: str) -> list[Sample]:
-        return self.bioprojects[BioProject(bioproject)]
+    def sample_attributes(
+        self, bioproject: BioProject
+    ) -> dict[Sample, SampleAttributes]:
+        return {s: self.sample_attrs[s] for s in self.bioprojects[bioproject]}
+
+    def total_reads(self, bioproject: BioProject) -> dict[Sample, int]:
+        return {
+            s: self.sample_attrs[s].reads for s in self.bioprojects[bioproject]
+        }
+
+    def viral_reads(
+        self, bioproject: BioProject, taxid: TaxID
+    ) -> dict[Sample, int]:
+        subtree = self.tax_tree[taxid]
+        viral_counts = count_reads(subtree, self.read_counts)
+        return {s: viral_counts[s] for s in self.bioprojects[bioproject]}

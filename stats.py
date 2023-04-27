@@ -1,7 +1,7 @@
 import stan  # type: ignore
 
 
-def naive_ra(
+def naive_relative_abundance(
     virus_counts: list[int], all_counts: list[int], prev_per_100k: float
 ) -> float:
     total_virus = sum(virus_counts)
@@ -36,7 +36,7 @@ model {
 # TODO: Figure out the actual required datatypes for list-like objects
 # TODO: Log stan output rather than writing to stderr
 def fit_model(
-    num_studies: int,
+    num_samples: int,
     viral_read_counts: list[int],
     total_read_counts: list[int],
     mean_log_prevalence: float,
@@ -44,7 +44,7 @@ def fit_model(
     random_seed: int,
 ) -> stan.fit.Fit:
     data = {
-        "J": num_studies,
+        "J": num_samples,
         "y": viral_read_counts,
         "n": total_read_counts,
         "mu": mean_log_prevalence,
