@@ -9,7 +9,7 @@ background = """SARS-CoV-2 is an airborne coronavirus, responsible for the
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.ENVELOPED,
-    taxid=2697049,
+    taxid=TaxID(2697049),
 )
 
 shedding_duration = SheddingDuration(
@@ -23,6 +23,7 @@ shedding_duration = SheddingDuration(
 underreporting = Scalar(
     scalar=4.0,
     confidence_interval=(3.4, 4.7),
+    coverage_probability=0.95,
     country="United States",
     start_date="2020-02",
     end_date="2021-09",
@@ -36,6 +37,7 @@ county_populations = {
         country="United States",
         state="California",
         county="San Diego",
+        tag="San Diego 2020",
         source="https://www.census.gov/quickfacts/fact/table/sandiegocountycalifornia/PST045221",
     ),
     "Los Angeles": Population(
@@ -44,6 +46,7 @@ county_populations = {
         country="United States",
         state="California",
         county="Los Angeles",
+        tag="Los Angeles 2020",
         source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia/PST045222",
     ),
     "Orange": Population(
@@ -52,6 +55,7 @@ county_populations = {
         country="United States",
         state="California",
         county="Orange",
+        tag="Orange 2020",
         source="https://www.census.gov/quickfacts/orangecountycalifornia",
     ),
 }
@@ -97,6 +101,7 @@ def estimate_prevalences():
                     state="California",
                     county=county,
                     date=date,
+                    tag="%s 2020" % county,
                 )
                 estimates.append(
                     cases.to_rate(county_populations[county])
