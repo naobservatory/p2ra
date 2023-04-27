@@ -12,30 +12,27 @@ def geom_mean(x: np.ndarray) -> float:
     return np.exp(np.mean(np.log(x)))
 
 
-def _format_number(x: float) -> str:
-    return f"{x:6.1e}"
-
-
 def print_summary(
     pathogen: str, naive_ra_per100: float, model_ra_per100: np.ndarray
 ) -> None:
     title = f"{pathogen} relative abundance at 1% prevalence"
     percentiles = [5, 25, 50, 75, 95]
     percentile_values = np.percentile(model_ra_per100, percentiles)
+    d = 1
     sep = " " * 4
     output = f"""
     {"-" * len(title)}
     {title}
     {"-" * len(title)}
     Naive estimate:
-    {_format_number(naive_ra_per100)}
+    {naive_ra_per100:.{d}e}
     Posterior arithmetic mean:
-    {_format_number(np.mean(model_ra_per100))}
+    {np.mean(model_ra_per100):.{d}e}
     Posterior geometric mean:
-    {_format_number(geom_mean(model_ra_per100))}
+    {geom_mean(model_ra_per100):.{d}e}
     Posterior quantiles:
-    {sep.join(f"{p:>6}%" for p in percentiles)}
-    {sep.join(_format_number(x) for x in percentile_values)}
+    {sep.join(f"{p:>{d+5}}%" for p in percentiles)}
+    {sep.join(f"{x:.{d}e}" for x in percentile_values)}
     """
     print(dedent(output))
 
