@@ -6,6 +6,38 @@ import stats
 from mgs import BioProject, MGSData
 from pathogens import pathogens
 
+
+def geom_mean(x: np.ndarray) -> float:
+    return np.exp(np.mean(np.log(x)))
+
+
+def print_summary(
+    pathogen: str, naive_ra_per100: float, model_ra_per100: np.ndarray
+) -> None:
+    percentiles = [5, 25, 50, 75, 95]
+    sep = "\t\t"
+    precision = 5
+    title = f"Relative abundance of {pathogen} at 1% prevalence"
+    print("-" * len(title))
+    print(title)
+    print("-" * len(title))
+    print("Naive estimate:")
+    print(f"{naive_ra_per100:0.{precision}f}")
+    print("Posterior arithmetic mean:")
+    print(f"{np.mean(model_ra_per100):0.{precision}f}")
+    print("Posterior geometric mean:")
+    print(f"{geom_mean(model_ra_per100):0.{precision}f}")
+    print("Posterior quantiles:")
+    print(*(f"{p}%" for p in percentiles), sep=sep)
+    print(
+        *(
+            f"{x:0.{precision}f}"
+            for x in np.percentile(model_ra_per100, percentiles)
+        ),
+        sep=sep,
+    )
+
+
 if __name__ == "__main__":
     bioproject = BioProject("PRJNA729801")  # Rothman
     pathogen = "norovirus"
@@ -36,22 +68,6 @@ if __name__ == "__main__":
         std_log_prevalence=1.0,
         random_seed=1,
     )
+    # TODO: Wrap the model fit so that we aren't exposed to stan variables like b
     model_ra_per100 = per100k_to_per100 * np.exp(fit["b"])
-    percentiles = [5, 25, 50, 75, 95]
-    sep = "\t\t"
-    title = f"Relative abundance of {pathogen} at 1% prevalence"
-    print("-" * len(title))
-    print(title)
-    print("-" * len(title))
-    print("Naive estimate:")
-    print(f"{naive_ra_per100:0.5f}")
-    print("Posterior arithmetic mean:")
-    print(f"{np.mean(model_ra_per100):0.5f}")
-    print("Posterior geometric mean:")
-    print(f"{np.exp(np.mean(np.log(model_ra_per100))):0.5f}")
-    print("Posterior quantiles:")
-    print(*(f"{p}%" for p in percentiles), sep=sep)
-    print(
-        *(f"{x:0.5f}" for x in np.percentile(model_ra_per100, percentiles)),
-        sep=sep,
-    )
+    print_summary(pathogen, naive_ra_per100, model_ra_per100)
