@@ -9,7 +9,7 @@ hemorrhagic fever, shock, and even death."""
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.ENVELOPED,
-    taxid=12637,
+    taxid=TaxID(12637),
 )
 
 california_reported_cases = IncidenceAbsolute(
@@ -24,6 +24,7 @@ california_reported_cases = IncidenceAbsolute(
 CA_population = Population(
     people=39538245,
     tag="California-2020",
+    date = "2020-04"
     source="https://www.census.gov/quickfacts/CA",
 )
 # disease duration in days
