@@ -17,6 +17,7 @@ pathogen_chars = PathogenChars(
 us_incidence_absolute_2018 = IncidenceAbsolute(
     annual_infections=12474,
     confidence_interval=(17500, 27400),
+    coverage_probability=0.95,
     country="United States",
     date="2018",
     tag="us-2018",
@@ -44,6 +45,7 @@ incidence_underreporting_scalar = Scalar(
         1 / 0.84,
         1 / 0.32,
     ),
+    coverage_probability=0.95,
     country="United States",
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4906888/#:~:text=Diagnosed%20hepatitis%20A,clear%20reporting%20responsibilities.",
 )
