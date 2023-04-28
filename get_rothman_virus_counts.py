@@ -5,7 +5,9 @@ from pathogens import pathogens
 
 if __name__ == "__main__":
     repo = mgs.GitHubRepo(
-        user="naobservatory", repo="mgs-pipeline", branch="main"
+        user="naobservatory",
+        repo="mgs-pipeline",
+        branch="47e2025f35168d3f414ae62928f6a14dd3f7c23d",
     )
     bp_data = mgs.load_bioprojects(repo)
     sample_data = mgs.load_sample_attributes(repo)
