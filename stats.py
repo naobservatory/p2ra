@@ -1,20 +1,15 @@
-from typing import TypeVar
-
-import numpy as np  # type: ignore
+import numpy as np
+import numpy.typing as npt
 import stan  # type: ignore
-
-T = TypeVar("T")
-# TODO: Specify the dtype of ndarray
-ArrayLike = list[T] | np.ndarray
 
 
 def naive_relative_abundance(
-    virus_counts: ArrayLike[int],
-    all_counts: ArrayLike[int],
-    prev_per_100k: float,
+    virus_counts: npt.ArrayLike,
+    all_counts: npt.ArrayLike,
+    prev_per_100k: np.float_,
 ) -> float:
-    total_virus = sum(virus_counts)
-    total_counts = sum(all_counts)
+    total_virus = np.sum(virus_counts)
+    total_counts = np.sum(all_counts)
     return total_virus / total_counts / prev_per_100k
 
 
@@ -44,17 +39,16 @@ model {
 # TODO: Log stan output rather than writing to stderr
 def fit_model(
     num_samples: int,
-    viral_read_counts: ArrayLike[int],
-    total_read_counts: ArrayLike[int],
-    mean_log_prevalence: float | ArrayLike[float],
+    viral_read_counts: npt.ArrayLike,
+    total_read_counts: npt.ArrayLike,
+    mean_log_prevalence: npt.ArrayLike,
     std_log_prevalence: float,
     random_seed: int,
 ) -> stan.fit.Fit:
-    mu: ArrayLike[float]
     if isinstance(mean_log_prevalence, float):
-        mu = num_samples * [mean_log_prevalence]
+        mu = np.ones(num_samples) * mean_log_prevalence
     else:
-        mu = mean_log_prevalence
+        mu = np.array(mean_log_prevalence)
     data = {
         "J": num_samples,
         "y": viral_read_counts,

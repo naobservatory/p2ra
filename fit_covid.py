@@ -57,8 +57,7 @@ if __name__ == "__main__":
     naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
         virus_reads,
         all_reads,
-        # Stop mypy from being persnickety while I sort out numpy annotations
-        float(np.mean(prevalence_per100k)),
+        np.mean(prevalence_per100k),
     )
 
     fit = stats.fit_model(
