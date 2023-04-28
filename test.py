@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import datetime
 import unittest
 from collections import Counter
 
@@ -17,13 +18,19 @@ class TestPathogens(unittest.TestCase):
     def test_summarize_location(self):
         us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
         self.assertEqual(us_2019.summarize_location(), "United States")
-        self.assertEqual(us_2019.summarize_date(), "2019")
+        self.assertEqual(
+            us_2019.summarize_date(),
+            (datetime.date(2019, 1, 1), datetime.date(2019, 12, 31)),
+        )
 
         self.assertEqual(
             la_2020.summarize_location(),
             "Los Angeles, California, United States",
         )
-        self.assertEqual(la_2020.summarize_date(), "2020")
+        self.assertEqual(
+            la_2020.summarize_date(),
+            (datetime.date(2020, 1, 1), datetime.date(2020, 12, 31)),
+        )
 
     def test_properties_exist(self):
         for pathogen_name, pathogen in pathogens.pathogens.items():
@@ -34,6 +41,57 @@ class TestPathogens(unittest.TestCase):
 
                 for estimate in pathogen.estimate_prevalences():
                     self.assertIsInstance(estimate, Prevalence)
+
+
+class TestVaribles(unittest.TestCase):
+    def test_date_parsing(self):
+        v = Variable(date="2019")
+        self.assertEqual(v.parsed_start, datetime.date(2019, 1, 1))
+        self.assertEqual(v.parsed_end, datetime.date(2019, 12, 31))
+
+        v = Variable(date="2019-02")
+        self.assertEqual(v.parsed_start, datetime.date(2019, 2, 1))
+        self.assertEqual(v.parsed_end, datetime.date(2019, 2, 28))
+
+        v = Variable(date="2020-02")
+        self.assertEqual(v.parsed_start, datetime.date(2020, 2, 1))
+        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 29))
+
+        v = Variable(date="2020-02-01")
+        self.assertEqual(v.parsed_start, datetime.date(2020, 2, 1))
+        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 1))
+
+        v = Variable(start_date="2020-01", end_date="2020-02")
+        self.assertEqual(v.parsed_start, datetime.date(2020, 1, 1))
+        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 29))
+
+        v = Variable(start_date="2020-01-07", end_date="2020-02-06")
+        self.assertEqual(v.parsed_start, datetime.date(2020, 1, 7))
+        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 6))
+
+        with self.assertRaises(Exception):
+            Variable(start_date="2020-01-07")
+
+        with self.assertRaises(Exception):
+            Variable(end_date="2020-01-07")
+
+        with self.assertRaises(Exception):
+            Variable(start_date="2020-01-07", date="2020")
+
+        with self.assertRaises(Exception):
+            Variable(end_date="2020-01-07", date="2020")
+
+        with self.assertRaises(Exception):
+            Variable(start_date="2020-01-07", end_date="2020-01-06")
+
+        with self.assertRaises(Exception):
+            Variable(date="2020-1")
+
+        with self.assertRaises(Exception):
+            Variable(date="2020/1/1")
+
+        with self.assertRaises(Exception):
+            Variable(date="2020/01/01")
 
 
 class TestMGS(unittest.TestCase):
