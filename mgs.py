@@ -10,17 +10,23 @@ from pydantic import BaseModel
 from pathogen_properties import TaxID
 from tree import Tree
 
+MGS_REPO_DEFAULTS = {
+    "user": "naobservatory",
+    "repo": "mgs-pipeline",
+    "ref": "data-2023-04-28",
+}
+
 
 @dataclass
 class GitHubRepo:
     user: str
     repo: str
-    branch: str
+    ref: str
 
     def get_file(self, path: str) -> str:
         file_url = (
             f"https://raw.githubusercontent.com/"
-            f"{self.user}/{self.repo}/{self.branch}/{path}"
+            f"{self.user}/{self.repo}/{self.ref}/{path}"
         )
         with urllib.request.urlopen(file_url) as response:
             if response.status == 200:
@@ -89,10 +95,51 @@ def make_count_tree(
 
 
 def count_reads(
-    taxtree: Tree[TaxID], sample_counts: SampleCounts
+    taxtree: Tree[TaxID] | None, sample_counts: SampleCounts
 ) -> Counter[Sample]:
+    if taxtree is None:
+        return Counter()
     count_tree = make_count_tree(taxtree, sample_counts)
     return sum(
         (elem.data[1] for elem in count_tree),
         start=Counter(),
     )
+
+
+@dataclass
+class MGSData:
+    bioprojects: dict[BioProject, list[Sample]]
+    sample_attrs: dict[Sample, SampleAttributes]
+    read_counts: SampleCounts
+    tax_tree: Tree[TaxID]
+
+    @staticmethod
+    def from_repo(
+        user=MGS_REPO_DEFAULTS["user"],
+        repo=MGS_REPO_DEFAULTS["repo"],
+        ref=MGS_REPO_DEFAULTS["ref"],
+    ):
+        repo = GitHubRepo(user, repo, ref)
+        return MGSData(
+            bioprojects=load_bioprojects(repo),
+            sample_attrs=load_sample_attributes(repo),
+            read_counts=load_sample_counts(repo),
+            tax_tree=load_tax_tree(repo),
+        )
+
+    def sample_attributes(
+        self, bioproject: BioProject
+    ) -> dict[Sample, SampleAttributes]:
+        return {s: self.sample_attrs[s] for s in self.bioprojects[bioproject]}
+
+    def total_reads(self, bioproject: BioProject) -> dict[Sample, int]:
+        return {
+            s: self.sample_attrs[s].reads for s in self.bioprojects[bioproject]
+        }
+
+    def viral_reads(
+        self, bioproject: BioProject, taxid: TaxID
+    ) -> dict[Sample, int]:
+        subtree = self.tax_tree[taxid]
+        viral_counts = count_reads(subtree, self.read_counts)
+        return {s: viral_counts[s] for s in self.bioprojects[bioproject]}

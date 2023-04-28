@@ -47,6 +47,9 @@ Before creating a PR or submitting code, run `./check.sh`.  It will run tests
 than check your types and formatting.  This also runs automatically on GitHub
 when you make PRs, but it's much faster to catch problems locally first.
 
+If `./check.sh` complains about formatting or import sorting, you can fix this
+automatically with `./check.sh --fix`.
+
 #### Installing pystan
 
 Pystan should be installed along with the other requirements when you run:
