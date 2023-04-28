@@ -3,7 +3,7 @@ import numpy as np
 
 import stats
 from fit_rothman import per100k_to_per100, print_summary
-from mgs import MGSData, BioProject
+from mgs import BioProject, MGSData
 from pathogens import pathogens
 
 plant_counties = {
@@ -44,7 +44,6 @@ if __name__ == "__main__":
         try:
             county = plant_counties[attrs.fine_location]
         except KeyError:
-            print(f"Plant {attrs.fine_location} not found")
             prevalence_per100k[i] = np.nan
         else:
             prevalence_per100k[i] = prevalence_by_loc_date[
@@ -58,7 +57,8 @@ if __name__ == "__main__":
     naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
         virus_reads,
         all_reads,
-        np.mean(prevalence_per100k),
+        # Stop mypy from being persnickety while I sort out numpy annotations
+        float(np.mean(prevalence_per100k)),
     )
 
     fit = stats.fit_model(
