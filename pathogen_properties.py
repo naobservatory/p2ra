@@ -2,7 +2,7 @@ import calendar
 import datetime
 import os.path
 import re
-from dataclasses import InitVar, dataclass
+from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import NewType, Optional
 
@@ -52,12 +52,11 @@ class Variable:
     methods: Optional[str] = None
     # Either supply date, or start_date and end_date.
     # Dates can be any of: YYYY, YYYY-MM, or YYYY-MM-DD.
-    # Don't read these -- always use the parsed versions instead.
     date: InitVar[Optional[str]] = None
     start_date: InitVar[Optional[str]] = None
     end_date: InitVar[Optional[str]] = None
-    parsed_start: Optional[datetime.date] = None
-    parsed_end: Optional[datetime.date] = None
+    parsed_start: Optional[datetime.date] = field(init=False)
+    parsed_end: Optional[datetime.date] = field(init=False)
     is_target: Optional[bool] = False
 
     # Remember to recursively consider each input's inputs if defined.
@@ -76,10 +75,15 @@ class Variable:
         if date:
             start_date = end_date = date
 
-        if start_date and not self.parsed_start:
+        if start_date:
             self.parsed_start = self._parse_date(start_date, "start")
-        if end_date and not self.parsed_end:
+        else:
+            self.parsed_start = None
+
+        if end_date:
             self.parsed_end = self._parse_date(end_date, "end")
+        else:
+            self.parsed_end = None
 
         if (
             self.parsed_start
