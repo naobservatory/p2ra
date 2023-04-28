@@ -6,6 +6,7 @@ from collections import Counter
 
 import mgs
 import pathogens
+from mgs import MGSData
 from pathogen_properties import *
 from tree import Tree
 
@@ -94,11 +95,7 @@ class TestVaribles(unittest.TestCase):
 
 
 class TestMGS(unittest.TestCase):
-    repo = mgs.GitHubRepo(
-        user="naobservatory",
-        repo="mgs-pipeline",
-        branch="47e2025f35168d3f414ae62928f6a14dd3f7c23d",
-    )
+    repo = mgs.GitHubRepo(**mgs.MGS_REPO_DEFAULTS)
 
     def test_load_bioprojects(self):
         bps = mgs.load_bioprojects(self.repo)
@@ -135,6 +132,31 @@ class TestMGS(unittest.TestCase):
         }
         expected = Counter({mgs.Sample("a"): 6, mgs.Sample("b"): 3})
         self.assertEqual(mgs.count_reads(taxtree, sample_counts), expected)
+
+
+class TestMGSData(unittest.TestCase):
+    mgs_data = MGSData.from_repo()
+    bioproject = mgs.BioProject("PRJNA729801")  # Rothman
+    sample = mgs.Sample("SRR14530726")  # Random Rothman sample
+    taxid = pathogens.pathogens["norovirus"].pathogen_chars.taxid
+
+    def test_from_repo(self):
+        self.assertIsInstance(MGSData.from_repo(), MGSData)
+
+    def test_sample_attributes(self):
+        samples = self.mgs_data.sample_attributes(self.bioproject)
+        self.assertIn(self.sample, samples)
+        self.assertIsInstance(samples[self.sample], mgs.SampleAttributes)
+
+    def test_total_reads(self):
+        reads = self.mgs_data.total_reads(self.bioproject)
+        self.assertIn(self.sample, reads)
+        self.assertIsInstance(reads[self.sample], int)
+
+    def test_viral_reads(self):
+        reads = self.mgs_data.viral_reads(self.bioproject, self.taxid)
+        self.assertIn(self.sample, reads)
+        self.assertIsInstance(reads[self.sample], int)
 
 
 class TestTree(unittest.TestCase):
