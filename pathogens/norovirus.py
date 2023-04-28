@@ -62,8 +62,15 @@ def estimate_prevalences():
             month = int(row[cols.index("Month")])
             state = row[cols.index("State")]
             etiology = row[cols.index("Etiology")]
+            # It distinguishes between GI and GII Norovirus.  I'm currently
+            # discarding this, but it could potentially be useful?
             genotype = row[cols.index("Serotype or Genotype")]
             if "Norovirus" not in etiology:
+                # It's the National Outbreak Reporting System, not the
+                # Norovirus Outbreak Reporting System.
+                #
+                # The non-Norovirus ones are almost all bacteria or parasites,
+                # though, not much useful to us.
                 continue
 
             date = year, month
@@ -111,6 +118,7 @@ def estimate_prevalences():
                 ).target(country="United States", date=target_date)
             )
 
+            # The CA-specific ones are very noisy; consider dropping them?
             prevalences.append(
                 normal_year_national_prevalence.scale(
                     Scalar(
