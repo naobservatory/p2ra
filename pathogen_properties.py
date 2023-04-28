@@ -2,7 +2,7 @@ import calendar
 import datetime
 import os.path
 import re
-from dataclasses import dataclass
+from dataclasses import InitVar, dataclass
 from enum import Enum
 from typing import NewType, Optional
 
@@ -53,9 +53,9 @@ class Variable:
     # Either supply date, or start_date and end_date.
     # Dates can be any of: YYYY, YYYY-MM, or YYYY-MM-DD.
     # Don't read these -- always use the parsed versions instead.
-    date: Optional[str] = None
-    start_date: Optional[str] = None
-    end_date: Optional[str] = None
+    date: InitVar[Optional[str]] = None
+    start_date: InitVar[Optional[str]] = None
+    end_date: InitVar[Optional[str]] = None
     parsed_start: Optional[datetime.date] = None
     parsed_end: Optional[datetime.date] = None
     is_target: Optional[bool] = False
@@ -63,21 +63,23 @@ class Variable:
     # Remember to recursively consider each input's inputs if defined.
     inputs: Optional[list["Variable"]] = None
 
-    def __post_init__(self):
-        if self.date and (self.start_date or self.end_date):
+    def __post_init__(
+        self,
+        date: Optional[str],
+        start_date: Optional[str],
+        end_date: Optional[str],
+    ):
+        if date and (start_date or end_date):
             raise Exception("If you have start/end don't set date.")
-        if (self.start_date and not self.end_date) or (
-            self.end_date and not self.start_date
-        ):
+        if (start_date and not end_date) or (end_date and not start_date):
             raise Exception("Start and end must go together.")
-        start = self.start_date
-        end = self.end_date
-        if self.date:
-            start = end = self.date
-        if start and not self.parsed_start:
-            self.parsed_start = self._parse_date(start, "start")
-        if end and not self.parsed_end:
-            self.parsed_end = self._parse_date(end, "end")
+        if date:
+            start_date = end_date = date
+
+        if start_date and not self.parsed_start:
+            self.parsed_start = self._parse_date(start_date, "start")
+        if end_date and not self.parsed_end:
+            self.parsed_end = self._parse_date(end_date, "end")
 
         if (
             self.parsed_start
