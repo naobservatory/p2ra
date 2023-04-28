@@ -140,5 +140,3 @@ p2ra_prevalences.code-workspace
 .DS_Store
 
 # Temporary CSV files
-prevalence-data/nhanes/2015-2016/*.csv
-prevalence-data/nhanes/2017-2018/*.csv
