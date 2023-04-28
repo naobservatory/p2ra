@@ -135,7 +135,6 @@ class TestMGS(unittest.TestCase):
 
 
 class TestMGSData(unittest.TestCase):
-    # TODO: Fake this?
     mgs_data = MGSData.from_repo()
     bioproject = mgs.BioProject("PRJNA729801")  # Rothman
     sample = mgs.Sample("SRR14530726")  # Random Rothman sample
