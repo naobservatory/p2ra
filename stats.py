@@ -14,20 +14,20 @@ data {
   int<lower=1> J;               // number of samples
   array[J] int<lower=0> y;      // reads mapped to virus
   vector[J] n;                  // total reads
-  real mu;                      // mean log prevalence
+  vector[J] mu;                 // mean log prevalence
   real<lower=0>  sigma;         // std log prevalence
 }
 parameters {
   real b;                 // log conversion factor
   real<lower=0> phi;      // inverse overdispersion
-  real theta;             // true log prevalence
+  vector[J] theta;        // true log prevalence
 }
 model {
   b ~ normal(0, 10);
   phi ~ gamma(2, 2);
 
   theta ~ normal(mu, sigma);
-  y ~ neg_binomial_2(exp(b + theta) * n, phi);
+  y ~ neg_binomial_2(exp(b + theta) .* n, phi);
 }
 """
 
