@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+if [[ $# = 1 ]] && [[ "$1" = "--fix" ]]; then
+    black . || exit 1
+    isort . || exit 1
+elif [[ $# -gt 0 ]]; then
+    echo "Usage: $0 [--fix]" > /dev/stderr
+    exit 1
+fi
+
 echo Testing...
 if ! ./test.py; then
     echo FAIL: tests
