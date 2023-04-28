@@ -151,34 +151,14 @@ class Variable:
             for variable in self.inputs:
                 variable._collect_dates(all_dates)
 
-    def summarize_date(self) -> str:
+    def summarize_date(self) -> Optional[tuple[datetime.date, datetime.date]]:
         all_dates: set[datetime.date] = set()
         self._collect_dates(all_dates)
 
         if not all_dates:
-            return "no date"
+            return None
 
-        start_date = min(all_dates)
-        end_date = max(all_dates)
-
-        if start_date == end_date:
-            return str(start_date)
-
-        if start_date.year != end_date.year:
-            return "%s to %s" % (start_date.year, end_date.year)
-
-        if (
-            start_date.month == 1
-            and start_date.day == 1
-            and end_date.month == 12
-            and end_date.day == 12
-        ):
-            return str(start_date.year)
-
-        if start_date.month != end_date.month:
-            return str(start_date.year)
-
-        return "%s to %s" % (start_date, end_date)
+        return min(all_dates), max(all_dates)
 
 
 @dataclass(kw_only=True)
