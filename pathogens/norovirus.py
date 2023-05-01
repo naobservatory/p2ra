@@ -7,11 +7,14 @@ from pathogen_properties import *
 background = """Norovirus in a GI infection, mostly spread through personal
 contact."""
 
+NOROVIRUS = TaxID(142786)
+NOROVIRUS_GROUP_I = TaxID(122928)
+NOROVIRUS_GROUP_II = TaxID(122929)
 
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=TaxID(142786),
+    taxid=TaxID(NOROVIRUS),
 )
 
 
@@ -50,6 +53,9 @@ def estimate_prevalences():
     us_outbreaks = Counter()  # date -> count
     ca_outbreaks = Counter()  # date -> count
 
+    us_outbreaks_I = Counter()  # date -> count of outbreaks with just I
+    us_outbreaks_II = Counter()  # date -> count of outbreaks with just II
+
     prevalences = []
 
     # Downloaded on 2023-04-28 from https://wwwn.cdc.gov/norsdashboard/
@@ -65,11 +71,8 @@ def estimate_prevalences():
             year = int(row[cols.index("Year")])
             month = int(row[cols.index("Month")])
             state = row[cols.index("State")]
-            etiology = row[cols.index("Etiology")]
-            # It distinguishes between GI and GII Norovirus.  I'm currently
-            # discarding this, but it could potentially be useful?
-            genotype = row[cols.index("Serotype or Genotype")]
-            if "Norovirus" not in etiology:
+            etiologies = row[cols.index("Etiology")]
+            if "Norovirus" not in etiologies:
                 # It's the National Outbreak Reporting System, not the
                 # Norovirus Outbreak Reporting System.
                 #
@@ -78,6 +81,18 @@ def estimate_prevalences():
                 continue
 
             date = year, month
+
+            seen_I = False
+            seen_II = False
+            for etiology in etiologies.split("; "):
+                if etiology.endswith("Norovirus Genogroup I"):
+                    seen_I = True
+                elif etiology.endswith("Norovirus Genogroup II"):
+                    seen_II = True
+            if seen_I and not seen_II:
+                us_outbreaks_I[date] += 1
+            elif seen_II and not seen_I:
+                us_outbreaks_II[date] += 1
 
             us_outbreaks[date] += 1
             if state == "California":
@@ -109,7 +124,7 @@ def estimate_prevalences():
                 target_year, target_month
             ] / days_in_month(datetime.date(target_year, target_month, 1))
 
-            prevalences.append(
+            adjusted_national_prevalence = (
                 normal_year_national_prevalence.scale(
                     Scalar(
                         scalar=target_us_daily_outbreaks
@@ -118,7 +133,43 @@ def estimate_prevalences():
                         date=target_date,
                         source="https://wwwn.cdc.gov/norsdashboard/",
                     )
-                ).target(country="United States", date=target_date)
+                )
+            )
+
+            prevalences.append(
+                adjusted_national_prevalence.target(
+                    country="United States", date=target_date
+                )
+            )
+
+            # Assume that all Norovirus infections are either Group I or II,
+            # which is very close.  Also assume the outbreaks for which we
+            # have subtype info are representative of all infections.
+            us_I = us_outbreaks_I[target_year, target_month]
+            us_II = us_outbreaks_II[target_year, target_month]
+            if us_I + us_II:
+                group_I_fraction = us_I / (us_I + us_II)
+                group_II_fraction = us_II / (us_I + us_II)
+            else:
+                group_I_fraction = group_II_fraction = 0
+
+            prevalences.append(
+                adjusted_national_prevalence.scale(
+                    Scalar(scalar=group_I_fraction)
+                ).target(
+                    country="United States",
+                    date=target_date,
+                    taxid=NOROVIRUS_GROUP_I,
+                )
+            )
+            prevalences.append(
+                adjusted_national_prevalence.scale(
+                    Scalar(scalar=group_II_fraction)
+                ).target(
+                    country="United States",
+                    date=target_date,
+                    taxid=NOROVIRUS_GROUP_II,
+                )
             )
 
             # The CA-specific ones are very noisy; consider dropping them?

@@ -58,6 +58,11 @@ class Variable:
     parsed_start: Optional[datetime.date] = field(init=False)
     parsed_end: Optional[datetime.date] = field(init=False)
     is_target: Optional[bool] = False
+    # Normally if you get a prevalence estimate from pathogens[foo] you get the
+    # taxid from pathogens[foo].pathogen_chars.taxid, but sometimes we made
+    # estimates for subtypes.  If taxid is set here it takes precedence over
+    # the one from pathogen_chars.  Look at Norovirus for an example.
+    taxid: Optional[TaxID] = None
 
     # Remember to recursively consider each input's inputs if defined.
     inputs: Optional[list["Variable"]] = None
