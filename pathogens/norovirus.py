@@ -18,22 +18,34 @@ pathogen_chars = PathogenChars(
 )
 
 
-us_national_cases_2013 = IncidenceAbsolute(
-    annual_infections=20e6,
-    confidence_interval=(19e6, 21e6),
+us_national_foodborne_cases_2006 = IncidenceAbsolute(
+    annual_infections=5_461_731,
+    confidence_interval=(3_227_078, 8_309_480),
+    coverage_probability=0.9,  # credible interval
     country="United States",
-    tag="us-2013",
-    date="2013",
-    # "19–21 million total illnesses per year"
-    source="https://wwwnc.cdc.gov/eid/article/19/8/pdfs/13-0465.pdf",
+    tag="us-2006",
+    date="2006",
+    # "Domestically acquired foodborne, mean (90% credible interval)
+    # ... 5,461,731 (3,227,078–8,309,480)"
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3375761/#:~:text=5%2C461%2C731%20(3%2C227%2C078%E2%80%938%2C309%2C480)",
 )
 
-us_population_2013 = Population(
-    people=315_091_138,
+us_total_relative_to_foodborne_2006 = Scalar(
+    scalar=1 / 0.26,
     country="United States",
-    date="2013-01-01",
-    tag="us-2013",
-    source="https://www.census.gov/newsroom/releases/archives/population/cb12-255.html",
+    date="2006",
+    # "Foodborne % ... 26"
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3375761/#:~:text=%3C1-,26,-5%2C461%2C731%20(3%2C227%2C078%E2%80%938%2C309%2C480",
+)
+
+us_population_2006 = Population(
+    people=299_000_000,
+    country="United States",
+    date="2006",
+    tag="us-2006",
+    # "all estimates were based on the US population in 2006 (299 million
+    # persons)"
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3375761/#:~:text=population%20in%202006%20(-,299%20million%20persons,-).%20Estimates%20were%20derived",
 )
 
 shedding_duration = SheddingDuration(
@@ -98,9 +110,11 @@ def estimate_prevalences():
             if state == "California":
                 ca_outbreaks[date] += 1
 
-    normal_year_national_prevalence = us_national_cases_2013.to_rate(
-        us_population_2013
-    ).to_prevalence(shedding_duration)
+    normal_year_national_prevalence = (
+        us_national_foodborne_cases_2006.to_rate(us_population_2006)
+        .to_prevalence(shedding_duration)
+        .scale(us_total_relative_to_foodborne_2006)
+    )
 
     total_us_outbreaks = 0
     total_ca_outbreaks = 0
