@@ -1,0 +1,146 @@
+Variable Name	Variable Description	Data File Name	Data File Description	Begin Year	EndYear	Component	Use Constraints
+LBXHE1	Herpes Simplex Virus Type 1	HSV_I	Herpes Simplex Virus Type-1 & Type-2	2015	2016	Laboratory	None
+LBXHE2	Herpes Simplex Virus Type 2	HSV_I	Herpes Simplex Virus Type-1 & Type-2	2015	2016	Laboratory	None
+SEQN	Respondent sequence number	HSV_I	Herpes Simplex Virus Type-1 & Type-2	2015	2016	Laboratory	None
+LBXHA	Hepatitis A antibody	HEPA_I	Hepatitis A	2015	2016	Laboratory	None
+SEQN	Respondent sequence number	HEPA_I	Hepatitis A	2015	2016	Laboratory	None
+LBXHBS	Hepatitis B Surface Antibody	HEPB_S_I	Hepatitis B: Surface Antibody	2015	2016	Laboratory	None
+SEQN	Respondent sequence number	HEPB_S_I	Hepatitis B: Surface Antibody	2015	2016	Laboratory	None
+LBDHBG	Hepatitis B surface antigen	HEPBD_I	Hepatitis B: Core antibody, Surface antigen, and Hepatitis D antibody	2015	2016	Laboratory	None
+LBDHD	Hepatitis D (anti-HDV)	HEPBD_I	Hepatitis B: Core antibody, Surface antigen, and Hepatitis D antibody	2015	2016	Laboratory	None
+LBXHBC	Hepatitis B core antibody	HEPBD_I	Hepatitis B: Core antibody, Surface antigen, and Hepatitis D antibody	2015	2016	Laboratory	None
+SEQN	Respondent sequence number	HEPBD_I	Hepatitis B: Core antibody, Surface antigen, and Hepatitis D antibody	2015	2016	Laboratory	None
+LBDHEG	Hepatitis E IgG (anti-HEV)	HEPE_I	Hepatitis E: IgG & IgM Antibodies	2015	2016	Laboratory	None
+LBDHEM	Hepatitis E IgM (anti-HEV)	HEPE_I	Hepatitis E: IgG & IgM Antibodies	2015	2016	Laboratory	None
+SEQN	Respondent sequence number	HEPE_I	Hepatitis E: IgG & IgM Antibodies	2015	2016	Laboratory	None
+LBXHCG	Hepatitis C Genotype	HEPC_I	Hepatitis C: RNA (HCV-RNA) and Hepatitis C Genotype	2015	2016	Laboratory	None
+LBXHCR	Hepatitis C RNA	HEPC_I	Hepatitis C: RNA (HCV-RNA) and Hepatitis C Genotype	2015	2016	Laboratory	None
+SEQN	Respondent sequence number.	HEPC_I	Hepatitis C: RNA (HCV-RNA) and Hepatitis C Genotype	2015	2016	Laboratory	None
+LBXHIV1	HIV-1 antibody	HIV_I	HIV Antibody Test	2015	2016	Laboratory	None
+LBXHIV2	HIV-2 antibody	HIV_I	HIV Antibody Test	2015	2016	Laboratory	None
+LBXHIVC	HIV-1, 2 Combo Test	HIV_I	HIV Antibody Test	2015	2016	Laboratory	None
+LBXHNAT	HIV Confirmatory Test	HIV_I	HIV Antibody Test	2015	2016	Laboratory	None
+SEQN	Respondent sequence number	HIV_I	HIV Antibody Test	2015	2016	Laboratory	None
+ORXGH	HPV High Globulin Band result	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXGL	HPV Low Globulin Band result	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH06	HPV Type 6	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH11	HPV Type 11	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH16	HPV Type 16	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH18	HPV Type 18	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH26	HPV Type 26	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH31	HPV Type 31	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH33	HPV Type 33	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH35	HPV Type 35	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH39	HPV Type 39	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH40	HPV Type 40	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH42	HPV Type 42	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH45	HPV Type 45	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH51	HPV Type 51	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH52	HPV Type 52	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH53	HPV Type 53	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH54	HPV Type 54	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH55	HPV Type 55	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH56	HPV Type 56	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH58	HPV Type 58	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH59	HPV Type 59	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH61	HPV Type 61	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH62	HPV Type 62	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH64	HPV Type 64	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH66	HPV Type 66	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH67	HPV Type 67	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH68	HPV Type 68	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH69	HPV Type 69	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH70	HPV Type 70	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH71	HPV Type 71	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH72	HPV Type 72	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH73	HPV Type 73	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH81	HPV Type 81	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH82	HPV Type 82	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH83	HPV Type 83	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXH84	HPV Type 84	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXHPC	HPV CP 6108	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXHPI	HPV Type IS39	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+ORXHPV	Oral HPV Result	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+SEQN	Respondent sequence number.	ORHPV_I	Human Papillomavirus (HPV) - Oral Rinse	2015	2016	Laboratory	None
+LBDR06	HPV type 6	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR11	HPV type 11	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR16	HPV type 16	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR18	HPV type 18	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR26	HPV type 26	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR31	HPV type 31	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR33	HPV type 33	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR35	HPV type 35	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR39	HPV type 39	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR40	HPV type 40	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR42	HPV type 42	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR45	HPV type 45	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR51	HPV type 51	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR52	HPV type 52	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR53	HPV type 53	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR54	HPV type 54	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR55	HPV type 55	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR56	HPV type 56	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR58	HPV type 58	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR59	HPV type 59	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR61	HPV type 61	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR62	HPV type 62	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR64	HPV type 64	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR66	HPV type 66	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR67	HPV type 67	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR68	HPV type 68	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR69	HPV type 69	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR70	HPV type 70	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR71	HPV type 71	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR72	HPV type 72	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR73	HPV type 73	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR81	HPV type 81	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR82	HPV type 82	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR83	HPV type 83	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR84	HPV type 84	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR89	HPV type 89	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDRHP	Roche LA high positive globin control	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDRLP	Roche LA low positive globin control	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDRPCR	Roche HPV linear array (LA) summary result	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDRPI	HPV type IS39	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+SEQN	Respondent sequence number.	HPVSWR_I	Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array	2015	2016	Laboratory	None
+LBDR06	HPV type 6	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR11	HPV type 11	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR16	HPV type 16	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR18	HPV type 18	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR26	HPV type 26	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR31	HPV type 31	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR33	HPV type 33	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR35	HPV type 35	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR39	HPV type 39	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR40	HPV type 40	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR42	HPV type 42	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR45	HPV type 45	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR51	HPV type 51	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR52	HPV type 52	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR53	HPV type 53	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR54	HPV type 54	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR55	HPV type 55	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR56	HPV type 56	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR58	HPV type 58	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR59	HPV type 59	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR61	HPV type 61	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR62	HPV type 62	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR64	HPV type 64	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR66	HPV type 66	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR67	HPV type 67	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR68	HPV type 68	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR69	HPV type 69	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR70	HPV type 70	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR71	HPV type 71	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR72	HPV type 72	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR73	HPV type 73	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR81	HPV type 81	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR82	HPV type 82	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR83	HPV type 83	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR84	HPV type 84	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDR89	HPV type 89	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDRHP	Roche LA high positive globin control	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDRLP	Roche LA low positive globin control	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDRPCR	Roche HPV linear array (LA) summary result	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+LBDRPI	HPV type IS39	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None
+SEQN	Respondent sequence number	HPVP_I	Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array	2015	2016	Laboratory	None

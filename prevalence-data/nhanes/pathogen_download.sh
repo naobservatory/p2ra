@@ -16,8 +16,10 @@ for year in "2015-2016" "2017-2018"; do
     fi
 
     # Loop over leaf names and download files
-    for leaf in "HEPA_${end}" "HEPBD_${end}" "HEPB_S_${end}" "HEPC_${end}" "HEPE_${end}" "HIV_${end}" "DEMO_${end}" "HSV_${end}" "HPVSWR_${end}" "HPVP_${end}" "ORHPV_${end}"; do
+    for leaf in "HEPA_${end}" "HEPBD_${end}" "HEPB_S_${end}" "HEPC_${end}" "HEPE_${end}" "HIV_${end}" "DEMO_${end}" "HSV_${end}" "HPVSWR_${end}" "HPVP_${end}" "ORHPV_${end}" "CMV_${end}"; do
         save_path="${year}/${leaf}.XPT"
+        # Setting path to start at the root directory of the folder
+
         url_w_year="https://wwwn.cdc.gov/Nchs/Nhanes/${year}/${leaf}.XPT"
 
         # Download the file, skip if it already exists
