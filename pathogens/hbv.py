@@ -1,6 +1,9 @@
 from pathogen_properties import *
 
-background = """Hepatitis B is a liver infection caused by the hepatitis B virus. It is transmitted through birth and contact with infected blood or bodily fluids. Hepatitis B infection increases the risk for hepatocellular carcinoma"""
+background = """Hepatitis B is a liver infection caused by the hepatitis B
+ virus. It is transmitted through birth and contact with infected blood or
+ bodily fluids. Hepatitis B infection increases the risk for hepatocellular
+ carcinoma"""
 
 # TODO: Add case surveillance data: https://wonder.cdc.gov/nndss/static/2019/annual/2019-table2h.html
 
@@ -28,8 +31,7 @@ hbv_us_2022_deaths_wonder = Number(
 
 estimated_acute_2019 = PrevalenceAbsolute(
     infections=20_700,
-    confidence_interval=(11_800, 50_800),
-    # 95% Bootstrap Confidence Interval
+    confidence_interval=(11_800, 50_800),  # 95% Bootstrap Confidence Interval
     coverage_probability=0.95,
     country="United States",
     date="2019",
