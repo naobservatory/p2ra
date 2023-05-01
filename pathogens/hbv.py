@@ -58,8 +58,6 @@ estimated_chronic_us_2020 = PrevalenceAbsolute(
 )
 
 
-# US population 2019
-
 us_population_2019 = Population(
     people=328.2 * 1e6,
     country="United States",
@@ -68,7 +66,6 @@ us_population_2019 = Population(
     source="https://data.census.gov/table?q=us+population+2019&tid=ACSDP1Y2019.DP05",
 )
 
-# US population 2020
 
 us_population_2020 = Population(
     people=331.4 * 1e6,
