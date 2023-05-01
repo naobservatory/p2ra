@@ -3,6 +3,10 @@
 The `stats` module uses the [Stan](https://mc-stan.org/) statistical programming language to define a Bayesian model of viral prevalences and metagenomic sequencing read counts.
 Our objective is to estimate a coefficient that connects estimates of the prevalence of a viral clade to the number of metagenomic reads assigned to that clade across a set of samples.
 
+The model is a work in progress.
+The goal so far has been to have something that is a reasonable representation of the problem that we can feed our various data sources into.
+Now that we have data and working glue code, we will work to assess and improve the model.
+
 Here is the Stan code.
 In the following section, we will explain each component.
 If you are not familiar with Stan, you may skip to the Data section.
@@ -35,17 +39,26 @@ The input to the model is data on read counts and viral prevalence.
 In particular, we must provide:
 
 - The number metagenomic samples, $J$
-- The number of reads assigned to our focal viral clade in each sample, $y_j$ for $j \in \{1, \ldots, J\}$. 
+- The number of reads assigned to our focal viral clade in each sample, $y_j$ for $j \in \left\{1, \ldots, J\right\}$. 
 - The total number of reads in each sample, $n_j$.
 - The expected log-prevalence of the viral clade in the population contributing to each sample, $\mu_j$.
 - An estimate of the uncertainty in the log-prevalence, represented as a standard deviation $\sigma$, assumed to be the same across samples.
 
 ### Parameters
 
+When we run the program, Stan uses a [Hamiltonian Monte Carlo](https://en.wikipedia.org/wiki/Hamiltonian_Monte_Carlo) algorithm to sample from the posterior distribution of the model parameters. 
+They are:
+
+- The true log-prevalence in the population contributing to each sample, $\theta_j$.
+- The coefficient linking the log-prevalence to the expected number of viral reads, $b$. Note that this is a scalar quantity, assumed to be the same across all samples.
+- An inverse overdispersion parameter $\phi$, representing the extra variation in read counts beyond a Poisson distribution. Larger $\phi$ is more Poisson-like, smaller $\phi$ is more overdispersed.
+
 ### Model
 
 ### Limitations and future directions
 
+- Priors
+- Independence of estimates
 - Partial pooling of prevalence estimates
 - Assessing model fit
 - Multiple studies/methodologies
