@@ -93,4 +93,13 @@ for age in sorted(HEPA_15_16_rates):
     indeterminate = HEPA_15_16_rates[age]["3"]
     missing = HEPA_15_16_rates[age]["NA"]
     total = positives + negatives
-    print("%s\t%s\t%s\t%s" % (age, positives, negatives, total))
+    print("%s\t%s\t%s\t%s" % (age, positives, negatives, total)) # Could use zfill here to make sorting easier.
+
+with open("2015-2016/HEPB_I.csv") as f:
+    reader = csv.reader(f)
+    cols = None
+    for row in reader:
+        if not cols:
+            cols = row
+        else:
+
