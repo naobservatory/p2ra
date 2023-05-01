@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from textwrap import dedent
 
-import numpy as np  # type: ignore
+import numpy as np
 
 import stats
 from mgs import BioProject, MGSData
