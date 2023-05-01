@@ -8,8 +8,8 @@ The goal so far has been to have something that is a reasonable representation o
 Now that we have data and working glue code, we will work to assess and improve the model.
 
 Here is the Stan code.
-In the following section, we will explain each component.
-If you are not familiar with Stan, you may skip to the Data section.
+In the following sections, we will explain each component.
+If you are not familiar with Stan, you may skip to the [Data](#data) section.
 
 ```stan
 data {
@@ -83,8 +83,17 @@ Finally, we give $\phi$ a Gamma prior with a mode at $\phi = 1$.
 
 ### Limitations and future directions
 
-- Priors
-- Independence of estimates
-- Partial pooling of prevalence estimates
-- Assessing model fit
-- Multiple studies/methodologies
+Our biggest current limitation is that we model the true prevalences as independent of one another.
+It would be more realistic for them to have shared as well as independent components of variation.
+For example, our prevalence estimates may be systematically biased in one direction or another and that would induce a correlated effect on all of the samples.
+The amount of shared variation between samples might also depend on features they have in common such as a shared sampling location or similar sampling times.
+(Issue [#59](https://github.com/naobservatory/p2ra/issues/59) outlines a simple way forward here.)
+
+A related issue is that we may have prevalence data that is more relevant for some samples than for others, but is not perfectly aligned with the sampling times and locations.
+In this case, we may want to have a stochastic process model (e.g., a Gaussian process) of the true prevalence that can be updated with our prevalence estimates and then emit the parameters for the negative binomial regressions.
+
+As mentioned in the [Model](#model) section, it would also be useful to extend the negative binomial regression to include predictors other than sample identity.
+By including sample processing methods, or viral characteristics as predictors, we could combine information across studies and viruses to develop a general model of MGS abundance. 
+
+Finally, we currently do not do any evaluation of model fit or sensitivity to prior assumptions.
+We will develop a workflow to check that the model is appropriate for the data and to improve it if not.
