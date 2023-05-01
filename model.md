@@ -57,9 +57,9 @@ They are:
 
 We assume that the read counts follow a negative binomial distribution and are independent (conditional on the parameters):
 
-$$$
+$$
 y_i \sim NB(n_i \exp(b + \theta_i), \phi),
-$$$
+$$
 
 using the (mean, reciprocal overdispersion) parameterization.
 Note that expected number of reads is proportional to the total number of reads times the exponentiated log-prevalence.
@@ -69,9 +69,9 @@ If we wanted to include other predictors of the abundance, $x$, we would multipl
 
 We give our true log-prevalence parameters independent Gaussian priors centered on our log-prevalence estimates:
 
-$$$
+$$
 \theta_i \sim Normal(\mu_i, \sigma).
-$$$
+$$
 
 This is equivalent to assuming a flat prior on the log-abundance and updating with Gaussian-likelihood to our prevalence data.
 
