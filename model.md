@@ -55,6 +55,32 @@ They are:
 
 ### Model
 
+We assume that the read counts follow a negative binomial distribution and are independent (conditional on the parameters):
+
+$$$
+y_i \sim NB(n_i \exp(b + \theta_i), \phi),
+$$$
+
+using the (mean, reciprocal overdispersion) parameterization.
+Note that expected number of reads is proportional to the total number of reads times the exponentiated log-prevalence.
+The constant of proportionality is $e^b$.
+In other words, $b$ is the intercept term of a negative binomial regression with a log link function.
+If we wanted to include other predictors of the abundance, $x$, we would multiply the mean by $e^{\beta x}$. 
+
+We give our true log-prevalence parameters independent Gaussian priors centered on our log-prevalence estimates:
+
+$$$
+\theta_i \sim Normal(\mu_i, \sigma).
+$$$
+
+This is equivalent to assuming a flat prior on the log-abundance and updating with Gaussian-likelihood to our prevalence data.
+
+We put a weakly informative Gaussian prior on $b$.
+(We can center this at zero by normalizing abundance inputs.)
+
+Finally, we give $\phi$ a Gamma prior with a mode at $\phi = 1$.
+(This is largely arbitrary at this stage, but enforces $\phi > 0$.)
+
 ### Limitations and future directions
 
 - Priors
