@@ -1,7 +1,7 @@
 ## Statistical model
 
 The `stats` module uses the [Stan](https://mc-stan.org/) statistical programming language to define a Bayesian model of viral prevalences and metagenomic sequencing read counts.
-Our objective is to estimate a coefficient that 
+Our objective is to estimate a coefficient that connects estimates of the prevalence of a viral clade to the number of metagenomic reads assigned to that clade across a set of samples.
 
 Here is the Stan code.
 In the following section, we will explain each component.
@@ -30,6 +30,15 @@ model {
 ```
 
 ### Data
+
+The input to the model is data on read counts and viral prevalence.
+In particular, we must provide:
+
+- The number metagenomic samples, $J$
+- The number of reads assigned to our focal viral clade in each sample, $y_j$ for $j \in \{1, \ldots, J\}$. 
+- The total number of reads in each sample, $n_j$.
+- The expected log-prevalence of the viral clade in the population contributing to each sample, $\mu_j$.
+- An estimate of the uncertainty in the log-prevalence, represented as a standard deviation $\sigma$, assumed to be the same across samples.
 
 ### Parameters
 
