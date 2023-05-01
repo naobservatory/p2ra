@@ -15,26 +15,29 @@ pathogen_chars = PathogenChars(
 )
 
 
-normal_year_national_cases = IncidenceAbsolute(
+us_national_cases_2013 = IncidenceAbsolute(
     annual_infections=20e6,
     confidence_interval=(19e6, 21e6),
     country="United States",
-    tag="us",
-    source="https://www.cdc.gov/norovirus/trends-outbreaks/burden-US.html",
+    tag="us-2013",
+    date="2013",
+    # "19–21 million total illnesses per year"
+    source="https://wwwnc.cdc.gov/eid/article/19/8/pdfs/13-0465.pdf",
 )
 
-us_population = Population(
-    people=333_287_557,
+us_population_2013 = Population(
+    people=315_091_138,
     country="United States",
-    date="2022-07-01",
-    tag="us",
-    source="https://www.census.gov/quickfacts/fact/table/US/PST045221",
+    date="2013-01-01",
+    tag="us-2013",
+    source="https://www.census.gov/newsroom/releases/archives/population/cb12-255.html",
 )
 
 shedding_duration = SheddingDuration(
     days=2,
     confidence_interval=(1, 3),
-    source="https://www.mayoclinic.org/diseases-conditions/norovirus/symptoms-causes/syc-20355296",
+    # "Norovirus infection symptoms usually last 1 to 3 days"
+    source="https://www.mayoclinic.org/diseases-conditions/norovirus/symptoms-causes/syc-20355296#:~:text=Norovirus%20infection%20symptoms%20usually%20last%201%20to%203%20days",
 )
 
 
@@ -49,7 +52,8 @@ def estimate_prevalences():
 
     prevalences = []
 
-    # Downloaded from https://wwwn.cdc.gov/norsdashboard/ 2023-04-28.
+    # Downloaded on 2023-04-28 from https://wwwn.cdc.gov/norsdashboard/
+    # Data runs through the end of 2021.
     with open(prevalence_data_filename("cdc-nors-outbreak-data.tsv")) as inf:
         cols = None
         for line in inf:
@@ -79,8 +83,8 @@ def estimate_prevalences():
             if state == "California":
                 ca_outbreaks[date] += 1
 
-    normal_year_national_prevalence = normal_year_national_cases.to_rate(
-        us_population
+    normal_year_national_prevalence = us_national_cases_2013.to_rate(
+        us_population_2013
     ).to_prevalence(shedding_duration)
 
     total_us_outbreaks = 0
@@ -111,7 +115,6 @@ def estimate_prevalences():
                         scalar=target_us_daily_outbreaks
                         / normal_us_average_daily_outbreaks,
                         country="United States",
-                        state="California",
                         date=target_date,
                         source="https://wwwn.cdc.gov/norsdashboard/",
                     )
