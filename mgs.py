@@ -13,7 +13,7 @@ from tree import Tree
 MGS_REPO_DEFAULTS = {
     "user": "naobservatory",
     "repo": "mgs-pipeline",
-    "branch": "47e2025f35168d3f414ae62928f6a14dd3f7c23d",
+    "ref": "data-2023-04-28",
 }
 
 
@@ -21,12 +21,12 @@ MGS_REPO_DEFAULTS = {
 class GitHubRepo:
     user: str
     repo: str
-    branch: str
+    ref: str
 
     def get_file(self, path: str) -> str:
         file_url = (
             f"https://raw.githubusercontent.com/"
-            f"{self.user}/{self.repo}/{self.branch}/{path}"
+            f"{self.user}/{self.repo}/{self.ref}/{path}"
         )
         with urllib.request.urlopen(file_url) as response:
             if response.status == 200:
@@ -117,9 +117,9 @@ class MGSData:
     def from_repo(
         user=MGS_REPO_DEFAULTS["user"],
         repo=MGS_REPO_DEFAULTS["repo"],
-        branch=MGS_REPO_DEFAULTS["branch"],
+        ref=MGS_REPO_DEFAULTS["ref"],
     ):
-        repo = GitHubRepo(user, repo, branch)
+        repo = GitHubRepo(user, repo, ref)
         return MGSData(
             bioprojects=load_bioprojects(repo),
             sample_attrs=load_sample_attributes(repo),
