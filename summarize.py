@@ -51,7 +51,11 @@ def start(pathogen_names):
             location = estimate.summarize_location()
 
             prevalence = "%.2f per 100k" % estimate.infections_per_100k
-            line = "%s (%s; %s)" % (prevalence.rjust(18), location, date)
+            taxid = ""
+            if estimate.taxid:
+                taxid = "; %s" % estimate.taxid
+            line = "%s (%s; %s%s)" % (
+                prevalence.rjust(18), location, date, taxid)
             to_print.append(((location, str(date)), line))
 
         to_print.sort()
