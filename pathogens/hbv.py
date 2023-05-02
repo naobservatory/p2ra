@@ -29,14 +29,21 @@ hbv_us_2022_deaths_wonder = Number(
     source="https://wonder.cdc.gov/controller/saved/D176/D341F095",
 )
 
-estimated_acute_2019 = PrevalenceAbsolute(
-    infections=20_700,
+time_to_peak_viral_load = SheddingDuration(
+    days=127,
+    confidence_interval=(127 + 46, 127 - 46),
+    # Home country of patients isn't disclosed
+    date="2001",
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2193367/#:~:text=This%20analysis%20yielded%20a%20mean%20time%20to%20infection%20before%20the%20viral%20peak%20of%20127%20%C2%B1%2046%20d.",
+)
+
+estimated_acute_2019 = IncidenceAbsolute(
+    annual_infections=20_700,
     confidence_interval=(11_800, 50_800),  # 95% Bootstrap Confidence Interval
     coverage_probability=0.95,
     country="United States",
     date="2019",
     tag="us_2019",
-    active=Active.ACTIVE,
     # Still need to find the specific paper this estimate is based on
     source="https://www.cdc.gov/hepatitis/statistics/2019surveillance/HepB.htm",
 )
@@ -78,6 +85,8 @@ us_population_2020 = Population(
 
 def estimate_prevalences():
     return [
-        estimated_acute_2019.to_rate(us_population_2019),
+        estimated_acute_2019.to_rate(us_population_2019).to_prevalence(
+            time_to_peak_viral_load
+        ),
         estimated_chronic_us_2020.to_rate(us_population_2020),
     ]
