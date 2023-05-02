@@ -22,6 +22,7 @@ cdc_2015_2016_nhanes_seroprevalence = Prevalence(
     country="United States",
     start_date="2015",
     end_date="2016",
+    active=Active.LATENT,
     source="https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm#:~:text=3710-,LBXHE2%20%2D%20Herpes%20Simplex%20Virus%20Type%202,-Variable%20Name%3A,",
 )
 
@@ -33,6 +34,7 @@ cdc_2018_nhanes_estimate = PrevalenceAbsolute(
     date="2018",
     country="United States",
     tag="18-49yo_us_population",
+    active=Active.LATENT,
     source="https://journals.lww.com/stdjournal/Fulltext/2021/04000/Estimates_of_the_Prevalence_and_Incidence_of.9.aspx#:~:text=In%202018%2C%20there,that%20are%20genital.",
     methods="https://journals.lww.com/stdjournal/Fulltext/2021/04000/Estimates_of_the_Prevalence_and_Incidence_of.9.aspx#:~:text=genital%20infections%20burden.-,METHODS,-We%20estimated%20the",
 )
@@ -43,6 +45,7 @@ cdc_2015_2016_nhanes_estimate = Prevalence(
     confidence_interval=(0.0966 * 100_000, 0.1495 * 100_000),
     start_date="2015",
     end_date="2016",
+    active=Active.LATENT,
     source="https://www.cdc.gov/nchs/data/databriefs/db304_table.pdf?#page=3",
     methods="https://www.cdc.gov/nchs/products/databriefs/db304.htm#:~:text=Estimates%20were%20calculated,p%20%3C%200.05.",
 )
