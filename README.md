@@ -15,6 +15,10 @@ more estimates.
 
 Run `./summarize.py` to get an overview of the data.
 
+### Statistical model
+
+For an overview of the statistical model see [model.md](model.md).
+
 ### Development
 
 #### Making changes
@@ -46,6 +50,9 @@ Run `./test.py`
 Before creating a PR or submitting code, run `./check.sh`.  It will run tests
 than check your types and formatting.  This also runs automatically on GitHub
 when you make PRs, but it's much faster to catch problems locally first.
+
+If `./check.sh` complains about formatting or import sorting, you can fix this
+automatically with `./check.sh --fix`.
 
 #### Installing pystan
 
