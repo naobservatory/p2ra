@@ -51,10 +51,21 @@ rhinovirus_shedding_duration = SheddingDuration(
     source="https://erj.ersjournals.com/content/44/1/169#:~:text=Virus%20shedding%20lasts%20on%20average%20for%2010%E2%80%9314%20days%20in%20immunocompetent%20subjects",
 )
 
+pandemic_decrease_factor = Scalar(
+    scalar=0.1,
+    date="2020",
+    source="https://www.bmj.com/content/370/bmj.m3182#:~:text=still%20around%20nine%20times%20fewer%20cases%20than%20the%20five%20year%20average%20for%20this%20time%20of%20year.",
+)
+
+rhinovirus_prevalence = Prevalence(
+    infections_per_100k=annual_rhinovirus_infections_per_100k.to_prevalence(
+        rhinovirus_shedding_duration
+    )
+    .scale(pandemic_decrease_factor)
+    .infections_per_100k,
+    active=Active.ACTIVE,
+)
+
 
 def estimate_prevalences():
-    return [
-        annual_rhinovirus_infections_per_100k.to_prevalence(
-            rhinovirus_shedding_duration
-        )
-    ]
+    return [rhinovirus_prevalence]
