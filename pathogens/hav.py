@@ -97,8 +97,10 @@ def estimate_prevalences():
         ),
         king_county_confirmed_cases_rate_2017.to_prevalence(
             hva_shedding_duration
-        ).scale(incidence_underreporting_scalar),
+        )
+        * incidence_underreporting_scalar,
         king_county_confirmed_cases_rate_2018.to_prevalence(
             hva_shedding_duration
-        ).scale(incidence_underreporting_scalar),
+        )
+        * incidence_underreporting_scalar,
     ]

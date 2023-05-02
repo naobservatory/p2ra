@@ -51,7 +51,6 @@ normal_year_outbreaks = Number(
 
 def estimate_prevalences():
     return [
-        cases.to_rate(us_population)
-        .to_prevalence(shedding_duration)
-        .scale(rothman_period_outbreaks.per(normal_year_outbreaks))
+        cases.to_rate(us_population).to_prevalence(shedding_duration)
+        * (rothman_period_outbreaks / normal_year_outbreaks)
     ]

@@ -104,10 +104,12 @@ def estimate_prevalences():
                     tag="%s 2020" % county,
                 )
                 estimates.append(
-                    cases.to_rate(county_populations[county])
-                    .to_prevalence(shedding_duration)
-                    .scale(underreporting)
-                    .target(
+                    (
+                        cases.to_rate(
+                            county_populations[county]
+                        ).to_prevalence(shedding_duration)
+                        * underreporting
+                    ).target(
                         country="United States",
                         state="California",
                         county=county,
