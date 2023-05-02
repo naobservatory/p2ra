@@ -1,8 +1,13 @@
 from pathogen_properties import *
 
-background = """EBV stands for Epstein-Barr virus. It is a type of herpes virus that infects humans and is known to cause infectious mononucleosis, also known as mono or glandular fever. EBV is a common virus that is transmitted through contact with infected saliva, such as through kissing, sharing utensils, or close contact with an infected person's respiratory droplets.
-EBV is a widespread virus that can persist in the body for life, although most people infected with EBV do not develop symptoms or have mild symptoms that resemble the flu.
-"""
+background = """EBV stands for Epstein-Barr virus. It is a type of 
+herpes virus that infects humans and is known to cause infectious 
+mononucleosis, also known as mono or glandular fever. 
+EBV is a common virus that is transmitted through contact with infected
+ saliva, such as through kissing, sharing utensils, or close contact with
+ an infected person's respiratory droplets. EBV is a widespread virus that 
+ can persist in the body for life, although most people infected with EBV 
+ do not develop symptoms or have mild symptoms that resemble the flu."""
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
@@ -14,6 +19,7 @@ UK_study = Prevalence(
     infections_per_100k=85300,
     country="UK",
     date="2002-2013",
+    active=Active.LATENT(),
 )
 
 # this study cites a  textbook published in 2007. It is not used
