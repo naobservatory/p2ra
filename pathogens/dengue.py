@@ -23,7 +23,7 @@ california_reported_cases = IncidenceAbsolute(
 )
 
 CA_population = Population(
-    people=39538245,
+    people=39_538_245,
     tag="California-2020",
     date="2020-04",
     source="https://www.census.gov/quickfacts/CA",
