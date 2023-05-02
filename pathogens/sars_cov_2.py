@@ -1,5 +1,6 @@
 import csv
 import datetime
+from collections import Counter
 
 from pathogen_properties import *
 
@@ -59,11 +60,49 @@ county_populations = {
         tag="Orange 2020",
         source="https://www.census.gov/quickfacts/orangecountycalifornia",
     ),
+    ("Alameda", "California"): Population(
+        people=1_682_353,
+        date="2020-04-01",
+        country="United States",
+        state="California",
+        county="Alameda",
+        tag="Alameda 2020",
+        source="https://www.census.gov/quickfacts/alamedacountycalifornia",
+    ),
+    ("Marin", "California"): Population(
+        people=262_318,
+        date="2020-04-01",
+        country="United States",
+        state="California",
+        county="Marin",
+        tag="Marin 2020",
+        source="https://www.census.gov/quickfacts/marincountycalifornia",
+    ),
+    ("San Francisco", "California"): Population(
+        people=873_959,
+        date="2020-04-01",
+        country="United States",
+        state="California",
+        county="San Francisco",
+        tag="San Francisco 2020",
+        source="https://www.census.gov/quickfacts/sanfranciscocountycalifornia",
+    ),
 }
+
+ohio_population = Population(
+    people=11_799_374,
+    date="2020-04-01",
+    country="United States",
+    state="Ohio",
+    tag="Ohio 2020",
+    source="https://www.census.gov/quickfacts/OH",
+)
 
 
 def estimate_prevalences():
     estimates = []
+
+    ohio_totals = Counter()  # day -> total new cases, 7d moving average
 
     # From the COVID-19 Data Repository by the Center for Systems Science and
     # Engineering (CSSE) at Johns Hopkins University
@@ -76,7 +115,7 @@ def estimate_prevalences():
             county = row[5]
             state = row[6]
 
-            if (county, state) not in county_populations:
+            if state != "Ohio" and (county, state) not in county_populations:
                 continue
 
             # In the tsv file, cumulative case counts start at column 11 with
@@ -103,24 +142,49 @@ def estimate_prevalences():
                 # centered moving average
                 # https://www.jefftk.com/p/careful-with-trailing-averages
                 date = str(day - datetime.timedelta(days=3))
-                cases = IncidenceAbsolute(
-                    annual_infections=sum(latest) * 52,
-                    country="United States",
-                    state="California",
-                    county=county,
-                    date=date,
-                    tag="%s 2020" % county,
-                )
-                estimates.append(
-                    cases.to_rate(county_populations[county, state])
-                    .to_prevalence(shedding_duration)
-                    .scale(underreporting)
-                    .target(
+                annual_infections = sum(latest) * 52
+                if state == "Ohio":
+                    ohio_totals[date] += annual_infections
+                else:
+                    cases = IncidenceAbsolute(
+                        annual_infections=annual_infections,
                         country="United States",
-                        state="California",
+                        state=state,
                         county=county,
                         date=date,
+                        tag="%s 2020" % county,
                     )
-                )
+                    estimates.append(
+                        cases.to_rate(county_populations[county, state])
+                        .to_prevalence(shedding_duration)
+                        .scale(underreporting)
+                        .target(
+                            country="United States",
+                            state=state,
+                            county=county,
+                            date=date,
+                        )
+                    )
 
-        return estimates
+    for date, annual_infections in ohio_totals.items():
+        cases = IncidenceAbsolute(
+            annual_infections=annual_infections,
+            country="United States",
+            state="Ohio",
+            date=date,
+            tag="Ohio 2020",
+        )
+        # TODO: we can probably get a better undereporting figure for the
+        # omicron surge.
+        estimates.append(
+            cases.to_rate(ohio_population)
+            .to_prevalence(shedding_duration)
+            .scale(underreporting)
+            .target(
+                country="United States",
+                state="Ohio",
+                date=date,
+            )
+        )
+
+    return estimates
