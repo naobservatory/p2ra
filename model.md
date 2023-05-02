@@ -77,7 +77,7 @@ This is equivalent to assuming a flat prior on the log-prevalence and updating w
 
 We put a weakly informative Gaussian prior on $b$.
 We can center the prior at zero by choosing the right scale for prevalence inputs.
-That is, we can convert prevalence to cases per $n$ individuals and choose $n$ so that when $theta = \log prevalence = 0$, we expect to see $O(1)$ reads.
+That is, we can convert prevalence to cases per $n$ individuals and choose $n$ so that when $\theta = \log prevalence = 0$, we expect to see $O(1)$ reads.
 
 Finally, we give $\phi$ a Gamma prior with a mode at $\phi = 1$.
 (This is largely arbitrary at this stage, but enforces $\phi > 0$.)
