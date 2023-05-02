@@ -55,7 +55,11 @@ def start(pathogen_names):
             if estimate.taxid:
                 taxid = "; %s" % estimate.taxid
             line = "%s (%s; %s%s)" % (
-                prevalence.rjust(18), location, date, taxid)
+                prevalence.rjust(18),
+                location,
+                date,
+                taxid,
+            )
             to_print.append(((location, str(date)), line))
 
         to_print.sort()
