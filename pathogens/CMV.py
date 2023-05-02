@@ -33,30 +33,34 @@ GER_seroprevalence_estimate = Prevalence(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6059406/#:~:text=Overall%20CMV%20seroprevalence,Germany%20in%20women",
 )
 
-# The CDC's source on this information is unclear. However, the website says
-# that "over 50% of people in the US have been infected with CMV by age 40."
-# 40 is around the average age in the US, so this implies a prevalence of
-# around 50%.
 US_prevalence = Prevalence(
-    infections_per_100k=50000,
+    # According to the CDC,  "over 50% of people in the US have been infected
+    # with CMV by age 40." At age 5 1/3 of people are infected, and by age 40
+    # 1/2 are infected, which hints toward the prevalence being asymptotic at
+    # around 50%. This implies that the true proportion is somewhere between
+    # around 1/3 and 3/5 of people. This number is not actually used, but can
+    # help confirm that the Germany estimate is reasonable
+    infections_per_100k=0.5 * 100_000,
     country="US",
     active=Active.LATENT,
+    # The CDC's source on this information is unclear.
     source="https://www.cdc.gov/cmv/overview.html#:~:text=In%20the%20United%20States%2C%20nearly%20one%20in%20three%20children%20is%20already%20infected%20with%20CMV%20by%20age%20five.%20Over%20half%20of%20adults%20have%20been%20infected%20with%20CMV%20by%20age%2040.%20Once",
-    date="2023",
+    date="2020",
 )
 
-# Since the US-specific number is non-exact and slightly too low, since the US median age is really 38, I think it makes sense to take the Germany estimate of 57000 per 100k
+# Since the US-specific number is very rough, I think it makes sense to take the Germany estimate of 57000 per 100k.
 
 
 # data is from Table 3 of the source paper. This is not an exact number, but an estimate based on the multiple estimates cited in the paper (and the paper's own analysis)
-adult_shedding = Scalar(
-    scalar=90,
+adult_shedding = SheddingDuration(
+    days=90,
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4494736/#:~:text=children%20and%20adults.-,Table%203,-Duration%20of%20CMV",
 )
 
+
 # data is from Table 3 of the source paper. This is not an exact number, but an estimate based on the multiple estimates cited in the paper (and the paper's own analysis)
-child_shedding = Scalar(
-    scalar=335,
+child_shedding = SheddingDuration(
+    days=335,
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4494736/#:~:text=children%20and%20adults.-,Table%203,-Duration%20of%20CMV",
 )
 
@@ -66,7 +70,7 @@ Over half of adults have been infected with CMV by age 40. I estimate that 40%
 of the population gets CMV as a child, so according to our seroprevalence 
 estimate, 57% - 40% = 17% gets CMV as an adult"""
 total_days_shedding_per_person = Scalar(
-    scalar=0.40 * child_shedding.scalar + 0.17 * adult_shedding.scalar,
+    scalar=0.40 * child_shedding.days + 0.17 * adult_shedding.days,
     source="https://www.cdc.gov/cmv/overview.html",
 )
 
