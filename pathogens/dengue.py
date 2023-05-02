@@ -1,8 +1,9 @@
 from pathogen_properties import *
 
-background = """Dengue virus, a mosquito-borne viral infection primarily transmitted
-by the Aedes aegypti and Aedes albopictus mosquitoes, present in tropical and subtropical regions.
-The virus presents with flu-like symptoms that can progress to severe dengue, characterized by
+background = """Dengue virus, a mosquito-borne viral infection primarily
+transmitted by the Aedes aegypti and Aedes albopictus mosquitoes, present 
+in tropical and subtropical regions. The virus presents with flu-like symptoms
+that can progress to severe dengue, characterized by
 hemorrhagic fever, shock, and even death."""
 
 
