@@ -7,7 +7,8 @@ urine, blood, semen, and breast milk. CMV can also be transmitted from a pregnan
 
 In healthy individuals with intact immune systems, CMV infection typically
 lasts for a few weeks to a few months. The acute phase of the infection, 
-during which the virus replicates and causes symptoms, usually lasts for several weeks. However, the virus can remain dormant in the body for life 
+during which the virus replicates and causes symptoms, usually lasts for 
+several weeks. However, the virus can remain dormant in the body for life 
 after the acute phase, and may reactivate later under certain circumstances
 such as when the immune system is weakened. According to Mount Sinai Hospital, 
 cytomegalovirus lasts for around 5 weeks. According to the CDC, about 1 in 200 
