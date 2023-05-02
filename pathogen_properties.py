@@ -223,6 +223,9 @@ class IncidenceRate(Variable):
 
     annual_infections_per_100k: float
 
+    # Any estimate derived from an incidence using a shedding duration must be an active estimate,
+    # since multilpying by SheddingDuration calculates the amount of time the virus is actively shedding for,
+    # which is not incorporated into a latent estimate.
     def to_prevalence(self, shedding_duration: SheddingDuration) -> Prevalence:
         return Prevalence(
             infections_per_100k=self.annual_infections_per_100k
