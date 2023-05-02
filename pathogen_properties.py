@@ -1,5 +1,8 @@
+import calendar
+import datetime
 import os.path
-from dataclasses import dataclass
+import re
+from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import NewType, Optional
 
@@ -23,6 +26,11 @@ class VariableType(Enum):
     MEASUREMENT = "measurement"
     EXTERNAL_ESTIMATE = "external_estimate"
     NAO_ESTIMATE = "nao_estimate"
+
+
+class Active(Enum):
+    ACTIVE = "Active"
+    LATENT = "Latent"
 
 
 TaxID = NewType("TaxID", int)
@@ -49,13 +57,73 @@ class Variable:
     methods: Optional[str] = None
     # Either supply date, or start_date and end_date.
     # Dates can be any of: YYYY, YYYY-MM, or YYYY-MM-DD.
-    date: Optional[str] = None
-    start_date: Optional[str] = None
-    end_date: Optional[str] = None
+    date: InitVar[Optional[str]] = None
+    start_date: InitVar[Optional[str]] = None
+    end_date: InitVar[Optional[str]] = None
+    parsed_start: Optional[datetime.date] = field(init=False)
+    parsed_end: Optional[datetime.date] = field(init=False)
     is_target: Optional[bool] = False
 
     # Remember to recursively consider each input's inputs if defined.
     inputs: Optional[list["Variable"]] = None
+
+    def __post_init__(
+        self,
+        date: Optional[str],
+        start_date: Optional[str],
+        end_date: Optional[str],
+    ):
+        if date and (start_date or end_date):
+            raise Exception("If you have start/end don't set date.")
+        if (start_date and not end_date) or (end_date and not start_date):
+            raise Exception("Start and end must go together.")
+        if date:
+            start_date = end_date = date
+
+        if start_date:
+            self.parsed_start = self._parse_date(start_date, "start")
+        else:
+            self.parsed_start = None
+
+        if end_date:
+            self.parsed_end = self._parse_date(end_date, "end")
+        else:
+            self.parsed_end = None
+
+        if (
+            self.parsed_start
+            and self.parsed_end
+            and self.parsed_start > self.parsed_end
+        ):
+            raise Exception("Start date can't be after end date")
+
+    def _parse_date(self, date: str, start_or_end: str) -> datetime.date:
+        y, m, d = None, None, None
+        if y_match := re.findall("^(\d\d\d\d)$", date):
+            (y,) = y_match
+        elif ym_match := re.findall("^(\d\d\d\d)-(\d\d)$", date):
+            ((y, m),) = ym_match
+        elif ymd_match := re.findall("^(\d\d\d\d)-(\d\d)-(\d\d)$", date):
+            ((y, m, d),) = ymd_match
+        else:
+            raise Exception("Unknown date format %s" % date)
+
+        y = int(y)
+
+        if m:
+            m = int(m)
+        else:
+            m = {"start": 1, "end": 12}[start_or_end]
+
+        if d:
+            d = int(d)
+        else:
+            if start_or_end == "start":
+                d = 1
+            else:
+                _, d = calendar.monthrange(int(y), int(m))
+
+        return datetime.date(y, m, d)
 
     def _location(self):
         bits = []
@@ -80,59 +148,22 @@ class Variable:
         self._collect_locations(all_locations)
         return "; ".join(sorted(all_locations))
 
-    def _collect_dates(self, all_dates):
-        for date in [self.date, self.start_date, self.end_date]:
+    def _collect_dates(self, all_dates: set[datetime.date]):
+        for date in [self.parsed_start, self.parsed_end]:
             if date:
                 all_dates.add(date)
         if self.inputs and not self.is_target:
             for variable in self.inputs:
                 variable._collect_dates(all_dates)
 
-    def summarize_date(self):
-        all_dates = set()
+    def summarize_date(self) -> Optional[tuple[datetime.date, datetime.date]]:
+        all_dates: set[datetime.date] = set()
         self._collect_dates(all_dates)
 
-        start_dates = set()
-        end_dates = set()
+        if not all_dates:
+            return None
 
-        for date in all_dates:
-            if len(date) == 4:
-                start_dates.add("%s-01-01" % date)
-                end_dates.add("%s-12-31" % date)
-            elif len(date) == 7:
-                start_dates.add("%s-01" % date)
-                # Not technically correct, since some months are shorter, but
-                # should be clear enough.
-                end_dates.add("%s-31" % date)
-            else:
-                start_dates.add(date)
-                end_dates.add(date)
-
-        if not start_dates and not end_dates:
-            return "no date"
-
-        start_date = min(start_dates)
-        end_date = max(end_dates)
-
-        if start_date == end_date:
-            return start_date
-
-        start_year = start_date[:4]
-        end_year = end_date[:4]
-
-        if start_year != end_year:
-            return "%s to %s" % (start_year, end_year)
-
-        if start_date.endswith("-01-01") and end_date.endswith("-12-31"):
-            return start_year
-
-        start_month = start_date[5:7]
-        end_month = start_date[5:7]
-
-        if start_month != end_month:
-            return start_year
-
-        return "%s to %s" % (start_date, end_date)
+        return min(all_dates), max(all_dates)
 
 
 @dataclass(kw_only=True)
@@ -154,12 +185,14 @@ class Scalar(Variable):
 class Prevalence(Variable):
     """What fraction of people have this pathogen at some moment"""
 
+    active: Active
     infections_per_100k: float
 
     def scale(self, scalar: Scalar) -> "Prevalence":
         return Prevalence(
             infections_per_100k=self.infections_per_100k * scalar.scalar,
             inputs=[self, scalar],
+            active=self.active,
         )
 
     def target(self, **kwargs) -> "Prevalence":
@@ -167,7 +200,8 @@ class Prevalence(Variable):
             infections_per_100k=self.infections_per_100k,
             inputs=[self],
             is_target=True,
-            **kwargs
+            active=self.active,
+            **kwargs,
         )
 
 
@@ -176,6 +210,8 @@ class PrevalenceAbsolute(Variable):
     """How many people had this pathogen at some moment"""
 
     infections: float
+    active: Active
+
     # Make this specific enough that you won't accidentally pair it with the
     # wrong population.
     tag: str
@@ -185,6 +221,7 @@ class PrevalenceAbsolute(Variable):
         return Prevalence(
             infections_per_100k=self.infections * 100000 / population.people,
             inputs=[self, population],
+            active=self.active,
         )
 
 
@@ -212,12 +249,16 @@ class IncidenceRate(Variable):
 
     annual_infections_per_100k: float
 
+    # Any estimate derived from an incidence using a shedding duration must be an active estimate,
+    # since multiplying by SheddingDuration calculates the amount of time the virus is actively shedding for,
+    # which is not incorporated into a latent estimate.
     def to_prevalence(self, shedding_duration: SheddingDuration) -> Prevalence:
         return Prevalence(
             infections_per_100k=self.annual_infections_per_100k
             * shedding_duration.days
             / 365,
             inputs=[self, shedding_duration],
+            active=Active.ACTIVE,
         )
 
 
