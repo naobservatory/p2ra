@@ -33,36 +33,35 @@ CDC, in the prevaccine era, around 40% of people got chickenpox before age 4,
 and around 90% before age 15. From these numbers, I estimate that around  half 
 the population got VZV before age 6. So, I'm using the fraction of the US 
 population 34 and older as an estimate for the proportion of the population 
-that got VZV in the prevaccine era. The median age in the US is 38, so around 
-50% of people are 38+. I estimate that around 55% are 34+. 
+that got VZV in the prevaccine era. According to the Census, 178 million people are 35+, and 147 million are 34-.
 https://www.cdc.gov/vaccines/pubs/pinkbook/varicella.html#:~:text=In%20the%20prevaccine%20era%2C%20varicella,younger%20than%20age%2015%20years.
-https://ourworldindata.org/grapher/median-age"""
+https://www.census.gov/data/tables/2020/demo/age-and-sex/2020-age-sex-composition.html"""
 population_above_34 = Prevalence(
-    infections_per_100k=0.55 * 100000,
+    infections_per_100k=178_000_000 / (178_000_000 + 147_000_000) * 100000,
     date="2021",
     active=Active.LATENT,
-    source="https://ourworldindata.org/grapher/median-age",
+    source="https://www.cdc.gov/vaccines/pubs/pinkbook/varicella.html#:~:text=In%20the%20prevaccine%20era%2C%20varicella,younger%20than%20age%2015%20years",
 )
 
 
-annual_new_VZV_infections = Scalar(
-    scalar=4000000,
+annual_new_VZV_infections = IncidenceAbsolute(
+    annual_infections=4_000_000,
+    tag="US-2023",
     source="https://www.childrenshospital.org/conditions/chickenpox#:~:text=More%20than%2095%20percent%20of%20American%20adults%20have%20had%20chickenpox%20and%20about%204%2C000%2C000%20people%20get%20chickenpox%20every%20year",
 )
 
 US_Population = Population(
-    people=335000000,
+    people=335_000_000,
     tag="US-2023",
     source="https://www.census.gov/popclock/",
 )
 
 prevalence_from_postvaccine_cases = Prevalence(
-    infections_per_100k=annual_new_VZV_infections.scalar
-    / US_Population.people
-    * 100000
-    * years_since_vaccine.scalar,
+    infections_per_100k=annual_new_VZV_infections.to_rate(US_Population),
     active=Active.LATENT,
 )
+
+prevalence_from_postvaccine_cases.scale(years_since_vaccine),
 
 # prevaccine cases estimate + postvaccine cases estimate
 VZV_latent_prevalence = Prevalence(
@@ -76,7 +75,7 @@ VZV_latent_prevalence = Prevalence(
 
 shingles_annual_infections = IncidenceAbsolute(
     annual_infections=1000000,
-    tag="US-2023",
+    tag="US-2020",
     source="https://www.cdc.gov/shingles/hcp/clinical-overview.html#:~:text=An%20estimated%20one%20million%20cases%20of%20herpes%20zoster%20occur%20annually%20in%20the%20United%20States",
 )
 
