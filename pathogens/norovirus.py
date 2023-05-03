@@ -146,9 +146,10 @@ def estimate_prevalences():
     )
 
     pre_covid_national_prevalence = (
-        us_national_foodborne_cases_2006.to_rate(us_population_2006)
-        .to_prevalence(shedding_duration)
-        .scale(us_total_relative_to_foodborne_2006)
+        us_national_foodborne_cases_2006.to_rate(
+            us_population_2006
+        ).to_prevalence(shedding_duration)
+        * us_total_relative_to_foodborne_2006
     )
 
     us_daily_outbreaks = to_daily_counts(us_outbreaks)
@@ -158,13 +159,16 @@ def estimate_prevalences():
             target_date = f"{year}-{month:02d}"
 
             prevalences.append(
-                pre_covid_national_prevalence.scale(
-                    Scalar(
-                        scalar=us_daily_outbreaks[year, month]
-                        / pre_covid_us_average_daily_outbreaks,
-                        country="United States",
-                        date=target_date,
-                        source="https://wwwn.cdc.gov/norsdashboard/",
+                (
+                    pre_covid_national_prevalence
+                    * (
+                        Scalar(
+                            scalar=us_daily_outbreaks[year, month]
+                            / pre_covid_us_average_daily_outbreaks,
+                            country="United States",
+                            date=target_date,
+                            source="https://wwwn.cdc.gov/norsdashboard/",
+                        )
                     )
                 ).target(country="United States", date=target_date)
             )
