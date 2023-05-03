@@ -37,7 +37,7 @@ annual_rhinovirus_infections_adults = Scalar(
 )
 
 annual_rhinovirus_infections_per_100k = IncidenceRate(
-    annual_infections_per_100k=100000
+    annual_infections_per_100k=100_000
     * (
         LA_county_adult_proportion.scalar
         * annual_rhinovirus_infections_adults.scalar
@@ -57,15 +57,10 @@ pandemic_decrease_factor = Scalar(
     source="https://www.bmj.com/content/370/bmj.m3182#:~:text=still%20around%20nine%20times%20fewer%20cases%20than%20the%20five%20year%20average%20for%20this%20time%20of%20year.",
 )
 
-rhinovirus_prevalence = Prevalence(
-    infections_per_100k=annual_rhinovirus_infections_per_100k.to_prevalence(
-        rhinovirus_shedding_duration
-    )
-    .scale(pandemic_decrease_factor)
-    .infections_per_100k,
-    active=Active.ACTIVE,
-)
-
 
 def estimate_prevalences():
-    return [rhinovirus_prevalence]
+    return [
+        annual_rhinovirus_infections_per_100k.to_prevalence(
+            rhinovirus_shedding_duration
+        ).scale(pandemic_decrease_factor)
+    ]
