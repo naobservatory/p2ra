@@ -1,3 +1,4 @@
+import csv
 import datetime
 
 from pathogen_properties import *
@@ -31,7 +32,7 @@ underreporting = Scalar(
 )
 
 county_populations = {
-    "San Diego": Population(
+    ("San Diego", "California"): Population(
         people=3_298_635,
         date="2020-04-01",
         country="United States",
@@ -40,7 +41,7 @@ county_populations = {
         tag="San Diego 2020",
         source="https://www.census.gov/quickfacts/fact/table/sandiegocountycalifornia/PST045221",
     ),
-    "Los Angeles": Population(
+    ("Los Angeles", "California"): Population(
         people=10_014_042,
         date="2020-04-01",
         country="United States",
@@ -49,7 +50,7 @@ county_populations = {
         tag="Los Angeles 2020",
         source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia/PST045222",
     ),
-    "Orange": Population(
+    ("Orange", "California"): Population(
         people=3_186_989,
         date="2020-04-01",
         country="United States",
@@ -64,16 +65,23 @@ county_populations = {
 def estimate_prevalences():
     estimates = []
 
+    # From the COVID-19 Data Repository by the Center for Systems Science and
+    # Engineering (CSSE) at Johns Hopkins University
+    #
+    # Downloaded 2023-05-02 from https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv
     with open(
-        prevalence_data_filename("southern-ca-cumulative-covid-cases.tsv")
+        prevalence_data_filename("time_series_covid19_confirmed_US.csv")
     ) as inf:
-        for line in inf:
-            bits = line.strip().split("\t")
-            county = bits[5]
+        for row in csv.reader(inf):
+            county = row[5]
+            state = row[6]
+
+            if (county, state) not in county_populations:
+                continue
 
             # In the tsv file, cumulative case counts start at column 11 with
             # counts for 2020-01-22.
-            case_counts = [int(x) for x in bits[11:]]
+            case_counts = [int(x) for x in row[11:]]
             day = datetime.date.fromisoformat("2020-01-22")
 
             # For computing a 7-day centered moving average.  We want a moving
@@ -83,8 +91,8 @@ def estimate_prevalences():
             for prev_case_count, case_count in zip(
                 case_counts, case_counts[1:]
             ):
-                # increment day at the beginning because zip means case_count never
-                # takes in the initial value.
+                # increment day at the beginning because zip means case_count
+                # never takes in the initial value.
                 day = day + datetime.timedelta(days=1)
 
                 # case counts are cumulative, but we want daily cases
@@ -106,12 +114,12 @@ def estimate_prevalences():
                 estimates.append(
                     (
                         cases.to_rate(
-                            county_populations[county]
+                            county_populations[county, state]
                         ).to_prevalence(shedding_duration)
                         * underreporting
                     ).target(
                         country="United States",
-                        state="California",
+                        state=state,
                         county=county,
                         date=date,
                     )
