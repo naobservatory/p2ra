@@ -177,7 +177,9 @@ def estimate_prevalences():
             tag="Ohio 2020",
         )
         # TODO: we can probably get a better undereporting figure for the
-        # omicron surge.
+        # omicron surge and this is likely too small.  The CDC 4x figure is not
+        # intended to cover this time period, this was after rapid tests were
+        # starting to be available, and omicron was relatively mild.
         estimates.append(
             (
                 cases.to_rate(ohio_population).to_prevalence(shedding_duration)
