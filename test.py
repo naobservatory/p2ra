@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
+import datetime
 import unittest
 from collections import Counter
 
 import mgs
 import pathogens
+from mgs import MGSData
 from pathogen_properties import *
 from tree import Tree
 
@@ -16,13 +18,19 @@ class TestPathogens(unittest.TestCase):
     def test_summarize_location(self):
         us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
         self.assertEqual(us_2019.summarize_location(), "United States")
-        self.assertEqual(us_2019.summarize_date(), "2019")
+        self.assertEqual(
+            us_2019.summarize_date(),
+            (datetime.date(2019, 1, 1), datetime.date(2019, 12, 31)),
+        )
 
         self.assertEqual(
             la_2020.summarize_location(),
             "Los Angeles, California, United States",
         )
-        self.assertEqual(la_2020.summarize_date(), "2020")
+        self.assertEqual(
+            la_2020.summarize_date(),
+            (datetime.date(2020, 1, 1), datetime.date(2020, 12, 31)),
+        )
 
     def test_properties_exist(self):
         for pathogen_name, pathogen in pathogens.pathogens.items():
@@ -35,12 +43,59 @@ class TestPathogens(unittest.TestCase):
                     self.assertIsInstance(estimate, Prevalence)
 
 
+class TestVaribles(unittest.TestCase):
+    def test_date_parsing(self):
+        v = Variable(date="2019")
+        self.assertEqual(v.parsed_start, datetime.date(2019, 1, 1))
+        self.assertEqual(v.parsed_end, datetime.date(2019, 12, 31))
+
+        v = Variable(date="2019-02")
+        self.assertEqual(v.parsed_start, datetime.date(2019, 2, 1))
+        self.assertEqual(v.parsed_end, datetime.date(2019, 2, 28))
+
+        v = Variable(date="2020-02")
+        self.assertEqual(v.parsed_start, datetime.date(2020, 2, 1))
+        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 29))
+
+        v = Variable(date="2020-02-01")
+        self.assertEqual(v.parsed_start, datetime.date(2020, 2, 1))
+        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 1))
+
+        v = Variable(start_date="2020-01", end_date="2020-02")
+        self.assertEqual(v.parsed_start, datetime.date(2020, 1, 1))
+        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 29))
+
+        v = Variable(start_date="2020-01-07", end_date="2020-02-06")
+        self.assertEqual(v.parsed_start, datetime.date(2020, 1, 7))
+        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 6))
+
+        with self.assertRaises(Exception):
+            Variable(start_date="2020-01-07")
+
+        with self.assertRaises(Exception):
+            Variable(end_date="2020-01-07")
+
+        with self.assertRaises(Exception):
+            Variable(start_date="2020-01-07", date="2020")
+
+        with self.assertRaises(Exception):
+            Variable(end_date="2020-01-07", date="2020")
+
+        with self.assertRaises(Exception):
+            Variable(start_date="2020-01-07", end_date="2020-01-06")
+
+        with self.assertRaises(Exception):
+            Variable(date="2020-1")
+
+        with self.assertRaises(Exception):
+            Variable(date="2020/1/1")
+
+        with self.assertRaises(Exception):
+            Variable(date="2020/01/01")
+
+
 class TestMGS(unittest.TestCase):
-    repo = mgs.GitHubRepo(
-        user="naobservatory",
-        repo="mgs-pipeline",
-        branch="47e2025f35168d3f414ae62928f6a14dd3f7c23d",
-    )
+    repo = mgs.GitHubRepo(**mgs.MGS_REPO_DEFAULTS)
 
     def test_load_bioprojects(self):
         bps = mgs.load_bioprojects(self.repo)
@@ -77,6 +132,31 @@ class TestMGS(unittest.TestCase):
         }
         expected = Counter({mgs.Sample("a"): 6, mgs.Sample("b"): 3})
         self.assertEqual(mgs.count_reads(taxtree, sample_counts), expected)
+
+
+class TestMGSData(unittest.TestCase):
+    mgs_data = MGSData.from_repo()
+    bioproject = mgs.BioProject("PRJNA729801")  # Rothman
+    sample = mgs.Sample("SRR14530726")  # Random Rothman sample
+    taxid = pathogens.pathogens["norovirus"].pathogen_chars.taxid
+
+    def test_from_repo(self):
+        self.assertIsInstance(MGSData.from_repo(), MGSData)
+
+    def test_sample_attributes(self):
+        samples = self.mgs_data.sample_attributes(self.bioproject)
+        self.assertIn(self.sample, samples)
+        self.assertIsInstance(samples[self.sample], mgs.SampleAttributes)
+
+    def test_total_reads(self):
+        reads = self.mgs_data.total_reads(self.bioproject)
+        self.assertIn(self.sample, reads)
+        self.assertIsInstance(reads[self.sample], int)
+
+    def test_viral_reads(self):
+        reads = self.mgs_data.viral_reads(self.bioproject, self.taxid)
+        self.assertIn(self.sample, reads)
+        self.assertIsInstance(reads[self.sample], int)
 
 
 class TestTree(unittest.TestCase):

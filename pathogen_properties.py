@@ -1,5 +1,9 @@
+import calendar
+import datetime
 import os.path
-from dataclasses import dataclass
+import re
+from collections.abc import Iterable
+from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import NewType, Optional
 
@@ -33,14 +37,19 @@ class Active(Enum):
 TaxID = NewType("TaxID", int)
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, eq=True, frozen=True)
 class PathogenChars:
     na_type: NAType
     enveloped: Enveloped
     taxid: TaxID
 
 
-@dataclass(kw_only=True)
+def days_in_month(year: int, month: int) -> int:
+    _, last_day = calendar.monthrange(year, month)
+    return last_day
+
+
+@dataclass(kw_only=True, eq=True, frozen=True)
 class Variable:
     """An external piece of data"""
 
@@ -54,13 +63,83 @@ class Variable:
     methods: Optional[str] = None
     # Either supply date, or start_date and end_date.
     # Dates can be any of: YYYY, YYYY-MM, or YYYY-MM-DD.
-    date: Optional[str] = None
-    start_date: Optional[str] = None
-    end_date: Optional[str] = None
+    date: InitVar[Optional[str]] = None
+    start_date: InitVar[Optional[str]] = None
+    end_date: InitVar[Optional[str]] = None
+    parsed_start: Optional[datetime.date] = field(init=False)
+    parsed_end: Optional[datetime.date] = field(init=False)
     is_target: Optional[bool] = False
+    inputs: InitVar[Optional[Iterable["Variable"]]] = None
+    all_inputs: set["Variable"] = field(init=False)
 
-    # Remember to recursively consider each input's inputs if defined.
-    inputs: Optional[list["Variable"]] = None
+    def __post_init__(
+        self,
+        date: Optional[str],
+        start_date: Optional[str],
+        end_date: Optional[str],
+        inputs: Optional[Iterable["Variable"]],
+    ):
+        # A python wart is that frozen dataclasses don't have an exception for
+        # __post_init__, and it thinks assignments here are mutation instead of
+        # initialization.  That's why we're assigning with __setattr__. See
+        # https://stackoverflow.com/questions/53756788/how-to-set-the-value-of-dataclass-field-in-post-init-when-frozen-true/54119384#54119384
+
+        if date and (start_date or end_date):
+            raise Exception("If you have start/end don't set date.")
+        if (start_date and not end_date) or (end_date and not start_date):
+            raise Exception("Start and end must go together.")
+        if date:
+            start_date = end_date = date
+
+        parsed_start = None
+        if start_date:
+            parsed_start = self._parse_date(start_date, "start")
+        object.__setattr__(self, "parsed_start", parsed_start)
+
+        parsed_end = None
+        if end_date:
+            parsed_end = self._parse_date(end_date, "end")
+        object.__setattr__(self, "parsed_end", parsed_end)
+
+        if (
+            self.parsed_start
+            and self.parsed_end
+            and self.parsed_start > self.parsed_end
+        ):
+            raise Exception("Start date can't be after end date")
+
+        all_inputs = set(inputs or [])
+        for variable in set(inputs or []):
+            all_inputs |= variable.all_inputs
+        object.__setattr__(self, "all_inputs", frozenset(all_inputs))
+
+    def _parse_date(self, date: str, start_or_end: str) -> datetime.date:
+        y, m, d = None, None, None
+        if y_match := re.findall("^(\d\d\d\d)$", date):
+            (y,) = y_match
+        elif ym_match := re.findall("^(\d\d\d\d)-(\d\d)$", date):
+            ((y, m),) = ym_match
+        elif ymd_match := re.findall("^(\d\d\d\d)-(\d\d)-(\d\d)$", date):
+            ((y, m, d),) = ymd_match
+        else:
+            raise Exception("Unknown date format %s" % date)
+
+        y = int(y)
+
+        if m:
+            m = int(m)
+        else:
+            m = {"start": 1, "end": 12}[start_or_end]
+
+        if d:
+            d = int(d)
+        else:
+            if start_or_end == "start":
+                d = 1
+            else:
+                d = days_in_month(int(y), int(m))
+
+        return datetime.date(y, m, d)
 
     def _location(self):
         bits = []
@@ -72,75 +151,23 @@ class Variable:
             bits.append(self.country)
         return ", ".join(bits)
 
-    def _collect_locations(self, all_locations):
-        location = self._location()
-        if location:
-            all_locations.add(location)
-        if self.inputs and not self.is_target:
-            for variable in self.inputs:
-                variable._collect_locations(all_locations)
-
     def summarize_location(self, all_locations=None):
-        all_locations = set()
-        self._collect_locations(all_locations)
-        return "; ".join(sorted(all_locations))
+        return "; ".join(
+            sorted(
+                set(i._location() for i in self.all_inputs if i._location())
+            )
+        )
 
-    def _collect_dates(self, all_dates):
-        for date in [self.date, self.start_date, self.end_date]:
-            if date:
-                all_dates.add(date)
-        if self.inputs and not self.is_target:
-            for variable in self.inputs:
-                variable._collect_dates(all_dates)
-
-    def summarize_date(self):
-        all_dates = set()
-        self._collect_dates(all_dates)
-
-        start_dates = set()
-        end_dates = set()
-
-        for date in all_dates:
-            if len(date) == 4:
-                start_dates.add("%s-01-01" % date)
-                end_dates.add("%s-12-31" % date)
-            elif len(date) == 7:
-                start_dates.add("%s-01" % date)
-                # Not technically correct, since some months are shorter, but
-                # should be clear enough.
-                end_dates.add("%s-31" % date)
-            else:
-                start_dates.add(date)
-                end_dates.add(date)
-
-        if not start_dates and not end_dates:
-            return "no date"
-
-        start_date = min(start_dates)
-        end_date = max(end_dates)
-
-        if start_date == end_date:
-            return start_date
-
-        start_year = start_date[:4]
-        end_year = end_date[:4]
-
-        if start_year != end_year:
-            return "%s to %s" % (start_year, end_year)
-
-        if start_date.endswith("-01-01") and end_date.endswith("-12-31"):
-            return start_year
-
-        start_month = start_date[5:7]
-        end_month = start_date[5:7]
-
-        if start_month != end_month:
-            return start_year
-
-        return "%s to %s" % (start_date, end_date)
+    def summarize_date(self) -> Optional[tuple[datetime.date, datetime.date]]:
+        try:
+            return min(
+                i.parsed_start for i in self.all_inputs if i.parsed_start
+            ), max(i.parsed_end for i in self.all_inputs if i.parsed_end)
+        except ValueError:
+            return None
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, eq=True, frozen=True)
 class Population(Variable):
     """A number of people"""
 
@@ -150,12 +177,12 @@ class Population(Variable):
     tag: str
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, eq=True, frozen=True)
 class Scalar(Variable):
     scalar: float
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, eq=True, frozen=True)
 class Prevalence(Variable):
     """What fraction of people have this pathogen at some moment"""
 
@@ -179,7 +206,7 @@ class Prevalence(Variable):
         )
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, eq=True, frozen=True)
 class PrevalenceAbsolute(Variable):
     """How many people had this pathogen at some moment"""
 
@@ -199,12 +226,12 @@ class PrevalenceAbsolute(Variable):
         )
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, eq=True, frozen=True)
 class SheddingDuration(Variable):
     days: float
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, eq=True, frozen=True)
 class Number(Variable):
     """Generic number.  Use this for weird one-off things
 
@@ -217,12 +244,15 @@ class Number(Variable):
         return Scalar(scalar=self.number / other.number, inputs=[self, other])
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, eq=True, frozen=True)
 class IncidenceRate(Variable):
     """What fraction of people get this pathogen annually"""
 
     annual_infections_per_100k: float
 
+    # Any estimate derived from an incidence using a shedding duration must be an active estimate,
+    # since multiplying by SheddingDuration calculates the amount of time the virus is actively shedding for,
+    # which is not incorporated into a latent estimate.
     def to_prevalence(self, shedding_duration: SheddingDuration) -> Prevalence:
         return Prevalence(
             infections_per_100k=self.annual_infections_per_100k
@@ -233,7 +263,7 @@ class IncidenceRate(Variable):
         )
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, eq=True, frozen=True)
 class IncidenceAbsolute(Variable):
     """How many people get this pathogen annually"""
 
