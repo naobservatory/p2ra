@@ -16,7 +16,7 @@ pathogen_chars = PathogenChars(
 )
 
 UK_study = Prevalence(
-    infections_per_100k=85300,
+    infections_per_100k=0.853 * 100_000,
     country="UK",
     start_date="2002",
     end_date="2013",
@@ -27,7 +27,7 @@ UK_study = Prevalence(
 # this study cites a  textbook published in 2007. It is not used
 # in the estimate, but rather to confirm that the estimate is reasonable
 global_estimate = Prevalence(
-    infections_per_100k=90000,
+    infections_per_100k=0.9 * 100_000,
     active=Active.LATENT,
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4235690/#:~:text=It%20is%20estimated%20that%20over%2090%25%20of%20the%20world’s%20population%20is%20infected%20with%20the%20virus",
 )
@@ -35,7 +35,7 @@ global_estimate = Prevalence(
 # this study looks only at children. It is also not used in the estimate,
 # but helps confirm that the estimate is reasonable
 US_children_study = Prevalence(
-    infections_per_100k=66500,
+    infections_per_100k=0.665 * 100_000,
     country="United States",
     start_date="2003",
     end_date="2010",
