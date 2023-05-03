@@ -61,18 +61,55 @@ new_US_adult_prevalence = Prevalence(
 # a lot of sense as an overall estimate
 
 
-# data is from Table 3 of the source paper. This is not an exact number, but an estimate based on the multiple estimates cited in the paper (and the paper's own analysis)
-adult_shedding = SheddingDuration(
-    days=90,
-    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4494736/#:~:text=children%20and%20adults.-,Table%203,-Duration%20of%20CMV",
+# Shedding duration data is from Table 3 of the paper linked below. I take all
+# appplicable studies from the paper and then create a weighted average of
+# their estimates.
+# https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4494736/#:~:text=children%20and%20adults.-,Table%203,-Duration%20of%20CMV
+adult_shedding_estimate = SheddingDuration(
+    # The original article cited in the comment above estimates shedding
+    # duration from figure 1C of the source. It says less than 90 days for all
+    # patients. I estimate around 70 for the average patient. This is also
+    # reasonably consistent with other inaccessible estimates from the paper
+    # and other less reputable information online.
+    days=70,
+    number_of_participants=48,
+    date=2004,
+    source="https://pubmed.ncbi.nlm.nih.gov/2839977/#:~:text=The%20duration%20of%20CMV%20excretion%20varied%20from%203.0%20to%2028.4%20months%2C%20with%20a%20mean%20of%2013.0%20%2B/%2D%209.1%20months%20for%20urine",
 )
 
-
-# data is from Table 3 of the source paper. This is not an exact number, but an estimate based on the multiple estimates cited in the paper (and the paper's own analysis)
-child_shedding = SheddingDuration(
-    days=335,
-    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4494736/#:~:text=children%20and%20adults.-,Table%203,-Duration%20of%20CMV",
+child_shedding_estimate_1 = SheddingDuration(
+    # Note that 30.4 is the # of days in an average month
+    days=13 * 30.4,
+    number_of_participants=79,
+    date=1988,
+    source="https://pubmed.ncbi.nlm.nih.gov/15529253/",
 )
+
+# I could not view the full paper, so I took information from the source paper
+# linked in the comment above the shedding estimates
+child_shedding_estimate_2 = SheddingDuration(
+    # Note that 30.4 is the # of days in an average month
+    days=6.5 * 30.4,
+    number_of_participants=17,
+    date=1970,
+    source="https://pubmed.ncbi.nlm.nih.gov/4316198/",
+)
+
+child_shedding_average = SheddingDuration(
+    days=(
+        child_shedding_estimate_1.days
+        * child_shedding_estimate_1.number_of_participants
+        + child_shedding_estimate_2.days
+        * child_shedding_estimate_2.number_of_participants
+    )
+    / (
+        child_shedding_estimate_1.number_of_participants
+        + child_shedding_estimate_2.number_of_participants
+    ),
+    number_of_participants=child_shedding_estimate_1.number_of_participants
+    + child_shedding_estimate_2.number_of_participants,
+)
+
 
 US_child_proportion = Scalar(
     scalar=0.222,
@@ -115,8 +152,12 @@ US_adult_proportion * new_US_adult_prevalence) / US_child_proportion""",
 )
 
 total_days_shedding_per_person = Scalar(
-    scalar=US_child_proportion * US_child_prevalence * child_shedding.days
-    + US_adult_proportion * new_US_adult_prevalence * adult_shedding.days,
+    scalar=US_child_proportion
+    * US_child_prevalence
+    * child_shedding_average.days
+    + US_adult_proportion
+    * new_US_adult_prevalence
+    * adult_shedding_estimate.days,
     source="https://www.cdc.gov/cmv/overview.html#:~:text=nearly%20one%20in%20three%20children%20is%20already%20infected%20with%20CMV%20by%20age%20five.%20Over%20half%20of%20adults%20have%20been%20infected%20with%20CMV%20by%20age%2040.",
 )
 
