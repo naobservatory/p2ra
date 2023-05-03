@@ -155,10 +155,12 @@ def estimate_prevalences():
                         tag="%s 2020" % county,
                     )
                     estimates.append(
-                        cases.to_rate(county_populations[county, state])
-                        .to_prevalence(shedding_duration)
-                        .scale(underreporting)
-                        .target(
+                        (
+                            cases.to_rate(
+                                county_populations[county, state]
+                            ).to_prevalence(shedding_duration)
+                            * underreporting
+                        ).target(
                             country="United States",
                             state=state,
                             county=county,
@@ -177,10 +179,10 @@ def estimate_prevalences():
         # TODO: we can probably get a better undereporting figure for the
         # omicron surge.
         estimates.append(
-            cases.to_rate(ohio_population)
-            .to_prevalence(shedding_duration)
-            .scale(underreporting)
-            .target(
+            (
+                cases.to_rate(ohio_population).to_prevalence(shedding_duration)
+                * underreporting
+            ).target(
                 country="United States",
                 state="Ohio",
                 date=date,
