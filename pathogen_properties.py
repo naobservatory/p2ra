@@ -232,6 +232,8 @@ class SheddingDuration(Variable):
 
 @dataclass(kw_only=True)
 class YearsOfInfections(Variable):
+    """Number to convert an incidence to a latent prevalence, if rather than the shedding duration we are interested in the number of years for which these infections have been occuring"""
+
     years: float
 
 
@@ -268,9 +270,7 @@ class IncidenceRate(Variable):
 
     def to_latent_prevalence(self, years: YearsOfInfections) -> Prevalence:
         return Prevalence(
-            infections_per_100k=self.annual_infections_per_100k
-            * years.years
-            / 365,
+            infections_per_100k=self.annual_infections_per_100k * years.years,
             inputs=[self, years],
             active=Active.LATENT,
         )
