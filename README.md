@@ -15,6 +15,10 @@ more estimates.
 
 Run `./summarize.py` to get an overview of the data.
 
+### Statistical model
+
+For an overview of the statistical model see [model.md](model.md).
+
 ### Development
 
 #### Making changes
