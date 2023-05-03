@@ -38,6 +38,11 @@ class PathogenChars:
     taxid: TaxID
 
 
+def days_in_month(year: int, month: int) -> int:
+    _, last_day = calendar.monthrange(year, month)
+    return last_day
+
+
 @dataclass(kw_only=True)
 class Variable:
     """An external piece of data"""
@@ -116,7 +121,7 @@ class Variable:
             if start_or_end == "start":
                 d = 1
             else:
-                _, d = calendar.monthrange(int(y), int(m))
+                d = days_in_month(int(y), int(m))
 
         return datetime.date(y, m, d)
 
