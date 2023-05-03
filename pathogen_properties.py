@@ -231,6 +231,11 @@ class SheddingDuration(Variable):
 
 
 @dataclass(kw_only=True)
+class YearsOfInfections(Variable):
+    years: float
+
+
+@dataclass(kw_only=True)
 class Number(Variable):
     """Generic number.  Use this for weird one-off things
 
@@ -259,6 +264,15 @@ class IncidenceRate(Variable):
             / 365,
             inputs=[self, shedding_duration],
             active=Active.ACTIVE,
+        )
+
+    def to_latent_prevalence(self, years: YearsOfInfections) -> Prevalence:
+        return Prevalence(
+            infections_per_100k=self.annual_infections_per_100k
+            * years.years
+            / 365,
+            inputs=[self, years],
+            active=Active.LATENT,
         )
 
 
