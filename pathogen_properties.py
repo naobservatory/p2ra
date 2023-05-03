@@ -189,10 +189,19 @@ class Prevalence(Variable):
     active: Active
     infections_per_100k: float
 
-    def scale(self, scalar: Scalar) -> "Prevalence":
+    def __mul__(self, scalar: Scalar) -> "Prevalence":
         return Prevalence(
             infections_per_100k=self.infections_per_100k * scalar.scalar,
             inputs=[self, scalar],
+            active=self.active,
+        )
+
+    def __add__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
+        assert self.active == other.active
+        return Prevalence(
+            infections_per_100k=self.infections_per_100k
+            + other.infections_per_100k,
+            inputs=[self, other],
             active=self.active,
         )
 
@@ -240,7 +249,7 @@ class Number(Variable):
 
     number: float
 
-    def per(self, other: "Number") -> Scalar:
+    def __truediv__(self, other: "Number") -> Scalar:
         return Scalar(scalar=self.number / other.number, inputs=[self, other])
 
 
@@ -250,9 +259,10 @@ class IncidenceRate(Variable):
 
     annual_infections_per_100k: float
 
-    # Any estimate derived from an incidence using a shedding duration must be an active estimate,
-    # since multiplying by SheddingDuration calculates the amount of time the virus is actively shedding for,
-    # which is not incorporated into a latent estimate.
+    # Any estimate derived from an incidence using a shedding duration must be
+    # an active estimate, since multiplying by SheddingDuration calculates the
+    # amount of time the virus is actively shedding for, which is not
+    # incorporated into a latent estimate.
     def to_prevalence(self, shedding_duration: SheddingDuration) -> Prevalence:
         return Prevalence(
             infections_per_100k=self.annual_infections_per_100k
