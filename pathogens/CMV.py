@@ -3,7 +3,8 @@ from pathogen_properties import *
 background = """Cytomegalovirus (CMV) is a common virus belonging to the 
 herpesvirus family. It can infect people of all ages and is typically 
 transmitted through close contact with infected body fluids, such as saliva, 
-urine, blood, semen, and breast milk. CMV can also be transmitted from a pregnant person to their fetus during pregnancy.
+urine, blood, semen, and breast milk. CMV can also be transmitted from a 
+pregnant person to their fetus during pregnancy.
 
 In healthy individuals with intact immune systems, CMV infection typically
 lasts for a few weeks to a few months. The acute phase of the infection, 
@@ -22,8 +23,10 @@ pathogen_chars = PathogenChars(
 
 # There is currently no vaccine for cytomegalovirus, so we can use seroprevalence to create a decent estimate of the overall proportion of people shedding at any given time.
 
-# Studies patients 18-79 years old
-GER_seroprevalence_estimate = Prevalence(
+
+GER_adult_seroprevalence_estimate = Prevalence(
+    # Estimate is for 18-79 year olds. In reality, this implies slightly lower
+    # than 57% for the overall population including children
     infections_per_100k=0.567 * 100000,
     confidence_interval=(0.548 * 100000, 0.587 * 100000),
     number_of_participants=6552,
@@ -33,22 +36,29 @@ GER_seroprevalence_estimate = Prevalence(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6059406/#:~:text=Overall%20CMV%20seroprevalence,Germany%20in%20women",
 )
 
-US_prevalence = Prevalence(
-    # According to the CDC,  "over 50% of people in the US have been infected
-    # with CMV by age 40." At age 5 1/3 of people are infected, and by age 40
-    # 1/2 are infected, which hints toward the prevalence being asymptotic at
-    # around 50%. This implies that the true proportion is somewhere between
-    # around 1/3 and 3/5 of people. This number is not actually used, but can
-    # help confirm that the Germany estimate is reasonable
-    infections_per_100k=0.5 * 100_000,
+# This study is generally good, but also from around 20 years ago
+older_US_prevalence = Prevalence(
+    infections_per_100k=0.504 * 100_000,
     country="US",
     active=Active.LATENT,
-    # The CDC's source on this information is unclear.
-    source="https://www.cdc.gov/cmv/overview.html#:~:text=In%20the%20United%20States%2C%20nearly%20one%20in%20three%20children%20is%20already%20infected%20with%20CMV%20by%20age%20five.%20Over%20half%20of%20adults%20have%20been%20infected%20with%20CMV%20by%20age%2040.%20Once",
-    date="2020",
+    source="https://pubmed.ncbi.nlm.nih.gov/20426575/#:~:text=the%20overall%20age%2Dadjusted%20CMV%20seroprevalence%20was%2050.4%25",
+    start_date="1999",
+    end_date="2004",
 )
 
-# Since the US-specific number is very rough, I think it makes sense to take the Germany estimate of 57000 per 100k.
+# This study is from 2020, and finds a 56% seroprevalence for US adults.
+new_US_adult_prevalence = Prevalence(
+    infections_per_100k=0.56 * 100_000,
+    date="2020",
+    country="US",
+    active=Active.LATENT,
+    source="https://www.frontiersin.org/articles/10.3389/fcimb.2020.00334/full#:~:text=Methods%3A%20We,population%20was%2056%25",
+)
+
+# Since the 2 adult seroprevalence estimates are around 56-57%, these
+# estimates are slightly too high because they don't account for children,
+# and the 1 overall seroprevalence estimate is 50%, I think that 50% makes
+# a lot of sense as an overall estimate
 
 
 # data is from Table 3 of the source paper. This is not an exact number, but an estimate based on the multiple estimates cited in the paper (and the paper's own analysis)
@@ -71,7 +81,7 @@ of the population gets CMV as a child, so according to our seroprevalence
 estimate, 57% - 40% = 17% gets CMV as an adult"""
 total_days_shedding_per_person = Scalar(
     scalar=0.40 * child_shedding.days + 0.17 * adult_shedding.days,
-    source="https://www.cdc.gov/cmv/overview.html",
+    source="https://www.cdc.gov/cmv/overview.html#:~:text=nearly%20one%20in%20three%20children%20is%20already%20infected%20with%20CMV%20by%20age%20five.%20Over%20half%20of%20adults%20have%20been%20infected%20with%20CMV%20by%20age%2040.",
 )
 
 # average lifespan in the US in days - average lifespan in years * days/year
@@ -89,4 +99,4 @@ shedding_prevalence = Prevalence(
 
 
 def estimate_prevalences():
-    return [GER_seroprevalence_estimate, shedding_prevalence]
+    return [GER_adult_seroprevalence_estimate, shedding_prevalence]
