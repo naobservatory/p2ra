@@ -42,6 +42,9 @@ class PathogenChars:
     na_type: NAType
     enveloped: Enveloped
     taxid: TaxID
+    # If we produce any estimates more specific than the overall taxid,
+    # subtaxids will contain all the secondary taxonomic ids we can generate.
+    subtaxids: frozenset[TaxID] = frozenset()
 
 
 def days_in_month(year: int, month: int) -> int:
@@ -69,6 +72,7 @@ class Variable:
     parsed_start: Optional[datetime.date] = field(init=False)
     parsed_end: Optional[datetime.date] = field(init=False)
     is_target: Optional[bool] = False
+    taxid: Optional[TaxID] = None
     inputs: InitVar[Optional[Iterable["Variable"]]] = None
     all_inputs: set["Variable"] = field(init=False)
 
@@ -152,6 +156,9 @@ class Variable:
         return ", ".join(bits)
 
     def summarize_location(self, all_locations=None):
+        if self.is_target and self._location():
+            return self._location()
+
         return "; ".join(
             sorted(
                 set(i._location() for i in self.all_inputs if i._location())
@@ -159,6 +166,9 @@ class Variable:
         )
 
     def summarize_date(self) -> Optional[tuple[datetime.date, datetime.date]]:
+        if self.is_target and self.parsed_start and self.parsed_end:
+            return self.parsed_start, self.parsed_end
+
         try:
             return min(
                 i.parsed_start for i in self.all_inputs if i.parsed_start

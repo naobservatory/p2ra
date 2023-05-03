@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 import numpy as np
 
@@ -7,11 +7,15 @@ from pathogen_properties import *
 background = """Norovirus is a GI infection, mostly spread through personal
 contact."""
 
+NOROVIRUS = TaxID(142786)
+NOROVIRUS_GROUP_I = TaxID(122928)
+NOROVIRUS_GROUP_II = TaxID(122929)
 
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=TaxID(142786),
+    taxid=TaxID(NOROVIRUS),
+    subtaxids=frozenset((NOROVIRUS_GROUP_I, NOROVIRUS_GROUP_II)),
 )
 
 # We're using Scallan 2011
@@ -68,7 +72,6 @@ shedding_duration = SheddingDuration(
     source="https://www.mayoclinic.org/diseases-conditions/norovirus/symptoms-causes/syc-20355296#:~:text=Norovirus%20infection%20symptoms%20usually%20last%201%20to%203%20days",
 )
 
-
 monthwise_count = dict[tuple[int, int], float]  # [year, month] -> float
 
 
@@ -81,8 +84,16 @@ def to_daily_counts(outbreaks_per_month: monthwise_count) -> monthwise_count:
     return outbreaks_per_day
 
 
-def load_nors_outbreaks() -> monthwise_count:
+def load_nors_outbreaks() -> (
+    tuple[monthwise_count, monthwise_count, monthwise_count]
+):
     us_outbreaks: monthwise_count = defaultdict(float)  # date -> count
+    us_outbreaks_I: monthwise_count = defaultdict(float)  # date -> count
+    us_outbreaks_II: monthwise_count = defaultdict(float)  # date -> count
+
+    # seen_I, seen_II -> count
+    totals: dict[tuple[bool, bool], int] = Counter()
+    total_seen_other = 0
 
     # Downloaded on 2023-04-28 from https://wwwn.cdc.gov/norsdashboard/
     # Click "Download all NORS Dashboard data (Excel)."
@@ -100,11 +111,11 @@ def load_nors_outbreaks() -> monthwise_count:
             year = int(row[cols.index("Year")])
             month = int(row[cols.index("Month")])
             state = row[cols.index("State")]
-            etiology = row[cols.index("Etiology")]
+            etiologies = row[cols.index("Etiology")]
             # It distinguishes between GI and GII Norovirus.  I'm currently
             # discarding this, but it could potentially be useful?
             genotype = row[cols.index("Serotype or Genotype")]
-            if "Norovirus" not in etiology:
+            if "Norovirus" not in etiologies:
                 # It's the National Outbreak Reporting System, not the
                 # Norovirus Outbreak Reporting System.
                 #
@@ -114,15 +125,53 @@ def load_nors_outbreaks() -> monthwise_count:
 
             date = year, month
 
-            us_outbreaks[date] += 1
+            seen_I = False
+            seen_II = False
+            seen_other = False
+            for etiology in etiologies.split("; "):
+                if etiology.endswith("Norovirus Genogroup I"):
+                    seen_I = True
+                elif etiology.endswith("Norovirus Genogroup II"):
+                    seen_II = True
+                elif "Genogroup" in etiology:
+                    seen_other = True
 
-    return us_outbreaks
+            us_outbreaks[date] += 1
+            if seen_I and not seen_II:
+                us_outbreaks_I[date] += 1
+            elif seen_II and not seen_I:
+                us_outbreaks_II[date] += 1
+
+            if seen_other:
+                total_seen_other += 1
+
+            # We don't care about the I-vs-II labeling in old data, so ignore
+            # dates before HISTORY_START.
+            if year >= HISTORY_START:
+                totals[seen_I, seen_II] += 1
+
+    total_classified = (
+        totals[True, False] + totals[False, True] + totals[True, True]
+    )
+
+    seen_both_fraction = totals[True, True] / total_classified
+
+    # As of 2023-05-03 this was 1.05%, low enough to ignore.  If this were
+    # higher we'd need to estimate prevalences that didn't add to the total
+    # prevalence.
+    assert seen_both_fraction < 0.011
+
+    # As of 2023-05-03 this was 0.15%, low enough to ignore.  If this were
+    # non-trivial we might want to try assigning reads to other genogroups.
+    assert total_seen_other / total_classified < 0.0015
+
+    return us_outbreaks, us_outbreaks_I, us_outbreaks_II
 
 
 def determine_average_daily_outbreaks(us_outbreaks: monthwise_count) -> float:
     total_us_outbreaks = 0.0
     days_considered = 0
-    for year in range(HISTORY_START, HISTORY_END + 1):
+    for year in range(HISTORY_START, COVID_START):
         for month in range(1, 13):
             total_us_outbreaks += us_outbreaks[year, month]
             days_considered += days_in_month(year, month)
@@ -134,13 +183,13 @@ def determine_average_daily_outbreaks(us_outbreaks: monthwise_count) -> float:
 #  * Long enough to reduce noise
 #  * Pre-covid
 HISTORY_START = 2012
-HISTORY_END = 2019
+COVID_START = 2020
 
 
 def estimate_prevalences():
     prevalences = []
 
-    us_outbreaks = load_nors_outbreaks()
+    us_outbreaks, us_outbreaks_I, us_outbreaks_II = load_nors_outbreaks()
     pre_covid_us_average_daily_outbreaks = determine_average_daily_outbreaks(
         us_outbreaks
     )
@@ -154,23 +203,58 @@ def estimate_prevalences():
 
     us_daily_outbreaks = to_daily_counts(us_outbreaks)
 
-    for year in range(HISTORY_START, HISTORY_END + 1):
+    for year in range(HISTORY_START, COVID_START):
         for month in range(1, 13):
             target_date = f"{year}-{month:02d}"
 
+            adjusted_national_prevalence = (
+                pre_covid_national_prevalence
+                * Scalar(
+                    scalar=us_daily_outbreaks[year, month]
+                    / pre_covid_us_average_daily_outbreaks,
+                    country="United States",
+                    date=target_date,
+                    source="https://wwwn.cdc.gov/norsdashboard/",
+                )
+            )
+
+            prevalences.append(
+                adjusted_national_prevalence.target(
+                    country="United States", date=target_date
+                )
+            )
+
+            # Assume that all Norovirus infections are either Group I or II,
+            # which is very close (see assertion above).  Also assume the
+            # outbreaks for which we have subtype info are representative of
+            # all infections.
+            us_I = us_outbreaks_I[year, month]
+            us_II = us_outbreaks_II[year, month]
+            if us_I + us_II:
+                group_I_fraction = us_I / (us_I + us_II)
+                group_II_fraction = us_II / (us_I + us_II)
+            else:
+                group_I_fraction = group_II_fraction = 0
+
             prevalences.append(
                 (
-                    pre_covid_national_prevalence
-                    * (
-                        Scalar(
-                            scalar=us_daily_outbreaks[year, month]
-                            / pre_covid_us_average_daily_outbreaks,
-                            country="United States",
-                            date=target_date,
-                            source="https://wwwn.cdc.gov/norsdashboard/",
-                        )
-                    )
-                ).target(country="United States", date=target_date)
+                    adjusted_national_prevalence
+                    * Scalar(scalar=group_I_fraction)
+                ).target(
+                    country="United States",
+                    date=target_date,
+                    taxid=NOROVIRUS_GROUP_I,
+                )
+            )
+            prevalences.append(
+                (
+                    adjusted_national_prevalence
+                    * Scalar(scalar=group_II_fraction)
+                ).target(
+                    country="United States",
+                    date=target_date,
+                    taxid=NOROVIRUS_GROUP_II,
+                )
             )
 
     return prevalences
