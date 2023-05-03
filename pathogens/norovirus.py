@@ -145,7 +145,8 @@ def load_nors_outbreaks() -> (
             if seen_other:
                 total_seen_other += 1
 
-            # We don't care about the I-vs-II labeling in old data.
+            # We don't care about the I-vs-II labeling in old data, so ignore
+            # dates before HISTORY_START.
             if year >= HISTORY_START:
                 totals[seen_I, seen_II] += 1
 
@@ -154,9 +155,6 @@ def load_nors_outbreaks() -> (
     )
 
     seen_both_fraction = totals[True, True] / total_classified
-
-    print(totals)
-    print(total_seen_other)
 
     # As of 2023-05-03 this was 1.05%, low enough to ignore.  If this were
     # higher we'd need to estimate prevalences that didn't add to the total
@@ -173,7 +171,7 @@ def load_nors_outbreaks() -> (
 def determine_average_daily_outbreaks(us_outbreaks: monthwise_count) -> float:
     total_us_outbreaks = 0.0
     days_considered = 0
-    for year in range(HISTORY_START, HISTORY_END + 1):
+    for year in range(HISTORY_START, COVID_START):
         for month in range(1, 13):
             total_us_outbreaks += us_outbreaks[year, month]
             days_considered += days_in_month(year, month)
@@ -185,7 +183,7 @@ def determine_average_daily_outbreaks(us_outbreaks: monthwise_count) -> float:
 #  * Long enough to reduce noise
 #  * Pre-covid
 HISTORY_START = 2012
-HISTORY_END = 2019
+COVID_START = 2020
 
 
 def estimate_prevalences():
@@ -204,7 +202,7 @@ def estimate_prevalences():
 
     us_daily_outbreaks = to_daily_counts(us_outbreaks)
 
-    for year in range(HISTORY_START, HISTORY_END + 1):
+    for year in range(HISTORY_START, COVID_START):
         for month in range(1, 13):
             target_date = f"{year}-{month:02d}"
 
