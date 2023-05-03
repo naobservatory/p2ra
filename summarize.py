@@ -28,7 +28,7 @@ def start(pathogen_names):
                 if start_date == end_date:
                     date = start_date
                 elif start_date.year != end_date.year:
-                    date = "%s to %s" % (start_date.year, end_date.year)
+                    date = f"{start_date.year} to {end_date.year}"
                 elif (
                     start_date.month == 1
                     and start_date.day == 1
@@ -41,12 +41,9 @@ def start(pathogen_names):
                     and start_date.day == 1
                     and end_date.day == end_date_month_last_day
                 ):
-                    date = "%s-%s" % (
-                        start_date.year,
-                        str(start_date.month).zfill(2),
-                    )
+                    date = f"{start_date.year}-{start_date.month:02d}"
                 else:
-                    date = "%s to %s" % (start_date, end_date)
+                    date = f"{start_date} to {end_date}"
 
             location = estimate.summarize_location()
 
