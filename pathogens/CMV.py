@@ -74,13 +74,15 @@ child_shedding = SheddingDuration(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4494736/#:~:text=children%20and%20adults.-,Table%203,-Duration%20of%20CMV",
 )
 
+
 """The CDC says that in the United States, nearly one in three children is
 already infected with CMV by age five.
-Over half of adults have been infected with CMV by age 40. I estimate that 40% 
-of the population gets CMV as a child, so according to our seroprevalence 
-estimate, 57% - 40% = 17% gets CMV as an adult"""
+Over half of adults have been infected with CMV by age 40. I estimate that 
+children are around 38% prevalent on average, our previous 2 adult estimates
+imply that adults are around 56% prevalent on average. """
+
 total_days_shedding_per_person = Scalar(
-    scalar=0.40 * child_shedding.days + 0.17 * adult_shedding.days,
+    scalar=0.2 * 0.5 * child_shedding.days + 0.8 * 0.5 * adult_shedding.days,
     source="https://www.cdc.gov/cmv/overview.html#:~:text=nearly%20one%20in%20three%20children%20is%20already%20infected%20with%20CMV%20by%20age%20five.%20Over%20half%20of%20adults%20have%20been%20infected%20with%20CMV%20by%20age%2040.",
 )
 
