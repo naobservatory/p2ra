@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 import numpy as np
 
@@ -15,6 +15,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
     taxid=TaxID(NOROVIRUS),
+    subtaxids=frozenset((NOROVIRUS_GROUP_I, NOROVIRUS_GROUP_II)),
 )
 
 # We're using Scallan 2011
@@ -90,6 +91,10 @@ def load_nors_outbreaks() -> (
     us_outbreaks_I: monthwise_count = defaultdict(float)  # date -> count
     us_outbreaks_II: monthwise_count = defaultdict(float)  # date -> count
 
+    # seen_I, seen_II -> count
+    totals: dict[tuple[bool, bool], int] = Counter()
+    total_seen_other = 0
+
     # Downloaded on 2023-04-28 from https://wwwn.cdc.gov/norsdashboard/
     # Click "Download all NORS Dashboard data (Excel)."
     # Exported from Google Sheets as CSV.
@@ -122,21 +127,45 @@ def load_nors_outbreaks() -> (
 
             seen_I = False
             seen_II = False
+            seen_other = False
             for etiology in etiologies.split("; "):
                 if etiology.endswith("Norovirus Genogroup I"):
                     seen_I = True
                 elif etiology.endswith("Norovirus Genogroup II"):
                     seen_II = True
-            if seen_I and not seen_II:
-                us_outbreaks_I[date] += 1
-            elif seen_II and not seen_I:
-                us_outbreaks_II[date] += 1
+                elif "Genogroup" in etiology:
+                    seen_other = True
 
             us_outbreaks[date] += 1
             if seen_I and not seen_II:
                 us_outbreaks_I[date] += 1
             elif seen_II and not seen_I:
                 us_outbreaks_II[date] += 1
+
+            if seen_other:
+                total_seen_other += 1
+
+            # We don't care about the I-vs-II labeling in old data.
+            if year >= HISTORY_START:
+                totals[seen_I, seen_II] += 1
+
+    total_classified = (
+        totals[True, False] + totals[False, True] + totals[True, True]
+    )
+
+    seen_both_fraction = totals[True, True] / total_classified
+
+    print(totals)
+    print(total_seen_other)
+
+    # As of 2023-05-03 this was 1.05%, low enough to ignore.  If this were
+    # higher we'd need to estimate prevalences that didn't add to the total
+    # prevalence.
+    assert seen_both_fraction < 0.011
+
+    # As of 2023-05-03 this was 0.15%, low enough to ignore.  If this were
+    # non-trivial we might want to try assigning reads to other genogroups.
+    assert total_seen_other / total_classified < 0.0015
 
     return us_outbreaks, us_outbreaks_I, us_outbreaks_II
 
@@ -196,8 +225,9 @@ def estimate_prevalences():
             )
 
             # Assume that all Norovirus infections are either Group I or II,
-            # which is very close.  Also assume the outbreaks for which we
-            # have subtype info are representative of all infections.
+            # which is very close (see assertion above).  Also assume the
+            # outbreaks for which we have subtype info are representative of
+            # all infections.
             us_I = us_outbreaks_I[year, month]
             us_II = us_outbreaks_II[year, month]
             if us_I + us_II:
