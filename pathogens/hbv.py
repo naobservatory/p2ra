@@ -51,9 +51,9 @@ estimated_chronic_us_2020 = PrevalenceAbsolute(
     # foreign-born individuals, and high-risk populations, both of which are
     # likely underrepresented in NHANES.
     infections=1_590_000,
-    confidence_interval=(1_250_000, 2_490_000), # After digging into the paper
-    # we found that these numbers represent a "low" and "high" estimate which
-    # isn't further defined.
+    confidence_interval=(1_250_000, 2_490_000),  # After digging into the paper
+    # we found that these numbers represent a "low" and "high" estimate. These
+    # labels aren't further defined.
     active=Active.LATENT,
     country="United States",
     date="2020",
