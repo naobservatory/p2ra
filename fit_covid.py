@@ -3,7 +3,7 @@ import numpy as np
 
 import stats
 from fit_rothman import per100k_to_per100, print_summary
-from mgs import BioProject, MGSData
+from mgs import BioProject, Enrichment, MGSData
 from pathogens import pathogens
 
 plant_counties = {
@@ -20,7 +20,9 @@ if __name__ == "__main__":
     bioproject = BioProject("PRJNA729801")  # Rothman
 
     mgs_data = MGSData.from_repo()
-    samples = mgs_data.sample_attributes(bioproject)
+    samples = mgs_data.sample_attributes(
+        bioproject, enrichment=Enrichment.VIRAL
+    )
     all_reads = np.array(
         [mgs_data.total_reads(bioproject)[s] for s in samples]
     )
