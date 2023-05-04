@@ -32,7 +32,7 @@ nhanes_children_estimate = Prevalence(
     # This study is also not used in the estimate,
     # but helps confirm that the estimate is reasonable
     infections_per_100k=0.665 * 100_000,
-    confidence_interval=(0.643 - 0.687),
+    confidence_interval=(0.643, 0.687),
     country="United States",
     start_date="2003",
     end_date="2010",
@@ -41,16 +41,37 @@ nhanes_children_estimate = Prevalence(
     source="https://pubmed.ncbi.nlm.nih.gov/23717674/#:~:text=Overall%20EBV%20seroprevalence%20was%2066.5%25%20(95%25%20CI%2064.3%25%2D68.7%25.)",
 )
 
-esimtae_for_18_19_year_olds = Prevalence(
+estimate_for_18_19_year_olds = Prevalence(
     infections_per_100k=0.89 * 100_000,
-    date=2009,
+    date="2009",
     country="United States",
     active=Active.LATENT,
     source="https://academic.oup.com/jid/article/208/8/1286/2192838#:~:text=years%2C%2069%25%3B%20and-,18%E2%80%9319%20years%2C%2089%25,-.%20Within%20each%20race",
 )
 
-overall_estimate = Prevalence()
+US_child_proportion = Scalar(
+    scalar=0.222,
+    date="2022",
+    source="https://www.census.gov/quickfacts/fact/table/US#",
+)
+
+US_adult_proportion = Scalar(
+    scalar=1 - US_child_proportion.scalar,
+    date="2022",
+    source="https://www.census.gov/quickfacts/fact/table/US#",
+)
+
+
+overall_estimate = Prevalence(
+    # this estimate uses children 18-19 as a proxy for the adult population
+    infections_per_100k=(
+        estimate_for_18_19_year_olds.__mul__(US_adult_proportion)
+        + nhanes_children_estimate.__mul__(US_child_proportion)
+    ).infections_per_100k,
+    country="United States",
+    active=Active.LATENT,
+)
 
 
 def estimate_prevalences():
-    return [nhanes_children_estimate]
+    return [overall_estimate]
