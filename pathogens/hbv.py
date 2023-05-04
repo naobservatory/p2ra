@@ -5,25 +5,22 @@ background = """Hepatitis B is a liver infection caused by the Hepatitis B
  bodily fluids. Hepatitis B infection increases the risk for hepatocellular
  carcinoma"""
 
-# TODO: Add in-house NHANES estimate. Specifically, we could present NHANES data
+# TODO:
+# - Add in-house NHANES estimate. Specifically, we could present NHANES data
 # for HBV-core antibody (evidence of past infection), and HBV-surface antigen
 # (evidence of active acute or chronic infection):
 # https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/HEPBD_J.htm
+# - Incorporate an estimate based on mortality date. This data can be acquired
+# from the CDC WONDER database (https://wonder.cdc.gov/mcd-icd10-provisional.html). Parameters for relevant query is:
+# - Select time period of death": 2022, and
+# - Slect underlying cause of death: B16 (Acute hepatitis B).
+# All other fields can be left as default.
 
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.ENVELOPED,
     taxid=TaxID(10407),
-)
-
-
-hbv_us_2022_deaths_wonder = Number(
-    # Would need to find CFR to arrive at prevalence
-    number=1_240,
-    date="2022",
-    country="United States",
-    source="https://wonder.cdc.gov/controller/saved/D176/D341F095",
 )
 
 dna_present_in_serum = SheddingDuration(
@@ -36,6 +33,9 @@ dna_present_in_serum = SheddingDuration(
 
 cdc_estimated_acute_2019 = IncidenceAbsolute(
     annual_infections=20_700,
+    # During 2019, a total of 3,192 acute hepatitis B cases were reported to
+    # CDC, resulting in 20,700 estimated infections (95% CI: 11,800–50,800)
+    # after adjusting for case underascertainment and underreporting
     confidence_interval=(11_800, 50_800),  # 95% Bootstrap Confidence Interval
     coverage_probability=0.95,
     country="United States",
@@ -51,7 +51,9 @@ estimated_chronic_us_2020 = PrevalenceAbsolute(
     # foreign-born individuals, and high-risk populations, both of which are
     # likely underrepresented in NHANES.
     infections=1_590_000,
-    confidence_interval=(1_250_000, 2_490_000),
+    confidence_interval=(1_250_000, 2_490_000), # After digging into the paper
+    # we found that these numbers represent a "low" and "high" estimate which
+    # isn't further defined.
     active=Active.LATENT,
     country="United States",
     date="2020",
