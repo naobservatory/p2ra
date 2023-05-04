@@ -51,7 +51,8 @@ asymptomatic_multiplier = Scalar(
 
 def estimate_prevalences():
     return [
-        LA_county_cases_in_2020.to_rate(LA_county_population)
-        .to_prevalence(west_nile_duration)
-        .scale(asymptomatic_multiplier)
+        LA_county_cases_in_2020.to_rate(LA_county_population).to_prevalence(
+            west_nile_duration
+        )
+        * asymptomatic_multiplier
     ]
