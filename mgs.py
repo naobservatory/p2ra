@@ -1,6 +1,7 @@
 import json
 import urllib.request
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date
 from typing import NewType, Optional
@@ -138,8 +139,13 @@ class MGSData:
         }
 
     def viral_reads(
-        self, bioproject: BioProject, taxid: TaxID
+        self, bioproject: BioProject, taxids: Iterable[TaxID]
     ) -> dict[Sample, int]:
-        subtree = self.tax_tree[taxid]
-        viral_counts = count_reads(subtree, self.read_counts)
-        return {s: viral_counts[s] for s in self.bioprojects[bioproject]}
+        viral_counts_by_taxid = {
+            taxid: count_reads(self.tax_tree[taxid], self.read_counts)
+            for taxid in taxids
+        }
+        return {
+            s: sum(viral_counts_by_taxid[taxid][s] for taxid in taxids)
+            for s in self.bioprojects[bioproject]
+        }

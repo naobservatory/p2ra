@@ -12,8 +12,8 @@ if __name__ == "__main__":
 
     for pathogen_name, pathogen in pathogens.items():
         print(pathogen_name)
-        taxid = pathogen.pathogen_chars.taxid
-        virus_reads = mgs_data.viral_reads(bioproject, taxid)
+        taxids = pathogen.pathogen_chars.taxids
+        virus_reads = mgs_data.viral_reads(bioproject, taxids)
         print(" All", sum(virus_reads[s] for s in samples), sep="\t")
         for fine_loc in fine_locs:
             print(

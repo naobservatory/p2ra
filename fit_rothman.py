@@ -47,9 +47,9 @@ if __name__ == "__main__":
     all_reads = [mgs_data.total_reads(bioproject)[s] for s in samples]
 
     for pathogen_name, pathogen in pathogens.items():
-        taxid = pathogen.pathogen_chars.taxid
+        taxids = pathogen.pathogen_chars.taxids
         virus_reads = [
-            mgs_data.viral_reads(bioproject, taxid)[s] for s in samples
+            mgs_data.viral_reads(bioproject, taxids)[s] for s in samples
         ]
 
         prevalence_estimates = pathogen.estimate_prevalences()
