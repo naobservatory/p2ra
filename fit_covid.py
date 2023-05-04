@@ -6,16 +6,6 @@ from fit_rothman import per100k_to_per100, print_summary
 from mgs import BioProject, Enrichment, MGSData
 from pathogens import pathogens
 
-plant_counties = {
-    "HTP": "Los Angeles",
-    "SJ": "Los Angeles",
-    "JWPCP": "Los Angeles",
-    "OC": "Orange",
-    "PL": "San Diego",
-    "SB": "San Diego",
-    "NC": "San Diego",
-}
-
 if __name__ == "__main__":
     bioproject = BioProject("PRJNA729801")  # Rothman
 
@@ -43,14 +33,10 @@ if __name__ == "__main__":
     prevalence_per100k = np.zeros(len(samples))
     for i, (sample, attrs) in enumerate(samples.items()):
         assert attrs.fine_location is not None
-        try:
-            county = plant_counties[attrs.fine_location]
-        except KeyError:
-            prevalence_per100k[i] = np.nan
-        else:
-            prevalence_per100k[i] = prevalence_by_loc_date[
-                (county, attrs.date)
-            ]
+        assert attrs.county is not None
+        prevalence_per100k[i] = prevalence_by_loc_date[
+            (attrs.county, attrs.date)
+        ]
 
     virus_reads = virus_reads[~np.isnan(prevalence_per100k)]
     all_reads = all_reads[~np.isnan(prevalence_per100k)]
