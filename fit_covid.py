@@ -18,9 +18,9 @@ if __name__ == "__main__":
     )
 
     pathogen = "sars_cov_2"
-    taxid = pathogens[pathogen].pathogen_chars.taxid
+    taxids = pathogens[pathogen].pathogen_chars.taxids
     virus_reads = np.array(
-        [mgs_data.viral_reads(bioproject, taxid)[s] for s in samples]
+        [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
     )
 
     prevalence_by_loc_date = {}
