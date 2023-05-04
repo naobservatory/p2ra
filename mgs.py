@@ -141,12 +141,10 @@ class MGSData:
     def viral_reads(
         self, bioproject: BioProject, taxids: Iterable[TaxID]
     ) -> dict[Sample, int]:
-        viral_counts_by_taxid = {}
-        for taxid in taxids:
-            subtree = self.tax_tree[taxid]
-            viral_counts_by_taxid[taxid] = count_reads(
-                subtree, self.read_counts
-            )
+        viral_counts_by_taxid = {
+            taxid: count_reads(self.tax_tree[taxid], self.read_counts)
+            for taxid in taxids
+        }
         return {
             s: sum(viral_counts_by_taxid[taxid][s] for taxid in taxids)
             for s in self.bioprojects[bioproject]
