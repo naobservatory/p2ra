@@ -27,15 +27,7 @@ UK_seroprevalence_0_to_25 = Prevalence(
     source="https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-020-09049-x#:~:text=1982/2325%20individuals%20(85.3%25)%20were%20EBV%20seropositive",
 )
 
-# this study cites a  textbook published in 2007. It is not used
-# in the estimate, but rather to confirm that the estimate is reasonable
-global_estimate = Prevalence(
-    infections_per_100k=0.9 * 100_000,
-    active=Active.LATENT,
-    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4235690/#:~:text=It%20is%20estimated%20that%20over%2090%25%20of%20the%20world’s%20population%20is%20infected%20with%20the%20virus",
-)
-
-
+# Children ages 8-19
 nhanes_children_estimate = Prevalence(
     # This study is also not used in the estimate,
     # but helps confirm that the estimate is reasonable
@@ -48,6 +40,16 @@ nhanes_children_estimate = Prevalence(
     active=Active.LATENT,
     source="https://pubmed.ncbi.nlm.nih.gov/23717674/#:~:text=Overall%20EBV%20seroprevalence%20was%2066.5%25%20(95%25%20CI%2064.3%25%2D68.7%25.)",
 )
+
+esimtae_for_18_19_year_olds = Prevalence(
+    infections_per_100k=0.89 * 100_000,
+    date=2009,
+    country="United States",
+    active=Active.LATENT,
+    source="https://academic.oup.com/jid/article/208/8/1286/2192838#:~:text=years%2C%2069%25%3B%20and-,18%E2%80%9319%20years%2C%2089%25,-.%20Within%20each%20race",
+)
+
+overall_estimate = Prevalence()
 
 
 def estimate_prevalences():
