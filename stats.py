@@ -31,7 +31,11 @@ model {
   phi ~ gamma(2, 2);
 
   theta ~ normal(mu, sigma);
-  y ~ neg_binomial_2(exp(b + theta) .* n, phi);
+  y ~ neg_binomial_2_log(b + theta + log(n), phi);
+}
+generated quantities {
+  array[J] int<lower=0> y_tilde
+    = neg_binomial_2_log_rng(b + theta + log(n), phi);
 }
 """
 

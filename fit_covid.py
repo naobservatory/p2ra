@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from textwrap import dedent
+
 import numpy as np
 
 import stats
@@ -59,3 +61,27 @@ if __name__ == "__main__":
     # TODO: Wrap the model fit so that we aren't exposed to stan variables
     model_ra_per100 = per100k_to_per100 * np.exp(fit["b"])
     print_summary(pathogen, naive_ra_per100, model_ra_per100)
+    pp_virus_reads = fit["y_tilde"]
+    print(np.mean(virus_reads))
+    means = np.mean(pp_virus_reads, axis=0)
+    d = 1
+    sep = " " * 4
+    percentiles = [5, 25, 50, 75, 95]
+    percentile_values = np.percentile(means, percentiles)
+    print(
+        dedent(
+            f"""Posterior quantiles:
+    {sep.join(f"{p:>{d+5}}%" for p in percentiles)}
+    {sep.join(f"{x:.{d}e}" for x in percentile_values)}"""
+        )
+    )
+    print(np.max(virus_reads))
+    maxes = np.max(pp_virus_reads, axis=0)
+    percentile_values = np.percentile(maxes, percentiles)
+    print(
+        dedent(
+            f"""Posterior quantiles:
+    {sep.join(f"{p:>{d+5}}%" for p in percentiles)}
+    {sep.join(f"{x:.{d}e}" for x in percentile_values)}"""
+        )
+    )
