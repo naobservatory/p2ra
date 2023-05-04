@@ -6,7 +6,9 @@ from pathogens import pathogens
 if __name__ == "__main__":
     bioproject = mgs.BioProject("PRJNA729801")  # Rothman
     mgs_data = mgs.MGSData.from_repo()
-    samples = mgs_data.sample_attributes(bioproject)
+    samples = mgs_data.sample_attributes(
+        bioproject, enrichment=mgs.Enrichment.VIRAL
+    )
 
     fine_locs = set(attribs.fine_location for _, attribs in samples.items())
 
