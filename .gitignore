@@ -133,3 +133,6 @@ dmypy.json
 
 # settings.json
 settings.json
+
+# Mac stuff
+.DS_Store
