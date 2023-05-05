@@ -24,11 +24,11 @@ pathogen_chars = PathogenChars(
 )
 
 dna_present_in_serum = SheddingDuration(
-    days=2 * 30.5,  # 2 months
-    date="1991",
-    source="https://pubmed.ncbi.nlm.nih.gov/1909458/",  # paywalled, data for
-    # this variable was read from figure 2, showing duration of presence of
-    # HBV-DNA in blood.
+    days=2.5 * 30.5,  # 2.5 months
+    date="2014",
+    source="https://doi.org/10.1016/S0140-6736(14)60220-8",  # Figure 2.
+    # No citation, but HBV-DNA is listed as a detectable serum marker for 2.5
+    # months
 )
 
 cdc_estimated_acute_2019 = IncidenceAbsolute(
@@ -46,20 +46,21 @@ cdc_estimated_acute_2019 = IncidenceAbsolute(
 )
 
 estimated_chronic_us_2020 = PrevalenceAbsolute(
-    # This estimate is higher than what NHANES data alone would suggest. This
-    # is because the study takes into account the high burden of HBV in
-    # foreign-born individuals, and high-risk populations, both of which are
-    # likely underrepresented in NHANES.
-    infections=1_590_000,
-    confidence_interval=(1_250_000, 2_490_000),  # After digging into the paper
-    # we found that these numbers represent a "low" and "high" estimate. These
-    # labels aren't further defined.
+    infections=1_721_027,
+    # This is their mid estimate in table 4, second to last row. The estimate
+    # listed in their paper and on the last line of the table doesn't add up.
+    # They say they added 303'237 (point estimate US-born) + 1'076'069 (lower
+    # estimate Foreign-born) + 72'013 (point estimate Non-NHANES). But that
+    # adds up to 1'450'320, which isn't the number they give (1.59M). We are
+    # contacting the authors on this.
+    confidence_interval=(1_249_055, 2_491_435),  # These numbers represent a
+    # "low" and "high" estimate, labels that aren't further defined. Numbers
+    # can be found in table 4, second to last row.
     active=Active.LATENT,
     country="United States",
     date="2020",
     tag="us_2020",
-    source="https://journals.lww.com/ajg/fulltext/2020/09000/prevalence_of_chronic_hepatitis_b_virus_infection.20.aspx",
-    # Methods for prevalence aggregation isn't given:
+    source="https://journals.lww.com/ajg/fulltext/2020/09000/prevalence_of_chronic_hepatitis_b_virus_infection.20.aspx#:~:text=Table%204.%3A%20Estimated%20prevalence%20of%20chronic%20HBV%20in%20the%20United%20Statesa",
     methods="https://journals.lww.com/ajg/fulltext/2020/09000/prevalence_of_chronic_hepatitis_b_virus_infection.20.aspx#:~:text=Panel%20members%20researched,in%20the%20US.",
 )
 
