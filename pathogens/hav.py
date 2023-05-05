@@ -10,7 +10,12 @@ weeks."""
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=TaxID(208726),
+    # Using 12092 (Hepatitis A virus) instead of its child 208726 (Human
+    # hepatitis A virus) because the MGS pipeline assigns reads to 12092.
+    # Which happens because the Virus-Host DB
+    # (https://www.genome.jp/virushostdb/view/) doesn't seem to know about
+    # 208726.
+    taxid=TaxID(12092),
 )
 
 
@@ -97,8 +102,10 @@ def estimate_prevalences():
         ),
         king_county_confirmed_cases_rate_2017.to_prevalence(
             hva_shedding_duration
-        ).scale(incidence_underreporting_scalar),
+        )
+        * incidence_underreporting_scalar,
         king_county_confirmed_cases_rate_2018.to_prevalence(
             hva_shedding_duration
-        ).scale(incidence_underreporting_scalar),
+        )
+        * incidence_underreporting_scalar,
     ]

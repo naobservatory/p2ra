@@ -4,7 +4,7 @@ from textwrap import dedent
 import numpy as np
 
 import stats
-from mgs import BioProject, MGSData
+from mgs import BioProject, Enrichment, MGSData
 from pathogens import pathogens
 
 
@@ -43,13 +43,15 @@ if __name__ == "__main__":
     bioproject = BioProject("PRJNA729801")  # Rothman
 
     mgs_data = MGSData.from_repo()
-    samples = mgs_data.sample_attributes(bioproject).keys()
+    samples = mgs_data.sample_attributes(
+        bioproject, enrichment=Enrichment.VIRAL
+    ).keys()
     all_reads = [mgs_data.total_reads(bioproject)[s] for s in samples]
 
     for pathogen_name, pathogen in pathogens.items():
-        taxid = pathogen.pathogen_chars.taxid
+        taxids = pathogen.pathogen_chars.taxids
         virus_reads = [
-            mgs_data.viral_reads(bioproject, taxid)[s] for s in samples
+            mgs_data.viral_reads(bioproject, taxids)[s] for s in samples
         ]
 
         prevalence_estimates = pathogen.estimate_prevalences()
