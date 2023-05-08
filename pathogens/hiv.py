@@ -70,10 +70,8 @@ la_population_2020 = Population(
 
 def estimate_prevalences():
     return [
-        us_infected_2019.to_rate(us_population_2019).scale(
-            us_unsuppressed_fraction_2019
-        ),
-        la_infected_2020.to_rate(la_population_2020).scale(
-            la_unsuppressed_fraction_2020
-        ),
+        us_infected_2019.to_rate(us_population_2019)
+        * us_unsuppressed_fraction_2019,
+        la_infected_2020.to_rate(la_population_2020)
+        * la_unsuppressed_fraction_2020,
     ]
