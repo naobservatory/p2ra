@@ -184,6 +184,7 @@ def determine_average_daily_outbreaks(us_outbreaks: monthwise_count) -> float:
 #  * Pre-covid
 HISTORY_START = 2012
 COVID_START = 2020
+DATA_END = 2022
 
 
 def estimate_prevalences():
@@ -203,7 +204,7 @@ def estimate_prevalences():
 
     us_daily_outbreaks = to_daily_counts(us_outbreaks)
 
-    for year in range(HISTORY_START, COVID_START):
+    for year in range(HISTORY_START, DATA_END):
         for month in range(1, 13):
             target_date = f"{year}-{month:02d}"
 
