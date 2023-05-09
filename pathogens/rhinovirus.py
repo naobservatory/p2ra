@@ -11,6 +11,8 @@ Rhinovirus is not as seasonal as viruses like influenza or coronviruses.
 0114871.g001)
 (https://academic.oup.com/view-large/figure/89888454/195-6-773-fig003.jpeg)"""
 
+# TODO for SIMON: Check if national estimates can be applied to regions like
+# Ohio during some specific time period.
 
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
