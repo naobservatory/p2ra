@@ -158,7 +158,7 @@ US_child_prevalence = Prevalence(
     # overall child prevalence, since most children are older than 5.
     infections_per_100k=(
         NHANES_US_prevalence
-        - US_adult_proportion * adult_prevalence_raleigh_durham
+        - adult_prevalence_raleigh_durham.__mul__(US_adult_proportion)
     )
     / US_child_proportion,
     date="2020",
