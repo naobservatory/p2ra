@@ -87,16 +87,88 @@ county_populations = {
         tag="San Francisco 2020",
         source="https://www.census.gov/quickfacts/sanfranciscocountycalifornia",
     ),
+    ("Franklin", "Ohio"): Population(
+        people=1_323_800,
+        date="2020-04-01",
+        country="United States",
+        state="Ohio",
+        county="Franklin",
+        tag="Franklin 2020",
+        source="https://www.census.gov/quickfacts/franklincountyohio",
+    ),
+    ("Greene", "Ohio"): Population(
+        people=167_971,
+        date="2020-04-01",
+        country="United States",
+        state="Ohio",
+        county="Greene",
+        tag="Greene 2020",
+        source="https://www.census.gov/quickfacts/greenecountyohio",
+    ),
+    ("Lawrence", "Ohio"): Population(
+        people=58_236,
+        date="2020-04-01",
+        country="United States",
+        state="Ohio",
+        county="Lawrence",
+        tag="Lawrence 2020",
+        source="https://www.census.gov/quickfacts/lawrencecountyohio",
+    ),
+    ("Licking", "Ohio"): Population(
+        people=178_509,
+        date="2020-04-01",
+        country="United States",
+        state="Ohio",
+        county="Licking",
+        tag="Licking 2020",
+        source="https://www.census.gov/quickfacts/lickingcountyohio",
+    ),
+    ("Lucas", "Ohio"): Population(
+        people=431_273,
+        date="2020-04-01",
+        country="United States",
+        state="Ohio",
+        county="Lucas",
+        tag="Lucas 2020",
+        source="https://www.census.gov/quickfacts/lucascountyohio",
+    ),
+    ("Montogmery", "Ohio"): Population(
+        people=537_316,
+        date="2020-04-01",
+        country="United States",
+        state="Ohio",
+        county="Montogmery",
+        tag="Montogmery 2020",
+        source="https://www.census.gov/quickfacts/montgomerycountyohio",
+    ),
+    ("Sandusky", "Ohio"): Population(
+        people=58_900,
+        date="2020-04-01",
+        country="United States",
+        state="Ohio",
+        county="Sandusky",
+        tag="Sandusky 2020",
+        source="https://www.census.gov/quickfacts/sanduskycountyohio",
+    ),
+    ("Summit", "Ohio"): Population(
+        people=540_436,
+        date="2020-04-01",
+        country="United States",
+        state="Ohio",
+        county="Summit",
+        tag="Summit 2020",
+        source="https://www.census.gov/quickfacts/summitcountyohio",
+    ),
+    ("Trumbull", "Ohio"): Population(
+        people=202_069,
+        date="2020-04-01",
+        country="United States",
+        state="Ohio",
+        county="Trumbull",
+        tag="Trumbull 2020",
+        source="https://www.census.gov/quickfacts/trumbullcountyohio",
+    ),
 }
-
-ohio_population = Population(
-    people=11_799_374,
-    date="2020-04-01",
-    country="United States",
-    state="Ohio",
-    tag="Ohio 2020",
-    source="https://www.census.gov/quickfacts/OH",
-)
 
 
 def estimate_prevalences():
@@ -115,7 +187,7 @@ def estimate_prevalences():
             county = row[5]
             state = row[6]
 
-            if state != "Ohio" and (county, state) not in county_populations:
+            if (county, state) not in county_populations:
                 continue
 
             # In the tsv file, cumulative case counts start at column 11 with
@@ -143,30 +215,28 @@ def estimate_prevalences():
                 # https://www.jefftk.com/p/careful-with-trailing-averages
                 date = str(day - datetime.timedelta(days=3))
                 annual_infections = sum(latest) * 52
-                if state == "Ohio":
-                    ohio_totals[date] += annual_infections
-                else:
-                    cases = IncidenceAbsolute(
-                        annual_infections=annual_infections,
+
+                cases = IncidenceAbsolute(
+                    annual_infections=annual_infections,
+                    country="United States",
+                    state=state,
+                    county=county,
+                    date=date,
+                    tag="%s 2020" % county,
+                )
+                estimates.append(
+                    (
+                        cases.to_rate(
+                            county_populations[county, state]
+                        ).to_prevalence(shedding_duration)
+                        * underreporting
+                    ).target(
                         country="United States",
                         state=state,
                         county=county,
                         date=date,
-                        tag="%s 2020" % county,
                     )
-                    estimates.append(
-                        (
-                            cases.to_rate(
-                                county_populations[county, state]
-                            ).to_prevalence(shedding_duration)
-                            * underreporting
-                        ).target(
-                            country="United States",
-                            state=state,
-                            county=county,
-                            date=date,
-                        )
-                    )
+                )
 
     for date, annual_infections in ohio_totals.items():
         cases = IncidenceAbsolute(
