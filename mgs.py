@@ -1,8 +1,10 @@
 import json
 import urllib.request
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date
+from enum import Enum
 from typing import NewType, Optional
 
 from pydantic import BaseModel
@@ -13,7 +15,7 @@ from tree import Tree
 MGS_REPO_DEFAULTS = {
     "user": "naobservatory",
     "repo": "mgs-pipeline",
-    "ref": "data-2023-04-28",
+    "ref": "data-2023-05-04",
 }
 
 
@@ -50,13 +52,20 @@ def load_bioprojects(repo: GitHubRepo) -> dict[BioProject, list[Sample]]:
     }
 
 
+class Enrichment(Enum):
+    VIRAL = "viral"
+    PANEL = "panel"
+
+
 class SampleAttributes(BaseModel):
     country: str
+    county: Optional[str] = None
     location: str
     fine_location: Optional[str] = None
     # Fixme: Not all the dates are real dates
     date: date | str
     reads: int
+    enrichment: Optional[Enrichment]
 
 
 def load_sample_attributes(repo: GitHubRepo) -> dict[Sample, SampleAttributes]:
@@ -128,9 +137,19 @@ class MGSData:
         )
 
     def sample_attributes(
-        self, bioproject: BioProject
+        self, bioproject: BioProject, enrichment: Optional[Enrichment] = None
     ) -> dict[Sample, SampleAttributes]:
-        return {s: self.sample_attrs[s] for s in self.bioprojects[bioproject]}
+        samples = {
+            s: self.sample_attrs[s] for s in self.bioprojects[bioproject]
+        }
+        if enrichment:
+            return {
+                s: attrs
+                for s, attrs in samples.items()
+                if attrs.enrichment == enrichment
+            }
+        else:
+            return samples
 
     def total_reads(self, bioproject: BioProject) -> dict[Sample, int]:
         return {
@@ -138,8 +157,13 @@ class MGSData:
         }
 
     def viral_reads(
-        self, bioproject: BioProject, taxid: TaxID
+        self, bioproject: BioProject, taxids: Iterable[TaxID]
     ) -> dict[Sample, int]:
-        subtree = self.tax_tree[taxid]
-        viral_counts = count_reads(subtree, self.read_counts)
-        return {s: viral_counts[s] for s in self.bioprojects[bioproject]}
+        viral_counts_by_taxid = {
+            taxid: count_reads(self.tax_tree[taxid], self.read_counts)
+            for taxid in taxids
+        }
+        return {
+            s: sum(viral_counts_by_taxid[taxid][s] for taxid in taxids)
+            for s in self.bioprojects[bioproject]
+        }
