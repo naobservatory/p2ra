@@ -10,7 +10,12 @@ weeks."""
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=TaxID(208726),
+    # Using 12092 (Hepatitis A virus) instead of its child 208726 (Human
+    # hepatitis A virus) because the MGS pipeline assigns reads to 12092.
+    # Which happens because the Virus-Host DB
+    # (https://www.genome.jp/virushostdb/view/) doesn't seem to know about
+    # 208726.
+    taxid=TaxID(12092),
 )
 
 

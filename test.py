@@ -111,18 +111,15 @@ class TestMGS(unittest.TestCase):
         sample_counts = mgs.load_sample_counts(self.repo)
         for p in ["sars_cov_2", "hiv"]:
             with self.subTest(pathogen=p):
-                self.assertIn(
-                    pathogens.pathogens[p].pathogen_chars.taxid,
-                    sample_counts,
-                )
+                for taxid in pathogens.pathogens[p].pathogen_chars.taxids:
+                    self.assertIn(taxid, sample_counts)
 
     def test_load_tax_tree(self):
         tree = mgs.load_tax_tree(self.repo)
-        for p in ["sars_cov_2", "hiv", "norovirus"]:
-            with self.subTest(pathogen=p):
-                self.assertIn(
-                    pathogens.pathogens[p].pathogen_chars.taxid, tree
-                )
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                for taxid in pathogen.pathogen_chars.taxids:
+                    self.assertIn(taxid, tree)
 
     def test_count_reads(self):
         taxtree = Tree(mgs.TaxID(0), [Tree(mgs.TaxID(i)) for i in range(1, 3)])
@@ -138,7 +135,7 @@ class TestMGSData(unittest.TestCase):
     mgs_data = MGSData.from_repo()
     bioproject = mgs.BioProject("PRJNA729801")  # Rothman
     sample = mgs.Sample("SRR14530726")  # Random Rothman sample
-    taxid = pathogens.pathogens["norovirus"].pathogen_chars.taxid
+    taxids = pathogens.pathogens["norovirus"].pathogen_chars.taxids
 
     def test_from_repo(self):
         self.assertIsInstance(MGSData.from_repo(), MGSData)
@@ -154,7 +151,7 @@ class TestMGSData(unittest.TestCase):
         self.assertIsInstance(reads[self.sample], int)
 
     def test_viral_reads(self):
-        reads = self.mgs_data.viral_reads(self.bioproject, self.taxid)
+        reads = self.mgs_data.viral_reads(self.bioproject, self.taxids)
         self.assertIn(self.sample, reads)
         self.assertIsInstance(reads[self.sample], int)
 

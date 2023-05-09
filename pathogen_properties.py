@@ -41,7 +41,26 @@ TaxID = NewType("TaxID", int)
 class PathogenChars:
     na_type: NAType
     enveloped: Enveloped
-    taxid: TaxID
+    # Set exactly one of taxid or taxids; read taxids.
+    #
+    # Normally you only should set taxid.  Set taxids in cases like the flu
+    # where surveillance generally conflates Flu A and Flu B but they don't
+    # form a clade.
+    taxid: InitVar[Optional[TaxID]] = None
+    taxids: Optional[frozenset[TaxID]] = None
+    # If we produce any estimates more specific than the overall taxid,
+    # subtaxids will contain all the secondary taxonomic ids we can generate.
+    subtaxids: frozenset[TaxID] = frozenset()
+
+    def __post_init__(self, taxid: Optional[TaxID]):
+        assert bool(taxid) ^ bool(self.taxids)  # Exactly one should be set.
+        if taxid:
+            # A python wart is that frozen dataclasses don't have an exception
+            # for __post_init__, and it thinks assignments here are mutation
+            # instead of initialization.  That's why we're assigning with
+            # __setattr__. See
+            # https://stackoverflow.com/questions/53756788/how-to-set-the-value-of-dataclass-field-in-post-init-when-frozen-true/54119384#54119384
+            object.__setattr__(self, "taxids", frozenset([taxid]))
 
 
 def days_in_month(year: int, month: int) -> int:
@@ -69,6 +88,7 @@ class Variable:
     parsed_start: Optional[datetime.date] = field(init=False)
     parsed_end: Optional[datetime.date] = field(init=False)
     is_target: Optional[bool] = False
+    taxid: Optional[TaxID] = None
     inputs: InitVar[Optional[Iterable["Variable"]]] = None
     all_inputs: set["Variable"] = field(init=False)
 
@@ -79,11 +99,7 @@ class Variable:
         end_date: Optional[str],
         inputs: Optional[Iterable["Variable"]],
     ):
-        # A python wart is that frozen dataclasses don't have an exception for
-        # __post_init__, and it thinks assignments here are mutation instead of
-        # initialization.  That's why we're assigning with __setattr__. See
-        # https://stackoverflow.com/questions/53756788/how-to-set-the-value-of-dataclass-field-in-post-init-when-frozen-true/54119384#54119384
-
+        # See comment above about __post_init__ for why we're using __setattr__.
         if date and (start_date or end_date):
             raise Exception("If you have start/end don't set date.")
         if (start_date and not end_date) or (end_date and not start_date):
@@ -152,6 +168,9 @@ class Variable:
         return ", ".join(bits)
 
     def summarize_location(self, all_locations=None):
+        if self.is_target and self._location():
+            return self._location()
+
         return "; ".join(
             sorted(
                 set(i._location() for i in self.all_inputs if i._location())
@@ -159,6 +178,9 @@ class Variable:
         )
 
     def summarize_date(self) -> Optional[tuple[datetime.date, datetime.date]]:
+        if self.is_target and self.parsed_start and self.parsed_end:
+            return self.parsed_start, self.parsed_end
+
         try:
             return min(
                 i.parsed_start for i in self.all_inputs if i.parsed_start
