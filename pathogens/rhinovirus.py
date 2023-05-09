@@ -1,7 +1,7 @@
 from pathogen_properties import *
 
-background = """According to the CDC, “Rhinoviruses are the most frequent 
-cause of the common cold. In the United States children have an average of two 
+background = """According to the CDC, “Rhinoviruses are the most frequent
+cause of the common cold. In the United States children have an average of two
 rhinovirus infections each year, and adults have an average of one.”
 Furthermore, Rhinovirus declined somewhat less than other respiratory viruses
 during the pandemic (https://jamanetwork.com/journals/jamanetworkopen
@@ -11,6 +11,7 @@ Rhinovirus is not as seasonal as viruses like influenza or coronviruses.
 0114871.g001)
 (https://academic.oup.com/view-large/figure/89888454/195-6-773-fig003.jpeg)"""
 
+# TODO for SIMON: Check if national estimates can be applied to regions like Ohio during some specific time period.
 
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
@@ -58,7 +59,7 @@ rhinovirus_shedding_duration = SheddingDuration(
     source="https://erj.ersjournals.com/content/44/1/169#:~:text=Virus%20shedding%20lasts%20on%20average%20for%2010%E2%80%9314%20days%20in%20immunocompetent%20subjects",
 )
 
-"""This article analyzes information from the following studies, and their 
+"""This article analyzes information from the following studies, and their
 analysis seems to make sense from an initial screening. https://www.rcgp.org.
 uk/clinical-and-research/our-programmes/research-and-surveillance-centre/
 public-health-data#:~:text=December%202022%20%C2%A0(ZIP%20file%2C%203.7%20MB
