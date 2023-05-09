@@ -173,7 +173,11 @@ class Variable:
 
         return "; ".join(
             sorted(
-                set(i._location() for i in self.all_inputs if i._location())
+                set(
+                    i._location()
+                    for i in self.all_inputs | set([self])
+                    if i._location()
+                )
             )
         )
 
@@ -183,8 +187,14 @@ class Variable:
 
         try:
             return min(
-                i.parsed_start for i in self.all_inputs if i.parsed_start
-            ), max(i.parsed_end for i in self.all_inputs if i.parsed_end)
+                i.parsed_start
+                for i in self.all_inputs | set([self])
+                if i.parsed_start
+            ), max(
+                i.parsed_end
+                for i in self.all_inputs | set([self])
+                if i.parsed_end
+            )
         except ValueError:
             return None
 
@@ -202,6 +212,10 @@ class Population(Variable):
 @dataclass(kw_only=True, eq=True, frozen=True)
 class Scalar(Variable):
     scalar: float
+
+    @staticmethod
+    def average(in1: "Scalar", in2: "Scalar"):
+        return Scalar(scalar=(in1.scalar + in2.scalar) / 2, inputs=[in1, in2])
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -311,6 +325,13 @@ class IncidenceAbsolute(Variable):
             * 100000
             / population.people,
             inputs=[self, population],
+        )
+
+    def __truediv__(self, other: "IncidenceAbsolute"):
+        assert self.tag == other.tag
+        return Scalar(
+            scalar=self.annual_infections / other.annual_infections,
+            inputs=[self, other],
         )
 
 

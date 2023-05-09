@@ -43,6 +43,40 @@ class TestPathogens(unittest.TestCase):
                     self.assertIsInstance(estimate, Prevalence)
 
 
+class TestMMWRWeek(unittest.TestCase):
+    def test_mmwr_week(self):
+        self.assertEqual(
+            pathogens.pathogens["influenza"].parse_mmwr_week(2020, 1),
+            # Year starts on a Wednesday, so week 1 starts in 2019.
+            datetime.date(2019, 12, 29),
+        )
+        self.assertEqual(
+            pathogens.pathogens["influenza"].parse_mmwr_week(2019, 1),
+            # Year starts on a Tuesday, so week 1 starts in 2018.
+            datetime.date(2018, 12, 30),
+        )
+        self.assertEqual(
+            pathogens.pathogens["influenza"].parse_mmwr_week(2018, 1),
+            # Year starts on a Monday, so week 1 starts in 2017.
+            datetime.date(2017, 12, 31),
+        )
+        self.assertEqual(
+            pathogens.pathogens["influenza"].parse_mmwr_week(2017, 1),
+            # Year starts on a Sunday, so week 1 starts in 2017.
+            datetime.date(2017, 1, 1),
+        )
+        self.assertEqual(
+            pathogens.pathogens["influenza"].parse_mmwr_week(2016, 1),
+            # Year starts on a Friday, so week 1 starts in 2016.
+            datetime.date(2016, 1, 3),
+        )
+        self.assertEqual(
+            pathogens.pathogens["influenza"].parse_mmwr_week(2015, 1),
+            # Year starts on a Thursday, so week 1 starts in 2016.
+            datetime.date(2015, 1, 4),
+        )
+
+
 class TestVaribles(unittest.TestCase):
     def test_date_parsing(self):
         v = Variable(date="2019")

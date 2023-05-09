@@ -27,8 +27,6 @@ def start(pathogen_names):
                 )
                 if start_date == end_date:
                     date = start_date
-                elif start_date.year != end_date.year:
-                    date = f"{start_date.year} to {end_date.year}"
                 elif (
                     start_date.month == 1
                     and start_date.day == 1
