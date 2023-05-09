@@ -21,10 +21,12 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(10359),
 )
 
-# There is currently no vaccine for cytomegalovirus, so we can use seroprevalence to create a decent estimate of the overall proportion of people shedding at any given time.
+# There is currently no vaccine for cytomegalovirus, so we can use
+# seroprevalence to create a decent estimate of the overall proportion of
+# people shedding at any given time.
 
 
-GER_adult_seroprevalence_estimate = Prevalence(
+ger_adult_seroprevalence_estimate = Prevalence(
     # Estimate is for 18-79 year olds. In reality, this implies slightly lower
     # than 57% for the overall population including children
     infections_per_100k=0.567 * 100000,
@@ -36,29 +38,36 @@ GER_adult_seroprevalence_estimate = Prevalence(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6059406/#:~:text=Overall%20CMV%20seroprevalence,Germany%20in%20women",
 )
 
-# This study is generally good, but also from around 20 years ago
-overall_US_prevalence = Prevalence(
+# This study is generally good, but also from around 20 years ago.
+# It covers individuals ages 6-49
+NHANES_US_prevalence = Prevalence(
     infections_per_100k=0.504 * 100_000,
     country="US",
     active=Active.LATENT,
+    number_of_participants=15_310,
     source="https://pubmed.ncbi.nlm.nih.gov/20426575/#:~:text=the%20overall%20age%2Dadjusted%20CMV%20seroprevalence%20was%2050.4%25",
     start_date="1999",
     end_date="2004",
 )
 
 # This study is from 2020, and finds a 56% seroprevalence for US adults.
-new_US_adult_prevalence = Prevalence(
+adult_prevalence_raleigh_durham = Prevalence(
     infections_per_100k=0.56 * 100_000,
+    number_of_participants=694,
     date="2020",
     country="US",
+    state="North Carolina",
+    county="Raleigh/Durham/Chapel Hill Metropolitan Area",
     active=Active.LATENT,
     source="https://www.frontiersin.org/articles/10.3389/fcimb.2020.00334/full#:~:text=Methods%3A%20We,population%20was%2056%25",
 )
 
-# Since the 2 adult seroprevalence estimates are around 56-57%, these
-# estimates are slightly too high because they don't account for children,
-# and the 1 overall seroprevalence estimate is 50%, I think that 50% makes
-# a lot of sense as an overall estimate
+# The Germany and North Carolina adult seroprevalence estimates are
+# around 56-57%. However, these estimates are slightly too high because they
+# don't account for children, who have lower seroprevalences.
+# The NHANES US seroprevalence estimate for ages 6-49 is 50%. This covers a
+# mix of children and adults and is slightly under 56-57, so I think that 50%
+# makes a lot of sense as an overall estimate.
 
 
 # Shedding duration data is from Table 3 of the paper linked below. I take all
@@ -68,30 +77,32 @@ new_US_adult_prevalence = Prevalence(
 adult_shedding_estimate = SheddingDuration(
     # The original article cited in the comment above estimates shedding
     # duration from figure 1C of the source. It says less than 90 days for all
-    # patients. I estimate around 70 for the average patient. This is also
+    # patients. I estimate around 60 for the average patient. This is also
     # reasonably consistent with other inaccessible estimates from the paper
-    # and other less reputable information online.
-    days=70,
+    # linked above and other less reputable information online.
+    days=60,
     number_of_participants=48,
-    date=2004,
-    source="https://pubmed.ncbi.nlm.nih.gov/2839977/#:~:text=The%20duration%20of%20CMV%20excretion%20varied%20from%203.0%20to%2028.4%20months%2C%20with%20a%20mean%20of%2013.0%20%2B/%2D%209.1%20months%20for%20urine",
+    date="2004",
+    source="https://academic.oup.com/jid/article/190/11/1908/836595#:~:text=Antibody%20maturation%20and%20presence%20of%20cytomegalovisrus%20(CMV)%20DNA%20in%20serum%2C%20after%20the%20onset%20of%20primary%20CMV%20infection%2C%20in%20immunocompetent%20patients%20(A%20and%20C)",
 )
 
 child_shedding_estimate_1 = SheddingDuration(
     # Note that 30.4 is the # of days in an average month
     days=13 * 30.4,
     number_of_participants=79,
-    date=1988,
-    source="https://pubmed.ncbi.nlm.nih.gov/15529253/",
+    date="1988",
+    source="https://pubmed.ncbi.nlm.nih.gov/2839977/#:~:text=The%20duration%20of%20CMV%20excretion%20varied%20from%203.0%20to%2028.4%20months%2C%20with%20a%20mean%20of%2013.0",
 )
 
 # I could not view the full paper, so I took information from the source paper
 # linked in the comment above the shedding estimates
 child_shedding_estimate_2 = SheddingDuration(
     # Note that 30.4 is the # of days in an average month
-    days=6.5 * 30.4,
+    # In parentheses is the number of months the average participant shed
+    days=(13 / 17 * 10.5 + 2 / 17 * 12 + 1 / 17 * 18 + 1 / 17 * 19) * 30.4,
     number_of_participants=17,
-    date=1970,
+    date="1970",
+    # See the 3rd paragraph of page 412 for relevant shedding information
     source="https://pubmed.ncbi.nlm.nih.gov/4316198/",
 )
 
@@ -124,25 +135,30 @@ US_adult_proportion = Scalar(
 )
 
 # Seroprevalence of children ages 1-5
-US_infant_seroprevalence = Prevalence(
+# This estimate is not used, but helps confirm that the child prevalence
+# estimate below is reasonable
+US_1_to_5_seroprevalence = Prevalence(
     infections_per_100k=0.207 * 100_000,
     date="2011",
+    number_of_participants=698,
     active=Active.LATENT,
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8248283/#:~:text=the%20seroprevalence%20of%20cytomegalovirus%20immunoglobulin%20G%20(IgG)%20antibodies%20among%20US%20children%20aged%201%E2%80%935%20years%20was%2020.7%25",
 )
 
 
 US_child_prevalence = Prevalence(
-    """To solve for the US_seroprevalence_of_children, we can simplify the 
-equation US_child_proportion * US_child_prevalence + US_adult_proportion * 
-new_US_adult_prevalence = overall_US_prevalence. 
-This gives us that US_child_prevalence = (older_US_prevalence - 
-US_adult_proportion * new_US_adult_prevalence) / US_child_proportion""",
-    # This number evaluates to 0.29. The seroprevalence of children ages 1-5 was
-    # 0.21, and it makes sense that this number is slightly lower than the overall
-    # child prevalence, since most children are older than 5
+    # To solve for the US_child_prevalence, we can simplify the
+    # equation US_child_proportion * US_child_prevalence + US_adult_proportion
+    # * adult_prevalence_raleigh_durham = overall_US_prevalence.
+    # This gives us that US_child_prevalence = (NHANES_US_prevalence -
+    # US_adult_proportion * adult_prevalence_raleigh_durham) /
+    # US_child_proportion.
+    # This number evaluates to 0.29. The seroprevalence of children ages 1-5
+    # was 0.21. It makes sense that this number is slightly lower than the
+    # overall child prevalence, since most children are older than 5.
     infections_per_100k=(
-        overall_US_prevalence - US_adult_proportion * new_US_adult_prevalence
+        NHANES_US_prevalence
+        - US_adult_proportion * adult_prevalence_raleigh_durham
     )
     / US_child_proportion,
     date="2020",
@@ -156,7 +172,7 @@ total_days_shedding_per_person = Scalar(
     * US_child_prevalence
     * child_shedding_average.days
     + US_adult_proportion
-    * new_US_adult_prevalence
+    * adult_prevalence_raleigh_durham
     * adult_shedding_estimate.days,
     source="https://www.cdc.gov/cmv/overview.html#:~:text=nearly%20one%20in%20three%20children%20is%20already%20infected%20with%20CMV%20by%20age%20five.%20Over%20half%20of%20adults%20have%20been%20infected%20with%20CMV%20by%20age%2040.",
 )
@@ -176,4 +192,4 @@ shedding_prevalence = Prevalence(
 
 
 def estimate_prevalences():
-    return [overall_US_prevalence, shedding_prevalence]
+    return [NHANES_US_prevalence, shedding_prevalence]
