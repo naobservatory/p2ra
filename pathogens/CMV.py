@@ -157,10 +157,10 @@ US_child_prevalence = Prevalence(
     # was 0.21. It makes sense that this number is slightly lower than the
     # overall child prevalence, since most children are older than 5.
     infections_per_100k=(
-        NHANES_US_prevalence
-        - adult_prevalence_raleigh_durham.__mul__(US_adult_proportion)
-    )
-    / US_child_proportion,
+        NHANES_US_prevalence.__subtract__(
+            adult_prevalence_raleigh_durham.__mul__(US_adult_proportion)
+        )
+    ).__div__(US_child_proportion),
     date="2020",
     country="US",
     active=Active.LATENT,
@@ -168,11 +168,11 @@ US_child_prevalence = Prevalence(
 )
 
 total_days_shedding_per_person = Scalar(
-    scalar=US_child_proportion
-    * US_child_prevalence
+    scalar=US_child_proportion.scalar
+    * US_child_prevalence.infections_per_100k
     * child_shedding_average.days
-    + US_adult_proportion
-    * adult_prevalence_raleigh_durham
+    + US_adult_proportion.scalar
+    * adult_prevalence_raleigh_durham.infections_per_100k
     * adult_shedding_estimate.days,
     source="https://www.cdc.gov/cmv/overview.html#:~:text=nearly%20one%20in%20three%20children%20is%20already%20infected%20with%20CMV%20by%20age%20five.%20Over%20half%20of%20adults%20have%20been%20infected%20with%20CMV%20by%20age%2040.",
 )
