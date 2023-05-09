@@ -15,41 +15,59 @@ Rhinovirus is not as seasonal as viruses like influenza or coronviruses.
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=TaxID(147711, 147712, 463676),
+    taxids=frozenset([TaxID(147711), TaxID(147712), TaxID(463676)]),
 )
 
-LA_county_under_18_proportion = Scalar(
-    scalar=0.211,
-    date="2021",
+LA_county_population = Population(
+    people=10_014_042,
+    date="2020-04",
+    tag="LA-2020",
+    source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia,CA/PST045221",
+)
+
+
+LA_county_under_18_population = Population(
+    people=0.211 * LA_county_population.people,
+    date="2020-04",
+    tag="LA-2020",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
 )
 
-LA_county_adult_proportion = Scalar(
-    scalar=1 - LA_county_under_18_proportion.scalar,
-    date="2021",
+LA_county_adult_population = Population(
+    people=0.789 * LA_county_population.people,
+    date="2020-04",
+    tag="LA-2020",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
 )
 
-annual_rhinovirus_infections_children = Scalar(
+
+"""This estimate was created by Simon with the following reasoning: During 
+this study, "A single family respondent was contacted weekly by telephone to 
+obtain information on the onset of acute respiratory or enteric illnesses in 
+any of the household members. Across this time they tracked the number of 
+respiratory illnesses, across age groups. These are overall respiratory 
+illnesses (which we might equate with colds). In the same study, they report 
+that colds were isolated in 34% of cases. (note that across 13140 cases of
+respiratory illnesses, they only sampled 2227 of cases for isolation, which 
+could lead to bias in this isolation rate). But for now, let's use this 
+number. Checking a table of isolation rates across ages, the rate of 
+Rhinoviruses among infections roughly holds true across ages."""
+annual_rhinovirus_infections_under_18 = IncidenceAbsolute(
     # rhinovirus_share_of_cold = 0.34
-    scalar=3.7 * 0.34,
-    source="https://sci-hub.ru/https://doi.org/10.1017/S0950268800050779#?page=6",
+    annual_infections=3.7 * 0.34 * LA_county_under_18_population.people,
+    start_date="1976",
+    end_date="1981",
+    tag="LA-2020",
+    source="doi.org/10.1017/S0950268800050779#?page=6",
 )
 
-annual_rhinovirus_infections_adults = Scalar(
+annual_rhinovirus_infections_adults = IncidenceAbsolute(
     # rhinovirus_share_of_cold = 0.34
-    scalar=2 * 0.34,
-    source="https://sci-hub.ru/https://doi.org/10.1017/S0950268800050779#?page=6",
-)
-
-annual_rhinovirus_infections_per_100k = IncidenceRate(
-    annual_infections_per_100k=100_000
-    * (
-        LA_county_adult_proportion.scalar
-        * annual_rhinovirus_infections_adults.scalar
-        + LA_county_under_18_proportion.scalar
-        * annual_rhinovirus_infections_children.scalar
-    ),
+    annual_infections=2 * 0.34 * LA_county_adult_population.people,
+    start_date="1976",
+    end_date="1981",
+    tag="LA-2020",
+    source="doi.org/10.1017/S0950268800050779#?page=6",
 )
 
 rhinovirus_shedding_duration = SheddingDuration(
@@ -57,6 +75,17 @@ rhinovirus_shedding_duration = SheddingDuration(
     confidence_interval=(10, 14),
     source="https://erj.ersjournals.com/content/44/1/169#:~:text=Virus%20shedding%20lasts%20on%20average%20for%2010%E2%80%9314%20days%20in%20immunocompetent%20subjects",
 )
+
+under_18_prevalence = annual_rhinovirus_infections_under_18.to_rate(
+    LA_county_under_18_population
+).to_prevalence(rhinovirus_shedding_duration)
+
+adult_prevalence = annual_rhinovirus_infections_adults.to_rate(
+    LA_county_adult_population
+).to_prevalence(rhinovirus_shedding_duration)
+
+total_prevalence = adult_prevalence + under_18_prevalence
+
 
 """This article analyzes information from the following studies, and their 
 analysis seems to make sense from an initial screening. https://www.rcgp.org.
@@ -72,7 +101,5 @@ pandemic_decrease_factor = Scalar(
 
 def estimate_prevalences():
     return [
-        annual_rhinovirus_infections_per_100k.to_prevalence(
-            rhinovirus_shedding_duration
-        ).scale(pandemic_decrease_factor)
+        total_prevalence.__mul__(pandemic_decrease_factor),
     ]
