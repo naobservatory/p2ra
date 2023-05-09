@@ -164,7 +164,6 @@ US_child_prevalence = Prevalence(
     date="2020",
     country="US",
     active=Active.LATENT,
-    source="",
 )
 
 total_days_shedding_per_person = Scalar(
