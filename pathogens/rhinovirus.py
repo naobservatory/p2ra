@@ -99,9 +99,10 @@ adult_prevalence = annual_rhinovirus_infections_adults.to_rate(
 
 total_prevalence = adult_prevalence + under_18_prevalence
 
-
 pandemic_decrease_factor = Scalar(
     scalar=0.2,
+    # This decrease factor is based on UK data, but applied to LA rhinovirus
+    # estimates from the same time period.
     date="2020",
     # See page 8 of the December 2020 report, around weeks 44 to 53
     # The 5-year avg at this time is in blue, and the national avg in red below
