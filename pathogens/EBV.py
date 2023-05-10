@@ -9,6 +9,9 @@ an infected person's respiratory droplets. EBV is a widespread virus that
 can persist in the body for life, although most people infected with EBV 
 do not develop symptoms or have mild symptoms that resemble the flu."""
 
+# TODO: Simon will look into incidence of mononucleosis in the US. There is
+# also the question of mono being a proxy for EBV infection, or activation.
+
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.ENVELOPED,
