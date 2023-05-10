@@ -27,7 +27,8 @@ LA_county_population = Population(
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia,CA/PST045221",
 )
 
-
+# Ideally, we would find the under 19 population instead to match our under 19
+# prevalence estimate
 LA_county_under_18_population = Population(
     people=0.211 * LA_county_population.people,
     date="2020-04",
@@ -54,9 +55,14 @@ respiratory illnesses, they only sampled 2227 of cases for isolation, which
 could lead to bias in this isolation rate). But for now, let's use this 
 number. Checking a table of isolation rates across ages, the rate of 
 Rhinoviruses among infections roughly holds true across ages."""
-annual_rhinovirus_infections_under_18 = IncidenceAbsolute(
+annual_rhinovirus_infections_under_19 = IncidenceAbsolute(
+    # The weighted average annual number of respiratory illnesses among
+    # 0-19-year-olds is in parentheses, aggregating the mean of 0-4 and 5-19
+    # year olds from table 1 of the source
     # rhinovirus_share_of_cold = 0.34
-    annual_infections=3.7 * 0.34 * LA_county_under_18_population.people,
+    annual_infections=((539 * 4.9 + 1541 * 2.8) / (539 + 1541))
+    * 0.34
+    * LA_county_under_18_population.people,
     start_date="1976",
     end_date="1981",
     tag="LA-2020",
@@ -64,8 +70,13 @@ annual_rhinovirus_infections_under_18 = IncidenceAbsolute(
 )
 
 annual_rhinovirus_infections_adults = IncidenceAbsolute(
+    # The weighted average annual number of respiratory illnesses among
+    # 20+ year-olds is in parentheses, aggregating the mean of 20-40 and 40+
+    # year olds from table 1 of the source
     # rhinovirus_share_of_cold = 0.34
-    annual_infections=2 * 0.34 * LA_county_adult_population.people,
+    annual_infections=((1523 * 2.2 + 1757 * 1.6) / (1523 + 1757))
+    * 0.34
+    * LA_county_adult_population.people,
     start_date="1976",
     end_date="1981",
     tag="LA-2020",
@@ -78,7 +89,7 @@ rhinovirus_shedding_duration = SheddingDuration(
     source="https://erj.ersjournals.com/content/44/1/169#:~:text=Virus%20shedding%20lasts%20on%20average%20for%2010%E2%80%9314%20days%20in%20immunocompetent%20subjects",
 )
 
-under_18_prevalence = annual_rhinovirus_infections_under_18.to_rate(
+under_18_prevalence = annual_rhinovirus_infections_under_19.to_rate(
     LA_county_under_18_population
 ).to_prevalence(rhinovirus_shedding_duration)
 
@@ -89,15 +100,12 @@ adult_prevalence = annual_rhinovirus_infections_adults.to_rate(
 total_prevalence = adult_prevalence + under_18_prevalence
 
 
-"""This article analyzes information from the following studies, and their 
-analysis seems to make sense from an initial screening. https://www.rcgp.org.
-uk/clinical-and-research/our-programmes/research-and-surveillance-centre/
-public-health-data#:~:text=December%202022%20%C2%A0(ZIP%20file%2C%203.7%20MB
-"""
 pandemic_decrease_factor = Scalar(
-    scalar=0.1,
+    scalar=0.2,
     date="2020",
-    source="https://www.bmj.com/content/370/bmj.m3182#:~:text=still%20around%20nine%20times%20fewer%20cases%20than%20the%20five%20year%20average%20for%20this%20time%20of%20year.",
+    # See page 8 of the December 2020 report, around weeks 44 to 53
+    # The 5-year avg at this time is in blue, and the national avg in red below
+    source="https://www.rcgp.org.uk/getmedia/e564cc01-bc66-4165-aba5-c762b693f50d/2020-December.zip",
 )
 
 
