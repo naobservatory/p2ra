@@ -116,9 +116,9 @@ class TestMGS(unittest.TestCase):
 
     def test_load_tax_tree(self):
         tree = mgs.load_tax_tree(self.repo)
-        for p in ["sars_cov_2", "hiv", "norovirus"]:
-            with self.subTest(pathogen=p):
-                for taxid in pathogens.pathogens[p].pathogen_chars.taxids:
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                for taxid in pathogen.pathogen_chars.taxids:
                     self.assertIn(taxid, tree)
 
     def test_count_reads(self):
