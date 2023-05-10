@@ -19,8 +19,8 @@ pathogen_chars = PathogenChars(
 # individuals between 0 and 25 years old to assess prevalence of detectable
 # anti-EBV antibodies."
 UK_seroprevalence_0_to_25 = Prevalence(
-    # This study is also not used in the estimate,
-    # but helps confirm that the estimate is reasonable
+    # This study is not used in the estimate,
+    # but is used to check that the later estimate is reasonable
     infections_per_100k=0.853 * 100_000,
     country="UK",
     start_date="2002",
@@ -32,7 +32,7 @@ UK_seroprevalence_0_to_25 = Prevalence(
 # Children ages 8-19
 nhanes_children_estimate = Prevalence(
     infections_per_100k=0.665 * 100_000,
-    confidence_interval=(0.643, 0.687),
+    confidence_interval=(0.643 * 100_000, 0.687 * 100_000),
     country="United States",
     start_date="2003",
     end_date="2010",
@@ -63,15 +63,10 @@ US_adult_proportion = Scalar(
 )
 
 
-us_seroprevalence_2003_2010 = Prevalence(
-    # this estimate uses children 18-19 as a proxy for the adult population
-    infections_per_100k=(
-        nhanes_18_19_yo_estimate.__mul__(US_adult_proportion)
-        + nhanes_children_estimate.__mul__(US_child_proportion)
-    ).infections_per_100k,
-    country="United States",
-    active=Active.LATENT,
-)
+# this estimate uses children 18-19 as a proxy for the adult population
+us_seroprevalence_2003_2010 = nhanes_18_19_yo_estimate.__mul__(
+    US_adult_proportion
+).__add__(nhanes_children_estimate.__mul__(US_child_proportion))
 
 
 def estimate_prevalences():
