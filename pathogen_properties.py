@@ -218,7 +218,7 @@ class Prevalence(Variable):
             active=self.active,
         )
 
-    def __div__(self, scalar: Scalar) -> "Prevalence":
+    def __truediv__(self, scalar: Scalar) -> "Prevalence":
         return Prevalence(
             infections_per_100k=self.infections_per_100k / scalar.scalar,
             inputs=[self, scalar],
@@ -234,7 +234,7 @@ class Prevalence(Variable):
             active=self.active,
         )
 
-    def __subtract__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
+    def __sub__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
         assert self.active == other.active
         return Prevalence(
             infections_per_100k=self.infections_per_100k

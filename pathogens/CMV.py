@@ -159,9 +159,13 @@ US_1_to_5_seroprevalence = Prevalence(
 # adult_prevalence_releigh_durham, because it is not meant to fit the
 # entire population like the NHANES estimate is
 US_child_prevalence = (
-    nhanes_6_to_49_US_seroprevalence
-    - (adult_prevalence_raleigh_durham * US_adult_proportion)
-) / (US_child_proportion).target(date="2022")
+    (
+        nhanes_6_to_49_US_seroprevalence
+        - (adult_prevalence_raleigh_durham * US_adult_proportion)
+    )
+    / (US_child_proportion)
+).target(date="2022")
+
 
 total_days_shedding_per_person = Scalar(
     scalar=US_child_proportion.scalar
@@ -170,14 +174,16 @@ total_days_shedding_per_person = Scalar(
     + US_adult_proportion.scalar
     * adult_prevalence_raleigh_durham.infections_per_100k
     * adult_shedding_estimate.days,
-    source="https://www.cdc.gov/cmv/overview.html#:~:text=nearly%20one%20in%20three%20children%20is%20already%20infected%20with%20CMV%20by%20age%20five.%20Over%20half%20of%20adults%20have%20been%20infected%20with%20CMV%20by%20age%2040.",
+    source="",
 )
+
 
 # average lifespan in the US in days - average lifespan in years * days/year
 average_lifespan_US = Scalar(
     scalar=76.1 * 365,
     source="https://www.cdc.gov/nchs/pressroom/nchs_press_releases/2022/20220831.htm",
 )
+
 
 shedding_prevalence = Prevalence(
     infections_per_100k=total_days_shedding_per_person.scalar
