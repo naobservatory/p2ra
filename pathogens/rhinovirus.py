@@ -1,7 +1,7 @@
 from pathogen_properties import *
 
-background = """According to the CDC, “Rhinoviruses are the most frequent 
-cause of the common cold. In the United States children have an average of two 
+background = """According to the CDC, “Rhinoviruses are the most frequent
+cause of the common cold. In the United States children have an average of two
 rhinovirus infections each year, and adults have an average of one.”
 Furthermore, Rhinovirus declined somewhat less than other respiratory viruses
 during the pandemic (https://jamanetwork.com/journals/jamanetworkopen
@@ -11,8 +11,9 @@ Rhinovirus is not as seasonal as viruses like influenza or coronviruses.
 0114871.g001)
 (https://academic.oup.com/view-large/figure/89888454/195-6-773-fig003.jpeg)"""
 
-# TODO for SIMON: Check if national estimates can be applied to regions like
-# Ohio during some specific time period.
+# TODOs for SIMON:
+#  - Check if national estimates can be applied to regions like Ohio during some specific time period.
+#  - Check if not accounting for seasonality is reasonable
 
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
@@ -44,16 +45,16 @@ LA_county_adult_population = Population(
 )
 
 
-"""This estimate was created by Simon with the following reasoning: During 
-this study, "A single family respondent was contacted weekly by telephone to 
-obtain information on the onset of acute respiratory or enteric illnesses in 
-any of the household members. Across this time they tracked the number of 
-respiratory illnesses, across age groups. These are overall respiratory 
-illnesses (which we might equate with colds). In the same study, they report 
+"""This estimate was created by Simon with the following reasoning: During
+this study, "A single family respondent was contacted weekly by telephone to
+obtain information on the onset of acute respiratory or enteric illnesses in
+any of the household members. Across this time they tracked the number of
+respiratory illnesses, across age groups. These are overall respiratory
+illnesses (which we might equate with colds). In the same study, they report
 that colds were isolated in 34% of cases. (note that across 13140 cases of
-respiratory illnesses, they only sampled 2227 of cases for isolation, which 
-could lead to bias in this isolation rate). But for now, let's use this 
-number. Checking a table of isolation rates across ages, the rate of 
+respiratory illnesses, they only sampled 2227 of cases for isolation, which
+could lead to bias in this isolation rate). But for now, let's use this
+number. Checking a table of isolation rates across ages, the rate of
 Rhinoviruses among infections roughly holds true across ages."""
 annual_rhinovirus_infections_under_19 = IncidenceAbsolute(
     # The weighted average annual number of respiratory illnesses among
