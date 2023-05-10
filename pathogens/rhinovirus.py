@@ -100,13 +100,22 @@ adult_prevalence = annual_rhinovirus_infections_adults.to_rate(
 
 total_prevalence = adult_prevalence + under_18_prevalence
 
+
+# Link for all RCGP reports (specific reference is given under source):
+#  https://www.rcgp.org.uk/clinical-and-research/our-programmes/research-and-surveillance-centre/public-health-data
 pandemic_decrease_factor = Scalar(
-    scalar=0.2,
-    # This decrease factor is based on UK data, but applied to LA rhinovirus
-    # estimates from the same time period.
+    scalar=0.6,
     date="2020",
     # See page 8 of the December 2020 report, around weeks 44 to 53
     # The 5-year avg at this time is in blue, and the national avg in red below
+    # From this graph, the UK's decrease factor was around 0.2.
+    # On page 5, we see that Covid incidence in the relevant weeks
+    # is around 100-200 per 100k.
+    # During fall 2020, LA County had a prevalence of around 10-150 per 100k,
+    # usually closer to 10 and then spiking exponentially in December. This
+    # gives an incidence much lower than the UK's, meaning our decrease factor
+    # should be significantly higher. I'm going to take 0.6 as a guess.
+    # (LA Covid Data: https://www.nytimes.com/interactive/2021/us/los-angeles-california-covid-cases.html)
     source="https://www.rcgp.org.uk/getmedia/e564cc01-bc66-4165-aba5-c762b693f50d/2020-December.zip",
 )
 
