@@ -38,9 +38,26 @@ ger_adult_seroprevalence_estimate = Prevalence(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6059406/#:~:text=Overall%20CMV%20seroprevalence,Germany%20in%20women",
 )
 
+# This study is from 2020, and finds a 56% seroprevalence for US adults.
+adult_prevalence_raleigh_durham = Prevalence(
+    infections_per_100k=0.56 * 100_000,
+    number_of_participants=694,
+    date="2020",
+    country="US",
+    state="North Carolina",
+    # Study is actually from the Raleigh-Durham-Chapel Hill Metropolitan Area
+    county="Raleigh County",
+    active=Active.LATENT,
+    source="https://www.frontiersin.org/articles/10.3389/fcimb.2020.00334/full#:~:text=Methods%3A%20We,population%20was%2056%25",
+)
+
 # This study is generally good, but also from around 20 years ago.
-# It covers individuals ages 6-49
-NHANES_US_prevalence = Prevalence(
+# It covers individuals ages 6-49.
+# Since the Germany and North Carolina estimates are just for adults, and
+# the NHANES US seroprevalence estimate covers a broader sample of the
+#  population (and is pretty much in agreement with the other estimates), I
+# think that the NHANES' 50% makes a lot of sense as an overall estimate.
+nhanes_6_to_49_US_seroprevalence = Prevalence(
     infections_per_100k=0.504 * 100_000,
     country="US",
     active=Active.LATENT,
@@ -49,25 +66,6 @@ NHANES_US_prevalence = Prevalence(
     start_date="1999",
     end_date="2004",
 )
-
-# This study is from 2020, and finds a 56% seroprevalence for US adults.
-adult_prevalence_raleigh_durham = Prevalence(
-    infections_per_100k=0.56 * 100_000,
-    number_of_participants=694,
-    date="2020",
-    country="US",
-    state="North Carolina",
-    county="Raleigh/Durham/Chapel Hill Metropolitan Area",
-    active=Active.LATENT,
-    source="https://www.frontiersin.org/articles/10.3389/fcimb.2020.00334/full#:~:text=Methods%3A%20We,population%20was%2056%25",
-)
-
-# The Germany and North Carolina adult seroprevalence estimates are
-# around 56-57%. However, these estimates are slightly too high because they
-# don't account for children, who have lower seroprevalences.
-# The NHANES US seroprevalence estimate for ages 6-49 is 50%. This covers a
-# mix of children and adults and is slightly under 56-57, so I think that 50%
-# makes a lot of sense as an overall estimate.
 
 
 # Shedding duration data is from Table 3 of the paper linked below. I take all
@@ -89,7 +87,8 @@ adult_shedding_estimate = SheddingDuration(
 child_shedding_estimate_1 = SheddingDuration(
     # Note that 30.4 is the # of days in an average month
     days=13 * 30.4,
-    number_of_participants=79,
+    number_of_participants=28,
+    confidence_interval=(3.9 * 30.4, 22.1 * 30.4),  # standard deviation
     date="1988",
     source="https://pubmed.ncbi.nlm.nih.gov/2839977/#:~:text=The%20duration%20of%20CMV%20excretion%20varied%20from%203.0%20to%2028.4%20months%2C%20with%20a%20mean%20of%2013.0",
 )
@@ -135,8 +134,7 @@ US_adult_proportion = Scalar(
 )
 
 # Seroprevalence of children ages 1-5
-# This estimate is not used, but helps confirm that the child prevalence
-# estimate below is reasonable
+# This estimate is not part of our final estimate, but is used to fact check that the child prevalence estimate below is reasonable
 US_1_to_5_seroprevalence = Prevalence(
     infections_per_100k=0.207 * 100_000,
     date="2011",
@@ -146,25 +144,24 @@ US_1_to_5_seroprevalence = Prevalence(
 )
 
 
-US_child_prevalence = Prevalence(
-    # To solve for the US_child_prevalence, we can simplify the
-    # equation US_child_proportion * US_child_prevalence + US_adult_proportion
-    # * adult_prevalence_raleigh_durham = overall_US_prevalence.
-    # This gives us that US_child_prevalence = (NHANES_US_prevalence -
-    # US_adult_proportion * adult_prevalence_raleigh_durham) /
-    # US_child_proportion.
-    # This number evaluates to 0.29. The seroprevalence of children ages 1-5
-    # was 0.21. It makes sense that this number is slightly lower than the
-    # overall child prevalence, since most children are older than 5.
-    infections_per_100k=(
-        NHANES_US_prevalence.__subtract__(
-            adult_prevalence_raleigh_durham.__mul__(US_adult_proportion)
-        )
-    ).__div__(US_child_proportion),
-    date="2020",
-    country="US",
-    active=Active.LATENT,
-)
+# To solve for the US_child_prevalence, we can first look at how to
+# calculate overall US prevalence:
+# nhanes_6_to_49_US_seroprevalence (taken to be overall prevalence) =
+# US_child_proportion * US_child_prevalence + US_adult_proportion
+# * adult_prevalence_raleigh_durham
+# Based on this, we can solve for US_child_prevalence the following way:
+#  US_child_prevalence = (nhanes_6_to_49_US_seroprevalence -  US_adult_proportion * adult_prevalence_raleigh_durham)) /
+# US_child_proportion.
+# This number evaluates to 0.29. The seroprevalence of children ages 1-5
+# was 0.21. It makes sense that this number is slightly lower than the
+# overall child prevalence, since most children are older than 5.
+# Note that we have slightly less confidence in
+# adult_prevalence_releigh_durham, because it is not meant to fit the
+# entire population like the NHANES estimate is
+US_child_prevalence = (
+    nhanes_6_to_49_US_seroprevalence
+    - (adult_prevalence_raleigh_durham * US_adult_proportion)
+) / (US_child_proportion).target(date="2022")
 
 total_days_shedding_per_person = Scalar(
     scalar=US_child_proportion.scalar
@@ -191,4 +188,4 @@ shedding_prevalence = Prevalence(
 
 
 def estimate_prevalences():
-    return [NHANES_US_prevalence, shedding_prevalence]
+    return [nhanes_6_to_49_US_seroprevalence, shedding_prevalence]
