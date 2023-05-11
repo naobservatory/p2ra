@@ -179,12 +179,17 @@ total_days_shedding_per_person = Scalar(
 
 
 # average lifespan in the US in days - average lifespan in years * days/year
+
 average_lifespan_US = Scalar(
     scalar=76.1 * 365,
     source="https://www.cdc.gov/nchs/pressroom/nchs_press_releases/2022/20220831.htm",
 )
 
-
+# We have the total # of days the average person sheds in their lifetime.
+# Dividing this by lifetime should give the fraction of days on which the
+# average person sheds throughout their lifetime. This number is equivalent to
+# the fraction of the population shedding on any given day. Then, multiplying
+# by 100_000 gives the number of people shedding per 100k on any given day.
 shedding_prevalence = Prevalence(
     infections_per_100k=total_days_shedding_per_person.scalar
     / average_lifespan_US.scalar
