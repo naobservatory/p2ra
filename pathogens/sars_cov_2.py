@@ -41,14 +41,14 @@ target_counties = set(
         "Alameda County, California",
         "Marin County, California",
         "San Francisco County, California",
-        "Franklin County, Ohio"
-        "Greene County, Ohio"
-        "Lawrence County, Ohio"
-        "Licking County, Ohio"
-        "Lucas County, Ohio"
-        "Montogmery County, Ohio"
-        "Sandusky County, Ohio"
-        "Summit County, Ohio"
+        "Franklin County, Ohio",
+        "Greene County, Ohio",
+        "Lawrence County, Ohio",
+        "Licking County, Ohio",
+        "Lucas County, Ohio",
+        "Montogmery County, Ohio",
+        "Sandusky County, Ohio",
+        "Summit County, Ohio",
         "Trumbull County, Ohio",
     ]
 )
