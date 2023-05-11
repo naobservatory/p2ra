@@ -157,29 +157,34 @@ class Variable:
 
         return datetime.date(y, m, d)
 
-    def _location(self):
-        bits = []
-        if self.county:
-            bits.append(self.county)
-        if self.state:
-            bits.append(self.state)
-        if self.country:
-            bits.append(self.country)
-        return ", ".join(bits)
+    # Returns country, state, county, or raises an error if there are
+    # conflicting locations.  If you hit an error here you probably need a
+    # target() call.
+    def target_location(
+        self,
+    ) -> tuple[Optional[str], Optional[str], Optional[str]]:
+        if self.is_target and self.country:
+            return self.country, self.state, self.county
 
-    def summarize_location(self, all_locations=None):
-        if self.is_target and self._location():
-            return self._location()
+        inputs = self.all_inputs | set([self])
 
-        return "; ".join(
-            sorted(
-                set(
-                    i._location()
-                    for i in self.all_inputs | set([self])
-                    if i._location()
-                )
-            )
-        )
+        countries = set(i.country for i in inputs if i.country)
+        states = set(i.state for i in inputs if i.state)
+        counties = set(i.county for i in inputs if i.county)
+
+        country = state = county = None
+
+        (country,) = countries
+        if states:
+            (state,) = states
+        if counties:
+            (county,) = counties
+
+        return country, state, county
+
+    def summarize_location(self) -> str:
+        country, state, county = self.target_location()
+        return ", ".join(x for x in [county, state, country] if x)
 
     def summarize_date(self) -> Optional[tuple[datetime.date, datetime.date]]:
         if self.is_target and self.parsed_start and self.parsed_end:
@@ -200,13 +205,40 @@ class Variable:
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class Population(Variable):
+class Taggable(Variable):
+    # In cases where the location and date isn't enough to identify the
+    # population, you can set a more specific tag to reduce errors.  For
+    # example, tag="18-49yo".
+    tag: Optional[str] = None
+
+    def assert_comparable(self, other: "Taggable"):
+        v1 = self
+        v2 = other
+
+        # While dates are optional in general, they're required for taggables.
+        assert v1.parsed_start
+        assert v2.parsed_start
+        assert v1.parsed_end
+        assert v2.parsed_end
+
+        assert v1.country == v2.country
+        assert v1.state == v2.state
+        assert v1.county == v2.county
+
+        # Normally everything has to match, but it's ok if one of them
+        # has a more specific date as long as it's within a year; populations
+        # don't change quickly.
+        assert v1.parsed_start.year == v2.parsed_start.year
+        assert v1.parsed_end.year == v2.parsed_end.year
+
+        assert v1.tag == v2.tag
+
+
+@dataclass(kw_only=True, eq=True, frozen=True)
+class Population(Taggable):
     """A number of people"""
 
     people: float
-    # Make this specific enough that you won't accidentally pair it with the
-    # wrong absolute prevalence or incidence.
-    tag: str
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -252,18 +284,15 @@ class Prevalence(Variable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class PrevalenceAbsolute(Variable):
+class PrevalenceAbsolute(Taggable):
     """How many people had this pathogen at some moment"""
 
     infections: float
     active: Active
 
-    # Make this specific enough that you won't accidentally pair it with the
-    # wrong population.
-    tag: str
-
     def to_rate(self, population: Population) -> Prevalence:
-        assert self.tag == population.tag
+        self.assert_comparable(population)
+
         return Prevalence(
             infections_per_100k=self.infections * 100000 / population.people,
             inputs=[self, population],
@@ -310,16 +339,14 @@ class IncidenceRate(Variable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class IncidenceAbsolute(Variable):
+class IncidenceAbsolute(Taggable):
     """How many people get this pathogen annually"""
 
     annual_infections: float
-    # Make this specific enough that you won't accidentally pair it with the
-    # wrong population.
-    tag: str
 
     def to_rate(self, population: Population) -> IncidenceRate:
-        assert self.tag == population.tag
+        self.assert_comparable(population)
+
         return IncidenceRate(
             annual_infections_per_100k=self.annual_infections
             * 100000

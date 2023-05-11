@@ -6,6 +6,7 @@ from collections import Counter
 
 import mgs
 import pathogens
+import populations
 from mgs import MGSData
 from pathogen_properties import *
 from tree import Tree
@@ -25,7 +26,7 @@ class TestPathogens(unittest.TestCase):
 
         self.assertEqual(
             la_2020.summarize_location(),
-            "Los Angeles, California, United States",
+            "Los Angeles County, California, United States",
         )
         self.assertEqual(
             la_2020.summarize_date(),
@@ -240,6 +241,76 @@ class TestTree(unittest.TestCase):
         )
         self.assertEqual(
             self.leaf.map(f).map(g), self.leaf.map(lambda x: g(f(x)))
+        )
+
+
+class TestPopulations(unittest.TestCase):
+    def test_county_state(self):
+        self.assertEqual(
+            populations.us_population(
+                county="Bristol County", state="Rhode Island", year=2020
+            ),
+            Population(
+                people=50_774,
+                date="2020-07-01",
+                source="https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html",
+                country="United States",
+                state="Rhode Island",
+                county="Bristol County",
+            ),
+        )
+
+        self.assertEqual(
+            populations.us_population(
+                county="Bristol County", state="Rhode Island", year=2020
+            ).people,
+            50_774,
+        )
+        self.assertEqual(
+            populations.us_population(
+                county="Bristol County", state="Rhode Island", year=2021
+            ).people,
+            50_800,
+        )
+        self.assertEqual(
+            populations.us_population(
+                county="Bristol County", state="Rhode Island", year=2022
+            ).people,
+            50_360,
+        )
+
+        self.assertEqual(
+            populations.us_population(
+                county="Southeastern Connecticut Planning Region",
+                state="Connecticut",
+                year=2022,
+            ).people,
+            280_403,
+        )
+
+    def test_state(self):
+        self.assertEqual(
+            populations.us_population(state="California", year=2022),
+            Population(
+                # From https://www.census.gov/quickfacts/CA
+                people=39_029_342,
+                date="2022-07-01",
+                source="https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html",
+                country="United States",
+                state="California",
+            ),
+        )
+
+    def test_country(self):
+        self.assertEqual(
+            populations.us_population(year=2022),
+            Population(
+                # https://www.census.gov/quickfacts/USA
+                people=333_287_557,
+                date="2022-07-01",
+                source="https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html",
+                country="United States",
+            ),
         )
 
 

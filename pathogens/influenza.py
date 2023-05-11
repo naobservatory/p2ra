@@ -2,6 +2,7 @@ import csv
 import datetime
 
 from pathogen_properties import *
+from populations import us_population
 
 background = """Influenza is a respiratory virus.  While we call it one thing,
 it has four variants (A/B/C/D) that don't form a clade.  Only A, B, and C
@@ -106,27 +107,6 @@ def load_weekly_data() -> WeeklyData:
             )
     return output
 
-
-# We're only interested in CA and OH for now because we're matching this data
-# with Rothman (CA), Crits-Christoph (CA), and Spurbeck (OH).
-populations = {
-    "California": Population(
-        people=39_538_245,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        tag="California",
-        source="https://www.census.gov/quickfacts/CA",
-    ),
-    "Ohio": Population(
-        people=11_799_374,
-        date="2020-04-01",
-        country="United States",
-        state="Ohio",
-        tag="Ohio",
-        source="https://www.census.gov/quickfacts/OH",
-    ),
-}
 
 # There's a ton of studies on this, but they vary a lot.  Fielding 2013 has a
 # metaanalysis but includes "Given the significant heterogeneity in most
@@ -250,24 +230,27 @@ def estimate_prevalences() -> list[Prevalence]:
                 (FLU_A, positive_a),
                 (FLU_B, positive_b),
             ]:
+                if parsed_start.year <= 2019:
+                    continue
+
                 underreporting = get_underreporting(parsed_start, parsed_end)
                 if not underreporting:
                     continue
 
                 incidence = IncidenceAbsolute(
                     annual_infections=weekly_count * 52,
-                    tag=state,
+                    country="United States",
+                    state=state,
+                    date=parsed_start.isoformat(),
                 )
 
                 prevalences.append(
                     (
-                        incidence.to_rate(populations[state]).to_prevalence(
-                            shedding_duration
-                        )
+                        incidence.to_rate(
+                            us_population(state=state, year=parsed_start.year)
+                        ).to_prevalence(shedding_duration)
                         * underreporting
                     ).target(
-                        country="USA",
-                        state=state,
                         start_date=parsed_start.isoformat(),
                         end_date=parsed_end.isoformat(),
                         taxid=taxid,
