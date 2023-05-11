@@ -104,7 +104,7 @@ total_prevalence = adult_prevalence + under_18_prevalence
 # Link for all RCGP reports (specific reference is given under source):
 #  https://www.rcgp.org.uk/clinical-and-research/our-programmes/research-and-surveillance-centre/public-health-data
 pandemic_decrease_factor = Scalar(
-    scalar=0.4,
+    scalar=0.33,
     date="2020",
     # See page 8 of the December 2020 report, around weeks 44 to 53
     # The 5-year avg at this time is in blue, and the national avg in red below
@@ -114,7 +114,7 @@ pandemic_decrease_factor = Scalar(
     # During fall 2020, LA County had an incidence of around 10-150 per 100k
     # per day, usually closer to 10 and then spiking exponentially in
     # December. This gives an average incidence slightly higher than the UK's.
-    # I'm going to take 0.4 as a guess.
+    # I'm going to take 0.33 as a guess.
     # (LA Covid Data: https://www.nytimes.com/interactive/2021/us/los-angeles-california-covid-cases.html)
     source="https://www.rcgp.org.uk/getmedia/e564cc01-bc66-4165-aba5-c762b693f50d/2020-December.zip",
 )
