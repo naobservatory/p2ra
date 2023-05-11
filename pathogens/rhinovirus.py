@@ -21,24 +21,17 @@ pathogen_chars = PathogenChars(
     taxids=frozenset([TaxID(147711), TaxID(147712), TaxID(463676)]),
 )
 
-LA_county_population = Population(
-    people=10_014_042,
-    date="2020-04",
-    tag="LA-2020",
-    source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia,CA/PST045221",
-)
-
 # Ideally, we would find the under 19 population instead to match our under 19
 # prevalence estimate
-LA_county_under_18_population = Population(
-    people=0.211 * LA_county_population.people,
+la_county_under_18_population = Population(
+    people=0.211 * 10_014_042,
     date="2020-04",
     tag="LA-2020",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
 )
 
-LA_county_adult_population = Population(
-    people=0.789 * LA_county_population.people,
+la_county_adult_population = Population(
+    people=0.789 * 10_014_042,
     date="2020-04",
     tag="LA-2020",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
@@ -63,7 +56,7 @@ annual_rhinovirus_infections_under_19 = IncidenceAbsolute(
     # rhinovirus_share_of_cold = 0.34
     annual_infections=((539 * 4.9 + 1541 * 2.8) / (539 + 1541))
     * 0.34
-    * LA_county_under_18_population.people,
+    * la_county_under_18_population.people,
     start_date="1976",
     end_date="1981",
     tag="LA-2020",
@@ -77,7 +70,7 @@ annual_rhinovirus_infections_adults = IncidenceAbsolute(
     # rhinovirus_share_of_cold = 0.34
     annual_infections=((1523 * 2.2 + 1757 * 1.6) / (1523 + 1757))
     * 0.34
-    * LA_county_adult_population.people,
+    * la_county_adult_population.people,
     start_date="1976",
     end_date="1981",
     tag="LA-2020",
@@ -91,11 +84,11 @@ rhinovirus_shedding_duration = SheddingDuration(
 )
 
 under_18_prevalence = annual_rhinovirus_infections_under_19.to_rate(
-    LA_county_under_18_population
+    la_county_under_18_population
 ).to_prevalence(rhinovirus_shedding_duration)
 
 adult_prevalence = annual_rhinovirus_infections_adults.to_rate(
-    LA_county_adult_population
+    la_county_adult_population
 ).to_prevalence(rhinovirus_shedding_duration)
 
 total_prevalence = adult_prevalence + under_18_prevalence
