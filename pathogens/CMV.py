@@ -121,21 +121,21 @@ child_shedding_average = SheddingDuration(
 )
 
 
-US_child_proportion = Scalar(
+us_child_proportion = Scalar(
     scalar=0.222,
     date="2022",
     source="https://www.census.gov/quickfacts/fact/table/US#",
 )
 
-US_adult_proportion = Scalar(
-    scalar=1 - US_child_proportion.scalar,
+us_adult_proportion = Scalar(
+    scalar=1 - us_child_proportion.scalar,
     date="2022",
     source="https://www.census.gov/quickfacts/fact/table/US#",
 )
 
 # Seroprevalence of children ages 1-5
 # This estimate is not part of our final estimate, but is used to fact check that the child prevalence estimate below is reasonable
-US_1_to_5_seroprevalence = Prevalence(
+us_1_to_5_seroprevalence = Prevalence(
     infections_per_100k=0.207 * 100_000,
     date="2011",
     number_of_participants=698,
@@ -144,34 +144,34 @@ US_1_to_5_seroprevalence = Prevalence(
 )
 
 
-# To solve for the US_child_prevalence, we can first look at how to
+# To solve for the us_child_prevalence, we can first look at how to
 # calculate overall US prevalence:
 # nhanes_6_to_49_US_seroprevalence (taken to be overall prevalence) =
-# US_child_proportion * US_child_prevalence + US_adult_proportion
+# us_child_proportion * us_child_prevalence + us_adult_proportion
 # * adult_prevalence_raleigh_durham
-# Based on this, we can solve for US_child_prevalence the following way:
-#  US_child_prevalence = (nhanes_6_to_49_US_seroprevalence -  US_adult_proportion * adult_prevalence_raleigh_durham)) /
-# US_child_proportion.
+# Based on this, we can solve for us_child_prevalence the following way:
+#  us_child_prevalence = (nhanes_6_to_49_US_seroprevalence -  us_adult_proportion * adult_prevalence_raleigh_durham)) /
+# us_child_proportion.
 # This number evaluates to 0.29. The seroprevalence of children ages 1-5
 # was 0.21. It makes sense that this number is slightly lower than the
 # overall child prevalence, since most children are older than 5.
 # Note that we have slightly less confidence in
 # adult_prevalence_releigh_durham, because it is not meant to fit the
 # entire population like the NHANES estimate is
-US_child_prevalence = (
+us_child_prevalence = (
     (
         nhanes_6_to_49_US_seroprevalence
-        - (adult_prevalence_raleigh_durham * US_adult_proportion)
+        - (adult_prevalence_raleigh_durham * us_adult_proportion)
     )
-    / (US_child_proportion)
+    / (us_child_proportion)
 ).target(date="2022")
 
 
 total_days_shedding_per_person = Scalar(
-    scalar=US_child_proportion.scalar
-    * US_child_prevalence.infections_per_100k
+    scalar=us_child_proportion.scalar
+    * us_child_prevalence.infections_per_100k
     * child_shedding_average.days
-    + US_adult_proportion.scalar
+    + us_adult_proportion.scalar
     * adult_prevalence_raleigh_durham.infections_per_100k
     * adult_shedding_estimate.days,
     source="",
@@ -194,4 +194,9 @@ shedding_prevalence = Prevalence(
 
 
 def estimate_prevalences():
-    return [nhanes_6_to_49_US_seroprevalence, shedding_prevalence]
+    return [
+        nhanes_6_to_49_US_seroprevalence,
+        shedding_prevalence,
+        ger_adult_seroprevalence_estimate,
+        adult_prevalence_raleigh_durham,
+    ]
