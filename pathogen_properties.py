@@ -171,11 +171,23 @@ class Variable:
         if self.is_target and self._location():
             return self._location()
 
+        inputs = self.all_inputs | set([self])
+
+        # Check if inputs vary only in specificity
+        counties = set(i.county for i in inputs if i.county)
+        states = set(i.state for i in inputs if i.state)
+        countries = set(i.country for i in inputs if i.country)
+
+        if len(counties) == len(states) == len(countries) == 1:
+            for i in inputs:
+                if i.county:
+                    return i._location()
+        elif len(states) == len(countries) == 1:
+            for i in inputs:
+                if i.state:
+                    return i._location()
         return "; ".join(
-            sorted(
-                set(i._location() for i in self.all_inputs if i._location())
-            )
-        )
+            sorted(set(i._location() for i in inputs if i._location())))
 
     def summarize_date(self) -> Optional[tuple[datetime.date, datetime.date]]:
         if self.is_target and self.parsed_start and self.parsed_end:
