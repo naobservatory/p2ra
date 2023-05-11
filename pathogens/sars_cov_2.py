@@ -90,7 +90,10 @@ def estimate_prevalences():
 
                 # centered moving average
                 # https://www.jefftk.com/p/careful-with-trailing-averages
-                date = str(day - datetime.timedelta(days=3))
+                date = day - datetime.timedelta(days=3)
+                if date.year > 2022:
+                    continue
+
                 annual_infections = sum(latest) * 52
                 if state == "Ohio":
                     ohio_totals[date] += annual_infections
@@ -99,15 +102,16 @@ def estimate_prevalences():
                         annual_infections=annual_infections,
                         country="United States",
                         state=state,
-                        county=county,
-                        date=date,
-                        tag="%s 2020" % county_state,
+                        county=full_county,
+                        date=date.isoformat(),
                     )
                     estimates.append(
                         (
                             cases.to_rate(
                                 us_population(
-                                    county=full_county, state=state, year=2020
+                                    county=full_county,
+                                    state=state,
+                                    year=date.year,
                                 )
                             ).to_prevalence(shedding_duration)
                             * underreporting
@@ -115,7 +119,7 @@ def estimate_prevalences():
                             country="United States",
                             state=state,
                             county=county,
-                            date=date,
+                            date=date.isoformat(),
                         )
                     )
 
@@ -124,8 +128,7 @@ def estimate_prevalences():
             annual_infections=annual_infections,
             country="United States",
             state="Ohio",
-            date=date,
-            tag="Ohio 2020",
+            date=date.isoformat(),
         )
         # TODO: we can probably get a better undereporting figure for the
         # omicron surge and this is likely too small.  The CDC 4x figure is not
@@ -134,13 +137,13 @@ def estimate_prevalences():
         estimates.append(
             (
                 cases.to_rate(
-                    us_population(state="Ohio", year=2020)
+                    us_population(state="Ohio", year=date.year)
                 ).to_prevalence(shedding_duration)
                 * underreporting
             ).target(
                 country="United States",
                 state="Ohio",
-                date=date,
+                date=date.isoformat(),
             )
         )
 

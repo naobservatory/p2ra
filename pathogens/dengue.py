@@ -20,7 +20,6 @@ california_reported_cases = IncidenceAbsolute(
     state="California",
     date="2020",
     source="https://www.cdph.ca.gov/Programs/CID/DCDC/CDPH%20Document%20Library/TravelAssociatedCasesofDengueVirusinCA.pdf",
-    tag="California 2020",
 )
 
 # disease duration in days

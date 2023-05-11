@@ -190,13 +190,40 @@ class Variable:
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class Population(Variable):
+class Taggable(Variable):
+    # In cases where the location and date isn't enough to identify the
+    # population, you can set a more specific tag to reduce errors.  For
+    # example, tag="18-49yo".
+    tag: Optional[str] = None
+
+    def assert_comparable(self, other: "Taggable"):
+        v1 = self
+        v2 = other
+
+        # While dates are optional in general, they're required for taggables.
+        assert v1.parsed_start
+        assert v2.parsed_start
+        assert v1.parsed_end
+        assert v2.parsed_end
+
+        assert v1.country == v2.country
+        assert v1.state == v2.state
+        assert v1.county == v2.county
+
+        # Normally everything has to match, but it's ok if one of them
+        # has a more specific date as long as it's within a year; populations
+        # don't change quickly.
+        assert v1.parsed_start.year == v2.parsed_start.year
+        assert v1.parsed_end.year == v2.parsed_end.year
+
+        assert v1.tag == v2.tag
+
+
+@dataclass(kw_only=True, eq=True, frozen=True)
+class Population(Taggable):
     """A number of people"""
 
     people: float
-    # Make this specific enough that you won't accidentally pair it with the
-    # wrong absolute prevalence or incidence.
-    tag: str
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -238,18 +265,15 @@ class Prevalence(Variable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class PrevalenceAbsolute(Variable):
+class PrevalenceAbsolute(Taggable):
     """How many people had this pathogen at some moment"""
 
     infections: float
     active: Active
 
-    # Make this specific enough that you won't accidentally pair it with the
-    # wrong population.
-    tag: str
-
     def to_rate(self, population: Population) -> Prevalence:
-        assert self.tag == population.tag
+        self.assert_comparable(population)
+
         return Prevalence(
             infections_per_100k=self.infections * 100000 / population.people,
             inputs=[self, population],
@@ -296,16 +320,14 @@ class IncidenceRate(Variable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class IncidenceAbsolute(Variable):
+class IncidenceAbsolute(Taggable):
     """How many people get this pathogen annually"""
 
     annual_infections: float
-    # Make this specific enough that you won't accidentally pair it with the
-    # wrong population.
-    tag: str
 
     def to_rate(self, population: Population) -> IncidenceRate:
-        assert self.tag == population.tag
+        self.assert_comparable(population)
+
         return IncidenceRate(
             annual_infections_per_100k=self.annual_infections
             * 100000

@@ -223,7 +223,6 @@ class TestPopulations(unittest.TestCase):
                 country="United States",
                 state="Rhode Island",
                 county="Bristol County",
-                tag="Bristol County, Rhode Island 2020",
             ),
         )
 
@@ -265,7 +264,6 @@ class TestPopulations(unittest.TestCase):
                 source="https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html",
                 country="United States",
                 state="California",
-                tag="California 2022",
             ),
         )
 
@@ -278,7 +276,6 @@ class TestPopulations(unittest.TestCase):
                 date="2022-07-01",
                 source="https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html",
                 country="United States",
-                tag="United States 2022",
             ),
         )
 
