@@ -85,3 +85,4 @@ if __name__ == "__main__":
     {sep.join(f"{x:.{d}e}" for x in percentile_values)}"""
         )
     )
+    stats.save_fit(fit, "fits/rothman-sars_cov_2.tsv")

@@ -1,3 +1,5 @@
+from pathlib import Path
+from typing import IO
 import numpy as np
 import numpy.typing as npt
 import stan  # type: ignore
@@ -63,3 +65,11 @@ def fit_model(
     model = stan.build(stan_code, data=data, random_seed=random_seed)
     fit = model.sample(num_chains=4, num_samples=1000)
     return fit
+
+
+def save_fit(
+    fit: stan.fit.Fit,
+    path: str | Path | IO,
+) -> None:
+    df = fit.to_frame()
+    df.to_csv(path, sep="\t")
