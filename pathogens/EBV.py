@@ -128,6 +128,7 @@ denmark_seroprevalence = PrevalenceAbsolute(
     # This estimate applies a seroprevalence estimate from 1983 to Denmark's
     # current population.
     date="2023",
+    country="Denmark",
     active=Active.LATENT,
     tag="Denmark-2023",
     source="10.3109/inf.1983.15.issue-4.03",
