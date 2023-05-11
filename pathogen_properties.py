@@ -173,7 +173,11 @@ class Variable:
 
         return "; ".join(
             sorted(
-                set(i._location() for i in self.all_inputs if i._location())
+                set(
+                    i._location()
+                    for i in self.all_inputs | set([self])
+                    if i._location()
+                )
             )
         )
 
@@ -183,8 +187,14 @@ class Variable:
 
         try:
             return min(
-                i.parsed_start for i in self.all_inputs if i.parsed_start
-            ), max(i.parsed_end for i in self.all_inputs if i.parsed_end)
+                i.parsed_start
+                for i in self.all_inputs | set([self])
+                if i.parsed_start
+            ), max(
+                i.parsed_end
+                for i in self.all_inputs | set([self])
+                if i.parsed_end
+            )
         except ValueError:
             return None
 
