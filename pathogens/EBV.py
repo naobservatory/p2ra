@@ -21,7 +21,7 @@ pathogen_chars = PathogenChars(
 # "We conducted a sero-epidemiological survey using serum samples from 2325
 # individuals between 0 and 25 years old to assess prevalence of detectable
 # anti-EBV antibodies."
-UK_seroprevalence_0_to_25 = Prevalence(
+uk_seroprevalence_0_to_25 = Prevalence(
     # This study is not used in the estimate,
     # but is used to check that the later estimate is reasonable
     infections_per_100k=0.853 * 100_000,
@@ -74,4 +74,4 @@ us_seroprevalence_2003_2010 = nhanes_18_19_yo_estimate * (
 
 
 def estimate_prevalences():
-    return [us_seroprevalence_2003_2010]
+    return [us_seroprevalence_2003_2010, uk_seroprevalence_0_to_25]
