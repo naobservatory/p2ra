@@ -41,14 +41,21 @@ target_counties = set(
         "Alameda County, California",
         "Marin County, California",
         "San Francisco County, California",
+        "Franklin County, Ohio",
+        "Greene County, Ohio",
+        "Lawrence County, Ohio",
+        "Licking County, Ohio",
+        "Lucas County, Ohio",
+        "Montogmery County, Ohio",
+        "Sandusky County, Ohio",
+        "Summit County, Ohio",
+        "Trumbull County, Ohio",
     ]
 )
 
 
 def estimate_prevalences():
     estimates = []
-
-    ohio_totals = Counter()  # day -> total new cases, 7d moving average
 
     # From the COVID-19 Data Repository by the Center for Systems Science and
     # Engineering (CSSE) at Johns Hopkins University
@@ -58,13 +65,16 @@ def estimate_prevalences():
         prevalence_data_filename("time_series_covid19_confirmed_US.csv")
     ) as inf:
         for row in csv.reader(inf):
-            county = row[5]
+            truncated_county = row[5]
             state = row[6]
 
-            full_county = "%s County" % county
-            county_state = "%s, %s" % (full_county, state)
+            # The time series data names counties like "Franklin", but the full
+            # name the census uses is "Franklin County".  Use the full names
+            # for consistency.
+            county = "%s County" % truncated_county
+            county_state = "%s, %s" % (county, state)
 
-            if state != "Ohio" and county_state not in target_counties:
+            if county_state not in target_counties:
                 continue
 
             # In the tsv file, cumulative case counts start at column 11 with
@@ -94,57 +104,38 @@ def estimate_prevalences():
                 if date.year > 2022:
                     continue
 
+                # Right now we use the same underreporting figure for both
+                # Spring/Fall 2020 and Winter 2021-2022.
+                #
+                # TODO: we can probably get a better undereporting figure for
+                # the omicron surge and this is likely too small.  The CDC 4x
+                # figure is not intended to cover this time period, this was
+                # after rapid tests were starting to be available, and omicron
+                # was relatively mild.
+
                 annual_infections = sum(latest) * 52
-                if state == "Ohio":
-                    ohio_totals[date] += annual_infections
-                else:
-                    cases = IncidenceAbsolute(
-                        annual_infections=annual_infections,
+
+                cases = IncidenceAbsolute(
+                    annual_infections=annual_infections,
+                    country="United States",
+                    state=state,
+                    county=county,
+                    date=date.isoformat(),
+                )
+                estimates.append(
+                    (
+                        cases.to_rate(
+                            us_population(
+                                county=county, state=state, year=date.year
+                            )
+                        ).to_prevalence(shedding_duration)
+                        * underreporting
+                    ).target(
                         country="United States",
                         state=state,
-                        county=full_county,
+                        county=county,
                         date=date.isoformat(),
                     )
-                    estimates.append(
-                        (
-                            cases.to_rate(
-                                us_population(
-                                    county=full_county,
-                                    state=state,
-                                    year=date.year,
-                                )
-                            ).to_prevalence(shedding_duration)
-                            * underreporting
-                        ).target(
-                            country="United States",
-                            state=state,
-                            county=county,
-                            date=date.isoformat(),
-                        )
-                    )
-
-    for date, annual_infections in ohio_totals.items():
-        cases = IncidenceAbsolute(
-            annual_infections=annual_infections,
-            country="United States",
-            state="Ohio",
-            date=date.isoformat(),
-        )
-        # TODO: we can probably get a better undereporting figure for the
-        # omicron surge and this is likely too small.  The CDC 4x figure is not
-        # intended to cover this time period, this was after rapid tests were
-        # starting to be available, and omicron was relatively mild.
-        estimates.append(
-            (
-                cases.to_rate(
-                    us_population(state="Ohio", year=date.year)
-                ).to_prevalence(shedding_duration)
-                * underreporting
-            ).target(
-                country="United States",
-                state="Ohio",
-                date=date.isoformat(),
-            )
-        )
+                )
 
     return estimates
