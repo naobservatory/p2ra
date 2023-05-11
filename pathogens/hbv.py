@@ -40,6 +40,8 @@ cdc_estimated_acute_2019 = IncidenceAbsolute(
     confidence_interval=(11_800, 50_800),  # 95% Bootstrap Confidence Interval
     coverage_probability=0.95,
     country="United States",
+    # I picked 2019 rates, as estimated rates in 2020 were 30% lower, even
+    # while deaths stayed the same: https://www.cdc.gov/hepatitis/statistics/2020surveillance/introduction/national-profile.htm#:~:text=hepatitis%20B%20transmission.-,Data%20from%20death%20certificates%20filed%20in%20the%20vital%20records%20offices%20of,same%20as%20the%20rate%20during%202019%20(0.42%20deaths%20per%20100%2C000%20population).,-Hepatitis%20C
     date="2019",
     tag="United States 2019",
     source="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=20%2C700%20estimated%20infections%20(95%25%20CI%3A%2011%2C800%E2%80%9350%2C800)",
