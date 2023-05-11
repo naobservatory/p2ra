@@ -3,6 +3,7 @@ import datetime
 from collections import Counter
 
 from pathogen_properties import *
+from populations import us_population
 
 background = """SARS-CoV-2 is an airborne coronavirus, responsible for the
 2019- pandemic"""
@@ -32,143 +33,25 @@ underreporting = Scalar(
     source="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/burden.html#:~:text=1%20in%204.0%20(95%25%20UI*%203.4%20%E2%80%93%204.7)%20COVID%E2%80%9319%20infections%20were%20reported.",
 )
 
-county_populations = {
-    ("San Diego", "California"): Population(
-        people=3_298_635,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="San Diego",
-        tag="San Diego 2020",
-        source="https://www.census.gov/quickfacts/fact/table/sandiegocountycalifornia/PST045221",
-    ),
-    ("Los Angeles", "California"): Population(
-        people=10_014_042,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="Los Angeles",
-        tag="Los Angeles 2020",
-        source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia/PST045222",
-    ),
-    ("Orange", "California"): Population(
-        people=3_186_989,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="Orange",
-        tag="Orange 2020",
-        source="https://www.census.gov/quickfacts/orangecountycalifornia",
-    ),
-    ("Alameda", "California"): Population(
-        people=1_682_353,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="Alameda",
-        tag="Alameda 2020",
-        source="https://www.census.gov/quickfacts/alamedacountycalifornia",
-    ),
-    ("Marin", "California"): Population(
-        people=262_318,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="Marin",
-        tag="Marin 2020",
-        source="https://www.census.gov/quickfacts/marincountycalifornia",
-    ),
-    ("San Francisco", "California"): Population(
-        people=873_959,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="San Francisco",
-        tag="San Francisco 2020",
-        source="https://www.census.gov/quickfacts/sanfranciscocountycalifornia",
-    ),
-    ("Franklin", "Ohio"): Population(
-        people=1_323_800,
-        date="2020-04-01",
-        country="United States",
-        state="Ohio",
-        county="Franklin",
-        tag="Franklin 2020",
-        source="https://www.census.gov/quickfacts/franklincountyohio",
-    ),
-    ("Greene", "Ohio"): Population(
-        people=167_971,
-        date="2020-04-01",
-        country="United States",
-        state="Ohio",
-        county="Greene",
-        tag="Greene 2020",
-        source="https://www.census.gov/quickfacts/greenecountyohio",
-    ),
-    ("Lawrence", "Ohio"): Population(
-        people=58_236,
-        date="2020-04-01",
-        country="United States",
-        state="Ohio",
-        county="Lawrence",
-        tag="Lawrence 2020",
-        source="https://www.census.gov/quickfacts/lawrencecountyohio",
-    ),
-    ("Licking", "Ohio"): Population(
-        people=178_509,
-        date="2020-04-01",
-        country="United States",
-        state="Ohio",
-        county="Licking",
-        tag="Licking 2020",
-        source="https://www.census.gov/quickfacts/lickingcountyohio",
-    ),
-    ("Lucas", "Ohio"): Population(
-        people=431_273,
-        date="2020-04-01",
-        country="United States",
-        state="Ohio",
-        county="Lucas",
-        tag="Lucas 2020",
-        source="https://www.census.gov/quickfacts/lucascountyohio",
-    ),
-    ("Montogmery", "Ohio"): Population(
-        people=537_316,
-        date="2020-04-01",
-        country="United States",
-        state="Ohio",
-        county="Montogmery",
-        tag="Montogmery 2020",
-        source="https://www.census.gov/quickfacts/montgomerycountyohio",
-    ),
-    ("Sandusky", "Ohio"): Population(
-        people=58_900,
-        date="2020-04-01",
-        country="United States",
-        state="Ohio",
-        county="Sandusky",
-        tag="Sandusky 2020",
-        source="https://www.census.gov/quickfacts/sanduskycountyohio",
-    ),
-    ("Summit", "Ohio"): Population(
-        people=540_436,
-        date="2020-04-01",
-        country="United States",
-        state="Ohio",
-        county="Summit",
-        tag="Summit 2020",
-        source="https://www.census.gov/quickfacts/summitcountyohio",
-    ),
-    ("Trumbull", "Ohio"): Population(
-        people=202_069,
-        date="2020-04-01",
-        country="United States",
-        state="Ohio",
-        county="Trumbull",
-        tag="Trumbull 2020",
-        source="https://www.census.gov/quickfacts/trumbullcountyohio",
-    ),
-}
+target_counties = set(
+    [
+        "San Diego County, California",
+        "Los Angeles County, California",
+        "Orange County, California",
+        "Alameda County, California",
+        "Marin County, California",
+        "San Francisco County, California",
+        "Franklin County, Ohio"
+        "Greene County, Ohio"
+        "Lawrence County, Ohio"
+        "Licking County, Ohio"
+        "Lucas County, Ohio"
+        "Montogmery County, Ohio"
+        "Sandusky County, Ohio"
+        "Summit County, Ohio"
+        "Trumbull County, Ohio",
+    ]
+)
 
 
 def estimate_prevalences():
@@ -187,7 +70,10 @@ def estimate_prevalences():
             county = row[5]
             state = row[6]
 
-            if (county, state) not in county_populations:
+            full_county = "%s County" % county
+            county_state = "%s, %s" % (full_county, state)
+
+            if county_state not in target_counties:
                 continue
 
             # In the tsv file, cumulative case counts start at column 11 with
@@ -213,29 +99,28 @@ def estimate_prevalences():
 
                 # centered moving average
                 # https://www.jefftk.com/p/careful-with-trailing-averages
-                date = str(day - datetime.timedelta(days=3))
+                date = day - datetime.timedelta(days=3)
+                if date.year > 2022:
+                    continue
+
                 annual_infections = sum(latest) * 52
 
                 cases = IncidenceAbsolute(
                     annual_infections=annual_infections,
                     country="United States",
                     state=state,
-                    county=county,
-                    date=date,
-                    tag="%s 2020" % county,
+                    county=full_county,
+                    date=date.isoformat(),
                 )
                 estimates.append(
                     (
                         cases.to_rate(
-                            county_populations[county, state]
+                            us_population(
+                                county=full_county, state=state, year=date.year
+                            )
                         ).to_prevalence(shedding_duration)
                         * underreporting
-                    ).target(
-                        country="United States",
-                        state=state,
-                        county=county,
-                        date=date,
-                    )
+                    ).target(date=date.isoformat())
                 )
 
     for date, annual_infections in ohio_totals.items():
@@ -243,8 +128,7 @@ def estimate_prevalences():
             annual_infections=annual_infections,
             country="United States",
             state="Ohio",
-            date=date,
-            tag="Ohio 2020",
+            date=date.isoformat(),
         )
         # TODO: we can probably get a better undereporting figure for the
         # omicron surge and this is likely too small.  The CDC 4x figure is not
@@ -252,12 +136,14 @@ def estimate_prevalences():
         # starting to be available, and omicron was relatively mild.
         estimates.append(
             (
-                cases.to_rate(ohio_population).to_prevalence(shedding_duration)
+                cases.to_rate(
+                    us_population(state="Ohio", year=date.year)
+                ).to_prevalence(shedding_duration)
                 * underreporting
             ).target(
                 country="United States",
                 state="Ohio",
-                date=date,
+                date=date.isoformat(),
             )
         )
 
