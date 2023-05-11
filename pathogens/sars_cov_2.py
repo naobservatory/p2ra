@@ -65,11 +65,14 @@ def estimate_prevalences():
         prevalence_data_filename("time_series_covid19_confirmed_US.csv")
     ) as inf:
         for row in csv.reader(inf):
-            county = row[5]
+            truncated_county = row[5]
             state = row[6]
 
-            full_county = "%s County" % county
-            county_state = "%s, %s" % (full_county, state)
+            # The time series data names counties like "Franklin", but the full
+            # name the census uses is "Franklin County".  Use the full names
+            # for consistency.
+            county = "%s County" % truncated_county
+            county_state = "%s, %s" % (county, state)
 
             if county_state not in target_counties:
                 continue
@@ -116,14 +119,14 @@ def estimate_prevalences():
                     annual_infections=annual_infections,
                     country="United States",
                     state=state,
-                    county=full_county,
+                    county=county,
                     date=date.isoformat(),
                 )
                 estimates.append(
                     (
                         cases.to_rate(
                             us_population(
-                                county=full_county, state=state, year=date.year
+                                county=county, state=state, year=date.year
                             )
                         ).to_prevalence(shedding_duration)
                         * underreporting
