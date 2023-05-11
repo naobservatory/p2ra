@@ -1,4 +1,5 @@
 from pathogen_properties import *
+from populations import us_population
 
 background = """Dengue virus, a mosquito-borne viral infection primarily
 transmitted by the Aedes aegypti and Aedes albopictus mosquitoes, present 
@@ -19,15 +20,9 @@ california_reported_cases = IncidenceAbsolute(
     state="California",
     date="2020",
     source="https://www.cdph.ca.gov/Programs/CID/DCDC/CDPH%20Document%20Library/TravelAssociatedCasesofDengueVirusinCA.pdf",
-    tag="California-2020",
+    tag="California 2020",
 )
 
-CA_population = Population(
-    people=39_538_245,
-    tag="California-2020",
-    date="2020-04",
-    source="https://www.census.gov/quickfacts/CA",
-)
 # disease duration in days
 disease_duration = SheddingDuration(
     days=7,
@@ -37,7 +32,7 @@ disease_duration = SheddingDuration(
 
 def estimate_prevalences():
     return [
-        california_reported_cases.to_rate(CA_population).to_prevalence(
-            disease_duration
-        )
+        california_reported_cases.to_rate(
+            us_population(state="California", year=2020)
+        ).to_prevalence(disease_duration)
     ]

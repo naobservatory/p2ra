@@ -1,4 +1,5 @@
 from pathogen_properties import *
+from populations import us_population
 
 background = """HIV is a sexually-transmitted retrovirus which gradually
 weakens the immune system."""
@@ -41,7 +42,7 @@ la_unsuppressed_fraction_2020 = Scalar(
     scalar=1 - 0.6,
     country="United States",
     state="California",
-    county="Los Angeles",
+    county="Los Angeles County",
     date="2020",
     source="https://web.archive.org/web/20201202004910/https://www.lacounty.hiv/",
 )
@@ -50,21 +51,11 @@ la_infected_2020 = PrevalenceAbsolute(
     infections=57_700,
     country="United States",
     state="California",
-    county="Los Angeles",
+    county="Los Angeles County",
     date="2020",
-    tag="la-2020",
+    tag="Los Angeles County, California 2020",
     active=Active.LATENT,
     source="https://web.archive.org/web/20201202004910/https://www.lacounty.hiv/",
-)
-
-la_population_2020 = Population(
-    people=10_014_009,
-    country="United States",
-    state="California",
-    county="Los Angeles",
-    date="2020-04-01",
-    tag="la-2020",
-    source="https://www.census.gov/quickfacts/losangelescountycalifornia",
 )
 
 
@@ -72,6 +63,10 @@ def estimate_prevalences():
     return [
         us_infected_2019.to_rate(us_population_2019)
         * us_unsuppressed_fraction_2019,
-        la_infected_2020.to_rate(la_population_2020)
+        la_infected_2020.to_rate(
+            us_population(
+                state="California", county="Los Angeles County", year=2020
+            )
+        )
         * la_unsuppressed_fraction_2020,
     ]
