@@ -144,7 +144,7 @@ def estimate_prevalences():
             counter += 1
             if counter == 0 or counter == 2:
                 case_rate = IncidenceRate(
-                    annual_infections_per_100k=ohio_counties_case_counts[key][g
+                    annual_infections_per_100k=ohio_counties_case_counts[key][
                         counter
                     ],
                     date=years[counter],
