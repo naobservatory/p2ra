@@ -3,6 +3,7 @@ import datetime
 from collections import Counter
 
 from pathogen_properties import *
+from populations import us_population
 
 background = """SARS-CoV-2 is an airborne coronavirus, responsible for the
 2019- pandemic"""
@@ -32,70 +33,15 @@ underreporting = Scalar(
     source="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/burden.html#:~:text=1%20in%204.0%20(95%25%20UI*%203.4%20%E2%80%93%204.7)%20COVID%E2%80%9319%20infections%20were%20reported.",
 )
 
-county_populations = {
-    ("San Diego", "California"): Population(
-        people=3_298_635,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="San Diego",
-        tag="San Diego 2020",
-        source="https://www.census.gov/quickfacts/fact/table/sandiegocountycalifornia/PST045221",
-    ),
-    ("Los Angeles", "California"): Population(
-        people=10_014_042,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="Los Angeles",
-        tag="Los Angeles 2020",
-        source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia/PST045222",
-    ),
-    ("Orange", "California"): Population(
-        people=3_186_989,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="Orange",
-        tag="Orange 2020",
-        source="https://www.census.gov/quickfacts/orangecountycalifornia",
-    ),
-    ("Alameda", "California"): Population(
-        people=1_682_353,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="Alameda",
-        tag="Alameda 2020",
-        source="https://www.census.gov/quickfacts/alamedacountycalifornia",
-    ),
-    ("Marin", "California"): Population(
-        people=262_318,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="Marin",
-        tag="Marin 2020",
-        source="https://www.census.gov/quickfacts/marincountycalifornia",
-    ),
-    ("San Francisco", "California"): Population(
-        people=873_959,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="San Francisco",
-        tag="San Francisco 2020",
-        source="https://www.census.gov/quickfacts/sanfranciscocountycalifornia",
-    ),
-}
-
-ohio_population = Population(
-    people=11_799_374,
-    date="2020-04-01",
-    country="United States",
-    state="Ohio",
-    tag="Ohio 2020",
-    source="https://www.census.gov/quickfacts/OH",
+target_counties = set(
+    [
+        "San Diego County, California",
+        "Los Angeles County, California",
+        "Orange County, California",
+        "Alameda County, California",
+        "Marin County, California",
+        "San Francisco County, California",
+    ]
 )
 
 
@@ -115,7 +61,10 @@ def estimate_prevalences():
             county = row[5]
             state = row[6]
 
-            if state != "Ohio" and (county, state) not in county_populations:
+            full_county = "%s County" % county
+            county_state = "%s, %s" % (full_county, state)
+
+            if state != "Ohio" and county_state not in target_counties:
                 continue
 
             # In the tsv file, cumulative case counts start at column 11 with
@@ -152,12 +101,14 @@ def estimate_prevalences():
                         state=state,
                         county=county,
                         date=date,
-                        tag="%s 2020" % county,
+                        tag="%s 2020" % county_state,
                     )
                     estimates.append(
                         (
                             cases.to_rate(
-                                county_populations[county, state]
+                                us_population(
+                                    county=full_county, state=state, year=2020
+                                )
                             ).to_prevalence(shedding_duration)
                             * underreporting
                         ).target(
@@ -182,7 +133,9 @@ def estimate_prevalences():
         # starting to be available, and omicron was relatively mild.
         estimates.append(
             (
-                cases.to_rate(ohio_population).to_prevalence(shedding_duration)
+                cases.to_rate(
+                    us_population(state="Ohio", year=2020)
+                ).to_prevalence(shedding_duration)
                 * underreporting
             ).target(
                 country="United States",
