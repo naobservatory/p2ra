@@ -100,7 +100,7 @@ estimated_current_infection_us_2013_2016 = PrevalenceAbsolute(
 
 shedding_duration = SheddingDuration(
     days=3 * 30.4,  # 3 months
-    #At month two, median HCV RNA levels remained comparable between
+    # At month two, median HCV RNA levels remained comparable between
     # individuals with persistent infection (5.4 log IU/mL; IQR: 3.1, 6.4) and
     # spontaneous clearance (4.8 log/IU/mL; IQR: 0.0, 6.0; P = 0.38). Median
     # HCV RNA levels initially diverged at three months following infection,
@@ -120,15 +120,15 @@ us_adult_population_2016 = Population(
 
 acute_underreporting_factor = Scalar(
     scalar=13.9,
-    #each reported case of acute hepatitis C represents 13.9 estimated
+    # each reported case of acute hepatitis C represents 13.9 estimated
     # infections (95% bootstrap CI: 11.0–47.4).
-    source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/pdfs/2018HepSurveillanceRpt.pdf?#page=8"
+    source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/pdfs/2018HepSurveillanceRpt.pdf?#page=8",
 )
 
 
 ohio_counties_case_counts = {
     # source: https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_K9I401S01H7F40QBNJU3SO1F56-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8
-    # county: [acute2020, total2020, acute2021, total2022]
+    # county: [acute2020, total2020, acute2021, total2021]
     "Summit": [1.1, 99.7, 0.7, 97.2],
     "Trumbull": [6.1, 120.9, 1.0, 107.2],
     "Lucas": [0.7, 134.7, 0.2, 122.1],
@@ -149,6 +149,7 @@ def estimate_prevalences():
         counter = -1
         for rate in ohio_counties_case_counts[key]:
             counter += 1
+            print(counter)
             if counter == 0 or counter == 2:
                 case_rate = IncidenceRate(
                     annual_infections_per_100k=ohio_counties_case_counts[key][
@@ -161,7 +162,9 @@ def estimate_prevalences():
                     source=source,
                 )
                 ohio_county_estimates.append(
-                    case_rate.to_prevalence(shedding_duration).scale(acute_underreporting_factor)
+                    case_rate.to_prevalence(shedding_duration).__mul__(
+                        acute_underreporting_factor
+                    )
                 )
             elif counter == 1 or counter == 3:
                 prevalence = Prevalence(
@@ -177,8 +180,12 @@ def estimate_prevalences():
     return [
         # Unpack the list of ohio county estimates
         *ohio_county_estimates,
-        reported_acute_ohio_2020.to_prevalence(shedding_duration).scale(acute_underreporting_factor),
-        reported_acute_ohio_2021.to_prevalence(shedding_duration).scale(acute_underreporting_factor),
+        reported_acute_ohio_2020.to_prevalence(shedding_duration).__mul__(
+            acute_underreporting_factor
+        ),
+        reported_acute_ohio_2021.to_prevalence(shedding_duration).__mul__(
+            acute_underreporting_factor
+        ),
         reported_total_ohio_2020,
         reported_total_ohio_2021,
         cdc_estimated_acute_44_us_states_2020.to_prevalence(shedding_duration),
