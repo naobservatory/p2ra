@@ -57,8 +57,6 @@ target_counties = set(
 def estimate_prevalences():
     estimates = []
 
-    ohio_totals = Counter()  # day -> total new cases, 7d moving average
-
     # From the COVID-19 Data Repository by the Center for Systems Science and
     # Engineering (CSSE) at Johns Hopkins University
     #
@@ -103,6 +101,15 @@ def estimate_prevalences():
                 if date.year > 2022:
                     continue
 
+                # Right now we use the same underreporting figure for both
+                # Spring/Fall 2020 and Winter 2021-2022.
+                #
+                # TODO: we can probably get a better undereporting figure for
+                # the omicron surge and this is likely too small.  The CDC 4x
+                # figure is not intended to cover this time period, this was
+                # after rapid tests were starting to be available, and omicron
+                # was relatively mild.
+
                 annual_infections = sum(latest) * 52
 
                 cases = IncidenceAbsolute(
@@ -127,29 +134,5 @@ def estimate_prevalences():
                         date=date.isoformat(),
                     )
                 )
-
-    for date, annual_infections in ohio_totals.items():
-        cases = IncidenceAbsolute(
-            annual_infections=annual_infections,
-            country="United States",
-            state="Ohio",
-            date=date.isoformat(),
-        )
-        # TODO: we can probably get a better undereporting figure for the
-        # omicron surge and this is likely too small.  The CDC 4x figure is not
-        # intended to cover this time period, this was after rapid tests were
-        # starting to be available, and omicron was relatively mild.
-        estimates.append(
-            (
-                cases.to_rate(
-                    us_population(state="Ohio", year=date.year)
-                ).to_prevalence(shedding_duration)
-                * underreporting
-            ).target(
-                country="United States",
-                state="Ohio",
-                date=date.isoformat(),
-            )
-        )
 
     return estimates
