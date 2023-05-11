@@ -120,7 +120,12 @@ def estimate_prevalences():
                             )
                         ).to_prevalence(shedding_duration)
                         * underreporting
-                    ).target(date=date.isoformat())
+                    ).target(
+                        country="United States",
+                        state=state,
+                        county=county,
+                        date=date.isoformat(),
+                    )
                 )
 
     for date, annual_infections in ohio_totals.items():
