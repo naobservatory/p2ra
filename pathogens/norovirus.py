@@ -218,9 +218,7 @@ def estimate_prevalences():
             )
 
             prevalences.append(
-                adjusted_national_prevalence.target(
-                    country="United States", date=target_date
-                )
+                adjusted_national_prevalence.target(date=target_date)
             )
 
             # Assume that all Norovirus infections are either Group I or II,
@@ -240,7 +238,6 @@ def estimate_prevalences():
                     adjusted_national_prevalence
                     * Scalar(scalar=group_I_fraction)
                 ).target(
-                    country="United States",
                     date=target_date,
                     taxid=NOROVIRUS_GROUP_I,
                 )
@@ -250,7 +247,6 @@ def estimate_prevalences():
                     adjusted_national_prevalence
                     * Scalar(scalar=group_II_fraction)
                 ).target(
-                    country="United States",
                     date=target_date,
                     taxid=NOROVIRUS_GROUP_II,
                 )

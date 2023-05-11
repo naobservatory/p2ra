@@ -130,12 +130,7 @@ def estimate_prevalences():
                             )
                         ).to_prevalence(shedding_duration)
                         * underreporting
-                    ).target(
-                        country="United States",
-                        state=state,
-                        county=county,
-                        date=date.isoformat(),
-                    )
+                    ).target(date=date.isoformat())
                 )
 
     return estimates

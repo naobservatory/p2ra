@@ -157,25 +157,34 @@ class Variable:
 
         return datetime.date(y, m, d)
 
-    def _location(self):
-        bits = []
-        if self.county:
-            bits.append(self.county)
-        if self.state:
-            bits.append(self.state)
-        if self.country:
-            bits.append(self.country)
-        return ", ".join(bits)
+    # Returns country, state, county, or raises an error if there are
+    # conflicting locations.  If you hit an error here you probably need a
+    # target() call.
+    def target_location(
+        self,
+    ) -> tuple[Optional[str], Optional[str], Optional[str]]:
+        if self.is_target and self.country:
+            return self.country, self.state, self.county
 
-    def summarize_location(self, all_locations=None):
-        if self.is_target and self._location():
-            return self._location()
+        inputs = self.all_inputs | set([self])
 
-        return "; ".join(
-            sorted(
-                set(i._location() for i in self.all_inputs if i._location())
-            )
-        )
+        countries = set(i.country for i in inputs if i.country)
+        states = set(i.state for i in inputs if i.state)
+        counties = set(i.county for i in inputs if i.county)
+
+        country = state = county = None
+
+        (country,) = countries
+        if states:
+            (state,) = states
+        if counties:
+            (county,) = counties
+
+        return country, state, county
+
+    def summarize_location(self) -> str:
+        country, state, county = self.target_location()
+        return ", ".join(x for x in [county, state, country] if x)
 
     def summarize_date(self) -> Optional[tuple[datetime.date, datetime.date]]:
         if self.is_target and self.parsed_start and self.parsed_end:
