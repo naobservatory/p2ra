@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import IO
+
 import numpy as np
 import numpy.typing as npt
 import stan  # type: ignore

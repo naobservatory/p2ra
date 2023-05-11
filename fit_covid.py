@@ -2,6 +2,7 @@
 from textwrap import dedent
 
 import numpy as np
+import pandas as pd
 
 import stats
 from fit_rothman import per100k_to_per100, print_summary
@@ -54,6 +55,21 @@ if __name__ == "__main__":
         std_log_prevalence=0.5,
         random_seed=1,
     )
+
+    # TODO: do this more neatly
+    df_obs = pd.DataFrame(
+        {
+            "viral_reads": virus_reads,
+            "total_reads": all_reads,
+            "prevalence_per100k": prevalence_per100k,
+            "county": [s.county for s in samples.values()],
+            "date": [s.date for s in samples.values()],
+            "plant": [s.fine_location for s in samples.values()],
+            "observation_type": "data",
+        }
+    )
+    df_obs.to_csv("covid_input.tsv", sep="\t")
+
     # TODO: Wrap the model fit so that we aren't exposed to stan variables
     model_ra_per100 = per100k_to_per100 * np.exp(fit["b"])
     print_summary(pathogen, naive_ra_per100, model_ra_per100)
