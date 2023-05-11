@@ -100,6 +100,13 @@ estimated_current_infection_us_2013_2016 = PrevalenceAbsolute(
 
 shedding_duration = SheddingDuration(
     days=3 * 30.4,  # 3 months
+    #At month two, median HCV RNA levels remained comparable between
+    # individuals with persistent infection (5.4 log IU/mL; IQR: 3.1, 6.4) and
+    # spontaneous clearance (4.8 log/IU/mL; IQR: 0.0, 6.0; P = 0.38). Median
+    # HCV RNA levels initially diverged at three months following infection,
+    # being 4.8 log/IU/mL (IQR: 3.3, 6.0) in individuals with persistent
+    # infection compared to 3.2 log/IU/mL (IQR: 0.0, 6.1) in those with
+    # spontaneous clearance (P = 0.03).
     source="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0122232#:~:text=Median%20HCV%20RNA%20levels%20initially%20diverged%20at%20three%20months%20following%20infection",
 )
 
