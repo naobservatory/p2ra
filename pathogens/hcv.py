@@ -62,8 +62,8 @@ cdc_estimated_acute_44_us_states_2020 = IncidenceRate(
     # 52_700–227_400), but not its rate (1.5 cases per 100k). I adopted their
     # absolute count CI to also get a CI for the rate.
     confidence_interval=(
-        52_700 / 66_700 * 1.5,
-        227_400 / 66_700 * 1.5,
+        (52_700 / 66_700) * 1.5,
+        (227_400 / 66_700) * 1.5,
     ),  # 95% CI
     coverage_probability=0.95,
     date="2020",
