@@ -111,6 +111,13 @@ us_adult_population_2016 = Population(
     tag="us-2013-2016",
 )
 
+acute_underreporting_factor = Scalar(
+    scalar=13.9,
+    #each reported case of acute hepatitis C represents 13.9 estimated
+    # infections (95% bootstrap CI: 11.0–47.4).
+    source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/pdfs/2018HepSurveillanceRpt.pdf?#page=8"
+)
+
 
 ohio_counties_case_counts = {
     # source: https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_K9I401S01H7F40QBNJU3SO1F56-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8
@@ -137,7 +144,7 @@ def estimate_prevalences():
             counter += 1
             if counter == 0 or counter == 2:
                 case_rate = IncidenceRate(
-                    annual_infections_per_100k=ohio_counties_case_counts[key][
+                    annual_infections_per_100k=ohio_counties_case_counts[key][g
                         counter
                     ],
                     date=years[counter],
@@ -147,7 +154,7 @@ def estimate_prevalences():
                     source=source,
                 )
                 ohio_county_estimates.append(
-                    case_rate.to_prevalence(shedding_duration)
+                    case_rate.to_prevalence(shedding_duration).scale(acute_underreporting_factor)
                 )
             elif counter == 1 or counter == 3:
                 prevalence = Prevalence(
@@ -163,8 +170,8 @@ def estimate_prevalences():
     return [
         # Unpack the list of ohio county estimates
         *ohio_county_estimates,
-        reported_acute_ohio_2020.to_prevalence(shedding_duration),
-        reported_acute_ohio_2021.to_prevalence(shedding_duration),
+        reported_acute_ohio_2020.to_prevalence(shedding_duration).scale(acute_underreporting_factor),
+        reported_acute_ohio_2021.to_prevalence(shedding_duration).scale(acute_underreporting_factor),
         reported_total_ohio_2020,
         reported_total_ohio_2021,
         cdc_estimated_acute_44_us_states_2020.to_prevalence(shedding_duration),
