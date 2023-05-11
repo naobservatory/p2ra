@@ -20,7 +20,9 @@ pathogen_chars = PathogenChars(
 
 LA_county_cases_in_2020 = IncidenceAbsolute(
     annual_infections=90,
-    tag="Los Angeles County, California 2020",
+    country="United States",
+    state="California",
+    county="Los Angeles County",
     date="2020",
     source="https://westnile.ca.gov/pdfs/VBDSAnnualReport20.pdf#?page=23",
 )

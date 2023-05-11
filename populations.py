@@ -35,7 +35,6 @@ def us_population(
                     source=source,
                     date=pop_date,
                     country="United States",
-                    tag="%s %s" % (location, year),
                 )
 
             if location == ".%s, %s" % (county, state):
@@ -46,7 +45,6 @@ def us_population(
                     country="United States",
                     state=state,
                     county=county,
-                    tag="%s, %s %s" % (county, state, year),
                 )
 
             if not county and location.endswith(", %s" % state):
@@ -62,5 +60,4 @@ def us_population(
         date=pop_date,
         country="United States",
         state=state,
-        tag="%s %s" % (state, year),
     )

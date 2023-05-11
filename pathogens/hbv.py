@@ -41,7 +41,6 @@ cdc_estimated_acute_2019 = IncidenceAbsolute(
     coverage_probability=0.95,
     country="United States",
     date="2019",
-    tag="United States 2019",
     source="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=20%2C700%20estimated%20infections%20(95%25%20CI%3A%2011%2C800%E2%80%9350%2C800)",
     methods="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=To%20account%20for,CI%3A%2011.0%E2%80%9347.4).",
 )
@@ -60,7 +59,6 @@ estimated_chronic_us_2020 = PrevalenceAbsolute(
     active=Active.LATENT,
     country="United States",
     date="2020",
-    tag="United States 2020",
     source="https://journals.lww.com/ajg/fulltext/2020/09000/prevalence_of_chronic_hepatitis_b_virus_infection.20.aspx#:~:text=Table%204.%3A%20Estimated%20prevalence%20of%20chronic%20HBV%20in%20the%20United%20Statesa",
     methods="https://journals.lww.com/ajg/fulltext/2020/09000/prevalence_of_chronic_hepatitis_b_virus_infection.20.aspx#:~:text=Panel%20members%20researched,in%20the%20US.",
 )
@@ -70,7 +68,6 @@ us_population_2019 = Population(
     people=328.2 * 1e6,
     country="United States",
     date="2019",
-    tag="United States 2019",
     source="https://data.census.gov/table?q=us+population+2019&tid=ACSDP1Y2019.DP05",
 )
 

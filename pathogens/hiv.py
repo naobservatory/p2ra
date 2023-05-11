@@ -25,7 +25,6 @@ us_infected_2019 = PrevalenceAbsolute(
     infections=1.2e6,
     country="United States",
     date="2019",
-    tag="usa-2019",
     active=Active.LATENT,
     source="https://www.cdc.gov/hiv/library/reports/hiv-surveillance/vol-26-no-2/content/national-profile.html#:~:text=Among%20the%20estimated-,1.2%20million%20people,-living%20with%20HIV",
 )
@@ -34,7 +33,6 @@ us_population_2019 = Population(
     people=328_231_337,
     country="United States",
     date="2019-01-01",
-    tag="usa-2019",
     source="https://www.census.gov/newsroom/press-releases/2019/new-years-population.html",
 )
 
@@ -53,7 +51,6 @@ la_infected_2020 = PrevalenceAbsolute(
     state="California",
     county="Los Angeles County",
     date="2020",
-    tag="Los Angeles County, California 2020",
     active=Active.LATENT,
     source="https://web.archive.org/web/20201202004910/https://www.lacounty.hiv/",
 )
