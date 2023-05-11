@@ -160,9 +160,11 @@ class Variable:
     # Returns country, state, county, or raises an error if there are
     # conflicting locations.  If you hit an error here you probably need a
     # target() call.
-    def target_location(self) -> tuple[Optional[str], Optional[str], Optional[str]]:
+    def target_location(
+        self,
+    ) -> tuple[Optional[str], Optional[str], Optional[str]]:
         if self.is_target and self.country:
-            return [self.country, self.state, self.county]
+            return self.country, self.state, self.county
 
         inputs = self.all_inputs | set([self])
 
@@ -171,13 +173,13 @@ class Variable:
         counties = set(i.county for i in inputs if i.county)
 
         country = state = county = None
-        
-        country, = countries
+
+        (country,) = countries
         if states:
-            state, = states
+            (state,) = states
         if counties:
-            county, = counties
-        
+            (county,) = counties
+
         return country, state, county
 
     def summarize_location(self) -> str:
