@@ -14,7 +14,7 @@ pathogen_chars = PathogenChars(
 
 
 reported_acute_ohio_2020 = IncidenceRate(
-    annual_infections_per_100k=2,
+    annual_infections_per_100k=2.0,
     # "Most commonly, acute hepatitis C virus (HCV) infection is defined as
     # the 6-month time period following acquisition of hepatitis C virus.
     # (https://www.hepatitisc.uw.edu/go/screening-diagnosis/acute-diagnosis/core-concept/all#:~:text=Most%20commonly%2C%20acute%20hepatitis%20C%20virus%20(HCV)%20infection%20is%20defined%20as%20the%206%2Dmonth%20time%20period%20following%20acquisition%20of%20hepatitis%20C%20virus.)"
@@ -76,7 +76,7 @@ cdc_estimated_acute_44_us_states_2020 = IncidenceRate(
 )
 
 
-estimated_current_infection_us_2013_2016 = PrevalenceAbsolute(
+estimated_current_infection_us_2013_2016 = Prevalence(
     # [...] we analyzed 2013-2016 data from the National Health
     # and Nutrition Examination Survey (NHANES) to estimate the prevalence of
     # HCV in the noninstitutionalized civilian population and used a
@@ -84,30 +84,33 @@ estimated_current_infection_us_2013_2016 = PrevalenceAbsolute(
     # approaches to estimate the HCV prevalence and population sizes for four
     # additional populations: incarcerated people, unsheltered homeless
     # people, active-duty military personnel, and nursing home residents.
-    infections=2_400_000,  # among all US adults
+    infections_per_100k=0.01 * 100_000,  # among all US adults
     # We estimated that [...] 1.0% (95% CI, 0.8-1.1%) of all adults,
     # approximately 2.4 (2.0-2.8) million persons, were HCV RNA–positive
     # (indicating current infection).
-    confidence_interval=(2_000_000, 2_800_000),  # 95% CI
+    confidence_interval=(0.008 * 100_000, 0.011 * 100_000),  # 95% CI
     coverage_probability=0.95,
-    start_date="2013",
-    end_date="2016",
+    date="2016",
+    # To calculate the number of noninstitutionalized civilians in the United
+    # States with HCV antibody and HCV RNA during 2013-2016, prevalence
+    # estimates were then multiplied by the estimated total
+    # noninstitutionalized civilian adult U.S. population as of December 31,
+    # 2016 from the 2012-2016 ACS.
     country="United States",
-    tag="us-2013-2016",
-    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6719781/#:~:text=2.1%20million%20persons%20(95%25%20CI%20%3D%201.8%20to%202.5%20million%20persons)%20with%20current%20HCV%20infection%20in%20the%20U.S.%20noninstitutionalized%20civilian%20population.",
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6719781/#:~:text=(1%2C983%2C900%2D2%2C807%2C800)-,1.0%25,(0.8%25%2D1.1%25),-Open%20in%20a",
     active=Active.LATENT,
 )
 
 shedding_duration = SheddingDuration(
+    # In this study, HCV RNA levels in blood from several patient cohorts were
+    # aggregated retroactively, identifying different patterns of HCV RNA
+    # levels among individuals who cleared HCV, versus those who developed a
+    # persistent infection.
     days=3 * 30.4,  # 3 months
-    # At month two, median HCV RNA levels remained comparable between
-    # individuals with persistent infection (5.4 log IU/mL; IQR: 3.1, 6.4) and
-    # spontaneous clearance (4.8 log/IU/mL; IQR: 0.0, 6.0; P = 0.38). Median
-    # HCV RNA levels initially diverged at three months following infection,
-    # being 4.8 log/IU/mL (IQR: 3.3, 6.0) in individuals with persistent
-    # infection compared to 3.2 log/IU/mL (IQR: 0.0, 6.1) in those with
-    # spontaneous clearance (P = 0.03).
+    # "At month two, median HCV RNA levels [in blood] remained comparable between individuals with persistent infection (5.4 log IU/mL; IQR: 3.1, 6.4) and spontaneous clearance (4.8 log/IU/mL; IQR: 0.0, 6.0; P = 0.38). Median HCV RNA levels initially diverged at three months following infection, being 4.8 log/IU/mL (IQR: 3.3, 6.0) in individuals with persistent infection compared to 3.2 log/IU/mL (IQR: 0.0, 6.1) in those with spontaneous clearance (P = 0.03).""
     source="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0122232#:~:text=Median%20HCV%20RNA%20levels%20initially%20diverged%20at%20three%20months%20following%20infection",
+    # High HCV viral loads in blood are associated with higher viral loads in
+    # rectal fluid, according to this study: https://academic.oup.com/cid/article/64/3/284/2452663#:~:text=Detection%20of%20HCV%20in%20rectal%20fluid%20as%20a%20function%20of%20HCV%20VL%20in%20blood.
 )
 
 us_adult_population_2016 = Population(
@@ -120,76 +123,95 @@ us_adult_population_2016 = Population(
 
 acute_underreporting_factor = Scalar(
     scalar=13.9,
+    confidence_interval=(11.0, 47.4),  # 95% CI
+    coverage_probability=0.95,
     # each reported case of acute hepatitis C represents 13.9 estimated
     # infections (95% bootstrap CI: 11.0–47.4).
     source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/pdfs/2018HepSurveillanceRpt.pdf?#page=8",
 )
 
 
-ohio_counties_case_counts = {
+ohio_counties_case_rates = {
     # source: https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_K9I401S01H7F40QBNJU3SO1F56-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8
-    # county: [acute2020, total2020, acute2021, total2021]
-    "Summit": [1.1, 99.7, 0.7, 97.2],
-    "Trumbull": [6.1, 120.9, 1.0, 107.2],
-    "Lucas": [0.7, 134.7, 0.2, 122.1],
-    "Lawrence": [15.2, 367.2, 1.7, 379.1],
-    "Sandusky": [1.7, 104.5, 0.0, 102.8],
-    "Franklin": [0.8, 74.3, 1.5, 86.8],
-    "Licking": [3.4, 59.5, 2.2, 65.1],
-    "Greene": [0.0, 74.1, 0.6, 49.4],
-    "Montgomery": [0.6, 105.9, 0.4, 98.0],
+    "Franklin": {
+        "2020": {"acute": 0.8, "total": 74.3},
+        "2021": {"acute": 1.5, "total": 86.8},
+    },
+    "Greene": {
+        "2020": {"acute": 0.0, "total": 74.1},
+        "2021": {"acute": 0.6, "total": 49.4},
+    },
+    "Lawrence": {
+        "2020": {"acute": 15.2, "total": 367.2},
+        "2021": {"acute": 1.7, "total": 379.1},
+    },
+    "Licking": {
+        "2020": {"acute": 3.4, "total": 59.5},
+        "2021": {"acute": 2.2, "total": 65.1},
+    },
+    "Lucas": {
+        "2020": {"acute": 0.7, "total": 134.7},
+        "2021": {"acute": 0.2, "total": 122.1},
+    },
+    "Montgomery": {
+        "2020": {"acute": 0.6, "total": 105.9},
+        "2021": {"acute": 0.4, "total": 98.0},
+    },
+    "Sandusky": {
+        "2020": {"acute": 1.7, "total": 104.5},
+        "2021": {"acute": 0.0, "total": 102.8},
+    },
+    "Summit": {
+        "2020": {"acute": 1.1, "total": 99.7},
+        "2021": {"acute": 0.7, "total": 97.2},
+    },
+    "Trumbull": {
+        "2020": {"acute": 6.1, "total": 120.9},
+        "2021": {"acute": 1.0, "total": 107.2},
+    },
 }
 
 
 def estimate_prevalences():
-    years = ["2020", "2020", "2021", "2021"]
     source = "https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_K9I401S01H7F40QBNJU3SO1F56-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8"
     ohio_county_estimates = []
-    for key in ohio_counties_case_counts:
-        counter = -1
-        for rate in ohio_counties_case_counts[key]:
-            counter += 1
-            print(counter)
-            if counter == 0 or counter == 2:
-                case_rate = IncidenceRate(
-                    annual_infections_per_100k=ohio_counties_case_counts[key][
-                        counter
-                    ],
-                    date=years[counter],
-                    country="United States",
-                    state="Ohio",
-                    county=key,
-                    source=source,
-                )
-                ohio_county_estimates.append(
-                    case_rate.to_prevalence(shedding_duration).__mul__(
-                        acute_underreporting_factor
-                    )
-                )
-            elif counter == 1 or counter == 3:
-                prevalence = Prevalence(
-                    infections_per_100k=rate,
-                    date=years[counter],
-                    country="United States",
-                    state="Ohio",
-                    county=key,
-                    active=Active.LATENT,
-                    source=source,
-                )
-                ohio_county_estimates.append(prevalence)
+    for county in ohio_counties_case_rates:
+        for year in ohio_counties_case_rates[county]:
+            case_rate = IncidenceRate(
+                annual_infections_per_100k=ohio_counties_case_rates[county][
+                    year
+                ]["acute"],
+                date=year,
+                country="United States",
+                state="Ohio",
+                county=county,
+                source=source,
+            )
+            ohio_county_estimates.append(
+                case_rate.to_prevalence(shedding_duration)
+                * (acute_underreporting_factor)
+            )
+            prevalence = Prevalence(
+                infections_per_100k=ohio_counties_case_rates[county][year][
+                    "total"
+                ],
+                date=year,
+                country="United States",
+                state="Ohio",
+                county=county,
+                active=Active.LATENT,
+                source=source,
+            )
+            ohio_county_estimates.append(prevalence)
     return [
         # Unpack the list of ohio county estimates
         *ohio_county_estimates,
-        reported_acute_ohio_2020.to_prevalence(shedding_duration).__mul__(
-            acute_underreporting_factor
-        ),
-        reported_acute_ohio_2021.to_prevalence(shedding_duration).__mul__(
-            acute_underreporting_factor
-        ),
+        reported_acute_ohio_2020.to_prevalence(shedding_duration)
+        * (acute_underreporting_factor),
+        reported_acute_ohio_2021.to_prevalence(shedding_duration)
+        * (acute_underreporting_factor),
         reported_total_ohio_2020,
         reported_total_ohio_2021,
         cdc_estimated_acute_44_us_states_2020.to_prevalence(shedding_duration),
-        estimated_current_infection_us_2013_2016.to_rate(
-            us_adult_population_2016
-        ),
+        estimated_current_infection_us_2013_2016,
     ]
