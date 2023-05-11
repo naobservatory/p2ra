@@ -40,10 +40,6 @@ if __name__ == "__main__":
             (attrs.county, attrs.date)
         ]
 
-    virus_reads = virus_reads[~np.isnan(prevalence_per100k)]
-    all_reads = all_reads[~np.isnan(prevalence_per100k)]
-    prevalence_per100k = prevalence_per100k[~np.isnan(prevalence_per100k)]
-
     naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
         virus_reads,
         all_reads,
