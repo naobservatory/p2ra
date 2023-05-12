@@ -124,13 +124,13 @@ def estimate_prevalences():
                     county=county,
                     date=date.isoformat(),
                 )
+
                 incidences.append(
                     cases.to_rate(
                         us_population(
                             county=county, state=state, year=date.year
                         )
-                    ).target(
-                    * underreporting
+                    ) * underreporting
                 )
 
     return shedding_duration.prevalences_from_incidences(incidences)
