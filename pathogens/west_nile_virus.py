@@ -1,4 +1,5 @@
 from pathogen_properties import *
+from populations import us_population
 
 # TODO: We should add a CI once we know how to get from tested individuals to
 # CI
@@ -19,18 +20,12 @@ pathogen_chars = PathogenChars(
 
 LA_county_cases_in_2020 = IncidenceAbsolute(
     annual_infections=90,
-    tag="LA-2020",
+    country="United States",
+    state="California",
+    county="Los Angeles County",
     date="2020",
     source="https://westnile.ca.gov/pdfs/VBDSAnnualReport20.pdf#?page=23",
 )
-
-LA_county_population = Population(
-    people=10_014_009,
-    date="2020",
-    tag="LA-2020",
-    source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia,CA/POP010220#POP010220",
-)
-
 
 west_nile_duration = SheddingDuration(
     # Symptoms last for 3-6 days usually, but sometimes for up to a month. I'm
@@ -51,8 +46,10 @@ asymptomatic_multiplier = Scalar(
 
 def estimate_prevalences():
     return [
-        LA_county_cases_in_2020.to_rate(LA_county_population).to_prevalence(
-            west_nile_duration
-        )
+        LA_county_cases_in_2020.to_rate(
+            us_population(
+                county="Los Angeles County", state="California", year=2020
+            )
+        ).to_prevalence(west_nile_duration)
         * asymptomatic_multiplier
     ]
