@@ -309,71 +309,63 @@ class SheddingDuration(Variable):
     # Incidences should contain daily estimates for target_day and at least the
     # prior `days` days.
     def prevalence_from_incidences(
-        self, target_day: datetime, incidences: list["IncidenceRate"]
+        self, target_day: datetime.date, incidences: list["IncidenceRate"]
     ) -> Prevalence:
         max_days = math.ceil(self.days)
         oldest_day = target_day - datetime.timedelta(days=max_days)
-        candiate_incidences: {}
+        candiate_incidences = {}
         for incidence in incidences:
+            assert incidence.parsed_start
+            assert incidence.parsed_end
             # Only handles daily incidences.
-            start_end = incidence.summarize_date()
-            assert start_end
-            start, end = start_end
-            assert start == end
-            incidence_day = start
-            if incidence_day > target_day or incidence_day < oldest_day:
+            assert incidence.parsed_start == incidence.parsed_end
+            incidence_day = incidence.parsed_start
+            if incidence_day > target_day or incidence_day <= oldest_day:
                 continue
 
             candiate_incidences[incidence_day] = incidence
 
         assert len(candiate_incidences) == max_days
 
-        infections_per_100k = 0
-        for offset in range(max_days):
-            incidence_day = target_day - datetime.timedelta(days=offset)
-            weight = 1
-            if offset == max_days - 1 and max_days != math.floor(self.days):
-                weight = self.days - math.floor(self.days)
-                infections_per_100k += (
-                    weight
-                    * candiate_incidences[
-                        incidence_day
-                    ].annual_infections_per_100k
-                    / 365
-                )
+        incidence_day = target_day
+        infections_per_100k = 0.0
+        n = 0
+        while incidence_day > oldest_day:
+            n += 1
+            weight = 1.0
+            if n > math.floor(self.days):
+                weight = math.floor(self.days) - n
+            infections_per_100k += (
+                weight
+                * candiate_incidences[incidence_day].annual_infections_per_100k
+                / 365
+            )
+            incidence_day -= datetime.timedelta(days=1)
 
         return Prevalence(
             infections_per_100k=infections_per_100k,
-            inputs=[self, shedding_duration],
+            inputs=[self, *candiate_incidences.values()],
             active=Active.ACTIVE,
-        ).target(date=target_day.isoformat())
+            date_source=candiate_incidences[target_day],
+        )
 
     def prevalences_from_incidences(
         self, incidences: list["IncidenceRate"]
     ) -> list[Prevalence]:
         dates = set()
         for incidence in incidences:
-            start_end = incidence.summarize_date()
-            assert start_end
-            start, end = start_end
-            if start != end:
-                import pprint
-
-                pprint.pprint(incidence)
-                pprint.pprint(start)
-                pprint.pprint(end)
-
-            assert start == end
-            dates.add(start)
-
+            assert incidence.parsed_start
+            dates.add(incidence.parsed_start)
         first_date = min(dates) + datetime.timedelta(days=math.ceil(self.days))
         last_date = max(dates)
 
         prevalences = []
         target_date = first_date
-        while d <= last_date:
-            prevalences.append(self.prevalence_from_incidences(d, incidences))
-            d += datetime.timedelta(days=1)
+        while target_date <= last_date:
+            prevalences.append(
+                self.prevalence_from_incidences(target_date, incidences)
+            )
+            target_date += datetime.timedelta(days=1)
         return prevalences
 
 

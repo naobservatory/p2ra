@@ -61,12 +61,12 @@ def estimate_prevalences():
     # Engineering (CSSE) at Johns Hopkins University
     #
     # Downloaded 2023-05-02 from https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv
-    incidences = []
-
     with open(
         prevalence_data_filename("time_series_covid19_confirmed_US.csv")
     ) as inf:
         for row in csv.reader(inf):
+            incidences = []
+
             truncated_county = row[5]
             state = row[6]
 
@@ -130,7 +130,10 @@ def estimate_prevalences():
                         us_population(
                             county=county, state=state, year=date.year
                         )
-                    ) * underreporting
+                    )
+                    * underreporting
                 )
-
-    return shedding_duration.prevalences_from_incidences(incidences)
+            estimates.extend(
+                shedding_duration.prevalences_from_incidences(incidences)
+            )
+    return estimates
