@@ -130,7 +130,7 @@ def estimate_prevalences():
                             )
                         ).to_prevalence(shedding_duration)
                         * underreporting
-                    ).target(date=date.isoformat())
+                    )
                 )
 
     return estimates
