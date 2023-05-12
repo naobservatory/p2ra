@@ -1,5 +1,6 @@
 import calendar
 import datetime
+import math
 import os.path
 import re
 from collections.abc import Iterable
@@ -300,6 +301,80 @@ class PrevalenceAbsolute(Taggable):
 class SheddingDuration(Variable):
     days: float
 
+    # The model here is that shedding is binary: on the first day of infection
+    # you begin to shed at 100%, and then after `days` you shed 0%.  This is a
+    # big simplification!
+    #
+    # Incidences should contain daily estimates for target_day and at least the
+    # prior `days` days.
+    def prevalence_from_incidences(
+        self, target_day: datetime, incidences: list["IncidenceRate"]
+    ) -> Prevalence:
+        max_days = math.ceil(self.days)
+        oldest_day = target_day - datetime.timedelta(days=max_days)
+        candiate_incidences: {}
+        for incidence in incidences:
+            # Only handles daily incidences.
+            start_end = incidence.summarize_date()
+            assert start_end
+            start, end = start_end
+            assert start == end
+            incidence_day = start
+            if incidence_day > target_day or incidence_day < oldest_day:
+                continue
+
+            candiate_incidences[incidence_day] = incidence
+
+        assert len(candiate_incidences) == max_days
+
+        infections_per_100k = 0
+        for offset in range(max_days):
+            incidence_day = target_day - datetime.timedelta(days=offset)
+            weight = 1
+            if offset == max_days - 1 and max_days != math.floor(self.days):
+                weight = self.days - math.floor(self.days)
+                infections_per_100k += (
+                    weight
+                    * candiate_incidences[
+                        incidence_day
+                    ].annual_infections_per_100k
+                    / 365
+                )
+
+        return Prevalence(
+            infections_per_100k=infections_per_100k,
+            inputs=[self, shedding_duration],
+            active=Active.ACTIVE,
+        ).target(date=target_day.isoformat())
+
+    def prevalences_from_incidences(
+        self, incidences: list["IncidenceRate"]
+    ) -> list[Prevalence]:
+        dates = set()
+        for incidence in incidences:
+            start_end = incidence.summarize_date()
+            assert start_end
+            start, end = start_end
+            if start != end:
+                import pprint
+
+                pprint.pprint(incidence)
+                pprint.pprint(start)
+                pprint.pprint(end)
+
+            assert start == end
+            dates.add(start)
+
+        first_date = min(dates) + datetime.timedelta(days=math.ceil(self.days))
+        last_date = max(dates)
+
+        prevalences = []
+        target_date = first_date
+        while d <= last_date:
+            prevalences.append(self.prevalence_from_incidences(d, incidences))
+            d += datetime.timedelta(days=1)
+        return prevalences
+
 
 @dataclass(kw_only=True, eq=True, frozen=True)
 class Number(Variable):
@@ -324,6 +399,11 @@ class IncidenceRate(Variable):
     # an active estimate, since multiplying by SheddingDuration calculates the
     # amount of time the virus is actively shedding for, which is not
     # incorporated into a latent estimate.
+    #
+    # Only use this method in situations where incidence is changing slowly
+    # relative to shedding_duration; of doesn't take into account that current
+    # prevalence includes past incidence over the shedding period.  If this
+    # does apply, use SheddingDuration.prevalences_from_incidences.
     def to_prevalence(self, shedding_duration: SheddingDuration) -> Prevalence:
         return Prevalence(
             infections_per_100k=self.annual_infections_per_100k
@@ -331,6 +411,13 @@ class IncidenceRate(Variable):
             / 365,
             inputs=[self, shedding_duration],
             active=Active.ACTIVE,
+        )
+
+    def __mul__(self, scalar: Scalar) -> "IncidenceRate":
+        return IncidenceRate(
+            annual_infections_per_100k=self.annual_infections_per_100k
+            * scalar.scalar,
+            inputs=[self, scalar],
         )
 
 
