@@ -1,3 +1,5 @@
+import csv
+
 from pathogen_properties import *
 
 background = """EBV stands for Epstein-Barr virus. It is a type of 
@@ -78,52 +80,88 @@ denmark_population = Population(
     tag="Denmark-2023",
 )
 
-denmark_population_under_1 = Scalar(
-    scalar=2 * 30_000,
-    date="2023",
-    source="https://www.dst.dk/en/Statistik/emner/borgere/befolkning/befolkningstal",
-)
+age_groups = {
+    "denmark_population_under_1": Population(
+        people=0,
+        date="2023",
+        country="Denmark",
+        tag="0-1yo",
+    ),
+    "denmark_population_1_to_3": Population(
+        people=0,
+        date="2023",
+        country="Denmark",
+        tag="1-3yo",
+    ),
+    "denmark_population_4_to_14": Population(
+        people=0,
+        date="2023",
+        country="Denmark",
+        tag="4-14yo",
+    ),
+    "denmark_population_15_to_17": Population(
+        people=0,
+        date="2023",
+        country="Denmark",
+        tag="15-17yo",
+    ),
+    "denmark_population_18_to_29": Population(
+        people=0,
+        date="2023",
+        country="Denmark",
+        tag="18-29yo",
+    ),
+    "denmark_population_over_30": Population(
+        people=0,
+        date="2023",
+        country="Denmark",
+        tag="30+yo",
+    ),
+}
 
-denmark_population_1_to_3 = Scalar(
-    scalar=2 * 3 * 31_500,
-    date="2023",
-    source="https://www.dst.dk/en/Statistik/emner/borgere/befolkning/befolkningstal",
-)
+# Open the CSV file
+with open(prevalence_data_filename("DenmarkPopulationData.csv")) as file:
+    reader = csv.reader(file)
+    next(reader)  # Skip the header
 
-denmark_population_4_to_14 = Scalar(
-    scalar=2 * 11 * 32_000,
-    date="2023",
-    source="https://www.dst.dk/en/Statistik/emner/borgere/befolkning/befolkningstal",
-)
+    for row in reader:
+        # Skip the total population row
+        if row[4] == "TOTAL":
+            continue
 
-denmark_population_15_to_17 = Scalar(
-    scalar=2 * 3 * 34_500,
-    date="2023",
-    source="https://www.dst.dk/en/Statistik/emner/borgere/befolkning/befolkningstal",
-)
+        age = int(
+            row[4].replace("+", "")
+        )  # Extract the age from the first column & turn "100+" into 100
 
-denmark_population_18_to_29 = Scalar(
-    # Here, I actually added up each age rounded to the nearest 1000
-    scalar=471_000 + 454_000,
-    date="2023",
-    source="https://www.dst.dk/en/Statistik/emner/borgere/befolkning/befolkningstal",
-)
+        # Remove spaces from the numbers and add them to the respective
+        # age group
+        population = int(row[5].replace(" ", ""))
 
-denmark_population_above_30 = Scalar(
-    # I added all percentages for age groups 30-34 and up
-    scalar=0.651 * denmark_population.people,
-    date="2023",
-    source="https://www.census.gov/popclock/world/da#:~:text=Population%20by%20Age%20and%20Sex",
-)
+        if age == 0:
+            age_groups["denmark_population_under_1"].people += population
+        elif 1 <= age <= 3:
+            age_groups["denmark_population_1_to_3"].people += population
+        elif 4 <= age <= 14:
+            age_groups["denmark_population_4_to_14"].people += population
+        elif 15 <= age <= 17:
+            age_groups["denmark_population_15_to_17"].people += population
+        elif 18 <= age <= 29:
+            age_groups["denmark_population_18_to_29"].people += population
+        elif 30 <= age <= 100:
+            age_groups["denmark_population_over_30"].people += population
+
+
+for group, population in age_groups.items():
+    print(f"{group}: {population}")
 
 denmark_seroprevalence = PrevalenceAbsolute(
     infections=(
-        0.15 * denmark_population_under_1.scalar
-        + 0.28 * denmark_population_1_to_3.scalar
-        + 0.625 * denmark_population_4_to_14.scalar
-        + 0.8 * denmark_population_15_to_17.scalar
-        + 0.86 * denmark_population_18_to_29.scalar
-        + 0.95 * denmark_population_above_30.scalar
+        0.15 * age_groups["denmark_population_under_1"].people
+        + 0.28 * age_groups["denmark_population_1_to_3"].people
+        + 0.625 * age_groups["denmark_population_4_to_14"].people
+        + 0.8 * age_groups["denmark_population_15_to_17"].people
+        + 0.86 * age_groups["denmark_population_18_to_29"].people
+        + 0.95 * age_groups["denmark_population_above_30"].people
     ),
     # This estimate applies a seroprevalence estimate from 1983 to Denmark's
     # current population.
@@ -131,6 +169,7 @@ denmark_seroprevalence = PrevalenceAbsolute(
     country="Denmark",
     active=Active.LATENT,
     tag="Denmark-2023",
+    # See page 336 of the study (page 3 of the pdf)
     source="10.3109/inf.1983.15.issue-4.03",
 )
 
