@@ -74,7 +74,7 @@ annual_rhinovirus_infections_under_19 = IncidenceAbsolute(
 )
 
 
-annual_rhinovirus_infections_adults = IncidenceAbsolute(
+annual_rhinovirus_infections_20_and_older = IncidenceAbsolute(
     # The weighted average annual number of respiratory illnesses among
     # 20+ year-olds is in parentheses, aggregating the mean of 20-40 and 40+
     # year olds from table 1 of the source
@@ -153,7 +153,9 @@ under_18_prevalence = (
 
 
 adult_prevalence = (
-    annual_rhinovirus_infections_adults.to_rate(la_county_adult_population)
+    annual_rhinovirus_infections_20_and_older.to_rate(
+        la_county_adult_population
+    )
     .to_prevalence(rhinovirus_shedding_duration)
     .target(
         country="United States",
