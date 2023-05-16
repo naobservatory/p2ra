@@ -33,7 +33,7 @@ cdc_2018_nhanes_estimate = PrevalenceAbsolute(
     coverage_probability=0.5,
     date="2018",
     country="United States",
-    tag="18-49yo_us_population",
+    tag="18-49yo",
     active=Active.LATENT,
     source="https://journals.lww.com/stdjournal/Fulltext/2021/04000/Estimates_of_the_Prevalence_and_Incidence_of.9.aspx#:~:text=In%202018%2C%20there,that%20are%20genital.",
     methods="https://journals.lww.com/stdjournal/Fulltext/2021/04000/Estimates_of_the_Prevalence_and_Incidence_of.9.aspx#:~:text=genital%20infections%20burden.-,METHODS,-We%20estimated%20the",
@@ -57,35 +57,35 @@ stratified_us_pop = {
         date="2018",
         country="United States",
         source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
-        tag="15-19yo_us_population",
+        tag="15-19yo",
     ),
     "20-24": Population(
         people=21_717_962,
         date="2018",
         country="United States",
         source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
-        tag="20-24yo_us_population",
+        tag="20-24yo",
     ),
     "25-34": Population(
         people=45_344_674,
         date="2018",
         country="United States",
         source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
-        tag="25-34yo_us_population",
+        tag="25-34yo",
     ),
     "35-44": Population(
         people=41_498_453,
         date="2018",
         country="United States",
         source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
-        tag="35-44yo_us_population",
+        tag="35-44yo",
     ),
     "45-54": Population(
         people=41_605_244,
         date="2018",
         country="United States",
         source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
-        tag="45-54yo_us_population",
+        tag="45-54yo",
     ),
 }
 
@@ -97,7 +97,7 @@ us_population_2018_18_to_49yo = Population(
     + stratified_us_pop["45-54"].people * 0.5,
     date="2018",
     country="United States",
-    tag="18-49yo_us_population",
+    tag="18-49yo",
     inputs=list(stratified_us_pop.values()),
 )
 
