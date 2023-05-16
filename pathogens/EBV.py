@@ -18,9 +18,7 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(10376),
 )
 
-# "We conducted a sero-epidemiological survey using serum samples from 2325
-# individuals between 0 and 25 years old to assess prevalence of detectable
-# anti-EBV antibodies."
+
 uk_seroprevalence_0_to_25 = Prevalence(
     # This study is not used in the estimate,
     # but is used to check that the later estimate is reasonable
@@ -30,6 +28,9 @@ uk_seroprevalence_0_to_25 = Prevalence(
     end_date="2013",
     number_of_participants=2325,
     active=Active.LATENT,
+    # "We conducted a sero-epidemiological survey using serum samples from 2325
+    # individuals between 0 and 25 years old to assess prevalence of detectable
+    # anti-EBV antibodies."
     source="https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-020-09049-x#:~:text=1982/2325%20individuals%20(85.3%25)%20were%20EBV%20seropositive",
 )
 
