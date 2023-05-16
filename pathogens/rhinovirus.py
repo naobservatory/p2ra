@@ -33,7 +33,7 @@ la_county_under_18_population = Population(
     people=0.211
     * us_population(
         state="California", county="Los Angeles County", year=2020
-    ),
+    ).people,
     date="2020",
     tag="LA-2020",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
@@ -44,7 +44,7 @@ la_county_adult_population = Population(
     people=0.789
     * us_population(
         state="California", county="Los Angeles County", year=2020
-    ),
+    ).people,
     date="2020",
     tag="LA-2020",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
@@ -70,8 +70,7 @@ annual_rhinovirus_infections_under_19 = IncidenceAbsolute(
     annual_infections=((539 * 4.9 + 1541 * 2.8) / (539 + 1541))
     * 0.34
     * la_county_under_18_population.people,
-    start_date="1976",
-    end_date="1981",
+    date="2020",
     tag="LA-2020",
     source="doi.org/10.1017/S0950268800050779#?page=6",
 )
@@ -86,7 +85,7 @@ annual_rhinovirus_infections_adults = IncidenceAbsolute(
     * la_county_adult_population.people,
     start_date="1976",
     end_date="1981",
-    tag="LA-2020",
+    tag="over 18",
     source="doi.org/10.1017/S0950268800050779#?page=6",
 )
 
