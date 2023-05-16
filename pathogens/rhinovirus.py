@@ -1,7 +1,6 @@
 from pathogen_properties import *
 from populations import us_population
 
-
 background = """According to the CDC, “Rhinoviruses are the most frequent
 cause of the common cold. In the United States children have an average of two
 rhinovirus infections each year, and adults have an average of one.”
@@ -15,7 +14,6 @@ Rhinovirus is not as seasonal as viruses like influenza or coronviruses.
 
 # TODOs for SIMON:
 #  - Check if national estimates can be applied to regions like Ohio during some specific time period.
-#  - Check if not accounting for seasonality is reasonable
 
 RHINOVIRUS_A = TaxID(147711)
 RHINOVIRUS_B = TaxID(147712)
@@ -35,7 +33,7 @@ la_county_under_18_population = Population(
         state="California", county="Los Angeles County", year=2020
     ).people,
     date="2020",
-    tag="LA-2020",
+    tag="under 18",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
 )
 
@@ -46,7 +44,7 @@ la_county_adult_population = Population(
         state="California", county="Los Angeles County", year=2020
     ).people,
     date="2020",
-    tag="LA-2020",
+    tag="over 18",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
 )
 
@@ -71,9 +69,10 @@ annual_rhinovirus_infections_under_19 = IncidenceAbsolute(
     * 0.34
     * la_county_under_18_population.people,
     date="2020",
-    tag="LA-2020",
+    tag="under 18",
     source="doi.org/10.1017/S0950268800050779#?page=6",
 )
+
 
 annual_rhinovirus_infections_adults = IncidenceAbsolute(
     # The weighted average annual number of respiratory illnesses among
@@ -83,11 +82,52 @@ annual_rhinovirus_infections_adults = IncidenceAbsolute(
     annual_infections=((1523 * 2.2 + 1757 * 1.6) / (1523 + 1757))
     * 0.34
     * la_county_adult_population.people,
-    start_date="1976",
-    end_date="1981",
+    date="2020",
     tag="over 18",
     source="doi.org/10.1017/S0950268800050779#?page=6",
 )
+
+annual_colds_la_county = IncidenceAbsolute(
+    # "Adults catch two to three colds a year, while young children come down
+    # with a cold four or more times a year."
+    # Since we're concerned with fall months, I'm multiplying by 1.5x
+    annual_infections=3.75 * la_county_adult_population.people
+    + 6 * la_county_under_18_population.people,
+    country="United States",
+    state="California",
+    county="Los Angeles County",
+    date="2020",
+    # These numbers basically just seem reasonable to me and seem to be
+    # generally reasonable according to the internet. I think this is more
+    # accurate than trusting a very-old study with questionable methods
+    source="https://my.clevelandclinic.org/health/diseases/12342-common-cold#:~:text=Adults%20catch%20two%20to%20three%20colds%20a%20year%2C%20while%20young%20children%20come%20down%20with%20a%20cold%20four%20or%20more%20times%20a%20year.",
+)
+
+
+annual_colds_per_100k = annual_colds_la_county.to_rate(
+    us_population(state="California", county="Los Angeles County", year=2020)
+)
+
+# In the fall, rhinovirus accounts for a higher percentage of colds than
+# during other times of year, according to this study
+fall_proportion_of_colds_caused_by_rhinovirus = Scalar(
+    scalar=0.82,
+    source="https://journals.asm.org/doi/epdf/10.1128/jcm.35.11.2864-2868.1997?src=getftr",
+)
+
+fall_proportion_of_colds_caused_by_rhinovirus_estimate_2 = Scalar(
+    scalar=(0.77 + 0.65 + 0.82) / 3,
+    # This is a literature review from 2001 which gives a few different
+    # estimates for what share of colds are from rhinoviruses during the fall
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7133757/",
+)
+
+overall_fall_proportion_of_colds_caused_by_rhinovirus = Scalar(
+    # Average of the first estimate & 3 studies in the second estimate
+    scalar=(0.82 + 0.77 + 0.65 + 0.82)
+    / 4,
+)
+
 
 rhinovirus_shedding_duration = SheddingDuration(
     days=12,
@@ -95,21 +135,42 @@ rhinovirus_shedding_duration = SheddingDuration(
     source="https://erj.ersjournals.com/content/44/1/169#:~:text=Virus%20shedding%20lasts%20on%20average%20for%2010%E2%80%9314%20days%20in%20immunocompetent%20subjects",
 )
 
-under_18_prevalence = annual_rhinovirus_infections_under_19.to_rate(
-    la_county_under_18_population
-).to_prevalence(rhinovirus_shedding_duration)
+rhinovirus_prevalence_using_colds = (
+    annual_colds_per_100k.to_prevalence(rhinovirus_shedding_duration)
+    * overall_fall_proportion_of_colds_caused_by_rhinovirus
+)
 
-adult_prevalence = annual_rhinovirus_infections_adults.to_rate(
-    la_county_adult_population
-).to_prevalence(rhinovirus_shedding_duration)
+
+under_18_prevalence = (
+    annual_rhinovirus_infections_under_19.to_rate(
+        la_county_under_18_population
+    )
+    .to_prevalence(rhinovirus_shedding_duration)
+    .target(
+        country="United States",
+    )
+)
+
+
+adult_prevalence = (
+    annual_rhinovirus_infections_adults.to_rate(la_county_adult_population)
+    .to_prevalence(rhinovirus_shedding_duration)
+    .target(
+        country="United States",
+    )
+)
 
 total_prevalence = adult_prevalence + under_18_prevalence
 
+finland_pandemic_decrease_factor = Scalar(
+    scalar=1,
+    source="https://onlinelibrary.wiley.com/doi/full/10.1002/jmv.27857#:~:text=Rhinovirus%20detections%20remained%20practically%20unchanged%20in%20all%20age%20groups%20throughout%20the%20pandemic%20period%20in%20Finland%20(Figure%C2%A02D).",
+)
 
 # Link for all RCGP reports (specific reference is given under source):
 #  https://www.rcgp.org.uk/clinical-and-research/our-programmes/research-and-surveillance-centre/public-health-data
 pandemic_decrease_factor = Scalar(
-    scalar=0.33,
+    scalar=0.4,
     date="2020",
     # See page 8 of the December 2020 report, around weeks 44 to 53
     # The 5-year avg at this time is in blue, and the national avg in red below
@@ -119,7 +180,8 @@ pandemic_decrease_factor = Scalar(
     # During fall 2020, LA County had an incidence of around 10-150 per 100k
     # per day, usually closer to 10 and then spiking exponentially in
     # December. This gives an average incidence slightly higher than the UK's.
-    # I'm going to take 0.33 as a guess.
+    # Additionally, in Finland, Rhinovirus barely decreased at all.
+    # I'm going to take 0.4 as a guess.
     # (LA Covid Data: https://www.nytimes.com/interactive/2021/us/los-angeles-california-covid-cases.html)
     source="https://www.rcgp.org.uk/getmedia/e564cc01-bc66-4165-aba5-c762b693f50d/2020-December.zip",
 )
@@ -128,4 +190,5 @@ pandemic_decrease_factor = Scalar(
 def estimate_prevalences():
     return [
         total_prevalence * (pandemic_decrease_factor),
+        rhinovirus_prevalence_using_colds * (pandemic_decrease_factor),
     ]
