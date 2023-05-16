@@ -1,4 +1,6 @@
 from pathogen_properties import *
+from populations import us_population
+
 
 background = """According to the CDC, “Rhinoviruses are the most frequent
 cause of the common cold. In the United States children have an average of two
@@ -15,24 +17,35 @@ Rhinovirus is not as seasonal as viruses like influenza or coronviruses.
 #  - Check if national estimates can be applied to regions like Ohio during some specific time period.
 #  - Check if not accounting for seasonality is reasonable
 
+RHINOVIRUS_A = TaxID(147711)
+RHINOVIRUS_B = TaxID(147712)
+RHINOVIRUS_C = TaxID(463676)
+
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxids=frozenset([TaxID(147711), TaxID(147712), TaxID(463676)]),
+    taxids=frozenset([RHINOVIRUS_A, RHINOVIRUS_B, RHINOVIRUS_C]),
 )
-
 # Ideally, we would find the under 19 population instead to match our under 19
 # prevalence estimate
 la_county_under_18_population = Population(
-    people=0.211 * 10_014_042,
-    date="2020-04",
+    # 0.211 = the proportion of LA County residents under 18
+    people=0.211
+    * us_population(
+        state="California", county="Los Angeles County", year=2020
+    ),
+    date="2020",
     tag="LA-2020",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
 )
 
 la_county_adult_population = Population(
-    people=0.789 * 10_014_042,
-    date="2020-04",
+    # 0.789 = the proportion of LA County residents over 18
+    people=0.789
+    * us_population(
+        state="California", county="Los Angeles County", year=2020
+    ),
+    date="2020",
     tag="LA-2020",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
 )
@@ -115,5 +128,5 @@ pandemic_decrease_factor = Scalar(
 
 def estimate_prevalences():
     return [
-        total_prevalence.__mul__(pandemic_decrease_factor),
+        total_prevalence * (pandemic_decrease_factor),
     ]
