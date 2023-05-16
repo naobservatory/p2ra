@@ -40,7 +40,6 @@ us_national_foodborne_cases_2006 = IncidenceAbsolute(
     confidence_interval=(3_227_078, 8_309_480),
     coverage_probability=0.9,  # credible interval
     country="United States",
-    tag="us-2006",
     date="2006",
     # "Domestically acquired foodborne, mean (90% credible interval)
     # ... 5,461,731 (3,227,078–8,309,480)"
@@ -59,7 +58,6 @@ us_population_2006 = Population(
     people=299_000_000,
     country="United States",
     date="2006",
-    tag="us-2006",
     # "all estimates were based on the US population in 2006 (299 million
     # persons)"
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3375761/#:~:text=population%20in%202006%20(-,299%20million%20persons,-).%20Estimates%20were%20derived",
@@ -220,9 +218,7 @@ def estimate_prevalences():
             )
 
             prevalences.append(
-                adjusted_national_prevalence.target(
-                    country="United States", date=target_date
-                )
+                adjusted_national_prevalence.target(date=target_date)
             )
 
             # Assume that all Norovirus infections are either Group I or II,
@@ -242,7 +238,6 @@ def estimate_prevalences():
                     adjusted_national_prevalence
                     * Scalar(scalar=group_I_fraction)
                 ).target(
-                    country="United States",
                     date=target_date,
                     taxid=NOROVIRUS_GROUP_I,
                 )
@@ -252,7 +247,6 @@ def estimate_prevalences():
                     adjusted_national_prevalence
                     * Scalar(scalar=group_II_fraction)
                 ).target(
-                    country="United States",
                     date=target_date,
                     taxid=NOROVIRUS_GROUP_II,
                 )
