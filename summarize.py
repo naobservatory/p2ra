@@ -20,8 +20,7 @@ def start(pathogen_names):
         for n, estimate in enumerate(pathogen.estimate_prevalences()):
             date = "no date"
 
-            start_date = estimate.parsed_start
-            end_date = estimate.parsed_end
+            start_date, end_date = estimate.get_dates()
             _, end_date_month_last_day = calendar.monthrange(
                 end_date.year, end_date.month
             )

@@ -102,6 +102,7 @@ class Variable:
     # parsed_start / parsed_end are set from date_source if supplied, otherwise
     # from start_date / end_date.
     date_source: InitVar[Optional["Variable"]] = None
+    # Read these via get_dates(), which asserts that they're set.
     parsed_start: Optional[datetime.date] = None
     parsed_end: Optional[datetime.date] = None
     taxid: Optional[TaxID] = None
@@ -184,6 +185,18 @@ class Variable:
 
         return datetime.date(y, m, d)
 
+    def get_dates(self) -> tuple[datetime.date, datetime.date]:
+        assert self.parsed_start
+        assert self.parsed_end
+        return self.parsed_start, self.parsed_end
+
+    def get_date(self) -> datetime.date:
+        # Only call this on variables that you know represent a single-day
+        # estimate.
+        start, end = self.get_dates()
+        assert start == end
+        return start
+
     # Returns country, state, county, or raises an error if there are
     # conflicting locations.
     def target_location(
@@ -221,12 +234,6 @@ class Taggable(Variable):
         v1 = self
         v2 = other
 
-        # While dates are optional in general, they're required for taggables.
-        assert v1.parsed_start
-        assert v2.parsed_start
-        assert v1.parsed_end
-        assert v2.parsed_end
-
         assert v1.country == v2.country
         assert v1.state == v2.state
         assert v1.county == v2.county
@@ -234,8 +241,10 @@ class Taggable(Variable):
         # Normally everything has to match, but it's ok if one of them
         # has a more specific date as long as it's within a year; populations
         # don't change quickly.
-        assert v1.parsed_start.year == v2.parsed_start.year
-        assert v1.parsed_end.year == v2.parsed_end.year
+        v1_start, v1_end = v1.get_dates()
+        v2_start, v2_end = v2.get_dates()
+        assert v1_start.year == v2_start.year
+        assert v1_end.year == v2_end.year
 
         assert v1.tag == v2.tag
 
@@ -315,15 +324,9 @@ class SheddingDuration(Variable):
         oldest_day = target_day - datetime.timedelta(days=max_days)
         candiate_incidences = {}
         for incidence in incidences:
-            assert incidence.parsed_start
-            assert incidence.parsed_end
-            # Only handles daily incidences.
-            assert incidence.parsed_start == incidence.parsed_end
-            incidence_day = incidence.parsed_start
-            if incidence_day > target_day or incidence_day <= oldest_day:
-                continue
-
-            candiate_incidences[incidence_day] = incidence
+            incidence_day = incidence.get_date()
+            if oldest_day < incidence_day <= target_day:
+                candiate_incidences[incidence_day] = incidence
 
         assert len(candiate_incidences) == max_days
 
@@ -352,21 +355,14 @@ class SheddingDuration(Variable):
     def prevalences_from_incidences(
         self, incidences: list["IncidenceRate"]
     ) -> list[Prevalence]:
-        dates = set()
-        for incidence in incidences:
-            assert incidence.parsed_start
-            dates.add(incidence.parsed_start)
+        dates = set(incidence.get_date() for incidence in incidences)
         first_date = min(dates) + datetime.timedelta(days=math.ceil(self.days))
-        last_date = max(dates)
 
-        prevalences = []
-        target_date = first_date
-        while target_date <= last_date:
-            prevalences.append(
-                self.prevalence_from_incidences(target_date, incidences)
-            )
-            target_date += datetime.timedelta(days=1)
-        return prevalences
+        return [
+            self.prevalence_from_incidences(target_date, incidences)
+            for target_date in sorted(dates)
+            if target_date >= first_date
+        ]
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
