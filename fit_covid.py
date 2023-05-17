@@ -54,7 +54,6 @@ def fit_to_dataframe(
         j="sample",
         sep=".",
     ).reset_index()
-    print(df)
 
     attrs = list(samples.values())
 
@@ -66,7 +65,6 @@ def fit_to_dataframe(
     df["county"] = get_sample_attrs("county")(df["sample"])
     df["plant"] = get_sample_attrs("fine_location")(df["sample"])
     df["total_reads"] = get_sample_attrs("reads")(df["sample"])
-    print(df)
 
     df["viral_reads"] = df["y_tilde"]
     df["prevalence_per100k"] = np.exp(df["theta"])
@@ -124,7 +122,12 @@ def start():
     )
     df = pd.concat([df, df_obs], ignore_index=True)
 
-    df.to_csv("fits/rothman-sars_cov_2.tsv", sep="\t", index=False)
+    df.to_csv(
+        "fits/rothman-sars_cov_2.tsv.gz",
+        sep="\t",
+        index=False,
+        compression="gzip",
+    )
 
     # TODO: Find a better way to get the once-per-draw stats
     model_ra_per100 = df[df["sample"] == 1]["ra_per_one_percent"]
