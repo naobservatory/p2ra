@@ -65,8 +65,8 @@ rhinovirus_0_4 = IncidenceRate(
     # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
     # USA, 1976-81. Actual rates per 1000 person year"
     source="https://doi.org/10.1017/S0950268800050779",
-    date_start="1976",
-    date_end="1981",
+    start_date="1976",
+    end_date="1981",
     country="United States",
     state="Michigan",
     county="Lenawee County",
@@ -77,8 +77,8 @@ rhinovirus_5_19 = IncidenceRate(
     # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
     # USA, 1976-81. Actual rates per 1000 person year"
     source="https://doi.org/10.1017/S0950268800050779",
-    date_start="1976",
-    date_end="1981",
+    start_date="1976",
+    end_date="1981",
     country="United States",
     state="Michigan",
     county="Lenawee County",
@@ -89,8 +89,8 @@ rhinovirus_20_39 = IncidenceRate(
     # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
     # USA, 1976-81. Actual rates per 1000 person year"
     source="https://doi.org/10.1017/S0950268800050779",
-    date_start="1976",
-    date_end="1981",
+    start_date="1976",
+    end_date="1981",
     country="United States",
     state="Michigan",
     county="Lenawee County",
@@ -101,8 +101,8 @@ rhinovirus_40_plus = IncidenceRate(
     # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
     # USA, 1976-81. Actual rates per 1000 person year"
     source="https://doi.org/10.1017/S0950268800050779",
-    date_start="1976",
-    date_end="1981",
+    start_date="1976",
+    end_date="1981",
     country="United States",
     state="Michigan",
     county="Lenawee County",
@@ -148,20 +148,49 @@ la_county_40_plus = (
     la_county - la_county_0_4 - la_county_5_19 - la_county_20_39
 )
 
-rhinovirus_la_county = IncidenceRate.weightedAverageByPopulation(
-    (rhinovirus_0_4, la_county_0_4),
-    (rhinovirus_5_19, la_county_5_19),
-    (rhinovirus_20_39, la_county_20_39),
-    (rhinovirus_40_plus, la_county_40_plus),
+rhinovirus_old_yearround_study_estimate = (
+    IncidenceRate.weightedAverageByPopulation(
+        (rhinovirus_0_4, la_county_0_4),
+        (rhinovirus_5_19, la_county_5_19),
+        (rhinovirus_20_39, la_county_20_39),
+        (rhinovirus_40_plus, la_county_40_plus),
+    )
 )
 
+average_colds_per_year_adults = Scalar(
+    scalar=2.5,
+    country="United States",
+    state="California",
+    county="Los Angeles County",
+    date="2023",
+    # These numbers basically just seem reasonable to me and seem to be
+    # generally reasonable according to the internet. I think this is more
+    # accurate than trusting a very-old study with questionable methods
+    source="https://my.clevelandclinic.org/health/diseases/12342-common-cold#:~:text=Adults%20catch%20two%20to%20three%20colds%20a%20year%2C%20while%20young%20children%20come%20down%20with%20a%20cold%20four%20or%20more%20times%20a%20year.",
+)
+
+average_colds_per_year_children = Scalar(
+    scalar=4,
+    country="United States",
+    state="California",
+    county="Los Angeles County",
+    date="2023",
+    # These numbers basically just seem reasonable to me and seem to be
+    # generally reasonable according to the internet. I think this is more
+    # accurate than trusting a very-old study with questionable methods
+    source="https://my.clevelandclinic.org/health/diseases/12342-common-cold#:~:text=Adults%20catch%20two%20to%20three%20colds%20a%20year%2C%20while%20young%20children%20come%20down%20with%20a%20cold%20four%20or%20more%20times%20a%20year.",
+)
 
 annual_colds_la_county = IncidenceAbsolute(
     # "Adults catch two to three colds a year, while young children come down
     # with a cold four or more times a year."
     # Since we're concerned with fall months, I'm multiplying by 1.5x
-    annual_infections=3.75 * la_county_adult_population.people
-    + 6 * la_county_under_18_population.people,
+    annual_infections=1.5
+    * average_colds_per_year_adults.scalar
+    * la_county_adult_population.people
+    + 1.5
+    * average_colds_per_year_children.scalar
+    * la_county_under_18_population.people,
     country="United States",
     state="California",
     county="Los Angeles County",
@@ -237,6 +266,9 @@ pandemic_decrease_factor = Scalar(
 
 def estimate_prevalences():
     return [
-        total_prevalence * (pandemic_decrease_factor),
+        rhinovirus_old_yearround_study_estimate.to_prevalence(
+            rhinovirus_shedding_duration
+        )
+        * (pandemic_decrease_factor),
         rhinovirus_prevalence_using_colds * (pandemic_decrease_factor),
     ]

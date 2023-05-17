@@ -1,4 +1,5 @@
 import calendar
+import dataclasses
 import datetime
 import os.path
 import re
@@ -240,6 +241,12 @@ class Population(Taggable):
 
     people: float
 
+    def __sub__(self, other):
+        if isinstance(other, Population):
+            return dataclasses.replace(self, people=self.people - other.people)
+        else:
+            raise ValueError("Can only subtract another Population instance")
+
 
 @dataclass(kw_only=True, eq=True, frozen=True)
 class Scalar(Variable):
@@ -276,6 +283,20 @@ class Prevalence(Variable):
             is_target=True,
             active=self.active,
             **kwargs,
+        )
+
+    @staticmethod
+    def weightedAverageByPopulation(*pairs: tuple["Prevalence", "Population"]):
+        totalInfections = 0.0
+        totalPopulation = 0.0
+        for prevalence, population in pairs:
+            totalInfections += (
+                population.people * prevalence.infections_per_100k / 100_000
+            )
+            totalPopulation += population.people
+        return dataclasses.replace(
+            pairs[0][0],
+            infections_per_100k=totalInfections / totalPopulation * 100_000,
         )
 
 
@@ -331,6 +352,26 @@ class IncidenceRate(Variable):
             / 365,
             inputs=[self, shedding_duration],
             active=Active.ACTIVE,
+        )
+
+    @staticmethod
+    def weightedAverageByPopulation(
+        *pairs: tuple["IncidenceRate", "Population"]
+    ):
+        totalIncidence = 0.0
+        totalPopulation = 0.0
+        for prevalence, population in pairs:
+            totalIncidence += (
+                population.people
+                * prevalence.annual_infections_per_100k
+                / 100_000
+            )
+            totalPopulation += population.people
+        return dataclasses.replace(
+            pairs[0][0],
+            annual_infections_per_100k=totalIncidence
+            / totalPopulation
+            * 100_000,
         )
 
 
