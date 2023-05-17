@@ -330,20 +330,18 @@ class SheddingDuration(Variable):
 
         assert len(candiate_incidences) == max_days
 
-        incidence_day = target_day
         infections_per_100k = 0.0
-        n = 0
-        while incidence_day > oldest_day:
-            n += 1
+        for days_prior in range(max_days):
+            incidence_day = target_day - datetime.timedelta(days=days_prior)
+
             weight = 1.0
-            if n > math.floor(self.days):
-                weight = math.floor(self.days) - n
+            if days_prior == max_days - 1:
+                weight = self.days - math.floor(self.days)
             infections_per_100k += (
                 weight
                 * candiate_incidences[incidence_day].annual_infections_per_100k
                 / 365
             )
-            incidence_day -= datetime.timedelta(days=1)
 
         return Prevalence(
             infections_per_100k=infections_per_100k,

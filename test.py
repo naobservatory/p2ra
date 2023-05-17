@@ -314,5 +314,21 @@ class TestPopulations(unittest.TestCase):
         )
 
 
+class TestPrevalenceFromIncidence(unittest.TestCase):
+    def test_prevalence_from_incidences(self):
+        sd = SheddingDuration(days=5.6)
+        incidences = [
+            IncidenceRate(annual_infections_per_100k=i, date="2000-01-0%s" % i)
+            for i in range(1, 10)
+        ]
+        target_date = datetime.date(2000, 1, 9)
+        self.assertAlmostEqual(
+            (9 + 8 + 7 + 6 + 5 + 4 * 0.6) / 365,
+            sd.prevalence_from_incidences(
+                target_date, incidences
+            ).infections_per_100k,
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
