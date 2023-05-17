@@ -49,43 +49,112 @@ la_county_adult_population = Population(
 )
 
 
-"""This estimate was created by Simon with the following reasoning: During
-this study, "A single family respondent was contacted weekly by telephone to
-obtain information on the onset of acute respiratory or enteric illnesses in
-any of the household members. Across this time they tracked the number of
-respiratory illnesses, across age groups. These are overall respiratory
-illnesses (which we might equate with colds). In the same study, they report
-that colds were isolated in 34% of cases. (note that across 13140 cases of
-respiratory illnesses, they only sampled 2227 of cases for isolation, which
-could lead to bias in this isolation rate). But for now, let's use this
+"""During this study, "A single family respondent was contacted weekly by 
+telephone to obtain information on the onset of acute respiratory or enteric 
+illnesses in any of the household members. Across this time they tracked the 
+number of respiratory illnesses, across age groups. These are overall 
+respiratory illnesses (which we might equate with colds). In the same study, 
+they report that colds were isolated in 34% of cases. (note that across 13140 
+cases of respiratory illnesses, they only sampled 2227 of cases for isolation, 
+which could lead to bias in this isolation rate). But for now, let's use this
 number. Checking a table of isolation rates across ages, the rate of
 Rhinoviruses among infections roughly holds true across ages."""
-annual_rhinovirus_infections_under_19 = IncidenceAbsolute(
-    # The weighted average annual number of respiratory illnesses among
-    # 0-19-year-olds is in parentheses, aggregating the mean of 0-4 and 5-19
-    # year olds from table 1 of the source
-    # rhinovirus_share_of_cold = 0.34
-    annual_infections=((539 * 4.9 + 1541 * 2.8) / (539 + 1541))
-    * 0.34
-    * la_county_under_18_population.people,
-    date="2020",
-    tag="under 18",
-    source="doi.org/10.1017/S0950268800050779#?page=6",
+rhinovirus_0_4 = IncidenceRate(
+    annual_infections_per_100k=113.2 * 100,
+    # Table 2, Rhinoviruses.
+    # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
+    # USA, 1976-81. Actual rates per 1000 person year"
+    source="https://doi.org/10.1017/S0950268800050779",
+    date_start="1976",
+    date_end="1981",
+    country="United States",
+    state="Michigan",
+    county="Lenawee County",
+)
+rhinovirus_5_19 = IncidenceRate(
+    annual_infections_per_100k=25.3 * 100,
+    # Table 2, Rhinoviruses
+    # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
+    # USA, 1976-81. Actual rates per 1000 person year"
+    source="https://doi.org/10.1017/S0950268800050779",
+    date_start="1976",
+    date_end="1981",
+    country="United States",
+    state="Michigan",
+    county="Lenawee County",
+)
+rhinovirus_20_39 = IncidenceRate(
+    annual_infections_per_100k=38.7 * 100,
+    # Table 2, Rhinoviruses
+    # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
+    # USA, 1976-81. Actual rates per 1000 person year"
+    source="https://doi.org/10.1017/S0950268800050779",
+    date_start="1976",
+    date_end="1981",
+    country="United States",
+    state="Michigan",
+    county="Lenawee County",
+)
+rhinovirus_40_plus = IncidenceRate(
+    annual_infections_per_100k=9.7 * 100,
+    # Table 2, Rhinoviruses
+    # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
+    # USA, 1976-81. Actual rates per 1000 person year"
+    source="https://doi.org/10.1017/S0950268800050779",
+    date_start="1976",
+    date_end="1981",
+    country="United States",
+    state="Michigan",
+    county="Lenawee County",
 )
 
-
-annual_rhinovirus_infections_20_and_older = IncidenceAbsolute(
-    # The weighted average annual number of respiratory illnesses among
-    # 20+ year-olds is in parentheses, aggregating the mean of 20-40 and 40+
-    # year olds from table 1 of the source
-    # rhinovirus_share_of_cold = 0.34
-    annual_infections=((1523 * 2.2 + 1757 * 1.6) / (1523 + 1757))
-    * 0.34
-    * la_county_adult_population.people,
+la_county_0_4 = Population(
+    people=285_140 + 273_131,
     date="2020",
-    tag="over 18",
-    source="doi.org/10.1017/S0950268800050779#?page=6",
+    country="United States",
+    state="California",
+    county="Los Angeles County",
+    source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
 )
+la_county_5_19 = Population(
+    people=(306_835 + 291_053) + (320_666 + 303_381) + (317_657 + 306_849),
+    date="2020",
+    country="United States",
+    state="California",
+    county="Los Angeles County",
+    source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
+)
+la_county_20_39 = Population(
+    people=(330_183 + 327_625)
+    + (406_008 + 399_410)
+    + (413_566 + 394_103)
+    + (370_948 + 355_002),
+    date="2020",
+    country="United States",
+    state="California",
+    county="Los Angeles County",
+    source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
+)
+la_county = Population(
+    people=4_965_022 + 5_048_987,
+    date="2020",
+    country="United States",
+    state="California",
+    county="Los Angeles County",
+    source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
+)
+
+la_county_40_plus = (
+    la_county - la_county_0_4 - la_county_5_19 - la_county_20_39
+)
+
+rhinovirus_la_county = IncidenceRate.weightedAverageByPopulation(
+    (rhinovirus_0_4, la_county_0_4),
+    (rhinovirus_5_19, la_county_5_19),
+    (rhinovirus_20_39, la_county_20_39),
+    (rhinovirus_40_plus, la_county_40_plus),
+)
+
 
 annual_colds_la_county = IncidenceAbsolute(
     # "Adults catch two to three colds a year, while young children come down
@@ -140,29 +209,6 @@ rhinovirus_prevalence_using_colds = (
     * overall_fall_proportion_of_colds_caused_by_rhinovirus
 )
 
-
-under_18_prevalence = (
-    annual_rhinovirus_infections_under_19.to_rate(
-        la_county_under_18_population
-    )
-    .to_prevalence(rhinovirus_shedding_duration)
-    .target(
-        country="United States",
-    )
-)
-
-
-adult_prevalence = (
-    annual_rhinovirus_infections_20_and_older.to_rate(
-        la_county_adult_population
-    )
-    .to_prevalence(rhinovirus_shedding_duration)
-    .target(
-        country="United States",
-    )
-)
-
-total_prevalence = adult_prevalence + under_18_prevalence
 
 finland_pandemic_decrease_factor = Scalar(
     scalar=1,
