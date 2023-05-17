@@ -44,6 +44,37 @@ def lookup_prevalence(
     return prevs
 
 
+def fit_to_dataframe(
+    fit, samples: dict[Sample, SampleAttributes]
+) -> pd.DataFrame:
+    df = pd.wide_to_long(
+        fit.to_frame().reset_index(),
+        stubnames=["y_tilde", "theta"],
+        i="draws",
+        j="sample",
+        sep=".",
+    ).reset_index()
+    print(df)
+
+    attrs = list(samples.values())
+
+    def get_sample_attrs(attr: str):
+        f = lambda i: getattr(attrs[i - 1], attr)
+        return np.vectorize(f)
+
+    df["date"] = get_sample_attrs("date")(df["sample"])
+    df["county"] = get_sample_attrs("county")(df["sample"])
+    df["plant"] = get_sample_attrs("fine_location")(df["sample"])
+    df["total_reads"] = get_sample_attrs("reads")(df["sample"])
+    print(df)
+
+    df["viral_reads"] = df["y_tilde"]
+    df["prevalence_per100k"] = np.exp(df["theta"])
+    df["ra_per_one_percent"] = per100k_to_per100 * np.exp(df["b"])
+    df["observation_type"] = "posterior"
+    return df
+
+
 def start():
     bioproject = BioProject("PRJNA729801")  # Rothman
 
@@ -77,29 +108,7 @@ def start():
         std_log_prevalence=0.5,
         random_seed=1,
     )
-    df = pd.wide_to_long(
-        fit.to_frame().reset_index(),
-        stubnames=["y_tilde", "theta"],
-        i="draws",
-        j="sample",
-        sep=".",
-    ).reset_index()
-
-    attrs = list(samples.values())
-
-    def get_sample_attrs(attr: str):
-        f = lambda i: getattr(attrs[i - 1], attr)
-        return np.vectorize(f)
-
-    df["date"] = get_sample_attrs("date")(df["sample"])
-    df["county"] = get_sample_attrs("county")(df["sample"])
-    df["plant"] = get_sample_attrs("fine_location")(df["sample"])
-    df["total_reads"] = get_sample_attrs("reads")(df["sample"])
-
-    df["viral_reads"] = df["y_tilde"]
-    df["prevalence_per100k"] = np.exp(df["theta"])
-    df["ra_per_one_percent"] = per100k_to_per100 * np.exp(df["b"])
-    df["observation_type"] = "posterior"
+    df = fit_to_dataframe(fit, samples)
 
     # TODO: do this more neatly
     df_obs = pd.DataFrame(
@@ -115,7 +124,7 @@ def start():
     )
     df = pd.concat([df, df_obs], ignore_index=True)
 
-    df.to_csv("fits/rothman-sars_cov_2.tsv", sep="\t")
+    df.to_csv("fits/rothman-sars_cov_2.tsv", sep="\t", index=False)
 
     # TODO: Find a better way to get the once-per-draw stats
     model_ra_per100 = df[df["sample"] == 1]["ra_per_one_percent"]
