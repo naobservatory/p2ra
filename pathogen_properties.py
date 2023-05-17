@@ -1,4 +1,5 @@
 import calendar
+import dataclasses
 import datetime
 import os.path
 import re
@@ -250,6 +251,20 @@ class Prevalence(Variable):
             is_target=True,
             active=self.active,
             **kwargs,
+        )
+
+    @staticmethod
+    def weightedAverageByPopulation(*pairs: tuple["Prevalence", "Population"]):
+        totalInfections = 0.0
+        totalPopulation = 0.0
+        for prevalence, population in pairs:
+            totalInfections += (
+                population.people * prevalence.infections_per_100k / 100_000
+            )
+            totalPopulation += population.people
+        return dataclasses.replace(
+            pairs[0][0],
+            infections_per_100k=totalInfections / totalPopulation * 100_000,
         )
 
 
