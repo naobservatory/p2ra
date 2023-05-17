@@ -24,7 +24,7 @@ class TestPathogens(unittest.TestCase):
             "Los Angeles County, California, United States",
         )
 
-    def test_dstes(self):
+    def test_dates(self):
         us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
         self.assertEqual(us_2019.parsed_start, datetime.date(2019, 1, 1))
         self.assertEqual(us_2019.parsed_end, datetime.date(2019, 12, 31))
@@ -46,40 +46,53 @@ class TestPathogens(unittest.TestCase):
         for pathogen_name, pathogen in pathogens.pathogens.items():
             with self.subTest(pathogen=pathogen_name):
                 for estimate in pathogen.estimate_prevalences():
-                    self.assertIsNotNone(estimate.parsed_start)
-                    self.assertIsNotNone(estimate.parsed_end)
+                    estimate.get_dates()
 
 
 class TestVaribles(unittest.TestCase):
     def test_date_parsing(self):
         v = Variable(date="2019")
-        self.assertEqual(v.parsed_start, datetime.date(2019, 1, 1))
-        self.assertEqual(v.parsed_end, datetime.date(2019, 12, 31))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2019, 1, 1), datetime.date(2019, 12, 31)),
+        )
 
         v = Variable(date="2019-02")
-        self.assertEqual(v.parsed_start, datetime.date(2019, 2, 1))
-        self.assertEqual(v.parsed_end, datetime.date(2019, 2, 28))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2019, 2, 1), datetime.date(2019, 2, 28)),
+        )
 
         v = Variable(date="2020-02")
-        self.assertEqual(v.parsed_start, datetime.date(2020, 2, 1))
-        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 29))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2020, 2, 1), datetime.date(2020, 2, 29)),
+        )
 
         v = Variable(date="2020-02-01")
-        self.assertEqual(v.parsed_start, datetime.date(2020, 2, 1))
-        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 1))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2020, 2, 1), datetime.date(2020, 2, 1)),
+        )
 
         v = Variable(start_date="2020-01", end_date="2020-02")
-        self.assertEqual(v.parsed_start, datetime.date(2020, 1, 1))
-        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 29))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2020, 1, 1), datetime.date(2020, 2, 29)),
+        )
 
         v = Variable(start_date="2020-01-07", end_date="2020-02-06")
-        self.assertEqual(v.parsed_start, datetime.date(2020, 1, 7))
-        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 6))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2020, 1, 7), datetime.date(2020, 2, 6)),
+        )
 
         v1 = Variable(date="2019")
         v2 = Variable(date="2020", date_source=v1)
-        self.assertEqual(v2.parsed_start, datetime.date(2019, 1, 1))
-        self.assertEqual(v2.parsed_end, datetime.date(2019, 12, 31))
+        self.assertEqual(
+            v2.get_dates(),
+            (datetime.date(2019, 1, 1), datetime.date(2019, 12, 31)),
+        )
 
         with self.assertRaises(Exception):
             Variable(start_date="2020-01-07")
@@ -104,6 +117,16 @@ class TestVaribles(unittest.TestCase):
 
         with self.assertRaises(Exception):
             Variable(date="2020/01/01")
+
+        v = Variable(date="2020")
+        with self.assertRaises(AssertionError):
+            v.get_date()  # asserts start==end
+
+        v = Variable()
+        self.assertIsNone(v.parsed_start)
+        self.assertIsNone(v.parsed_end)
+        with self.assertRaises(AssertionError):
+            v.get_dates()  # asserts dates are set
 
 
 class TestMGS(unittest.TestCase):
@@ -288,6 +311,22 @@ class TestPopulations(unittest.TestCase):
                 source="https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html",
                 country="United States",
             ),
+        )
+
+
+class TestPrevalenceFromIncidence(unittest.TestCase):
+    def test_prevalence_from_incidences(self):
+        sd = SheddingDuration(days=5.6)
+        incidences = [
+            IncidenceRate(annual_infections_per_100k=i, date="2000-01-0%s" % i)
+            for i in range(1, 10)
+        ]
+        target_date = datetime.date(2000, 1, 9)
+        self.assertAlmostEqual(
+            (9 + 8 + 7 + 6 + 5 + 4 * 0.6) / 365,
+            sd.prevalence_from_incidences(
+                target_date, incidences
+            ).infections_per_100k,
         )
 
 

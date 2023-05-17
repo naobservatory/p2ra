@@ -1,5 +1,6 @@
 import calendar
 import datetime
+import math
 import os.path
 import re
 from collections.abc import Iterable
@@ -101,6 +102,7 @@ class Variable:
     # parsed_start / parsed_end are set from date_source if supplied, otherwise
     # from start_date / end_date.
     date_source: InitVar[Optional["Variable"]] = None
+    # Read these via get_dates(), which asserts that they're set.
     parsed_start: Optional[datetime.date] = None
     parsed_end: Optional[datetime.date] = None
     taxid: Optional[TaxID] = None
@@ -183,6 +185,18 @@ class Variable:
 
         return datetime.date(y, m, d)
 
+    def get_dates(self) -> tuple[datetime.date, datetime.date]:
+        assert self.parsed_start
+        assert self.parsed_end
+        return self.parsed_start, self.parsed_end
+
+    def get_date(self) -> datetime.date:
+        # Only call this on variables that you know represent a single-day
+        # estimate.
+        start, end = self.get_dates()
+        assert start == end
+        return start
+
     # Returns country, state, county, or raises an error if there are
     # conflicting locations.
     def target_location(
@@ -220,12 +234,6 @@ class Taggable(Variable):
         v1 = self
         v2 = other
 
-        # While dates are optional in general, they're required for taggables.
-        assert v1.parsed_start
-        assert v2.parsed_start
-        assert v1.parsed_end
-        assert v2.parsed_end
-
         assert v1.country == v2.country
         assert v1.state == v2.state
         assert v1.county == v2.county
@@ -233,8 +241,10 @@ class Taggable(Variable):
         # Normally everything has to match, but it's ok if one of them
         # has a more specific date as long as it's within a year; populations
         # don't change quickly.
-        assert v1.parsed_start.year == v2.parsed_start.year
-        assert v1.parsed_end.year == v2.parsed_end.year
+        v1_start, v1_end = v1.get_dates()
+        v2_start, v2_end = v2.get_dates()
+        assert v1_start.year == v2_start.year
+        assert v1_end.year == v2_end.year
 
         assert v1.tag == v2.tag
 
@@ -301,6 +311,57 @@ class PrevalenceAbsolute(Taggable):
 class SheddingDuration(Variable):
     days: float
 
+    # The model here is that shedding is binary: on the first day of infection
+    # you begin to shed at 100%, and then after `days` you shed 0%.  This is a
+    # big simplification!
+    #
+    # Incidences should contain daily estimates for target_day and at least the
+    # prior `days` days.
+    def prevalence_from_incidences(
+        self, target_day: datetime.date, incidences: list["IncidenceRate"]
+    ) -> Prevalence:
+        max_days = math.ceil(self.days)
+        oldest_day = target_day - datetime.timedelta(days=max_days)
+        candiate_incidences = {}
+        for incidence in incidences:
+            incidence_day = incidence.get_date()
+            if oldest_day < incidence_day <= target_day:
+                candiate_incidences[incidence_day] = incidence
+
+        assert len(candiate_incidences) == max_days
+
+        infections_per_100k = 0.0
+        for days_prior in range(max_days):
+            incidence_day = target_day - datetime.timedelta(days=days_prior)
+
+            weight = 1.0
+            if days_prior == max_days - 1:
+                weight = self.days - math.floor(self.days)
+            infections_per_100k += (
+                weight
+                * candiate_incidences[incidence_day].annual_infections_per_100k
+                / 365
+            )
+
+        return Prevalence(
+            infections_per_100k=infections_per_100k,
+            inputs=[self, *candiate_incidences.values()],
+            active=Active.ACTIVE,
+            date_source=candiate_incidences[target_day],
+        )
+
+    def prevalences_from_incidences(
+        self, incidences: list["IncidenceRate"]
+    ) -> list[Prevalence]:
+        dates = set(incidence.get_date() for incidence in incidences)
+        first_date = min(dates) + datetime.timedelta(days=math.ceil(self.days))
+
+        return [
+            self.prevalence_from_incidences(target_date, incidences)
+            for target_date in sorted(dates)
+            if target_date >= first_date
+        ]
+
 
 @dataclass(kw_only=True, eq=True, frozen=True)
 class Number(Variable):
@@ -329,6 +390,11 @@ class IncidenceRate(Variable):
     # an active estimate, since multiplying by SheddingDuration calculates the
     # amount of time the virus is actively shedding for, which is not
     # incorporated into a latent estimate.
+    #
+    # Only use this method in situations where incidence is changing slowly
+    # relative to shedding_duration; of doesn't take into account that current
+    # prevalence includes past incidence over the shedding period.  If this
+    # does apply, use SheddingDuration.prevalences_from_incidences.
     def to_prevalence(self, shedding_duration: SheddingDuration) -> Prevalence:
         return Prevalence(
             infections_per_100k=self.annual_infections_per_100k
@@ -336,6 +402,14 @@ class IncidenceRate(Variable):
             / 365,
             inputs=[self, shedding_duration],
             active=Active.ACTIVE,
+            date_source=self,
+        )
+
+    def __mul__(self, scalar: Scalar) -> "IncidenceRate":
+        return IncidenceRate(
+            annual_infections_per_100k=self.annual_infections_per_100k
+            * scalar.scalar,
+            inputs=[self, scalar],
             date_source=self,
         )
 
