@@ -19,15 +19,17 @@ class TestPathogens(unittest.TestCase):
     def test_summarize_location(self):
         us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
         self.assertEqual(us_2019.summarize_location(), "United States")
-        self.assertEqual(us_2019.parsed_start, datetime.date(2019, 1, 1))
-        self.assertEqual(us_2019.parsed_end, datetime.date(2019, 12, 31))
-
         self.assertEqual(
             la_2020.summarize_location(),
             "Los Angeles County, California, United States",
         )
-        self.assertEqual(la_2020.parsed_start, datetime.date(2020, 1, 1))
 
+    def test_dstes(self):
+        us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
+        self.assertEqual(us_2019.parsed_start, datetime.date(2019, 1, 1))
+        self.assertEqual(us_2019.parsed_end, datetime.date(2019, 12, 31))
+
+        self.assertEqual(la_2020.parsed_start, datetime.date(2020, 1, 1))
         self.assertEqual(la_2020.parsed_end, datetime.date(2020, 12, 31))
 
     def test_properties_exist(self):
@@ -44,8 +46,8 @@ class TestPathogens(unittest.TestCase):
         for pathogen_name, pathogen in pathogens.pathogens.items():
             with self.subTest(pathogen=pathogen_name):
                 for estimate in pathogen.estimate_prevalences():
-                    self.assertTrue(estimate.parsed_start)
-                    self.assertTrue(estimate.parsed_end)
+                    self.assertIsNotNone(estimate.parsed_start)
+                    self.assertIsNotNone(estimate.parsed_end)
 
 
 class TestVaribles(unittest.TestCase):
