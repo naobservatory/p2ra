@@ -15,7 +15,12 @@ def prevalence_by_state_county_date(
     prevs = {}
     for estimate in pathogens[pathogen].estimate_prevalences():
         assert estimate.parsed_start == estimate.parsed_end
-        key = (estimate.state, estimate.county, estimate.parsed_start)
+        country, state, county = estimate.target_location()
+        assert country == "United States"
+        assert state is not None
+        assert county is not None
+        est_date = estimate.parsed_start
+        key = (state, county, est_date)
         assert key not in prevs
         prevs[key] = estimate.infections_per_100k
     return prevs
