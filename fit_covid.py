@@ -1,15 +1,50 @@
 #!/usr/bin/env python3
-from textwrap import dedent
+from datetime import date
 
 import numpy as np
 import pandas as pd
 
 import stats
 from fit_rothman import per100k_to_per100, print_summary
-from mgs import BioProject, Enrichment, MGSData
+from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
 from pathogens import pathogens
 
-if __name__ == "__main__":
+
+def prevalence_by_state_county_date(
+    pathogen: str,
+) -> dict[tuple[str, str, date], float]:
+    prevs = {}
+    for estimate in pathogens[pathogen].estimate_prevalences():
+        assert estimate.parsed_start == estimate.parsed_end
+        country, state, county = estimate.target_location()
+        assert country == "United States"
+        assert state is not None
+        assert county is not None
+        est_date = estimate.parsed_start
+        key = (state, county, est_date)
+        assert key not in prevs
+        prevs[key] = estimate.infections_per_100k
+    return prevs
+
+
+def lookup_prevalence(
+    samples: dict[Sample, SampleAttributes], pathogen: str
+) -> list[float]:
+    lookup = prevalence_by_state_county_date(pathogen)
+    prevs = []
+    for _, attrs in samples.items():
+        assert attrs.fine_location is not None
+        assert attrs.county in [
+            "Los Angeles County",
+            "San Diego County",
+            "Orange County",
+        ]
+        assert isinstance(attrs.date, date)
+        prevs.append(lookup[("California", attrs.county, attrs.date)])
+    return prevs
+
+
+def start():
     bioproject = BioProject("PRJNA729801")  # Rothman
 
     mgs_data = MGSData.from_repo()
@@ -26,20 +61,7 @@ if __name__ == "__main__":
         [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
     )
 
-    prevalence_by_loc_date = {}
-    for estimate in pathogens[pathogen].estimate_prevalences():
-        assert estimate.parsed_start == estimate.parsed_end
-        key = (estimate.county, estimate.parsed_start)
-        assert key not in prevalence_by_loc_date
-        prevalence_by_loc_date[key] = estimate.infections_per_100k
-
-    prevalence_per100k = np.zeros(len(samples))
-    for i, (sample, attrs) in enumerate(samples.items()):
-        assert attrs.fine_location is not None
-        assert attrs.county is not None
-        prevalence_per100k[i] = prevalence_by_loc_date[
-            (attrs.county, attrs.date)
-        ]
+    prevalence_per100k = np.array(lookup_prevalence(samples, pathogen))
 
     naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
         virus_reads,
@@ -73,28 +95,8 @@ if __name__ == "__main__":
     # TODO: Wrap the model fit so that we aren't exposed to stan variables
     model_ra_per100 = per100k_to_per100 * np.exp(fit["b"])
     print_summary(pathogen, naive_ra_per100, model_ra_per100)
-    pp_virus_reads = fit["y_tilde"]
-    print(np.mean(virus_reads))
-    means = np.mean(pp_virus_reads, axis=0)
-    d = 1
-    sep = " " * 4
-    percentiles = [5, 25, 50, 75, 95]
-    percentile_values = np.percentile(means, percentiles)
-    print(
-        dedent(
-            f"""Posterior quantiles:
-    {sep.join(f"{p:>{d+5}}%" for p in percentiles)}
-    {sep.join(f"{x:.{d}e}" for x in percentile_values)}"""
-        )
-    )
-    print(np.max(virus_reads))
-    maxes = np.max(pp_virus_reads, axis=0)
-    percentile_values = np.percentile(maxes, percentiles)
-    print(
-        dedent(
-            f"""Posterior quantiles:
-    {sep.join(f"{p:>{d+5}}%" for p in percentiles)}
-    {sep.join(f"{x:.{d}e}" for x in percentile_values)}"""
-        )
-    )
     stats.save_fit(fit, "fits/rothman-sars_cov_2.tsv")
+
+
+if __name__ == "__main__":
+    start()

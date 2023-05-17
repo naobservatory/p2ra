@@ -19,31 +19,30 @@ def start(pathogen_names):
 
         for n, estimate in enumerate(pathogen.estimate_prevalences()):
             date = "no date"
-            date_summary = estimate.summarize_date()
-            if date_summary:
-                start_date, end_date = date_summary
-                _, end_date_month_last_day = calendar.monthrange(
-                    end_date.year, end_date.month
-                )
-                if start_date == end_date:
-                    date = start_date
-                elif start_date.year != end_date.year:
-                    date = f"{start_date.year} to {end_date.year}"
-                elif (
-                    start_date.month == 1
-                    and start_date.day == 1
-                    and end_date.month == 12
-                    and end_date.day == 31
-                ):
-                    date = start_date.year
-                elif (
-                    start_date.month == end_date.month
-                    and start_date.day == 1
-                    and end_date.day == end_date_month_last_day
-                ):
-                    date = f"{start_date.year}-{start_date.month:02d}"
-                else:
-                    date = f"{start_date} to {end_date}"
+
+            start_date, end_date = estimate.get_dates()
+            _, end_date_month_last_day = calendar.monthrange(
+                end_date.year, end_date.month
+            )
+            if start_date == end_date:
+                date = start_date
+            elif start_date.year != end_date.year:
+                date = f"{start_date.year} to {end_date.year}"
+            elif (
+                start_date.month == 1
+                and start_date.day == 1
+                and end_date.month == 12
+                and end_date.day == 31
+            ):
+                date = start_date.year
+            elif (
+                start_date.month == end_date.month
+                and start_date.day == 1
+                and end_date.day == end_date_month_last_day
+            ):
+                date = f"{start_date.year}-{start_date.month:02d}"
+            else:
+                date = f"{start_date} to {end_date}"
 
             location = estimate.summarize_location()
 
