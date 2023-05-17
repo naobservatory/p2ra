@@ -33,7 +33,11 @@ def lookup_prevalence(
     prevs = []
     for _, attrs in samples.items():
         assert attrs.fine_location is not None
-        assert attrs.county is not None
+        assert attrs.county in [
+            "Los Angeles County",
+            "San Diego County",
+            "Orange County",
+        ]
         assert isinstance(attrs.date, date)
         prevs.append(lookup[("California", attrs.county, attrs.date)])
     return prevs
