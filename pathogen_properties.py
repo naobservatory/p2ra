@@ -85,47 +85,73 @@ class Variable:
     date: InitVar[Optional[str]] = None
     start_date: InitVar[Optional[str]] = None
     end_date: InitVar[Optional[str]] = None
-    parsed_start: Optional[datetime.date] = field(init=False)
-    parsed_end: Optional[datetime.date] = field(init=False)
-    is_target: Optional[bool] = False
+    # In cases where an estimate is derived from multiple input variables with
+    # different dates, set date_source to the Variable that represents the date
+    # range this estimate is intended for.  For example, imagine we have:
+    #
+    #   population = Population(date="2020-04-01", ...)
+    #   prevalence = AbsolutePrevalence(date="2020-08-01", ...)
+    #   return prevalence.to_rate(population)
+    #
+    # There's no way for the consumer to know what date this estimate is for.
+    # So instead we do:
+    #
+    #   return prevalence.to_rate(population, date_source=prevalence)
+    #
+    # parsed_start / parsed_end are set from date_source if supplied, otherwise
+    # from start_date / end_date.
+    date_source: InitVar[Optional["Variable"]] = None
+    parsed_start: Optional[datetime.date] = None
+    parsed_end: Optional[datetime.date] = None
     taxid: Optional[TaxID] = None
     inputs: InitVar[Optional[Iterable["Variable"]]] = None
-    all_inputs: set["Variable"] = field(init=False)
+    all_inputs: set["Variable"] = field(default_factory=set)
 
     def __post_init__(
         self,
         date: Optional[str],
         start_date: Optional[str],
         end_date: Optional[str],
+        date_source: Optional["Variable"],
         inputs: Optional[Iterable["Variable"]],
     ):
-        # See comment above about __post_init__ for why we're using __setattr__.
+        # See comment above about __post_init__ for why we're using
+        # __setattr__.
         if date and (start_date or end_date):
             raise Exception("If you have start/end don't set date.")
+        if self.parsed_start and (date or start_date):
+            raise Exception("Don't set both parsed_start and provide a date")
+        if self.parsed_end and (date or end_date):
+            raise Exception("Don't set both parsed_start and provide a date")
         if (start_date and not end_date) or (end_date and not start_date):
             raise Exception("Start and end must go together.")
         if date:
             start_date = end_date = date
 
-        parsed_start = None
+        parsed_start = self.parsed_start
         if start_date:
             parsed_start = self._parse_date(start_date, "start")
-        object.__setattr__(self, "parsed_start", parsed_start)
 
-        parsed_end = None
+        parsed_end = self.parsed_end
         if end_date:
             parsed_end = self._parse_date(end_date, "end")
-        object.__setattr__(self, "parsed_end", parsed_end)
 
-        if (
-            self.parsed_start
-            and self.parsed_end
-            and self.parsed_start > self.parsed_end
-        ):
+        if date_source:
+            assert date_source.parsed_start
+            assert date_source.parsed_end
+            parsed_start = date_source.parsed_start
+            parsed_end = date_source.parsed_end
+
+        if parsed_start and parsed_end and parsed_start > parsed_end:
             raise Exception("Start date can't be after end date")
 
-        all_inputs = set(inputs or [])
-        for variable in set(inputs or []):
+        object.__setattr__(self, "parsed_start", parsed_start)
+        object.__setattr__(self, "parsed_end", parsed_end)
+
+        all_inputs = set(self.all_inputs or inputs or [])
+        if date_source:
+            all_inputs.add(date_source)
+        for variable in list(all_inputs):
             all_inputs |= variable.all_inputs
         object.__setattr__(self, "all_inputs", frozenset(all_inputs))
 
@@ -158,14 +184,10 @@ class Variable:
         return datetime.date(y, m, d)
 
     # Returns country, state, county, or raises an error if there are
-    # conflicting locations.  If you hit an error here you probably need a
-    # target() call.
+    # conflicting locations.
     def target_location(
         self,
     ) -> tuple[Optional[str], Optional[str], Optional[str]]:
-        if self.is_target and self.country:
-            return self.country, self.state, self.county
-
         inputs = self.all_inputs | set([self])
 
         countries = set(i.country for i in inputs if i.country)
@@ -185,23 +207,6 @@ class Variable:
     def summarize_location(self) -> str:
         country, state, county = self.target_location()
         return ", ".join(x for x in [county, state, country] if x)
-
-    def summarize_date(self) -> Optional[tuple[datetime.date, datetime.date]]:
-        if self.is_target and self.parsed_start and self.parsed_end:
-            return self.parsed_start, self.parsed_end
-
-        try:
-            return min(
-                i.parsed_start
-                for i in self.all_inputs | set([self])
-                if i.parsed_start
-            ), max(
-                i.parsed_end
-                for i in self.all_inputs | set([self])
-                if i.parsed_end
-            )
-        except ValueError:
-            return None
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -258,24 +263,19 @@ class Prevalence(Variable):
             infections_per_100k=self.infections_per_100k * scalar.scalar,
             inputs=[self, scalar],
             active=self.active,
+            date_source=self,
         )
 
     def __add__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
         assert self.active == other.active
+        assert self.parsed_start == other.parsed_start
+        assert self.parsed_end == other.parsed_end
         return Prevalence(
             infections_per_100k=self.infections_per_100k
             + other.infections_per_100k,
             inputs=[self, other],
             active=self.active,
-        )
-
-    def target(self, **kwargs) -> "Prevalence":
-        return Prevalence(
-            infections_per_100k=self.infections_per_100k,
-            inputs=[self],
-            is_target=True,
-            active=self.active,
-            **kwargs,
+            date_source=self,
         )
 
 
@@ -293,6 +293,7 @@ class PrevalenceAbsolute(Taggable):
             infections_per_100k=self.infections * 100000 / population.people,
             inputs=[self, population],
             active=self.active,
+            date_source=self,
         )
 
 
@@ -311,7 +312,11 @@ class Number(Variable):
     number: float
 
     def __truediv__(self, other: "Number") -> Scalar:
-        return Scalar(scalar=self.number / other.number, inputs=[self, other])
+        return Scalar(
+            scalar=self.number / other.number,
+            inputs=[self, other],
+            date_source=self,
+        )
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -331,6 +336,7 @@ class IncidenceRate(Variable):
             / 365,
             inputs=[self, shedding_duration],
             active=Active.ACTIVE,
+            date_source=self,
         )
 
 
@@ -348,6 +354,7 @@ class IncidenceAbsolute(Taggable):
             * 100000
             / population.people,
             inputs=[self, population],
+            date_source=self,
         )
 
 

@@ -20,18 +20,17 @@ class TestPathogens(unittest.TestCase):
         us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
         self.assertEqual(us_2019.summarize_location(), "United States")
         self.assertEqual(
-            us_2019.summarize_date(),
-            (datetime.date(2019, 1, 1), datetime.date(2019, 12, 31)),
-        )
-
-        self.assertEqual(
             la_2020.summarize_location(),
             "Los Angeles County, California, United States",
         )
-        self.assertEqual(
-            la_2020.summarize_date(),
-            (datetime.date(2020, 1, 1), datetime.date(2020, 12, 31)),
-        )
+
+    def test_dstes(self):
+        us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
+        self.assertEqual(us_2019.parsed_start, datetime.date(2019, 1, 1))
+        self.assertEqual(us_2019.parsed_end, datetime.date(2019, 12, 31))
+
+        self.assertEqual(la_2020.parsed_start, datetime.date(2020, 1, 1))
+        self.assertEqual(la_2020.parsed_end, datetime.date(2020, 12, 31))
 
     def test_properties_exist(self):
         for pathogen_name, pathogen in pathogens.pathogens.items():
@@ -42,6 +41,13 @@ class TestPathogens(unittest.TestCase):
 
                 for estimate in pathogen.estimate_prevalences():
                     self.assertIsInstance(estimate, Prevalence)
+
+    def test_dates_set(self):
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                for estimate in pathogen.estimate_prevalences():
+                    self.assertIsNotNone(estimate.parsed_start)
+                    self.assertIsNotNone(estimate.parsed_end)
 
 
 class TestVaribles(unittest.TestCase):
@@ -69,6 +75,11 @@ class TestVaribles(unittest.TestCase):
         v = Variable(start_date="2020-01-07", end_date="2020-02-06")
         self.assertEqual(v.parsed_start, datetime.date(2020, 1, 7))
         self.assertEqual(v.parsed_end, datetime.date(2020, 2, 6))
+
+        v1 = Variable(date="2019")
+        v2 = Variable(date="2020", date_source=v1)
+        self.assertEqual(v2.parsed_start, datetime.date(2019, 1, 1))
+        self.assertEqual(v2.parsed_end, datetime.date(2019, 12, 31))
 
         with self.assertRaises(Exception):
             Variable(start_date="2020-01-07")
