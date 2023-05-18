@@ -110,7 +110,6 @@ def start():
         viral_read_counts=virus_reads,
         total_read_counts=all_reads,
         mean_log_prevalence=np.log(prevalence_per100k),
-        std_log_prevalence=0.5,
         random_seed=1,
     )
     df = fit_to_dataframe(fit, samples)

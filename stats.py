@@ -22,7 +22,9 @@ data {
   array[J] int<lower=0> y;      // reads mapped to virus
   vector[J] n;                  // total reads
   vector[J] mu;                 // mean log prevalence
-  real<lower=0>  sigma;         // std log prevalence
+}
+transformed data {
+  real<lower=0> sigma = 0.5;         // std log prevalence
 }
 parameters {
   real b;                 // log conversion factor
@@ -49,7 +51,6 @@ def fit_model(
     viral_read_counts: npt.ArrayLike,
     total_read_counts: npt.ArrayLike,
     mean_log_prevalence: npt.ArrayLike,
-    std_log_prevalence: float,
     random_seed: int,
 ) -> stan.fit.Fit:
     if isinstance(mean_log_prevalence, float):
@@ -61,7 +62,6 @@ def fit_model(
         "y": viral_read_counts,
         "n": total_read_counts,
         "mu": mu,
-        "sigma": std_log_prevalence,
     }
     model = stan.build(stan_code, data=data, random_seed=random_seed)
     fit = model.sample(num_chains=4, num_samples=1000)
