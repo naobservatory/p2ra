@@ -7,6 +7,7 @@ from collections import Counter
 import mgs
 import pathogens
 import populations
+from fit_covid import lookup_prevalence
 from mgs import MGSData
 from pathogen_properties import *
 from tree import Tree
@@ -328,6 +329,18 @@ class TestPrevalenceFromIncidence(unittest.TestCase):
                 target_date, incidences
             ).infections_per_100k,
         )
+
+
+class TestCovid(unittest.TestCase):
+    def test_lookup_prevalence(self):
+        pathogen = "sars_cov_2"
+        bioproject = mgs.BioProject("PRJNA729801")  # Rothman
+        mgs_data = MGSData.from_repo()
+        samples = mgs_data.sample_attributes(
+            bioproject, enrichment=mgs.Enrichment.VIRAL
+        )
+        prevs = lookup_prevalence(samples, pathogen)
+        self.assertEqual(len(samples), len(prevs))
 
 
 if __name__ == "__main__":
