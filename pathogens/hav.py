@@ -1,4 +1,7 @@
+import csv
+
 from pathogen_properties import *
+from populations import us_population
 
 background = """Hepatitis A is a vaccine-preventable liver-infection caused by
 the hepatitis A virus. In the US, it's mostly spread by individual contact.
@@ -90,6 +93,39 @@ king_county_confirmed_cases_rate_2018 = IncidenceRate(
     source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
 )
 
+ohio_hav_prevalence_2020 = Prevalence(
+    infections_per_100k=2.4,
+    date="2020",
+    country="United States",
+    state="Ohio",
+    active=Active.ACTIVE,
+    source="https://www.cdc.gov/hepatitis/statistics/2020surveillance/hepatitis-a/figure-1.3.htm",
+)
+
+ohio_county_hav_prevalences = {}
+
+with open(prevalence_data_filename("havCaseCountsOhioCounties.csv")) as file:
+    reader = csv.reader(file)
+    next(reader)
+    for row in reader:
+        row[0] = row[0] + " County"
+        ohio_county_hav_prevalences[row[0]] = (
+            IncidenceAbsolute(
+                country="United States",
+                state="Ohio",
+                date="2021",
+                county=row[0],
+                annual_infections=int(row[1]) / 4,
+            )
+            .to_rate(us_population(year=2021, state="Ohio", county=row[0]))
+            .to_prevalence(hva_shedding_duration)
+        )
+
+
+def return_dictionary_entries(dictionary):
+    for item in dictionary:
+        return item
+
 
 def estimate_prevalences():
     return [
@@ -104,4 +140,6 @@ def estimate_prevalences():
             hva_shedding_duration
         )
         * incidence_underreporting_scalar,
+        ohio_hav_prevalence_2020,
+        return_dictionary_entries(ohio_county_hav_prevalences),
     ]
