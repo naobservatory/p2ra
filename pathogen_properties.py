@@ -334,6 +334,7 @@ class Prevalence(Variable):
                     for (prevalence, population) in pairs
                 ]
             ),
+            location_source=pairs[0][1],
             inputs=itertools.chain.from_iterable(pairs),
         )
 
@@ -479,6 +480,7 @@ class IncidenceRate(Variable):
                     for (incidence, population) in pairs
                 ]
             ),
+            location_source=pairs[0][1],
             inputs=itertools.chain.from_iterable(pairs),
         )
 
