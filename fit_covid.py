@@ -98,7 +98,6 @@ def start():
     prevalence_per100k = np.array(
         lookup_prevalence(samples, pathogen, country, state)
     )
-    print(prevalence_per100k)
 
     naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
         virus_reads,
@@ -137,8 +136,9 @@ def start():
         compression="gzip",
     )
 
-    # TODO: Find a better way to get the once-per-draw stats
-    model_ra_per100 = df[df["sample"] == 1]["ra_per_one_percent"]
+    model_ra_per100 = pd.pivot_table(
+        df, index="draws", values=["ra_per_one_percent"]
+    )
     print_summary(pathogen, naive_ra_per100, model_ra_per100)
 
 
