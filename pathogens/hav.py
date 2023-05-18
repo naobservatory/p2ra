@@ -116,10 +116,12 @@ with open(prevalence_data_filename("havCaseCountsOhioCounties.csv")) as file:
                 date="2021",
                 county=row[0],
                 annual_infections=int(row[1]) / 4,
-            )
-            .to_rate(us_population(year=2021, state="Ohio", county=row[0]))
-            .to_prevalence(hva_shedding_duration)
-        )
+            ).to_rate(us_population(year=2021, state="Ohio", county=row[0]))
+        ).to_prevalence(hva_shedding_duration)
+
+import pprint
+
+pprint.pprint(ohio_county_hav_prevalences["Adams County"].infections_per_100k)
 
 
 def return_dictionary_entries(dictionary):
