@@ -7,39 +7,43 @@ import pandas as pd
 import stats
 from fit_rothman import per100k_to_per100, print_summary
 from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
+from pathogen_properties import Prevalence
 from pathogens import pathogens
 
 
-def prevalence_by_state_county_date(
-    pathogen: str,
-) -> dict[tuple[str, str, date], float]:
-    prevs = {}
-    for estimate in pathogens[pathogen].estimate_prevalences():
-        country, state, county = estimate.target_location()
-        assert country == "United States"
-        assert state is not None
-        assert county is not None
-        est_date = estimate.get_date()
-        key = (state, county, est_date)
-        assert key not in prevs
-        prevs[key] = estimate.infections_per_100k
-    return prevs
+def is_match(
+    prevalence: Prevalence,
+    sample_attrs: SampleAttributes,
+    sample_country: str,
+    sample_state: str,
+) -> bool:
+    country, state, county = prevalence.target_location()
+    start, end = prevalence.get_dates()
+    assert isinstance(sample_attrs.date, date)
+    return (
+        (prevalence.taxid is None)  # TODO: allow other taxids
+        and (country == sample_country)
+        and ((state is None) or (state == sample_state))
+        and ((county is None) or (county == sample_attrs.county))
+        and (start <= sample_attrs.date <= end)
+    )
 
 
 def lookup_prevalence(
-    samples: dict[Sample, SampleAttributes], pathogen: str
+    samples: dict[Sample, SampleAttributes],
+    pathogen: str,
+    country: str,
+    state: str,
 ) -> list[float]:
-    lookup = prevalence_by_state_county_date(pathogen)
+    prev_estimates = pathogens[pathogen].estimate_prevalences()
     prevs = []
     for _, attrs in samples.items():
-        assert attrs.fine_location is not None
-        assert attrs.county in [
-            "Los Angeles County",
-            "San Diego County",
-            "Orange County",
+        matches = [
+            p for p in prev_estimates if is_match(p, attrs, country, state)
         ]
-        assert isinstance(attrs.date, date)
-        prevs.append(lookup[("California", attrs.county, attrs.date)])
+        # TODO: handle multiple matches
+        assert len(matches) == 1
+        prevs.append(matches[0].infections_per_100k)
     return prevs
 
 
@@ -74,6 +78,8 @@ def fit_to_dataframe(
 
 def start():
     bioproject = BioProject("PRJNA729801")  # Rothman
+    country = "United States"
+    state = "California"
 
     mgs_data = MGSData.from_repo()
     samples = mgs_data.sample_attributes(
@@ -89,7 +95,10 @@ def start():
         [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
     )
 
-    prevalence_per100k = np.array(lookup_prevalence(samples, pathogen))
+    prevalence_per100k = np.array(
+        lookup_prevalence(samples, pathogen, country, state)
+    )
+    print(prevalence_per100k)
 
     naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
         virus_reads,
