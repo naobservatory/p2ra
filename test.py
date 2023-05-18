@@ -129,6 +129,30 @@ class TestVaribles(unittest.TestCase):
         with self.assertRaises(AssertionError):
             v.get_dates()  # asserts dates are set
 
+    def test_locations(self):
+        v1 = Variable(
+            country="United States", state="Ohio", county="Franklin County"
+        )
+        self.assertEqual(
+            ("United States", "Ohio", "Franklin County"), v1.target_location()
+        )
+
+        v2 = Variable(
+            country="United States",
+            state="California",
+            county="Alameda County",
+        )
+
+        # Conflicting locations with no resolution specified.
+        v3 = Variable(inputs=[v1, v2])
+        with self.assertRaises(ValueError):
+            v3.target_location()
+
+        v4 = Variable(inputs=[v1, v2], location_source=v1)
+        self.assertEqual(
+            ("United States", "Ohio", "Franklin County"), v4.target_location()
+        )
+
 
 class TestMGS(unittest.TestCase):
     repo = mgs.GitHubRepo(**mgs.MGS_REPO_DEFAULTS)
