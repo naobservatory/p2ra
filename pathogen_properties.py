@@ -1,6 +1,7 @@
 import calendar
 import dataclasses
 import datetime
+import itertools
 import math
 import os.path
 import re
@@ -8,6 +9,8 @@ from collections.abc import Iterable
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import NewType, Optional
+
+import numpy as np
 
 # Enums, short for enumerations, are a data type in Python used to represent a set of named values,
 # which are typically used to define a set of related constants with unique names.
@@ -208,7 +211,7 @@ class Variable:
         countries = set(i.country for i in inputs if i.country)
         states = set(i.state for i in inputs if i.state)
         counties = set(i.county for i in inputs if i.county)
-
+        print(states)
         country = state = county = None
 
         (country,) = countries
@@ -222,6 +225,17 @@ class Variable:
     def summarize_location(self) -> str:
         country, state, county = self.target_location()
         return ", ".join(x for x in [county, state, country] if x)
+
+    @staticmethod
+    def _weightedAverageByPopulation(
+        *pairs: tuple[float, "Population"]
+    ) -> float:
+        return float(
+            np.average(
+                [val for (val, population) in pairs],
+                weights=[population.people for (val, population) in pairs],
+            )
+        )
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -256,11 +270,8 @@ class Population(Taggable):
 
     people: float
 
-    def __sub__(self, other):
-        if isinstance(other, Population):
-            return dataclasses.replace(self, people=self.people - other.people)
-        else:
-            raise ValueError("Can only subtract another Population instance")
+    def __sub__(self, other: "Population") -> "Population":
+        return dataclasses.replace(self, people=self.people - other.people)
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -296,17 +307,18 @@ class Prevalence(Variable):
         )
 
     @staticmethod
-    def weightedAverageByPopulation(*pairs: tuple["Prevalence", "Population"]):
-        totalInfections = 0.0
-        totalPopulation = 0.0
-        for prevalence, population in pairs:
-            totalInfections += (
-                population.people * prevalence.infections_per_100k / 100_000
-            )
-            totalPopulation += population.people
+    def weightedAverageByPopulation(
+        *pairs: tuple["Prevalence", "Population"]
+    ) -> "Prevalence":
         return dataclasses.replace(
             pairs[0][0],
-            infections_per_100k=totalInfections / totalPopulation * 100_000,
+            infections_per_100k=Variable._weightedAverageByPopulation(
+                *[
+                    (prevalence.infections_per_100k, population)
+                    for (prevalence, population) in pairs
+                ]
+            ),
+            inputs=itertools.chain.from_iterable(pairs),
         )
 
 
@@ -437,21 +449,16 @@ class IncidenceRate(Variable):
     @staticmethod
     def weightedAverageByPopulation(
         *pairs: tuple["IncidenceRate", "Population"]
-    ):
-        totalIncidence = 0.0
-        totalPopulation = 0.0
-        for prevalence, population in pairs:
-            totalIncidence += (
-                population.people
-                * prevalence.annual_infections_per_100k
-                / 100_000
-            )
-            totalPopulation += population.people
+    ) -> "IncidenceRate":
         return dataclasses.replace(
             pairs[0][0],
-            annual_infections_per_100k=totalIncidence
-            / totalPopulation
-            * 100_000,
+            annual_infections_per_100k=Variable._weightedAverageByPopulation(
+                *[
+                    (incidence.annual_infections_per_100k, population)
+                    for (incidence, population) in pairs
+                ]
+            ),
+            inputs=itertools.chain.from_iterable(pairs),
         )
 
 
