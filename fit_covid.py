@@ -85,48 +85,32 @@ def start():
     samples = mgs_data.sample_attributes(
         bioproject, enrichment=Enrichment.VIRAL
     )
-    all_reads = np.array(
-        [mgs_data.total_reads(bioproject)[s] for s in samples]
-    )
 
     pathogen = "sars_cov_2"
     taxids = pathogens[pathogen].pathogen_chars.taxids
-    virus_reads = np.array(
-        [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
-    )
 
-    prevalence_per100k = np.array(
-        lookup_prevalence(samples, pathogen, country, state)
-    )
-
-    naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
-        virus_reads,
-        all_reads,
-        np.mean(prevalence_per100k),
-    )
+    data = {
+        "total_reads": np.array(
+            [mgs_data.total_reads(bioproject)[s] for s in samples]
+        ),
+        "viral_reads": np.array(
+            [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
+        ),
+        "prevalence_per100k": np.array(
+            lookup_prevalence(samples, pathogen, country, state)
+        ),
+        "county": [s.county for s in samples.values()],
+        "date": [s.date for s in samples.values()],
+        "plant": [s.fine_location for s in samples.values()],
+        "observation_type": "data",
+    }
 
     fit = stats.fit_model(
-        num_samples=len(virus_reads),
-        viral_read_counts=virus_reads,
-        total_read_counts=all_reads,
-        mean_log_prevalence=np.log(prevalence_per100k),
+        data=data,
         random_seed=1,
     )
     df = fit_to_dataframe(fit, samples)
-
-    # TODO: do this more neatly
-    df_obs = pd.DataFrame(
-        {
-            "viral_reads": virus_reads,
-            "total_reads": all_reads,
-            "prevalence_per100k": prevalence_per100k,
-            "county": [s.county for s in samples.values()],
-            "date": [s.date for s in samples.values()],
-            "plant": [s.fine_location for s in samples.values()],
-            "observation_type": "data",
-        }
-    )
-    df = pd.concat([df, df_obs], ignore_index=True)
+    df = pd.concat([pd.DataFrame(data), df], ignore_index=True)
 
     df.to_csv(
         "fits/rothman-sars_cov_2.tsv.gz",
@@ -135,6 +119,11 @@ def start():
         compression="gzip",
     )
 
+    naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
+        data["viral_reads"],
+        data["total_reads"],
+        np.mean(data["prevalence_per100k"]),
+    )
     model_ra_per100 = pd.pivot_table(
         df, index="draws", values=["ra_per_one_percent"]
     )
