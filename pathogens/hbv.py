@@ -74,10 +74,24 @@ us_population_2019 = Population(
 )
 
 
+ohio_acute_incidence_2021 = IncidenceRate(
+    # This source reports both an acute and a chronic incidence. I think it
+    # makes sense to add these 2 numbers for an acute estimate, since chronic
+    # cases still have an acute phase in which they shed.
+    annual_infections_per_100k=16.5,
+    country="United States",
+    state="Ohio",
+    date="2021",
+    # Note that this source has yearly data for 2017-2021 if it's ever needed
+    source="https://odh.ohio.gov/know-our-programs/viral-hepatitis/data-statistics/hbv_5yr_report",
+)
+
+
 def estimate_prevalences():
     return [
         cdc_estimated_acute_2019.to_rate(us_population_2019).to_prevalence(
             dna_present_in_serum
         ),
         estimated_chronic_us_2020.to_rate(us_population(year=2020)),
+        ohio_acute_incidence_2021.to_prevalence(dna_present_in_serum),
     ]
