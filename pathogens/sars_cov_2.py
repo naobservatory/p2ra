@@ -65,6 +65,8 @@ def estimate_prevalences():
         prevalence_data_filename("time_series_covid19_confirmed_US.csv")
     ) as inf:
         for row in csv.reader(inf):
+            incidences = []
+
             truncated_county = row[5]
             state = row[6]
 
@@ -122,15 +124,16 @@ def estimate_prevalences():
                     county=county,
                     date=date.isoformat(),
                 )
-                estimates.append(
-                    (
-                        cases.to_rate(
-                            us_population(
-                                county=county, state=state, year=date.year
-                            )
-                        ).to_prevalence(shedding_duration)
-                        * underreporting
-                    ).target(date=date.isoformat())
-                )
 
+                incidences.append(
+                    cases.to_rate(
+                        us_population(
+                            county=county, state=state, year=date.year
+                        )
+                    )
+                    * underreporting
+                )
+            estimates.extend(
+                shedding_duration.prevalences_from_incidences(incidences)
+            )
     return estimates

@@ -25,8 +25,7 @@ if __name__ == "__main__":
 
     prevalence_by_loc_date = {}
     for estimate in pathogens[pathogen].estimate_prevalences():
-        assert estimate.parsed_start == estimate.parsed_end
-        key = (estimate.county, estimate.parsed_start)
+        key = (estimate.county, estimate.get_date())
         assert key not in prevalence_by_loc_date
         prevalence_by_loc_date[key] = estimate.infections_per_100k
 
