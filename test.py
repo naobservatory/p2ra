@@ -153,7 +153,6 @@ class TestWeightedAverageByPopulation(unittest.TestCase):
             Prevalence.weightedAverageByPopulation(
                 *zip(prevalences, populations)
             ).infections_per_100k,
-            delta=0.00001,
         )
 
 

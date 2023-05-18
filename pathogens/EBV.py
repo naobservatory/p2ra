@@ -104,20 +104,20 @@ with open(prevalence_data_filename("DenmarkPopulationData.csv")) as file:
 
         # Remove spaces from the numbers and add them to the respective
         # age group
-        population = float(row[5].replace(" ", ""))
+        population = int(row[5].replace(" ", ""))
 
         if age == 0:
-            denmark_age_groups[(0, 0)] += int(population)
+            denmark_age_groups[(0, 0)] += population
         elif 1 <= age <= 3:
-            denmark_age_groups[(1, 3)] += int(population)
+            denmark_age_groups[(1, 3)] += population
         elif 4 <= age <= 14:
-            denmark_age_groups[(4, 14)] += int(population)
+            denmark_age_groups[(4, 14)] += population
         elif 15 <= age <= 17:
-            denmark_age_groups[(15, 17)] += int(population)
+            denmark_age_groups[(15, 17)] += population
         elif 18 <= age <= 29:
-            denmark_age_groups[(18, 29)] += int(population)
+            denmark_age_groups[(18, 29)] += population
         elif 30 <= age <= 100:
-            denmark_age_groups[(30, 100)] += int(population)
+            denmark_age_groups[(30, 100)] += population
         else:
             assert False
 
@@ -130,8 +130,6 @@ with open(prevalence_data_filename("DenmarkPopulationData.csv")) as file:
             tag="%s-%syo" % (min_age, max_age),
             source="https://www.census.gov/data-tools/demo/idb/#/pop?COUNTRY_YEAR=2023&COUNTRY_YR_ANIM=2023&FIPS_SINGLE=DA&menu=popViz&FIPS=DA&POP_YEARS=2023&popPages=BYAGE",
         )
-    print(denmark_populations[0, 0])
-
 
 # These estimates apply seroprevalence estimates from 1983 to Denmark's
 # current population.
