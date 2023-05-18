@@ -7,6 +7,7 @@ from collections import Counter
 import mgs
 import pathogens
 import populations
+from fit_covid import lookup_prevalence
 from mgs import MGSData
 from pathogen_properties import *
 from tree import Tree
@@ -127,6 +128,30 @@ class TestVaribles(unittest.TestCase):
         self.assertIsNone(v.parsed_end)
         with self.assertRaises(AssertionError):
             v.get_dates()  # asserts dates are set
+
+    def test_locations(self):
+        v1 = Variable(
+            country="United States", state="Ohio", county="Franklin County"
+        )
+        self.assertEqual(
+            ("United States", "Ohio", "Franklin County"), v1.target_location()
+        )
+
+        v2 = Variable(
+            country="United States",
+            state="California",
+            county="Alameda County",
+        )
+
+        # Conflicting locations with no resolution specified.
+        v3 = Variable(inputs=[v1, v2])
+        with self.assertRaises(ValueError):
+            v3.target_location()
+
+        v4 = Variable(inputs=[v1, v2], location_source=v1)
+        self.assertEqual(
+            ("United States", "Ohio", "Franklin County"), v4.target_location()
+        )
 
 
 class TestMGS(unittest.TestCase):
@@ -328,6 +353,18 @@ class TestPrevalenceFromIncidence(unittest.TestCase):
                 target_date, incidences
             ).infections_per_100k,
         )
+
+
+class TestCovid(unittest.TestCase):
+    def test_lookup_prevalence(self):
+        pathogen = "sars_cov_2"
+        bioproject = mgs.BioProject("PRJNA729801")  # Rothman
+        mgs_data = MGSData.from_repo()
+        samples = mgs_data.sample_attributes(
+            bioproject, enrichment=mgs.Enrichment.VIRAL
+        )
+        prevs = lookup_prevalence(samples, pathogen)
+        self.assertEqual(len(samples), len(prevs))
 
 
 if __name__ == "__main__":
