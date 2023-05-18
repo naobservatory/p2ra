@@ -178,7 +178,8 @@ class TestWeightedAverageByPopulation(unittest.TestCase):
         ]
         populations = [
             Population(
-                people=100_000 * i, date="2000-01-0%s" % i, tag="US-2020"
+                people=100_000 * i,
+                date="2000-01-0%s" % i,
             )
             for i in range(1, 5)
         ]

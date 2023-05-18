@@ -127,7 +127,6 @@ with open(prevalence_data_filename("DenmarkPopulationData.csv")) as file:
             people=people,
             date="2023",
             country="Denmark",
-            tag="%s-%syo" % (min_age, max_age),
             source="https://www.census.gov/data-tools/demo/idb/#/pop?COUNTRY_YEAR=2023&COUNTRY_YR_ANIM=2023&FIPS_SINGLE=DA&menu=popViz&FIPS=DA&POP_YEARS=2023&popPages=BYAGE",
         )
 
