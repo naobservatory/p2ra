@@ -1,6 +1,7 @@
 import calendar
 import dataclasses
 import datetime
+import math
 import os.path
 import re
 from collections.abc import Iterable
@@ -86,47 +87,74 @@ class Variable:
     date: InitVar[Optional[str]] = None
     start_date: InitVar[Optional[str]] = None
     end_date: InitVar[Optional[str]] = None
-    parsed_start: Optional[datetime.date] = field(init=False)
-    parsed_end: Optional[datetime.date] = field(init=False)
-    is_target: Optional[bool] = False
+    # In cases where an estimate is derived from multiple input variables with
+    # different dates, set date_source to the Variable that represents the date
+    # range this estimate is intended for.  For example, imagine we have:
+    #
+    #   population = Population(date="2020-04-01", ...)
+    #   prevalence = AbsolutePrevalence(date="2020-08-01", ...)
+    #   return prevalence.to_rate(population)
+    #
+    # There's no way for the consumer to know what date this estimate is for.
+    # So instead we do:
+    #
+    #   return prevalence.to_rate(population, date_source=prevalence)
+    #
+    # parsed_start / parsed_end are set from date_source if supplied, otherwise
+    # from start_date / end_date.
+    date_source: InitVar[Optional["Variable"]] = None
+    # Read these via get_dates(), which asserts that they're set.
+    parsed_start: Optional[datetime.date] = None
+    parsed_end: Optional[datetime.date] = None
     taxid: Optional[TaxID] = None
     inputs: InitVar[Optional[Iterable["Variable"]]] = None
-    all_inputs: set["Variable"] = field(init=False)
+    all_inputs: set["Variable"] = field(default_factory=set)
 
     def __post_init__(
         self,
         date: Optional[str],
         start_date: Optional[str],
         end_date: Optional[str],
+        date_source: Optional["Variable"],
         inputs: Optional[Iterable["Variable"]],
     ):
-        # See comment above about __post_init__ for why we're using __setattr__.
+        # See comment above about __post_init__ for why we're using
+        # __setattr__.
         if date and (start_date or end_date):
             raise Exception("If you have start/end don't set date.")
+        if self.parsed_start and (date or start_date):
+            raise Exception("Don't set both parsed_start and provide a date")
+        if self.parsed_end and (date or end_date):
+            raise Exception("Don't set both parsed_start and provide a date")
         if (start_date and not end_date) or (end_date and not start_date):
             raise Exception("Start and end must go together.")
         if date:
             start_date = end_date = date
 
-        parsed_start = None
+        parsed_start = self.parsed_start
         if start_date:
             parsed_start = self._parse_date(start_date, "start")
-        object.__setattr__(self, "parsed_start", parsed_start)
 
-        parsed_end = None
+        parsed_end = self.parsed_end
         if end_date:
             parsed_end = self._parse_date(end_date, "end")
-        object.__setattr__(self, "parsed_end", parsed_end)
 
-        if (
-            self.parsed_start
-            and self.parsed_end
-            and self.parsed_start > self.parsed_end
-        ):
+        if date_source:
+            assert date_source.parsed_start
+            assert date_source.parsed_end
+            parsed_start = date_source.parsed_start
+            parsed_end = date_source.parsed_end
+
+        if parsed_start and parsed_end and parsed_start > parsed_end:
             raise Exception("Start date can't be after end date")
 
-        all_inputs = set(inputs or [])
-        for variable in set(inputs or []):
+        object.__setattr__(self, "parsed_start", parsed_start)
+        object.__setattr__(self, "parsed_end", parsed_end)
+
+        all_inputs = set(self.all_inputs or inputs or [])
+        if date_source:
+            all_inputs.add(date_source)
+        for variable in list(all_inputs):
             all_inputs |= variable.all_inputs
         object.__setattr__(self, "all_inputs", frozenset(all_inputs))
 
@@ -158,46 +186,75 @@ class Variable:
 
         return datetime.date(y, m, d)
 
-    def _location(self):
-        bits = []
-        if self.county:
-            bits.append(self.county)
-        if self.state:
-            bits.append(self.state)
-        if self.country:
-            bits.append(self.country)
-        return ", ".join(bits)
+    def get_dates(self) -> tuple[datetime.date, datetime.date]:
+        assert self.parsed_start
+        assert self.parsed_end
+        return self.parsed_start, self.parsed_end
 
-    def summarize_location(self, all_locations=None):
-        if self.is_target and self._location():
-            return self._location()
+    def get_date(self) -> datetime.date:
+        # Only call this on variables that you know represent a single-day
+        # estimate.
+        start, end = self.get_dates()
+        assert start == end
+        return start
 
-        return "; ".join(
-            sorted(
-                set(i._location() for i in self.all_inputs if i._location())
-            )
-        )
+    # Returns country, state, county, or raises an error if there are
+    # conflicting locations.
+    def target_location(
+        self,
+    ) -> tuple[Optional[str], Optional[str], Optional[str]]:
+        inputs = self.all_inputs | set([self])
 
-    def summarize_date(self) -> Optional[tuple[datetime.date, datetime.date]]:
-        if self.is_target and self.parsed_start and self.parsed_end:
-            return self.parsed_start, self.parsed_end
+        countries = set(i.country for i in inputs if i.country)
+        states = set(i.state for i in inputs if i.state)
+        counties = set(i.county for i in inputs if i.county)
 
-        try:
-            return min(
-                i.parsed_start for i in self.all_inputs if i.parsed_start
-            ), max(i.parsed_end for i in self.all_inputs if i.parsed_end)
-        except ValueError:
-            return None
+        country = state = county = None
+
+        (country,) = countries
+        if states:
+            (state,) = states
+        if counties:
+            (county,) = counties
+
+        return country, state, county
+
+    def summarize_location(self) -> str:
+        country, state, county = self.target_location()
+        return ", ".join(x for x in [county, state, country] if x)
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class Population(Variable):
+class Taggable(Variable):
+    # In cases where the location and date isn't enough to identify the
+    # population, you can set a more specific tag to reduce errors.  For
+    # example, tag="18-49yo".
+    tag: Optional[str] = None
+
+    def assert_comparable(self, other: "Taggable"):
+        v1 = self
+        v2 = other
+
+        assert v1.country == v2.country
+        assert v1.state == v2.state
+        assert v1.county == v2.county
+
+        # Normally everything has to match, but it's ok if one of them
+        # has a more specific date as long as it's within a year; populations
+        # don't change quickly.
+        v1_start, v1_end = v1.get_dates()
+        v2_start, v2_end = v2.get_dates()
+        assert v1_start.year == v2_start.year
+        assert v1_end.year == v2_end.year
+
+        assert v1.tag == v2.tag
+
+
+@dataclass(kw_only=True, eq=True, frozen=True)
+class Population(Taggable):
     """A number of people"""
 
     people: float
-    # Make this specific enough that you won't accidentally pair it with the
-    # wrong absolute prevalence or incidence.
-    tag: str
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -217,6 +274,7 @@ class Prevalence(Variable):
             infections_per_100k=self.infections_per_100k * scalar.scalar,
             inputs=[self, scalar],
             active=self.active,
+            date_source=self,
         )
 
     def __truediv__(self, scalar: Scalar) -> "Prevalence":
@@ -224,33 +282,31 @@ class Prevalence(Variable):
             infections_per_100k=self.infections_per_100k / scalar.scalar,
             inputs=[self, scalar],
             active=self.active,
+            date_source=self,
         )
 
     def __add__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
         assert self.active == other.active
+        assert self.parsed_start == other.parsed_start
+        assert self.parsed_end == other.parsed_end
         return Prevalence(
             infections_per_100k=self.infections_per_100k
             + other.infections_per_100k,
             inputs=[self, other],
             active=self.active,
+            date_source=self,
         )
 
     def __sub__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
         assert self.active == other.active
+        assert self.parsed_start == other.parsed_start
+        assert self.parsed_end == other.parsed_end
         return Prevalence(
             infections_per_100k=self.infections_per_100k
             - other.infections_per_100k,
             inputs=[self, other],
             active=self.active,
-        )
-
-    def target(self, **kwargs) -> "Prevalence":
-        return Prevalence(
-            infections_per_100k=self.infections_per_100k,
-            inputs=[self],
-            is_target=True,
-            active=self.active,
-            **kwargs,
+            date_source=self,
         )
 
     @staticmethod
@@ -269,28 +325,77 @@ class Prevalence(Variable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class PrevalenceAbsolute(Variable):
+class PrevalenceAbsolute(Taggable):
     """How many people had this pathogen at some moment"""
 
     infections: float
     active: Active
 
-    # Make this specific enough that you won't accidentally pair it with the
-    # wrong population.
-    tag: str
-
     def to_rate(self, population: Population) -> Prevalence:
-        assert self.tag == population.tag
+        self.assert_comparable(population)
+
         return Prevalence(
             infections_per_100k=self.infections * 100000 / population.people,
             inputs=[self, population],
             active=self.active,
+            date_source=self,
         )
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
 class SheddingDuration(Variable):
     days: float
+
+    # The model here is that shedding is binary: on the first day of infection
+    # you begin to shed at 100%, and then after `days` you shed 0%.  This is a
+    # big simplification!
+    #
+    # Incidences should contain daily estimates for target_day and at least the
+    # prior `days` days.
+    def prevalence_from_incidences(
+        self, target_day: datetime.date, incidences: list["IncidenceRate"]
+    ) -> Prevalence:
+        max_days = math.ceil(self.days)
+        oldest_day = target_day - datetime.timedelta(days=max_days)
+        candiate_incidences = {}
+        for incidence in incidences:
+            incidence_day = incidence.get_date()
+            if oldest_day < incidence_day <= target_day:
+                candiate_incidences[incidence_day] = incidence
+
+        assert len(candiate_incidences) == max_days
+
+        infections_per_100k = 0.0
+        for days_prior in range(max_days):
+            incidence_day = target_day - datetime.timedelta(days=days_prior)
+
+            weight = 1.0
+            if days_prior == max_days - 1:
+                weight = self.days - math.floor(self.days)
+            infections_per_100k += (
+                weight
+                * candiate_incidences[incidence_day].annual_infections_per_100k
+                / 365
+            )
+
+        return Prevalence(
+            infections_per_100k=infections_per_100k,
+            inputs=[self, *candiate_incidences.values()],
+            active=Active.ACTIVE,
+            date_source=candiate_incidences[target_day],
+        )
+
+    def prevalences_from_incidences(
+        self, incidences: list["IncidenceRate"]
+    ) -> list[Prevalence]:
+        dates = set(incidence.get_date() for incidence in incidences)
+        first_date = min(dates) + datetime.timedelta(days=math.ceil(self.days))
+
+        return [
+            self.prevalence_from_incidences(target_date, incidences)
+            for target_date in sorted(dates)
+            if target_date >= first_date
+        ]
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -303,7 +408,11 @@ class Number(Variable):
     number: float
 
     def __truediv__(self, other: "Number") -> Scalar:
-        return Scalar(scalar=self.number / other.number, inputs=[self, other])
+        return Scalar(
+            scalar=self.number / other.number,
+            inputs=[self, other],
+            date_source=self,
+        )
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -316,6 +425,11 @@ class IncidenceRate(Variable):
     # an active estimate, since multiplying by SheddingDuration calculates the
     # amount of time the virus is actively shedding for, which is not
     # incorporated into a latent estimate.
+    #
+    # Only use this method in situations where incidence is changing slowly
+    # relative to shedding_duration; of doesn't take into account that current
+    # prevalence includes past incidence over the shedding period.  If this
+    # does apply, use SheddingDuration.prevalences_from_incidences.
     def to_prevalence(self, shedding_duration: SheddingDuration) -> Prevalence:
         return Prevalence(
             infections_per_100k=self.annual_infections_per_100k
@@ -323,25 +437,33 @@ class IncidenceRate(Variable):
             / 365,
             inputs=[self, shedding_duration],
             active=Active.ACTIVE,
+            date_source=self,
+        )
+
+    def __mul__(self, scalar: Scalar) -> "IncidenceRate":
+        return IncidenceRate(
+            annual_infections_per_100k=self.annual_infections_per_100k
+            * scalar.scalar,
+            inputs=[self, scalar],
+            date_source=self,
         )
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class IncidenceAbsolute(Variable):
+class IncidenceAbsolute(Taggable):
     """How many people get this pathogen annually"""
 
     annual_infections: float
-    # Make this specific enough that you won't accidentally pair it with the
-    # wrong population.
-    tag: str
 
     def to_rate(self, population: Population) -> IncidenceRate:
-        assert self.tag == population.tag
+        self.assert_comparable(population)
+
         return IncidenceRate(
             annual_infections_per_100k=self.annual_infections
             * 100000
             / population.people,
             inputs=[self, population],
+            date_source=self,
         )
 
 

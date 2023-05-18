@@ -1,3 +1,4 @@
+import dataclasses
 from collections import Counter, defaultdict
 
 import numpy as np
@@ -40,7 +41,6 @@ us_national_foodborne_cases_2006 = IncidenceAbsolute(
     confidence_interval=(3_227_078, 8_309_480),
     coverage_probability=0.9,  # credible interval
     country="United States",
-    tag="us-2006",
     date="2006",
     # "Domestically acquired foodborne, mean (90% credible interval)
     # ... 5,461,731 (3,227,078–8,309,480)"
@@ -59,7 +59,6 @@ us_population_2006 = Population(
     people=299_000_000,
     country="United States",
     date="2006",
-    tag="us-2006",
     # "all estimates were based on the US population in 2006 (299 million
     # persons)"
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3375761/#:~:text=population%20in%202006%20(-,299%20million%20persons,-).%20Estimates%20were%20derived",
@@ -206,24 +205,19 @@ def estimate_prevalences():
 
     for year in range(HISTORY_START, DATA_END):
         for month in range(1, 13):
-            target_date = f"{year}-{month:02d}"
-
-            adjusted_national_prevalence = (
-                pre_covid_national_prevalence
-                * Scalar(
-                    scalar=us_daily_outbreaks[year, month]
-                    / pre_covid_us_average_daily_outbreaks,
-                    country="United States",
-                    date=target_date,
-                    source="https://wwwn.cdc.gov/norsdashboard/",
-                )
+            adjustment = Scalar(
+                scalar=us_daily_outbreaks[year, month]
+                / pre_covid_us_average_daily_outbreaks,
+                country="United States",
+                date=f"{year}-{month:02d}",
+                source="https://wwwn.cdc.gov/norsdashboard/",
+            )
+            adjusted_national_prevalence = dataclasses.replace(
+                pre_covid_national_prevalence * adjustment,
+                date_source=adjustment,
             )
 
-            prevalences.append(
-                adjusted_national_prevalence.target(
-                    country="United States", date=target_date
-                )
-            )
+            prevalences.append(adjusted_national_prevalence)
 
             # Assume that all Norovirus infections are either Group I or II,
             # which is very close (see assertion above).  Also assume the
@@ -238,22 +232,16 @@ def estimate_prevalences():
                 group_I_fraction = group_II_fraction = 0
 
             prevalences.append(
-                (
+                dataclasses.replace(
                     adjusted_national_prevalence
-                    * Scalar(scalar=group_I_fraction)
-                ).target(
-                    country="United States",
-                    date=target_date,
+                    * Scalar(scalar=group_I_fraction),
                     taxid=NOROVIRUS_GROUP_I,
                 )
             )
             prevalences.append(
-                (
+                dataclasses.replace(
                     adjusted_national_prevalence
-                    * Scalar(scalar=group_II_fraction)
-                ).target(
-                    country="United States",
-                    date=target_date,
+                    * Scalar(scalar=group_II_fraction),
                     taxid=NOROVIRUS_GROUP_II,
                 )
             )
