@@ -102,6 +102,9 @@ class Variable:
     # parsed_start / parsed_end are set from date_source if supplied, otherwise
     # from start_date / end_date.
     date_source: InitVar[Optional["Variable"]] = None
+    # Same deal as date_source: set this if otherwise it wouldn't be clear
+    # what location an estimate would be for.
+    location_source: InitVar[Optional["Variable"]] = None
     # Read these via get_dates(), which asserts that they're set.
     parsed_start: Optional[datetime.date] = None
     parsed_end: Optional[datetime.date] = None
@@ -115,6 +118,7 @@ class Variable:
         start_date: Optional[str],
         end_date: Optional[str],
         date_source: Optional["Variable"],
+        location_source: Optional["Variable"],
         inputs: Optional[Iterable["Variable"]],
     ):
         # See comment above about __post_init__ for why we're using
@@ -150,9 +154,16 @@ class Variable:
         object.__setattr__(self, "parsed_start", parsed_start)
         object.__setattr__(self, "parsed_end", parsed_end)
 
+        if location_source:
+            object.__setattr__(self, "country", location_source.country)
+            object.__setattr__(self, "state", location_source.state)
+            object.__setattr__(self, "county", location_source.county)
+
         all_inputs = set(self.all_inputs or inputs or [])
         if date_source:
             all_inputs.add(date_source)
+        if location_source:
+            all_inputs.add(location_source)
         for variable in list(all_inputs):
             all_inputs |= variable.all_inputs
         object.__setattr__(self, "all_inputs", frozenset(all_inputs))
@@ -208,12 +219,15 @@ class Variable:
         states = set(i.state for i in inputs if i.state)
         counties = set(i.county for i in inputs if i.county)
 
-        country = state = county = None
+        country = self.country
+        state = self.state
+        county = self.county
 
-        (country,) = countries
-        if states:
+        if not country:
+            (country,) = countries
+        if states and not state:
             (state,) = states
-        if counties:
+        if counties and not county:
             (county,) = counties
 
         return country, state, county
@@ -274,6 +288,7 @@ class Prevalence(Variable):
             inputs=[self, scalar],
             active=self.active,
             date_source=self,
+            location_source=self,
         )
 
     def __add__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
@@ -286,6 +301,7 @@ class Prevalence(Variable):
             inputs=[self, other],
             active=self.active,
             date_source=self,
+            location_source=self,
         )
 
 
@@ -304,6 +320,7 @@ class PrevalenceAbsolute(Taggable):
             inputs=[self, population],
             active=self.active,
             date_source=self,
+            location_source=self,
         )
 
 
@@ -348,6 +365,7 @@ class SheddingDuration(Variable):
             inputs=[self, *candiate_incidences.values()],
             active=Active.ACTIVE,
             date_source=candiate_incidences[target_day],
+            location_source=candiate_incidences[target_day],
         )
 
     def prevalences_from_incidences(
@@ -377,6 +395,7 @@ class Number(Variable):
             scalar=self.number / other.number,
             inputs=[self, other],
             date_source=self,
+            location_source=self,
         )
 
 
@@ -403,6 +422,7 @@ class IncidenceRate(Variable):
             inputs=[self, shedding_duration],
             active=Active.ACTIVE,
             date_source=self,
+            location_source=self,
         )
 
     def __mul__(self, scalar: Scalar) -> "IncidenceRate":
@@ -411,6 +431,7 @@ class IncidenceRate(Variable):
             * scalar.scalar,
             inputs=[self, scalar],
             date_source=self,
+            location_source=self,
         )
 
 
@@ -429,6 +450,7 @@ class IncidenceAbsolute(Taggable):
             / population.people,
             inputs=[self, population],
             date_source=self,
+            location_source=self,
         )
 
 
