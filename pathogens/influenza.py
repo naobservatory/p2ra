@@ -1,4 +1,5 @@
 import csv
+import dataclasses
 import datetime
 
 from pathogen_properties import *
@@ -111,6 +112,9 @@ def load_weekly_data() -> WeeklyData:
 # There's a ton of studies on this, but they vary a lot.  Fielding 2013 has a
 # metaanalysis but includes "Given the significant heterogeneity in most
 # groups, the combined estimates of viral shedding duration are not reported."
+#
+# TODO: this isn't fecal shedding; if we decide to keep the shedding
+# conversions come back and update this.
 shedding_duration = SheddingDuration(
     # From eyeballing the "Community" portion of Figure 1.
     days=5,
@@ -119,6 +123,8 @@ shedding_duration = SheddingDuration(
 
 infections_2019_2020 = IncidenceAbsolute(
     annual_infections=36_000_000,
+    confidence_interval=(28_663_846, 71_197_342),
+    coverage_probability=0.95,  # 95% UI
     start_date="2019-07-01",
     end_date="2020-07-01",
     tag="us-2019-2020",
@@ -129,6 +135,8 @@ infections_2019_2020 = IncidenceAbsolute(
 
 infections_2021_2022 = IncidenceAbsolute(
     annual_infections=9_000_000,
+    confidence_interval=(7_683_440, 15_541_059),
+    coverage_probability=0.95,  # 95% UI
     start_date="2021-07-01",
     end_date="2022-07-01",
     tag="us-2021-2022",
@@ -245,14 +253,15 @@ def estimate_prevalences() -> list[Prevalence]:
                 )
 
                 prevalences.append(
-                    (
-                        incidence.to_rate(
-                            us_population(state=state, year=parsed_start.year)
-                        ).to_prevalence(shedding_duration)
-                        * underreporting
-                    ).target(
-                        start_date=parsed_start.isoformat(),
-                        end_date=parsed_end.isoformat(),
+                    dataclasses.replace(
+                        (
+                            incidence.to_rate(
+                                us_population(
+                                    state=state, year=parsed_start.year
+                                )
+                            ).to_prevalence(shedding_duration)
+                            * underreporting
+                        ),
                         taxid=taxid,
                     )
                 )
