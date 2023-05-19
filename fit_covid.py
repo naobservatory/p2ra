@@ -2,6 +2,7 @@
 from datetime import date
 
 import numpy as np
+import pandas as pd
 
 import stats
 from fit_rothman import per100k_to_per100, print_summary
@@ -42,6 +43,35 @@ def lookup_prevalence(
     return prevs
 
 
+def fit_to_dataframe(
+    fit, samples: dict[Sample, SampleAttributes]
+) -> pd.DataFrame:
+    df = pd.wide_to_long(
+        fit.to_frame().reset_index(),
+        stubnames=["y_tilde", "theta"],
+        i="draws",
+        j="sample",
+        sep=".",
+    ).reset_index()
+
+    attrs = list(samples.values())
+
+    def get_sample_attrs(attr: str):
+        f = lambda i: getattr(attrs[i - 1], attr)
+        return np.vectorize(f)
+
+    df["date"] = get_sample_attrs("date")(df["sample"])
+    df["county"] = get_sample_attrs("county")(df["sample"])
+    df["plant"] = get_sample_attrs("fine_location")(df["sample"])
+    df["total_reads"] = get_sample_attrs("reads")(df["sample"])
+
+    df["viral_reads"] = df["y_tilde"]
+    df["prevalence_per100k"] = np.exp(df["theta"])
+    df["ra_per_one_percent"] = per100k_to_per100 * np.exp(df["b"])
+    df["observation_type"] = "posterior"
+    return df
+
+
 def start():
     bioproject = BioProject("PRJNA729801")  # Rothman
 
@@ -75,8 +105,31 @@ def start():
         std_log_prevalence=0.5,
         random_seed=1,
     )
-    # TODO: Wrap the model fit so that we aren't exposed to stan variables
-    model_ra_per100 = per100k_to_per100 * np.exp(fit["b"])
+    df = fit_to_dataframe(fit, samples)
+
+    # TODO: do this more neatly
+    df_obs = pd.DataFrame(
+        {
+            "viral_reads": virus_reads,
+            "total_reads": all_reads,
+            "prevalence_per100k": prevalence_per100k,
+            "county": [s.county for s in samples.values()],
+            "date": [s.date for s in samples.values()],
+            "plant": [s.fine_location for s in samples.values()],
+            "observation_type": "data",
+        }
+    )
+    df = pd.concat([df, df_obs], ignore_index=True)
+
+    df.to_csv(
+        "fits/rothman-sars_cov_2.tsv.gz",
+        sep="\t",
+        index=False,
+        compression="gzip",
+    )
+
+    # TODO: Find a better way to get the once-per-draw stats
+    model_ra_per100 = df[df["sample"] == 1]["ra_per_one_percent"]
     print_summary(pathogen, naive_ra_per100, model_ra_per100)
 
 
