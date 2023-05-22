@@ -369,7 +369,7 @@ class TestCovid(unittest.TestCase):
         samples = mgs_data.sample_attributes(
             bioproject, enrichment=mgs.Enrichment.VIRAL
         )
-        prevs = lookup_prevalence(samples, pathogen)
+        prevs = lookup_prevalence(samples, pathogens.pathogens[pathogen])
         self.assertEqual(len(samples), len(prevs))
 
 

@@ -7,7 +7,7 @@ import pandas as pd
 import stats
 from fit_rothman import per100k_to_per100, print_summary
 from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
-from pathogen_properties import Prevalence
+from pathogen_properties import NAType, Prevalence
 from pathogens import pathogens
 
 
@@ -29,9 +29,9 @@ def is_match(
 
 def lookup_prevalence(
     samples: dict[Sample, SampleAttributes],
-    pathogen: str,
+    pathogen,
 ) -> list[float]:
-    prev_estimates = pathogens[pathogen].estimate_prevalences()
+    prev_estimates = pathogen.estimate_prevalences()
     prevs = []
     for _, attrs in samples.items():
         matches = [p for p in prev_estimates if is_match(p, attrs)]
@@ -78,46 +78,49 @@ def start():
         bioproject, enrichment=Enrichment.VIRAL
     )
 
-    pathogen = "sars_cov_2"
-    taxids = pathogens[pathogen].pathogen_chars.taxids
+    for pathogen_name in ["sars_cov_2", "norovirus"]:
+        pathogen = pathogens[pathogen_name]
+        taxids = pathogen.pathogen_chars.taxids
 
-    data = {
-        "total_reads": np.array(
-            [mgs_data.total_reads(bioproject)[s] for s in samples]
-        ),
-        "viral_reads": np.array(
-            [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
-        ),
-        "prevalence_per100k": np.array(lookup_prevalence(samples, pathogen)),
-        "county": [s.county for s in samples.values()],
-        "date": [s.date for s in samples.values()],
-        "plant": [s.fine_location for s in samples.values()],
-        "observation_type": "data",
-    }
+        data = {
+            "total_reads": np.array(
+                [mgs_data.total_reads(bioproject)[s] for s in samples]
+            ),
+            "viral_reads": np.array(
+                [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
+            ),
+            "prevalence_per100k": np.array(
+                lookup_prevalence(samples, pathogen)
+            ),
+            "county": [s.county for s in samples.values()],
+            "date": [s.date for s in samples.values()],
+            "plant": [s.fine_location for s in samples.values()],
+            "observation_type": "data",
+        }
 
-    fit = stats.fit_model(
-        data=data,
-        random_seed=1,
-    )
-    df = fit_to_dataframe(fit, samples)
-    df = pd.concat([pd.DataFrame(data), df], ignore_index=True)
+        fit = stats.fit_model(
+            data=data,
+            random_seed=1,
+        )
+        df = fit_to_dataframe(fit, samples)
+        df = pd.concat([pd.DataFrame(data), df], ignore_index=True)
 
-    df.to_csv(
-        "fits/rothman-sars_cov_2.tsv.gz",
-        sep="\t",
-        index=False,
-        compression="gzip",
-    )
+        df.to_csv(
+            f"fits/rothman-{pathogen_name}.tsv.gz",
+            sep="\t",
+            index=False,
+            compression="gzip",
+        )
 
-    naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
-        data["viral_reads"],
-        data["total_reads"],
-        np.mean(data["prevalence_per100k"]),
-    )
-    model_ra_per100 = pd.pivot_table(
-        df, index="draws", values=["ra_per_one_percent"]
-    )
-    print_summary(pathogen, naive_ra_per100, model_ra_per100)
+        naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
+            data["viral_reads"],
+            data["total_reads"],
+            np.mean(data["prevalence_per100k"]),
+        )
+        model_ra_per100 = pd.pivot_table(
+            df, index="draws", values=["ra_per_one_percent"]
+        )
+        print_summary(pathogen_name, naive_ra_per100, model_ra_per100)
 
 
 if __name__ == "__main__":
