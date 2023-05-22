@@ -15,7 +15,7 @@ from tree import Tree
 MGS_REPO_DEFAULTS = {
     "user": "naobservatory",
     "repo": "mgs-pipeline",
-    "ref": "data-2023-05-17",
+    "ref": "data-2023-05-22",
 }
 
 
@@ -59,6 +59,7 @@ class Enrichment(Enum):
 
 class SampleAttributes(BaseModel):
     country: str
+    state: Optional[str] = None
     county: Optional[str] = None
     location: str
     fine_location: Optional[str] = None
