@@ -10,11 +10,11 @@ from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
 from pathogens import pathogens
 
 
-def prevalence_by_state_county_date(
+def incidence_by_state_county_date(
     pathogen: str,
 ) -> dict[tuple[str, str, date], float]:
     prevs = {}
-    for estimate in pathogens[pathogen].estimate_prevalences():
+    for estimate in pathogens[pathogen].estimate_incidences():
         country, state, county = estimate.get_location()
         assert country == "United States"
         assert state is not None
@@ -22,14 +22,14 @@ def prevalence_by_state_county_date(
         est_date = estimate.get_date()
         key = (state, county, est_date)
         assert key not in prevs
-        prevs[key] = estimate.infections_per_100k
+        prevs[key] = estimate.annual_infections_per_100k
     return prevs
 
 
-def lookup_prevalence(
+def lookup_incidence(
     samples: dict[Sample, SampleAttributes], pathogen: str
 ) -> list[float]:
-    lookup = prevalence_by_state_county_date(pathogen)
+    lookup = incidence_by_state_county_date(pathogen)
     prevs = []
     for _, attrs in samples.items():
         assert attrs.fine_location is not None
@@ -66,7 +66,7 @@ def fit_to_dataframe(
     df["total_reads"] = get_sample_attrs("reads")(df["sample"])
 
     df["viral_reads"] = df["y_tilde"]
-    df["prevalence_per100k"] = np.exp(df["theta"])
+    df["incidence_per100k"] = np.exp(df["theta"])
     df["ra_per_one_percent"] = per100k_to_per100 * np.exp(df["b"])
     df["observation_type"] = "posterior"
     return df
@@ -89,20 +89,20 @@ def start():
         [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
     )
 
-    prevalence_per100k = np.array(lookup_prevalence(samples, pathogen))
+    incidence_per100k = np.array(lookup_incidence(samples, pathogen))
 
     naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
         virus_reads,
         all_reads,
-        np.mean(prevalence_per100k),
+        np.mean(incidence_per100k),
     )
 
     fit = stats.fit_model(
         num_samples=len(virus_reads),
         viral_read_counts=virus_reads,
         total_read_counts=all_reads,
-        mean_log_prevalence=np.log(prevalence_per100k),
-        std_log_prevalence=0.5,
+        mean_log_incidence=np.log(incidence_per100k),
+        std_log_incidence=0.5,
         random_seed=1,
     )
     df = fit_to_dataframe(fit, samples)
@@ -112,7 +112,7 @@ def start():
         {
             "viral_reads": virus_reads,
             "total_reads": all_reads,
-            "prevalence_per100k": prevalence_per100k,
+            "incidence_per100k": incidence_per100k,
             "county": [s.county for s in samples.values()],
             "date": [s.date for s in samples.values()],
             "plant": [s.fine_location for s in samples.values()],

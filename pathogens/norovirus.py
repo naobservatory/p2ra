@@ -64,13 +64,6 @@ us_population_2006 = Population(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3375761/#:~:text=population%20in%202006%20(-,299%20million%20persons,-).%20Estimates%20were%20derived",
 )
 
-shedding_duration = SheddingDuration(
-    days=2,
-    confidence_interval=(1, 3),
-    # "Norovirus infection symptoms usually last 1 to 3 days"
-    source="https://www.mayoclinic.org/diseases-conditions/norovirus/symptoms-causes/syc-20355296#:~:text=Norovirus%20infection%20symptoms%20usually%20last%201%20to%203%20days",
-)
-
 monthwise_count = dict[tuple[int, int], float]  # [year, month] -> float
 
 
@@ -186,18 +179,16 @@ COVID_START = 2020
 DATA_END = 2022
 
 
-def estimate_prevalences():
-    prevalences = []
+def estimate_incidences() -> list[IncidenceRate]:
+    incidences = []
 
     us_outbreaks, us_outbreaks_I, us_outbreaks_II = load_nors_outbreaks()
     pre_covid_us_average_daily_outbreaks = determine_average_daily_outbreaks(
         us_outbreaks
     )
 
-    pre_covid_national_prevalence = (
-        us_national_foodborne_cases_2006.to_rate(
-            us_population_2006
-        ).to_prevalence(shedding_duration)
+    pre_covid_national_incidence = (
+        us_national_foodborne_cases_2006.to_rate(us_population_2006)
         * us_total_relative_to_foodborne_2006
     )
 
@@ -212,12 +203,12 @@ def estimate_prevalences():
                 date=f"{year}-{month:02d}",
                 source="https://wwwn.cdc.gov/norsdashboard/",
             )
-            adjusted_national_prevalence = dataclasses.replace(
-                pre_covid_national_prevalence * adjustment,
+            adjusted_national_incidence = dataclasses.replace(
+                pre_covid_national_incidence * adjustment,
                 date_source=adjustment,
             )
 
-            prevalences.append(adjusted_national_prevalence)
+            incidences.append(adjusted_national_incidence)
 
             # Assume that all Norovirus infections are either Group I or II,
             # which is very close (see assertion above).  Also assume the
@@ -231,19 +222,23 @@ def estimate_prevalences():
             else:
                 group_I_fraction = group_II_fraction = 0
 
-            prevalences.append(
+            incidences.append(
                 dataclasses.replace(
-                    adjusted_national_prevalence
+                    adjusted_national_incidence
                     * Scalar(scalar=group_I_fraction),
                     taxid=NOROVIRUS_GROUP_I,
                 )
             )
-            prevalences.append(
+            incidences.append(
                 dataclasses.replace(
-                    adjusted_national_prevalence
+                    adjusted_national_incidence
                     * Scalar(scalar=group_II_fraction),
                     taxid=NOROVIRUS_GROUP_II,
                 )
             )
 
-    return prevalences
+    return incidences
+
+
+def estimate_prevalences() -> list[Prevalence]:
+    return []
