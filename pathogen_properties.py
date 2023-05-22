@@ -158,6 +158,29 @@ class Variable:
             object.__setattr__(self, "country", location_source.country)
             object.__setattr__(self, "state", location_source.state)
             object.__setattr__(self, "county", location_source.county)
+        elif inputs:
+            # If they didn't give us location information but there's location
+            # information in our inputs, check that for consistency.  If it's
+            # consistent use it, otherwise raise an error.
+
+            countries = set(i.country for i in inputs if i.country)
+            states = set(i.state for i in inputs if i.state)
+            counties = set(i.county for i in inputs if i.county)
+
+            country = self.country
+            state = self.state
+            county = self.county
+
+            if not country:
+                (country,) = countries
+            if states and not state:
+                (state,) = states
+            if counties and not county:
+                (county,) = counties
+
+            object.__setattr__(self, "country", country)
+            object.__setattr__(self, "state", state)
+            object.__setattr__(self, "county", county)
 
         all_inputs = set(self.all_inputs or inputs or [])
         if date_source:
@@ -208,32 +231,13 @@ class Variable:
         assert start == end
         return start
 
-    # Returns country, state, county, or raises an error if there are
-    # conflicting locations.
-    def target_location(
+    def get_location(
         self,
     ) -> tuple[Optional[str], Optional[str], Optional[str]]:
-        inputs = self.all_inputs | set([self])
-
-        countries = set(i.country for i in inputs if i.country)
-        states = set(i.state for i in inputs if i.state)
-        counties = set(i.county for i in inputs if i.county)
-
-        country = self.country
-        state = self.state
-        county = self.county
-
-        if not country:
-            (country,) = countries
-        if states and not state:
-            (state,) = states
-        if counties and not county:
-            (county,) = counties
-
-        return country, state, county
+        return self.country, self.state, self.county
 
     def summarize_location(self) -> str:
-        country, state, county = self.target_location()
+        country, state, county = self.get_location()
         return ", ".join(x for x in [county, state, country] if x)
 
 

@@ -17,7 +17,7 @@ def is_match(
     sample_country: str,
     sample_state: str,
 ) -> bool:
-    country, state, county = prevalence.target_location()
+    country, state, county = prevalence.get_location()
     start, end = prevalence.get_dates()
     assert isinstance(sample_attrs.date, date)
     return (
