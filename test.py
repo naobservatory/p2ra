@@ -134,7 +134,7 @@ class TestVaribles(unittest.TestCase):
             country="United States", state="Ohio", county="Franklin County"
         )
         self.assertEqual(
-            ("United States", "Ohio", "Franklin County"), v1.target_location()
+            ("United States", "Ohio", "Franklin County"), v1.get_location()
         )
 
         v2 = Variable(
@@ -144,13 +144,12 @@ class TestVaribles(unittest.TestCase):
         )
 
         # Conflicting locations with no resolution specified.
-        v3 = Variable(inputs=[v1, v2])
         with self.assertRaises(ValueError):
-            v3.target_location()
+            Variable(inputs=[v1, v2])
 
-        v4 = Variable(inputs=[v1, v2], location_source=v1)
+        v3 = Variable(inputs=[v1, v2], location_source=v1)
         self.assertEqual(
-            ("United States", "Ohio", "Franklin County"), v4.target_location()
+            ("United States", "Ohio", "Franklin County"), v3.get_location()
         )
 
 

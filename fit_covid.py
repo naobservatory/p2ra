@@ -15,7 +15,7 @@ def prevalence_by_state_county_date(
 ) -> dict[tuple[str, str, date], float]:
     prevs = {}
     for estimate in pathogens[pathogen].estimate_prevalences():
-        country, state, county = estimate.target_location()
+        country, state, county = estimate.get_location()
         assert country == "United States"
         assert state is not None
         assert county is not None
