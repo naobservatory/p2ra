@@ -164,7 +164,14 @@ class TestMGS(unittest.TestCase):
     def test_load_sample_attributes(self):
         samples = mgs.load_sample_attributes(self.repo)
         # Randomly picked Rothman sample
-        self.assertIn(mgs.Sample("SRR14530726"), samples)
+        s = mgs.Sample("SRR14530726")
+        self.assertIn(s, samples)
+        attrs = samples[s]
+        self.assertEqual(attrs.country, "United States")
+        self.assertEqual(attrs.state, "California")
+        self.assertEqual(attrs.county, "San Diego County")
+        self.assertEqual(attrs.date, datetime.date(2020, 8, 27))
+        self.assertEqual(attrs.enrichment, mgs.Enrichment.VIRAL)
 
     def test_load_sample_counts(self):
         sample_counts = mgs.load_sample_counts(self.repo)
