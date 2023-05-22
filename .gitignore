@@ -136,3 +136,4 @@ settings.json
 
 # Mac stuff
 .DS_Store
+fits/*.tsv.gz
