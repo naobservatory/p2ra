@@ -365,13 +365,11 @@ class TestCovid(unittest.TestCase):
     def test_lookup_prevalence(self):
         pathogen = "sars_cov_2"
         bioproject = mgs.BioProject("PRJNA729801")  # Rothman
-        country = "United States"
-        state = "California"
         mgs_data = MGSData.from_repo()
         samples = mgs_data.sample_attributes(
             bioproject, enrichment=mgs.Enrichment.VIRAL
         )
-        prevs = lookup_prevalence(samples, pathogen, country, state)
+        prevs = lookup_prevalence(samples, pathogen)
         self.assertEqual(len(samples), len(prevs))
 
 

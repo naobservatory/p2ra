@@ -14,16 +14,14 @@ from pathogens import pathogens
 def is_match(
     prevalence: Prevalence,
     sample_attrs: SampleAttributes,
-    sample_country: str,
-    sample_state: str,
 ) -> bool:
     country, state, county = prevalence.get_location()
     start, end = prevalence.get_dates()
     assert isinstance(sample_attrs.date, date)
     return (
         (prevalence.taxid is None)  # TODO: allow other taxids
-        and (country == sample_country)
-        and ((state is None) or (state == sample_state))
+        and (country == sample_attrs.country)
+        and ((state is None) or (state == sample_attrs.state))
         and ((county is None) or (county == sample_attrs.county))
         and (start <= sample_attrs.date <= end)
     )
@@ -32,15 +30,11 @@ def is_match(
 def lookup_prevalence(
     samples: dict[Sample, SampleAttributes],
     pathogen: str,
-    country: str,
-    state: str,
 ) -> list[float]:
     prev_estimates = pathogens[pathogen].estimate_prevalences()
     prevs = []
     for _, attrs in samples.items():
-        matches = [
-            p for p in prev_estimates if is_match(p, attrs, country, state)
-        ]
+        matches = [p for p in prev_estimates if is_match(p, attrs)]
         # TODO: handle multiple matches
         assert len(matches) == 1
         prevs.append(matches[0].infections_per_100k)
@@ -78,8 +72,6 @@ def fit_to_dataframe(
 
 def start():
     bioproject = BioProject("PRJNA729801")  # Rothman
-    country = "United States"
-    state = "California"
 
     mgs_data = MGSData.from_repo()
     samples = mgs_data.sample_attributes(
@@ -96,9 +88,7 @@ def start():
         "viral_reads": np.array(
             [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
         ),
-        "prevalence_per100k": np.array(
-            lookup_prevalence(samples, pathogen, country, state)
-        ),
+        "prevalence_per100k": np.array(lookup_prevalence(samples, pathogen)),
         "county": [s.county for s in samples.values()],
         "date": [s.date for s in samples.values()],
         "plant": [s.fine_location for s in samples.values()],
