@@ -67,10 +67,8 @@ king_county_confirmed_cases_rate_2018 = IncidenceRate(
 def estimate_incidences() -> list[IncidenceRate]:
     return [
         us_incidence_absolute_2018.to_rate(us_population_2018),
-        king_county_confirmed_cases_rate_2017
-        * incidence_underreporting_scalar,
-        king_county_confirmed_cases_rate_2018
-        * incidence_underreporting_scalar,
+        king_county_confirmed_cases_rate_2017 * acute_underreporting_factor,
+        king_county_confirmed_cases_rate_2018 * acute_underreporting_factor,
     ]
 
 
