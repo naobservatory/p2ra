@@ -9,6 +9,8 @@ from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import NewType, Optional
 
+import numpy as np
+
 # Enums, short for enumerations, are a data type in Python used to represent a set of named values,
 # which are typically used to define a set of related constants with unique names.
 
@@ -302,6 +304,7 @@ class Prevalence(Variable):
             inputs=[self, scalar],
             active=self.active,
             date_source=self,
+            location_source=self,
         )
 
     def __add__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
@@ -327,20 +330,22 @@ class Prevalence(Variable):
             inputs=[self, other],
             active=self.active,
             date_source=self,
+            location_source=self,
         )
 
     @staticmethod
     def weightedAverageByPopulation(*pairs: tuple["Prevalence", "Population"]):
-        totalInfections = 0.0
-        totalPopulation = 0.0
-        for prevalence, population in pairs:
-            totalInfections += (
-                population.people * prevalence.infections_per_100k / 100_000
-            )
-            totalPopulation += population.people
         return dataclasses.replace(
             pairs[0][0],
-            infections_per_100k=totalInfections / totalPopulation * 100_000,
+            infections_per_100k=np.average(
+                [
+                    prevalence.infections_per_100k
+                    for prevalence, population in pairs
+                ],
+                weights=[
+                    population.people for prevalence, population in pairs
+                ],
+            ),
         )
 
 

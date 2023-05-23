@@ -80,12 +80,6 @@ us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(
     (nhanes_18_19_yo_estimate, over_18_population_US),
 )
 
-denmark_population = Population(
-    people=5_941_388,
-    source="https://www.dst.dk/en/Statistik/emner/borgere/befolkning/befolkningstal",
-    tag="Denmark-2023",
-)
-
 denmark_age_groups: Counter[tuple[int, int]] = Counter()
 
 # Source for CSV: https://www.census.gov/data-tools/demo/idb/#/pop?COUNTRY_YEAR=2023&COUNTRY_YR_ANIM=2023&FIPS_SINGLE=DA&menu=popViz&FIPS=DA&POP_YEARS=2023&popPages=BYAGE
