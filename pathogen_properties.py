@@ -159,6 +159,29 @@ class Variable:
             object.__setattr__(self, "country", location_source.country)
             object.__setattr__(self, "state", location_source.state)
             object.__setattr__(self, "county", location_source.county)
+        elif inputs:
+            # If they didn't give us location information but there's location
+            # information in our inputs, check that for consistency.  If it's
+            # consistent use it, otherwise raise an error.
+
+            countries = set(i.country for i in inputs if i.country)
+            states = set(i.state for i in inputs if i.state)
+            counties = set(i.county for i in inputs if i.county)
+
+            country = self.country
+            state = self.state
+            county = self.county
+
+            if not country:
+                (country,) = countries
+            if states and not state:
+                (state,) = states
+            if counties and not county:
+                (county,) = counties
+
+            object.__setattr__(self, "country", country)
+            object.__setattr__(self, "state", state)
+            object.__setattr__(self, "county", county)
 
         all_inputs = set(self.all_inputs or inputs or [])
         if date_source:
@@ -209,32 +232,13 @@ class Variable:
         assert start == end
         return start
 
-    # Returns country, state, county, or raises an error if there are
-    # conflicting locations.
-    def target_location(
+    def get_location(
         self,
     ) -> tuple[Optional[str], Optional[str], Optional[str]]:
-        inputs = self.all_inputs | set([self])
-
-        countries = set(i.country for i in inputs if i.country)
-        states = set(i.state for i in inputs if i.state)
-        counties = set(i.county for i in inputs if i.county)
-
-        country = self.country
-        state = self.state
-        county = self.county
-
-        if not country:
-            (country,) = countries
-        if states and not state:
-            (state,) = states
-        if counties and not county:
-            (county,) = counties
-
-        return country, state, county
+        return self.country, self.state, self.county
 
     def summarize_location(self) -> str:
-        country, state, county = self.target_location()
+        country, state, county = self.get_location()
         return ", ".join(x for x in [county, state, country] if x)
 
 
@@ -360,63 +364,6 @@ class PrevalenceAbsolute(Taggable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class SheddingDuration(Variable):
-    days: float
-
-    # The model here is that shedding is binary: on the first day of infection
-    # you begin to shed at 100%, and then after `days` you shed 0%.  This is a
-    # big simplification!
-    #
-    # Incidences should contain daily estimates for target_day and at least the
-    # prior `days` days.
-    def prevalence_from_incidences(
-        self, target_day: datetime.date, incidences: list["IncidenceRate"]
-    ) -> Prevalence:
-        max_days = math.ceil(self.days)
-        oldest_day = target_day - datetime.timedelta(days=max_days)
-        candiate_incidences = {}
-        for incidence in incidences:
-            incidence_day = incidence.get_date()
-            if oldest_day < incidence_day <= target_day:
-                candiate_incidences[incidence_day] = incidence
-
-        assert len(candiate_incidences) == max_days
-
-        infections_per_100k = 0.0
-        for days_prior in range(max_days):
-            incidence_day = target_day - datetime.timedelta(days=days_prior)
-
-            weight = 1.0
-            if days_prior == max_days - 1:
-                weight = self.days - math.floor(self.days)
-            infections_per_100k += (
-                weight
-                * candiate_incidences[incidence_day].annual_infections_per_100k
-                / 365
-            )
-
-        return Prevalence(
-            infections_per_100k=infections_per_100k,
-            inputs=[self, *candiate_incidences.values()],
-            active=Active.ACTIVE,
-            date_source=candiate_incidences[target_day],
-            location_source=candiate_incidences[target_day],
-        )
-
-    def prevalences_from_incidences(
-        self, incidences: list["IncidenceRate"]
-    ) -> list[Prevalence]:
-        dates = set(incidence.get_date() for incidence in incidences)
-        first_date = min(dates) + datetime.timedelta(days=math.ceil(self.days))
-
-        return [
-            self.prevalence_from_incidences(target_date, incidences)
-            for target_date in sorted(dates)
-            if target_date >= first_date
-        ]
-
-
-@dataclass(kw_only=True, eq=True, frozen=True)
 class Number(Variable):
     """Generic number.  Use this for weird one-off things
 
@@ -439,26 +386,6 @@ class IncidenceRate(Variable):
     """What fraction of people get this pathogen annually"""
 
     annual_infections_per_100k: float
-
-    # Any estimate derived from an incidence using a shedding duration must be
-    # an active estimate, since multiplying by SheddingDuration calculates the
-    # amount of time the virus is actively shedding for, which is not
-    # incorporated into a latent estimate.
-    #
-    # Only use this method in situations where incidence is changing slowly
-    # relative to shedding_duration; of doesn't take into account that current
-    # prevalence includes past incidence over the shedding period.  If this
-    # does apply, use SheddingDuration.prevalences_from_incidences.
-    def to_prevalence(self, shedding_duration: SheddingDuration) -> Prevalence:
-        return Prevalence(
-            infections_per_100k=self.annual_infections_per_100k
-            * shedding_duration.days
-            / 365,
-            inputs=[self, shedding_duration],
-            active=Active.ACTIVE,
-            date_source=self,
-            location_source=self,
-        )
 
     def __mul__(self, scalar: Scalar) -> "IncidenceRate":
         return IncidenceRate(
