@@ -67,8 +67,9 @@ us_population_2019 = Population(
 
 
 ohio_acute_incidence_2021 = IncidenceRate(
-    # This source reports both an acute and a chronic incidence. I think it
-    # makes sense to add these 2 numbers for an acute estimate, since chronic
+    # This source reports both an acute and a total incidence. The total
+    # incidence is the sum of the acute and chronic incidences. I think it
+    # makes sense to report the total incidence, since chronic
     # cases still have an acute phase in which they shed.
     annual_infections_per_100k=16.5,
     country="United States",
