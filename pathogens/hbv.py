@@ -66,7 +66,7 @@ us_population_2019 = Population(
 )
 
 
-ohio_acute_incidence_2021 = IncidenceRate(
+ohio_total_incidence_2021 = IncidenceRate(
     # This source reports both an acute and a total incidence. The total
     # incidence is the sum of the acute and chronic incidences. I think it
     # makes sense to report the total incidence, since chronic
@@ -87,5 +87,5 @@ def estimate_prevalences() -> list[Prevalence]:
 def estimate_incidences() -> list[IncidenceRate]:
     return [
         cdc_estimated_acute_2019.to_rate(us_population_2019),
-        ohio_acute_incidence_2021,
+        ohio_total_incidence_2021,
     ]
