@@ -200,7 +200,9 @@ fall_proportion_of_colds_caused_by_rhinovirus = Scalar(
 
 # People get more colds in the fall. Since we are only interested in the fall,
 # it makes sense to increase the yearround number by some reasonable factor
-colds_fall_disproportionality = Scalar(scalar=1.5)
+# Assuming people get no colds in the summer and an equal amount of colds
+# during the fall, winter, and spring, this factor should be about 1.33
+colds_fall_disproportionality = Scalar(scalar=1.33)
 
 fall_rhinovirus_incidence_la_county = (
     colds_la_county * colds_fall_disproportionality
@@ -237,7 +239,9 @@ la_estimated_pandemic_decrease_factor = Scalar(
     # December. This gives an average incidence slightly higher than the UK's.
     # Additionally, in Finland, Rhinovirus barely decreased at all.
     # So, there was clearly high variance in the decrease factor from place to
-    # place. For LA, I'm going to take 0.4 as a guess.
+    # place. For LA, I'm going to take 0.4 as a guess. For context, influenza's
+    # decrease factor was around 0.01 in LA during fall 2020, but influenza
+    # decreased more than rhino (https://www.laalmanac.com/health/he14f.php)
     # (LA Covid Data: https://www.nytimes.com/interactive/2021/us/los-angeles-california-covid-cases.html)
     scalar=0.4,
     country="United States",
