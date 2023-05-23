@@ -1,5 +1,6 @@
 import calendar
 import datetime
+import math
 import os.path
 import re
 from collections.abc import Iterable
@@ -85,47 +86,108 @@ class Variable:
     date: InitVar[Optional[str]] = None
     start_date: InitVar[Optional[str]] = None
     end_date: InitVar[Optional[str]] = None
-    parsed_start: Optional[datetime.date] = field(init=False)
-    parsed_end: Optional[datetime.date] = field(init=False)
-    is_target: Optional[bool] = False
+    # In cases where an estimate is derived from multiple input variables with
+    # different dates, set date_source to the Variable that represents the date
+    # range this estimate is intended for.  For example, imagine we have:
+    #
+    #   population = Population(date="2020-04-01", ...)
+    #   prevalence = AbsolutePrevalence(date="2020-08-01", ...)
+    #   return prevalence.to_rate(population)
+    #
+    # There's no way for the consumer to know what date this estimate is for.
+    # So instead we do:
+    #
+    #   return prevalence.to_rate(population, date_source=prevalence)
+    #
+    # parsed_start / parsed_end are set from date_source if supplied, otherwise
+    # from start_date / end_date.
+    date_source: InitVar[Optional["Variable"]] = None
+    # Same deal as date_source: set this if otherwise it wouldn't be clear
+    # what location an estimate would be for.
+    location_source: InitVar[Optional["Variable"]] = None
+    # Read these via get_dates(), which asserts that they're set.
+    parsed_start: Optional[datetime.date] = None
+    parsed_end: Optional[datetime.date] = None
     taxid: Optional[TaxID] = None
     inputs: InitVar[Optional[Iterable["Variable"]]] = None
-    all_inputs: set["Variable"] = field(init=False)
+    all_inputs: set["Variable"] = field(default_factory=set)
 
     def __post_init__(
         self,
         date: Optional[str],
         start_date: Optional[str],
         end_date: Optional[str],
+        date_source: Optional["Variable"],
+        location_source: Optional["Variable"],
         inputs: Optional[Iterable["Variable"]],
     ):
-        # See comment above about __post_init__ for why we're using __setattr__.
+        # See comment above about __post_init__ for why we're using
+        # __setattr__.
         if date and (start_date or end_date):
             raise Exception("If you have start/end don't set date.")
+        if self.parsed_start and (date or start_date):
+            raise Exception("Don't set both parsed_start and provide a date")
+        if self.parsed_end and (date or end_date):
+            raise Exception("Don't set both parsed_start and provide a date")
         if (start_date and not end_date) or (end_date and not start_date):
             raise Exception("Start and end must go together.")
         if date:
             start_date = end_date = date
 
-        parsed_start = None
+        parsed_start = self.parsed_start
         if start_date:
             parsed_start = self._parse_date(start_date, "start")
-        object.__setattr__(self, "parsed_start", parsed_start)
 
-        parsed_end = None
+        parsed_end = self.parsed_end
         if end_date:
             parsed_end = self._parse_date(end_date, "end")
-        object.__setattr__(self, "parsed_end", parsed_end)
 
-        if (
-            self.parsed_start
-            and self.parsed_end
-            and self.parsed_start > self.parsed_end
-        ):
+        if date_source:
+            assert date_source.parsed_start
+            assert date_source.parsed_end
+            parsed_start = date_source.parsed_start
+            parsed_end = date_source.parsed_end
+
+        if parsed_start and parsed_end and parsed_start > parsed_end:
             raise Exception("Start date can't be after end date")
 
-        all_inputs = set(inputs or [])
-        for variable in set(inputs or []):
+        object.__setattr__(self, "parsed_start", parsed_start)
+        object.__setattr__(self, "parsed_end", parsed_end)
+
+        if location_source:
+            object.__setattr__(self, "country", location_source.country)
+            object.__setattr__(self, "state", location_source.state)
+            object.__setattr__(self, "county", location_source.county)
+        elif inputs:
+            # If they didn't give us location information but there's location
+            # information in our inputs, check that for consistency.  If it's
+            # consistent use it, otherwise raise an error.
+
+            countries = set(i.country for i in inputs if i.country)
+            states = set(i.state for i in inputs if i.state)
+            counties = set(i.county for i in inputs if i.county)
+
+            country = self.country
+            state = self.state
+            county = self.county
+
+            if not country:
+                (country,) = countries
+            if states and not state:
+                (state,) = states
+            if counties and not county:
+                (county,) = counties
+
+            object.__setattr__(self, "country", country)
+            object.__setattr__(self, "state", state)
+            object.__setattr__(self, "county", county)
+
+        all_inputs = set(self.all_inputs or inputs or [])
+        if date_source:
+            all_inputs.add(date_source)
+        if location_source:
+            all_inputs.add(location_source)
+        for variable in list(all_inputs):
             all_inputs |= variable.all_inputs
         object.__setattr__(self, "all_inputs", frozenset(all_inputs))
 
@@ -157,51 +219,26 @@ class Variable:
 
         return datetime.date(y, m, d)
 
-    # Returns country, state, county, or raises an error if there are
-    # conflicting locations.  If you hit an error here you probably need a
-    # target() call.
-    def target_location(
+    def get_dates(self) -> tuple[datetime.date, datetime.date]:
+        assert self.parsed_start
+        assert self.parsed_end
+        return self.parsed_start, self.parsed_end
+
+    def get_date(self) -> datetime.date:
+        # Only call this on variables that you know represent a single-day
+        # estimate.
+        start, end = self.get_dates()
+        assert start == end
+        return start
+
+    def get_location(
         self,
     ) -> tuple[Optional[str], Optional[str], Optional[str]]:
-        if self.is_target and self.country:
-            return self.country, self.state, self.county
-
-        inputs = self.all_inputs | set([self])
-
-        countries = set(i.country for i in inputs if i.country)
-        states = set(i.state for i in inputs if i.state)
-        counties = set(i.county for i in inputs if i.county)
-
-        country = state = county = None
-
-        (country,) = countries
-        if states:
-            (state,) = states
-        if counties:
-            (county,) = counties
-
-        return country, state, county
+        return self.country, self.state, self.county
 
     def summarize_location(self) -> str:
-        country, state, county = self.target_location()
+        country, state, county = self.get_location()
         return ", ".join(x for x in [county, state, country] if x)
-
-    def summarize_date(self) -> Optional[tuple[datetime.date, datetime.date]]:
-        if self.is_target and self.parsed_start and self.parsed_end:
-            return self.parsed_start, self.parsed_end
-
-        try:
-            return min(
-                i.parsed_start
-                for i in self.all_inputs | set([self])
-                if i.parsed_start
-            ), max(
-                i.parsed_end
-                for i in self.all_inputs | set([self])
-                if i.parsed_end
-            )
-        except ValueError:
-            return None
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -215,12 +252,6 @@ class Taggable(Variable):
         v1 = self
         v2 = other
 
-        # While dates are optional in general, they're required for taggables.
-        assert v1.parsed_start
-        assert v2.parsed_start
-        assert v1.parsed_end
-        assert v2.parsed_end
-
         assert v1.country == v2.country
         assert v1.state == v2.state
         assert v1.county == v2.county
@@ -228,8 +259,10 @@ class Taggable(Variable):
         # Normally everything has to match, but it's ok if one of them
         # has a more specific date as long as it's within a year; populations
         # don't change quickly.
-        assert v1.parsed_start.year == v2.parsed_start.year
-        assert v1.parsed_end.year == v2.parsed_end.year
+        v1_start, v1_end = v1.get_dates()
+        v2_start, v2_end = v2.get_dates()
+        assert v1_start.year == v2_start.year
+        assert v1_end.year == v2_end.year
 
         assert v1.tag == v2.tag
 
@@ -258,24 +291,21 @@ class Prevalence(Variable):
             infections_per_100k=self.infections_per_100k * scalar.scalar,
             inputs=[self, scalar],
             active=self.active,
+            date_source=self,
+            location_source=self,
         )
 
     def __add__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
         assert self.active == other.active
+        assert self.parsed_start == other.parsed_start
+        assert self.parsed_end == other.parsed_end
         return Prevalence(
             infections_per_100k=self.infections_per_100k
             + other.infections_per_100k,
             inputs=[self, other],
             active=self.active,
-        )
-
-    def target(self, **kwargs) -> "Prevalence":
-        return Prevalence(
-            infections_per_100k=self.infections_per_100k,
-            inputs=[self],
-            is_target=True,
-            active=self.active,
-            **kwargs,
+            date_source=self,
+            location_source=self,
         )
 
 
@@ -293,12 +323,9 @@ class PrevalenceAbsolute(Taggable):
             infections_per_100k=self.infections * 100000 / population.people,
             inputs=[self, population],
             active=self.active,
+            date_source=self,
+            location_source=self,
         )
-
-
-@dataclass(kw_only=True, eq=True, frozen=True)
-class SheddingDuration(Variable):
-    days: float
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -311,7 +338,12 @@ class Number(Variable):
     number: float
 
     def __truediv__(self, other: "Number") -> Scalar:
-        return Scalar(scalar=self.number / other.number, inputs=[self, other])
+        return Scalar(
+            scalar=self.number / other.number,
+            inputs=[self, other],
+            date_source=self,
+            location_source=self,
+        )
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -320,17 +352,13 @@ class IncidenceRate(Variable):
 
     annual_infections_per_100k: float
 
-    # Any estimate derived from an incidence using a shedding duration must be
-    # an active estimate, since multiplying by SheddingDuration calculates the
-    # amount of time the virus is actively shedding for, which is not
-    # incorporated into a latent estimate.
-    def to_prevalence(self, shedding_duration: SheddingDuration) -> Prevalence:
-        return Prevalence(
-            infections_per_100k=self.annual_infections_per_100k
-            * shedding_duration.days
-            / 365,
-            inputs=[self, shedding_duration],
-            active=Active.ACTIVE,
+    def __mul__(self, scalar: Scalar) -> "IncidenceRate":
+        return IncidenceRate(
+            annual_infections_per_100k=self.annual_infections_per_100k
+            * scalar.scalar,
+            inputs=[self, scalar],
+            date_source=self,
+            location_source=self,
         )
 
 
@@ -348,6 +376,8 @@ class IncidenceAbsolute(Taggable):
             * 100000
             / population.people,
             inputs=[self, population],
+            date_source=self,
+            location_source=self,
         )
 
 

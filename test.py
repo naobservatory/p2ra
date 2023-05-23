@@ -7,6 +7,7 @@ from collections import Counter
 import mgs
 import pathogens
 import populations
+from fit_covid import lookup_incidence
 from mgs import MGSData
 from pathogen_properties import *
 from tree import Tree
@@ -20,18 +21,17 @@ class TestPathogens(unittest.TestCase):
         us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
         self.assertEqual(us_2019.summarize_location(), "United States")
         self.assertEqual(
-            us_2019.summarize_date(),
-            (datetime.date(2019, 1, 1), datetime.date(2019, 12, 31)),
-        )
-
-        self.assertEqual(
             la_2020.summarize_location(),
             "Los Angeles County, California, United States",
         )
-        self.assertEqual(
-            la_2020.summarize_date(),
-            (datetime.date(2020, 1, 1), datetime.date(2020, 12, 31)),
-        )
+
+    def test_dates(self):
+        us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
+        self.assertEqual(us_2019.parsed_start, datetime.date(2019, 1, 1))
+        self.assertEqual(us_2019.parsed_end, datetime.date(2019, 12, 31))
+
+        self.assertEqual(la_2020.parsed_start, datetime.date(2020, 1, 1))
+        self.assertEqual(la_2020.parsed_end, datetime.date(2020, 12, 31))
 
     def test_properties_exist(self):
         for pathogen_name, pathogen in pathogens.pathogens.items():
@@ -40,35 +40,66 @@ class TestPathogens(unittest.TestCase):
 
                 self.assertIsInstance(pathogen.pathogen_chars, PathogenChars)
 
+                saw_estimate = False
                 for estimate in pathogen.estimate_prevalences():
                     self.assertIsInstance(estimate, Prevalence)
+                    saw_estimate = True
+                for estimate in pathogen.estimate_incidences():
+                    self.assertIsInstance(estimate, IncidenceRate)
+                    saw_estimate = True
+                self.assertTrue(saw_estimate)
+
+    def test_dates_set(self):
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                for estimate in pathogen.estimate_prevalences():
+                    estimate.get_dates()
 
 
 class TestVaribles(unittest.TestCase):
     def test_date_parsing(self):
         v = Variable(date="2019")
-        self.assertEqual(v.parsed_start, datetime.date(2019, 1, 1))
-        self.assertEqual(v.parsed_end, datetime.date(2019, 12, 31))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2019, 1, 1), datetime.date(2019, 12, 31)),
+        )
 
         v = Variable(date="2019-02")
-        self.assertEqual(v.parsed_start, datetime.date(2019, 2, 1))
-        self.assertEqual(v.parsed_end, datetime.date(2019, 2, 28))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2019, 2, 1), datetime.date(2019, 2, 28)),
+        )
 
         v = Variable(date="2020-02")
-        self.assertEqual(v.parsed_start, datetime.date(2020, 2, 1))
-        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 29))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2020, 2, 1), datetime.date(2020, 2, 29)),
+        )
 
         v = Variable(date="2020-02-01")
-        self.assertEqual(v.parsed_start, datetime.date(2020, 2, 1))
-        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 1))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2020, 2, 1), datetime.date(2020, 2, 1)),
+        )
 
         v = Variable(start_date="2020-01", end_date="2020-02")
-        self.assertEqual(v.parsed_start, datetime.date(2020, 1, 1))
-        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 29))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2020, 1, 1), datetime.date(2020, 2, 29)),
+        )
 
         v = Variable(start_date="2020-01-07", end_date="2020-02-06")
-        self.assertEqual(v.parsed_start, datetime.date(2020, 1, 7))
-        self.assertEqual(v.parsed_end, datetime.date(2020, 2, 6))
+        self.assertEqual(
+            v.get_dates(),
+            (datetime.date(2020, 1, 7), datetime.date(2020, 2, 6)),
+        )
+
+        v1 = Variable(date="2019")
+        v2 = Variable(date="2020", date_source=v1)
+        self.assertEqual(
+            v2.get_dates(),
+            (datetime.date(2019, 1, 1), datetime.date(2019, 12, 31)),
+        )
 
         with self.assertRaises(Exception):
             Variable(start_date="2020-01-07")
@@ -94,6 +125,39 @@ class TestVaribles(unittest.TestCase):
         with self.assertRaises(Exception):
             Variable(date="2020/01/01")
 
+        v = Variable(date="2020")
+        with self.assertRaises(AssertionError):
+            v.get_date()  # asserts start==end
+
+        v = Variable()
+        self.assertIsNone(v.parsed_start)
+        self.assertIsNone(v.parsed_end)
+        with self.assertRaises(AssertionError):
+            v.get_dates()  # asserts dates are set
+
+    def test_locations(self):
+        v1 = Variable(
+            country="United States", state="Ohio", county="Franklin County"
+        )
+        self.assertEqual(
+            ("United States", "Ohio", "Franklin County"), v1.get_location()
+        )
+
+        v2 = Variable(
+            country="United States",
+            state="California",
+            county="Alameda County",
+        )
+
+        # Conflicting locations with no resolution specified.
+        with self.assertRaises(ValueError):
+            Variable(inputs=[v1, v2])
+
+        v3 = Variable(inputs=[v1, v2], location_source=v1)
+        self.assertEqual(
+            ("United States", "Ohio", "Franklin County"), v3.get_location()
+        )
+
 
 class TestMGS(unittest.TestCase):
     repo = mgs.GitHubRepo(**mgs.MGS_REPO_DEFAULTS)
@@ -106,7 +170,14 @@ class TestMGS(unittest.TestCase):
     def test_load_sample_attributes(self):
         samples = mgs.load_sample_attributes(self.repo)
         # Randomly picked Rothman sample
-        self.assertIn(mgs.Sample("SRR14530726"), samples)
+        s = mgs.Sample("SRR14530726")
+        self.assertIn(s, samples)
+        attrs = samples[s]
+        self.assertEqual(attrs.country, "United States")
+        self.assertEqual(attrs.state, "California")
+        self.assertEqual(attrs.county, "San Diego County")
+        self.assertEqual(attrs.date, datetime.date(2020, 8, 27))
+        self.assertEqual(attrs.enrichment, mgs.Enrichment.VIRAL)
 
     def test_load_sample_counts(self):
         sample_counts = mgs.load_sample_counts(self.repo)
@@ -278,6 +349,18 @@ class TestPopulations(unittest.TestCase):
                 country="United States",
             ),
         )
+
+
+class TestCovid(unittest.TestCase):
+    def test_lookup_incidence(self):
+        pathogen = "sars_cov_2"
+        bioproject = mgs.BioProject("PRJNA729801")  # Rothman
+        mgs_data = MGSData.from_repo()
+        samples = mgs_data.sample_attributes(
+            bioproject, enrichment=mgs.Enrichment.VIRAL
+        )
+        prevs = lookup_incidence(samples, pathogen)
+        self.assertEqual(len(samples), len(prevs))
 
 
 if __name__ == "__main__":

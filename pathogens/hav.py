@@ -35,13 +35,6 @@ us_population_2018 = Population(
     source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
 )
 
-hva_shedding_duration = SheddingDuration(
-    days=14,
-    confidence_interval=(7, 21),
-    country="United States",
-    source="https://www.cdc.gov/vaccines/pubs/pinkbook/hepa.html#:~:text=Viral%20shedding%20persists%20for%201%20to%203%20weeks.",
-)
-
 incidence_underreporting_scalar = Scalar(
     scalar=1 / 0.59,
     confidence_interval=(
@@ -91,17 +84,15 @@ king_county_confirmed_cases_rate_2018 = IncidenceRate(
 )
 
 
-def estimate_prevalences():
+def estimate_incidences() -> list[IncidenceRate]:
     return [
-        us_incidence_absolute_2018.to_rate(us_population_2018).to_prevalence(
-            hva_shedding_duration
-        ),
-        king_county_confirmed_cases_rate_2017.to_prevalence(
-            hva_shedding_duration
-        )
+        us_incidence_absolute_2018.to_rate(us_population_2018),
+        king_county_confirmed_cases_rate_2017
         * incidence_underreporting_scalar,
-        king_county_confirmed_cases_rate_2018.to_prevalence(
-            hva_shedding_duration
-        )
+        king_county_confirmed_cases_rate_2018
         * incidence_underreporting_scalar,
     ]
+
+
+def estimate_prevalences() -> list[Prevalence]:
+    return []
