@@ -199,3 +199,7 @@ def estimate_prevalences():
         denmark_overall_seroprevalence,
         UK_seroprevalence_0_to_25,
     ]
+
+
+def estimate_incidences():
+    return []
