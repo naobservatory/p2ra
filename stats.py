@@ -1,3 +1,6 @@
+from pathlib import Path
+from typing import IO
+
 import numpy as np
 import numpy.typing as npt
 import stan  # type: ignore
@@ -31,7 +34,11 @@ model {
   phi ~ gamma(2, 2);
 
   theta ~ normal(mu, sigma);
-  y ~ neg_binomial_2(exp(b + theta) .* n, phi);
+  y ~ neg_binomial_2_log(b + theta + log(n), phi);
+}
+generated quantities {
+  array[J] int<lower=0> y_tilde
+    = neg_binomial_2_log_rng(b + theta + log(n), phi);
 }
 """
 

@@ -109,18 +109,6 @@ def load_weekly_data() -> WeeklyData:
     return output
 
 
-# There's a ton of studies on this, but they vary a lot.  Fielding 2013 has a
-# metaanalysis but includes "Given the significant heterogeneity in most
-# groups, the combined estimates of viral shedding duration are not reported."
-#
-# TODO: this isn't fecal shedding; if we decide to keep the shedding
-# conversions come back and update this.
-shedding_duration = SheddingDuration(
-    # From eyeballing the "Community" portion of Figure 1.
-    days=5,
-    source="https://onlinelibrary.wiley.com/doi/full/10.1111/irv.12216",
-)
-
 infections_2019_2020 = IncidenceAbsolute(
     annual_infections=36_000_000,
     confidence_interval=(28_663_846, 71_197_342),
@@ -128,6 +116,7 @@ infections_2019_2020 = IncidenceAbsolute(
     start_date="2019-07-01",
     end_date="2020-07-01",
     tag="us-2019-2020",
+    country="United States",
     # "The overall burden of influenza (flu) for the 2019-2020 was an estimated
     # 36 million flu-related illnesses"
     source="https://www.cdc.gov/flu/about/burden/2019-2020.html#:~:text=The%20overall%20burden%20of%20influenza%20(flu)%20for%20the%202019%2D2020%20was%20an%20estimated%C2%A036%20million%C2%A0flu%2Drelated%20illnesses",
@@ -140,6 +129,7 @@ infections_2021_2022 = IncidenceAbsolute(
     start_date="2021-07-01",
     end_date="2022-07-01",
     tag="us-2021-2022",
+    country="United States",
     # "The overall burden of influenza (flu) for the 2021-2022 season was an
     # estimated 9 million flu illnesses"
     source="https://www.cdc.gov/flu/about/burden/2021-2022.htm#:~:text=The%20overall%20burden%20of%20influenza%20(flu)%20for%20the%202021%2D2022%20season%20was%20an%20estimated%C2%A09%20million%C2%A0flu%20illnesses",
@@ -180,11 +170,11 @@ def compare_incidence_to_positive_tests(
     return official_incidence / public_health_labs_infections
 
 
-def estimate_prevalences() -> list[Prevalence]:
+def estimate_incidences() -> list[IncidenceRate]:
     # State -> Week -> (PositiveA, PositiveB)
     weekly_data = load_weekly_data()
 
-    # We can't just go from positive tests to prevalence because many people
+    # We can't just go from positive tests to incidence because many people
     # will get flu but never be tested, or their test won't make it back to the
     # CDC.  For each flu season we use the overall CDC incidence estimate and
     # our count of positive tests to get an estimate of underreporting.
@@ -228,7 +218,7 @@ def estimate_prevalences() -> list[Prevalence]:
         else:
             return None
 
-    prevalences = []
+    incidences = []
     for state in ["California", "Ohio"]:
         for parsed_start in weekly_data[state]:
             positive_a, positive_b = weekly_data[state][parsed_start]
@@ -252,18 +242,22 @@ def estimate_prevalences() -> list[Prevalence]:
                     date=parsed_start.isoformat(),
                 )
 
-                prevalences.append(
+                incidences.append(
                     dataclasses.replace(
                         (
                             incidence.to_rate(
                                 us_population(
                                     state=state, year=parsed_start.year
                                 )
-                            ).to_prevalence(shedding_duration)
+                            )
                             * underreporting
                         ),
                         taxid=taxid,
                     )
                 )
 
-    return prevalences
+    return incidences
+
+
+def estimate_prevalences() -> list[Prevalence]:
+    return []
