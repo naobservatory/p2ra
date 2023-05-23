@@ -101,26 +101,6 @@ estimated_current_infection_us_2013_2016 = Prevalence(
     active=Active.LATENT,
 )
 
-shedding_duration = SheddingDuration(
-    # In the absence of time-series fecal HCV shedding data, we use HCV RNA
-    # blood detectability as a proxy.
-    # In this study, HCV RNA levels in blood from several patient cohorts were
-    # aggregated retroactively, identifying different patterns of HCV RNA
-    # levels among individuals who cleared HCV, versus those who developed a
-    # persistent infection.
-    days=3 * 30.4,  # 3 months
-    # "At month two, median HCV RNA levels [in blood] remained comparable
-    # between individuals with persistent infection (5.4 log IU/mL; IQR: 3.1,
-    # 6.4) and spontaneous clearance (4.8 log/IU/mL; IQR: 0.0, 6.0; P = 0.38).
-    # Median HCV RNA levels initially diverged at three months following
-    # infection, being 4.8 log/IU/mL (IQR: 3.3, 6.0) in individuals with
-    # persistent infection compared to 3.2 log/IU/mL (IQR: 0.0, 6.1) in those
-    # with spontaneous clearance (P = 0.03).""
-    source="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0122232#:~:text=Median%20HCV%20RNA%20levels%20initially%20diverged%20at%20three%20months%20following%20infection",
-    # High HCV viral loads in blood are associated with higher viral loads in
-    # rectal fluid, according to this study: https://academic.oup.com/cid/article/64/3/284/2452663#:~:text=Detection%20of%20HCV%20in%20rectal%20fluid%20as%20a%20function%20of%20HCV%20VL%20in%20blood.
-)
-
 us_adult_population_2016 = Population(
     people=249_448_772,
     source="https://data.census.gov/table?q=2016+population+us&tid=ACSDP1Y2016.DP05",
@@ -179,47 +159,52 @@ ohio_counties_case_rates = {
     },
 }
 
+OHIO_COUNTY_ESTIMATES_SOURCE = "https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_K9I401S01H7F40QBNJU3SO1F56-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8"
 
-def estimate_prevalences():
-    source = "https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_K9I401S01H7F40QBNJU3SO1F56-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8"
-    ohio_county_estimates = []
+
+def estimate_incidences():
+    estimates = [
+        reported_acute_ohio_2020 * (acute_underreporting_factor),
+        reported_acute_ohio_2021 * (acute_underreporting_factor),
+        cdc_estimated_acute_44_us_states_2020,
+    ]
     for county in ohio_counties_case_rates:
         for year in ohio_counties_case_rates[county]:
-            case_rate = IncidenceRate(
-                annual_infections_per_100k=ohio_counties_case_rates[county][
-                    year
-                ]["acute"],
-                date=year,
-                country="United States",
-                state="Ohio",
-                county=county,
-                source=source,
+            estimates.append(
+                IncidenceRate(
+                    annual_infections_per_100k=ohio_counties_case_rates[
+                        county
+                    ][year]["acute"],
+                    date=year,
+                    country="United States",
+                    state="Ohio",
+                    county=county,
+                    source=OHIO_COUNTY_ESTIMATES_SOURCE,
+                )
+                * acute_underreporting_factor
             )
-            ohio_county_estimates.append(
-                case_rate.to_prevalence(shedding_duration)
-                * (acute_underreporting_factor)
-            )
-            prevalence = Prevalence(
-                infections_per_100k=ohio_counties_case_rates[county][year][
-                    "total"
-                ],
-                date=year,
-                country="United States",
-                state="Ohio",
-                county=county,
-                active=Active.LATENT,
-                source=source,
-            )
-            ohio_county_estimates.append(prevalence)
-    return [
-        # Unpack the list of ohio county estimates
-        *ohio_county_estimates,
-        reported_acute_ohio_2020.to_prevalence(shedding_duration)
-        * (acute_underreporting_factor),
-        reported_acute_ohio_2021.to_prevalence(shedding_duration)
-        * (acute_underreporting_factor),
+    return estimates
+
+
+def estimate_prevalences() -> list[Prevalence]:
+    estimates = [
         reported_total_ohio_2020,
         reported_total_ohio_2021,
-        cdc_estimated_acute_44_us_states_2020.to_prevalence(shedding_duration),
         estimated_current_infection_us_2013_2016,
     ]
+    for county in ohio_counties_case_rates:
+        for year in ohio_counties_case_rates[county]:
+            estimates.append(
+                Prevalence(
+                    infections_per_100k=ohio_counties_case_rates[county][year][
+                        "total"
+                    ],
+                    date=year,
+                    country="United States",
+                    state="Ohio",
+                    county=county,
+                    active=Active.LATENT,
+                    source=OHIO_COUNTY_ESTIMATES_SOURCE,
+                )
+            )
+    return estimates
