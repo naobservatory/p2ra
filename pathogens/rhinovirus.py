@@ -37,9 +37,7 @@ rhinovirus_shedding_duration = SheddingDuration(
 la_county_under_18_population = Population(
     # 0.211 = the proportion of LA County residents under 18
     people=0.211
-    * us_population(
-        state="California", county="Los Angeles County", year=2020
-    ).people,
+    * us_population(state="California", county="Los Angeles County", year=2020).people,
     date="2020",
     tag="under 18",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
@@ -48,9 +46,7 @@ la_county_under_18_population = Population(
 la_county_adult_population = Population(
     # 0.789 = the proportion of LA County residents over 18
     people=0.789
-    * us_population(
-        state="California", county="Los Angeles County", year=2020
-    ).people,
+    * us_population(state="California", county="Los Angeles County", year=2020).people,
     date="2020",
     tag="over 18",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
@@ -152,17 +148,13 @@ la_county = Population(
     source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
 )
 
-la_county_40_plus = (
-    la_county - la_county_0_4 - la_county_5_19 - la_county_20_39
-)
+la_county_40_plus = la_county - la_county_0_4 - la_county_5_19 - la_county_20_39
 
-rhinovirus_old_yearround_study_estimate = (
-    IncidenceRate.weightedAverageByPopulation(
-        (rhinovirus_0_4, la_county_0_4),
-        (rhinovirus_5_19, la_county_5_19),
-        (rhinovirus_20_39, la_county_20_39),
-        (rhinovirus_40_plus, la_county_40_plus),
-    )
+rhinovirus_old_yearround_study_estimate = IncidenceRate.weightedAverageByPopulation(
+    (rhinovirus_0_4, la_county_0_4),
+    (rhinovirus_5_19, la_county_5_19),
+    (rhinovirus_20_39, la_county_20_39),
+    (rhinovirus_40_plus, la_county_40_plus),
 )
 
 #  "Adults catch two to three colds a year, while young children come down
@@ -206,17 +198,16 @@ fall_proportion_of_colds_caused_by_rhinovirus = Scalar(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7133757/",
 )
 
-
+# People get more colds in the fall. Since we are only interested in the fall,
+# it makes sense to increase the yearround number by some reasonable factor
 colds_fall_disproportionality = Scalar(scalar=1.5)
 
 fall_rhinovirus_incidence_la_county = (
     colds_la_county * colds_fall_disproportionality
 ) * fall_proportion_of_colds_caused_by_rhinovirus
 
-rhinovirus_prevalence_using_colds = (
-    fall_rhinovirus_incidence_la_county.to_prevalence(
-        rhinovirus_shedding_duration
-    )
+rhinovirus_prevalence_using_colds = fall_rhinovirus_incidence_la_county.to_prevalence(
+    rhinovirus_shedding_duration
 )
 
 
@@ -249,6 +240,9 @@ la_estimated_pandemic_decrease_factor = Scalar(
     # place. For LA, I'm going to take 0.4 as a guess.
     # (LA Covid Data: https://www.nytimes.com/interactive/2021/us/los-angeles-california-covid-cases.html)
     scalar=0.4,
+    country="United States",
+    state="California",
+    county="Los Angeles",
     date="2020",
 )
 
@@ -259,6 +253,5 @@ def estimate_prevalences():
             rhinovirus_shedding_duration
         )
         * (la_estimated_pandemic_decrease_factor),
-        rhinovirus_prevalence_using_colds
-        * (la_estimated_pandemic_decrease_factor),
+        rhinovirus_prevalence_using_colds * (la_estimated_pandemic_decrease_factor),
     ]
