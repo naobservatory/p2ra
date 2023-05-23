@@ -56,7 +56,7 @@ la_infected_2020 = PrevalenceAbsolute(
 )
 
 
-def estimate_prevalences():
+def estimate_prevalences() -> list[Prevalence]:
     return [
         us_infected_2019.to_rate(us_population_2019)
         * us_unsuppressed_fraction_2019,
@@ -67,3 +67,7 @@ def estimate_prevalences():
         )
         * la_unsuppressed_fraction_2020,
     ]
+
+
+def estimate_incidences() -> list[IncidenceRate]:
+    return []
