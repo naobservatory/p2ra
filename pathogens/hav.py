@@ -95,31 +95,25 @@ ohio_hav_prevalence_2020 = Prevalence(
     source="https://www.cdc.gov/hepatitis/statistics/2020surveillance/hepatitis-a/figure-1.3.htm",
 )
 
-ohio_county_hav_prevalences = {}
+ohio_county_hav_incidences = {}
 
 with open(prevalence_data_filename("havCaseCountsOhioCounties.csv")) as file:
     reader = csv.reader(file)
     next(reader)
     for row in reader:
         row[0] = row[0] + " County"
-        ohio_county_hav_prevalences[row[0]] = (
-            IncidenceAbsolute(
-                country="United States",
-                state="Ohio",
-                date="2021",
-                county=row[0],
-                annual_infections=int(row[1]) / 4,
-            ).to_rate(us_population(year=2021, state="Ohio", county=row[0]))
-        ).to_prevalence(hva_shedding_duration)
-
-import pprint
-
-pprint.pprint(ohio_county_hav_prevalences["Adams County"].infections_per_100k)
+        ohio_county_hav_incidences[row[0]] = IncidenceAbsolute(
+            country="United States",
+            state="Ohio",
+            date="2021",
+            county=row[0],
+            annual_infections=int(row[1]) / 4,
+        ).to_rate(us_population(year=2021, state="Ohio", county=row[0]))
 
 
 def return_dictionary_entries(dictionary):
     for item in dictionary:
-        return item
+        return dictionary[item]
 
 
 def estimate_incidences() -> list[IncidenceRate]:
@@ -129,10 +123,9 @@ def estimate_incidences() -> list[IncidenceRate]:
         * incidence_underreporting_scalar,
         king_county_confirmed_cases_rate_2018
         * incidence_underreporting_scalar,
-        ohio_hav_prevalence_2020,
-        return_dictionary_entries(ohio_county_hav_prevalences),
+        return_dictionary_entries(ohio_county_hav_incidences),
     ]
 
 
 def estimate_prevalences() -> list[Prevalence]:
-    return []
+    return [ohio_hav_prevalence_2020]
