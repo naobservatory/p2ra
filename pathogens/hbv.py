@@ -79,7 +79,7 @@ ohio_acute_incidence_2021 = IncidenceRate(
 )
 
 
-def estimate_prevalences():
+def estimate_incidences() -> list[IncidenceRate]:
     return [
         cdc_estimated_acute_2019.to_rate(us_population_2019),
         estimated_chronic_us_2020.to_rate(us_population(year=2020)),
