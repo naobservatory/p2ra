@@ -35,9 +35,9 @@ us_population_2018 = Population(
     source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
 )
 
-incidence_underreporting_scalar = Scalar(
+acute_underreporting_factor = Scalar(
     scalar=2,
-    confidence_interval=(1.4,2.2),
+    confidence_interval=(1.4, 2.2),
     coverage_probability=0.95,
     country="United States",
     source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/pdfs/2018HepSurveillanceRpt.pdf?#page=8",
