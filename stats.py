@@ -1,9 +1,14 @@
-from pathlib import Path
-from typing import IO
+from datetime import date
 
 import numpy as np
 import numpy.typing as npt
+import pandas as pd
 import stan  # type: ignore
+
+from mgs import Sample, SampleAttributes
+from pathogen_properties import Prevalence
+
+per100k_to_per100 = 1e5 / 1e2
 
 
 def naive_relative_abundance(
@@ -14,6 +19,65 @@ def naive_relative_abundance(
     total_virus = np.sum(virus_counts)
     total_counts = np.sum(all_counts)
     return total_virus / total_counts / prev_per_100k
+
+
+def is_match(
+    prevalence: Prevalence,
+    sample_attrs: SampleAttributes,
+) -> bool:
+    country, state, county = prevalence.get_location()
+    start, end = prevalence.get_dates()
+    assert isinstance(sample_attrs.date, date)
+    return (
+        (prevalence.taxid is None)  # TODO: allow other taxids
+        and (country == sample_attrs.country)
+        and ((state is None) or (state == sample_attrs.state))
+        and ((county is None) or (county == sample_attrs.county))
+        and (start <= sample_attrs.date <= end)
+    )
+
+
+def lookup_prevalence(
+    samples: dict[Sample, SampleAttributes],
+    pathogen,
+) -> list[float]:
+    prev_estimates = pathogen.estimate_prevalences()
+    prevs = []
+    for _, attrs in samples.items():
+        matches = [p for p in prev_estimates if is_match(p, attrs)]
+        # TODO: handle multiple matches
+        assert len(matches) == 1
+        prevs.append(matches[0].infections_per_100k)
+    return prevs
+
+
+def fit_to_dataframe(
+    fit, samples: dict[Sample, SampleAttributes]
+) -> pd.DataFrame:
+    df = pd.wide_to_long(
+        fit.to_frame().reset_index(),
+        stubnames=["y_tilde", "theta"],
+        i="draws",
+        j="sample",
+        sep=".",
+    ).reset_index()
+
+    attrs = list(samples.values())
+
+    def get_sample_attrs(attr: str):
+        f = lambda i: getattr(attrs[i - 1], attr)
+        return np.vectorize(f)
+
+    df["date"] = get_sample_attrs("date")(df["sample"])
+    df["county"] = get_sample_attrs("county")(df["sample"])
+    df["plant"] = get_sample_attrs("fine_location")(df["sample"])
+    df["total_reads"] = get_sample_attrs("reads")(df["sample"])
+
+    df["viral_reads"] = df["y_tilde"]
+    df["prevalence_per100k"] = np.exp(df["theta"])
+    df["ra_per_one_percent"] = per100k_to_per100 * np.exp(df["b"])
+    df["observation_type"] = "posterior"
+    return df
 
 
 stan_code = """
