@@ -7,9 +7,9 @@ from collections import Counter
 import mgs
 import pathogens
 import populations
-from fit_rothman import lookup_prevalence
 from mgs import MGSData
 from pathogen_properties import *
+from stats import lookup_prevalence
 from tree import Tree
 
 

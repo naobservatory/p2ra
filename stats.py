@@ -5,7 +5,7 @@ import numpy.typing as npt
 import pandas as pd
 import stan  # type: ignore
 
-from mgs import Sample, SampleAttributes
+from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
 from pathogen_properties import Prevalence
 
 per100k_to_per100 = 1e5 / 1e2
@@ -110,17 +110,37 @@ generated quantities {
 """
 
 
-# TODO: Log stan output rather than writing to stderr
 def fit_model(
-    data: dict,
+    mgs_data: MGSData,
+    bioproject: BioProject,
+    pathogen,
     random_seed: int,
-) -> stan.fit.Fit:
+) -> pd.DataFrame:
+    samples = mgs_data.sample_attributes(
+        bioproject, enrichment=Enrichment.VIRAL
+    )
+    taxids = pathogen.pathogen_chars.taxids
+    data = {
+        "total_reads": np.array(
+            [mgs_data.total_reads(bioproject)[s] for s in samples]
+        ),
+        "viral_reads": np.array(
+            [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
+        ),
+        "prevalence_per100k": np.array(lookup_prevalence(samples, pathogen)),
+        "county": [s.county for s in samples.values()],
+        "date": [s.date for s in samples.values()],
+        "plant": [s.fine_location for s in samples.values()],
+        "observation_type": "data",
+    }
     stan_data = {
         k: v
         for k, v in data.items()
         if k in ["viral_reads", "total_reads", "prevalence_per100k"]
     }
-    stan_data["J"] = len(stan_data["viral_reads"])
+    stan_data["J"] = len(samples)
     model = stan.build(stan_code, data=stan_data, random_seed=random_seed)
     fit = model.sample(num_chains=4, num_samples=1000)
-    return fit
+    df = fit_to_dataframe(fit, samples)
+    df = pd.concat([pd.DataFrame(data), df], ignore_index=True)
+    return df
