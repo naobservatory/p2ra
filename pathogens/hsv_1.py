@@ -44,9 +44,13 @@ tear_and_saliva_prevalence = Prevalence(
 )
 
 
-def estimate_prevalences():
+def estimate_prevalences() -> list[Prevalence]:
     return [
         cdc_2015_2016_nhanes_seroprevalence,
         cdc_2015_2016_nhanes_estimate,
         tear_and_saliva_prevalence,
     ]
+
+
+def estimate_incidences() -> list[IncidenceRate]:
+    return []

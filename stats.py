@@ -6,7 +6,7 @@ import pandas as pd
 import stan  # type: ignore
 
 from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
-from pathogen_properties import Prevalence
+from pathogen_properties import IncidenceRate
 
 per100k_to_per100 = 1e5 / 1e2
 
@@ -22,14 +22,14 @@ def naive_relative_abundance(
 
 
 def is_match(
-    prevalence: Prevalence,
+    incidence: IncidenceRate,
     sample_attrs: SampleAttributes,
 ) -> bool:
-    country, state, county = prevalence.get_location()
-    start, end = prevalence.get_dates()
+    country, state, county = incidence.get_location()
+    start, end = incidence.get_dates()
     assert isinstance(sample_attrs.date, date)
     return (
-        (prevalence.taxid is None)  # TODO: allow other taxids
+        (incidence.taxid is None)  # TODO: allow other taxids
         and (country == sample_attrs.country)
         and ((state is None) or (state == sample_attrs.state))
         and ((county is None) or (county == sample_attrs.county))
@@ -37,18 +37,18 @@ def is_match(
     )
 
 
-def lookup_prevalence(
+def lookup_incidence(
     samples: dict[Sample, SampleAttributes],
     pathogen,
 ) -> list[float]:
-    prev_estimates = pathogen.estimate_prevalences()
-    prevs = []
+    inc_estimates = pathogen.estimate_incidences()
+    incs = []
     for _, attrs in samples.items():
-        matches = [p for p in prev_estimates if is_match(p, attrs)]
+        matches = [p for p in inc_estimates if is_match(p, attrs)]
         # TODO: handle multiple matches
         assert len(matches) == 1
-        prevs.append(matches[0].infections_per_100k)
-    return prevs
+        incs.append(matches[0].annual_infections_per_100k)
+    return incs
 
 
 def fit_to_dataframe(
@@ -74,7 +74,7 @@ def fit_to_dataframe(
     df["total_reads"] = get_sample_attrs("reads")(df["sample"])
 
     df["viral_reads"] = df["y_tilde"]
-    df["prevalence_per100k"] = np.exp(df["theta"])
+    df["incidence_per100k"] = np.exp(df["theta"])
     df["ra_per_one_percent"] = per100k_to_per100 * np.exp(df["b"])
     df["observation_type"] = "posterior"
     return df
@@ -85,16 +85,16 @@ data {
   int<lower=1> J;
   array[J] int<lower=0> viral_reads;
   vector[J] total_reads;
-  vector[J] prevalence_per100k;
+  vector[J] incidence_per100k;
 }
 transformed data {
-  vector[J] mu = log(prevalence_per100k);
+  vector[J] mu = log(incidence_per100k);
   real<lower=0> sigma = 0.5;
 }
 parameters {
   real b;                 // log conversion factor
   real<lower=0> phi;      // inverse overdispersion
-  vector[J] theta;        // true log prevalence
+  vector[J] theta;        // true log incidence
 }
 model {
   b ~ normal(0, 10);
@@ -127,7 +127,7 @@ def fit_model(
         "viral_reads": np.array(
             [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
         ),
-        "prevalence_per100k": np.array(lookup_prevalence(samples, pathogen)),
+        "incidence_per100k": np.array(lookup_incidence(samples, pathogen)),
         "county": [s.county for s in samples.values()],
         "date": [s.date for s in samples.values()],
         "plant": [s.fine_location for s in samples.values()],
@@ -136,7 +136,7 @@ def fit_model(
     stan_data = {
         k: v
         for k, v in data.items()
-        if k in ["viral_reads", "total_reads", "prevalence_per100k"]
+        if k in ["viral_reads", "total_reads", "incidence_per100k"]
     }
     stan_data["J"] = len(samples)
     model = stan.build(stan_code, data=stan_data, random_seed=random_seed)
