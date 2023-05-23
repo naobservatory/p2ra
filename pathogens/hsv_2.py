@@ -102,9 +102,13 @@ us_population_2018_18_to_49yo = Population(
 )
 
 
-def estimate_prevalences():
+def estimate_prevalences() -> list[Prevalence]:
     return [
         cdc_2015_2016_nhanes_seroprevalence,
         cdc_2015_2016_nhanes_estimate,
         cdc_2018_nhanes_estimate.to_rate(us_population_2018_18_to_49yo),
     ]
+
+
+def estimate_incidences() -> list[IncidenceRate]:
+    return []

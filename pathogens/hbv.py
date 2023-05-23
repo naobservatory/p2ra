@@ -24,14 +24,6 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(10407),
 )
 
-dna_present_in_serum = SheddingDuration(
-    days=2.5 * 30.5,  # 2.5 months
-    date="2014",
-    source="https://doi.org/10.1016/S0140-6736(14)60220-8",  # Figure 2.
-    # No citation, but HBV-DNA is listed as a detectable serum marker for 2.5
-    # months
-)
-
 cdc_estimated_acute_2019 = IncidenceAbsolute(
     annual_infections=20_700,
     # During 2019, a total of 3,192 acute hepatitis B cases were reported to
@@ -89,9 +81,7 @@ ohio_acute_incidence_2021 = IncidenceRate(
 
 def estimate_prevalences():
     return [
-        cdc_estimated_acute_2019.to_rate(us_population_2019).to_prevalence(
-            dna_present_in_serum
-        ),
+        cdc_estimated_acute_2019.to_rate(us_population_2019),
         estimated_chronic_us_2020.to_rate(us_population(year=2020)),
-        ohio_acute_incidence_2021.to_prevalence(dna_present_in_serum),
+        ohio_acute_incidence_2021,
     ]

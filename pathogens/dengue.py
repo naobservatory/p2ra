@@ -22,16 +22,14 @@ california_reported_cases = IncidenceAbsolute(
     source="https://www.cdph.ca.gov/Programs/CID/DCDC/CDPH%20Document%20Library/TravelAssociatedCasesofDengueVirusinCA.pdf",
 )
 
-# disease duration in days
-disease_duration = SheddingDuration(
-    days=7,
-    source="https://www.cdc.gov/dengue/symptoms/index.html",
-)
 
-
-def estimate_prevalences():
+def estimate_incidences() -> list[IncidenceRate]:
     return [
         california_reported_cases.to_rate(
             us_population(state="California", year=2020)
-        ).to_prevalence(disease_duration)
+        )
     ]
+
+
+def estimate_prevalences() -> list[Prevalence]:
+    return []
