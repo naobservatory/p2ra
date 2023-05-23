@@ -1,35 +1,25 @@
 from datetime import date
+from typing import TypeVar
 
 import numpy as np
-import numpy.typing as npt
 import pandas as pd
 import stan  # type: ignore
 
 from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
-from pathogen_properties import IncidenceRate
+from pathogen_properties import Variable
 
 per100k_to_per100 = 1e5 / 1e2
 
 
-def naive_relative_abundance(
-    virus_counts: npt.ArrayLike,
-    all_counts: npt.ArrayLike,
-    prev_per_100k: np.float_,
-) -> float:
-    total_virus = np.sum(virus_counts)
-    total_counts = np.sum(all_counts)
-    return total_virus / total_counts / prev_per_100k
-
-
 def is_match(
-    incidence: IncidenceRate,
     sample_attrs: SampleAttributes,
+    variable: Variable,
 ) -> bool:
-    country, state, county = incidence.get_location()
-    start, end = incidence.get_dates()
+    country, state, county = variable.get_location()
+    start, end = variable.get_dates()
     assert isinstance(sample_attrs.date, date)
     return (
-        (incidence.taxid is None)  # TODO: allow other taxids
+        (variable.taxid is None)  # TODO: allow other taxids
         and (country == sample_attrs.country)
         and ((state is None) or (state == sample_attrs.state))
         and ((county is None) or (county == sample_attrs.county))
@@ -37,18 +27,20 @@ def is_match(
     )
 
 
-def lookup_incidence(
+V = TypeVar("V", bound=Variable)
+
+
+def match_variables(
     samples: dict[Sample, SampleAttributes],
-    pathogen,
-) -> list[float]:
-    inc_estimates = pathogen.estimate_incidences()
-    incs = []
+    vars: list[V],
+) -> list[V]:
+    keep = []
     for _, attrs in samples.items():
-        matches = [p for p in inc_estimates if is_match(p, attrs)]
+        matches = [v for v in vars if is_match(attrs, v)]
         # TODO: handle multiple matches
         assert len(matches) == 1
-        incs.append(matches[0].annual_infections_per_100k)
-    return incs
+        keep.append(matches[0])
+    return keep
 
 
 def fit_to_dataframe(
@@ -120,6 +112,7 @@ def fit_model(
         bioproject, enrichment=Enrichment.VIRAL
     )
     taxids = pathogen.pathogen_chars.taxids
+    incidences = pathogen.estimate_incidences()
     data = {
         "total_reads": np.array(
             [mgs_data.total_reads(bioproject)[s] for s in samples]
@@ -127,7 +120,12 @@ def fit_model(
         "viral_reads": np.array(
             [mgs_data.viral_reads(bioproject, taxids)[s] for s in samples]
         ),
-        "incidence_per100k": np.array(lookup_incidence(samples, pathogen)),
+        "incidence_per100k": np.array(
+            [
+                inc.annual_infections_per_100k
+                for inc in match_variables(samples, incidences)
+            ]
+        ),
         "county": [s.county for s in samples.values()],
         "date": [s.date for s in samples.values()],
         "plant": [s.fine_location for s in samples.values()],
