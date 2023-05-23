@@ -12,6 +12,9 @@ Rhinovirus is not as seasonal as viruses like influenza or coronviruses.
 0114871.g001)
 (https://academic.oup.com/view-large/figure/89888454/195-6-773-fig003.jpeg)"""
 
+# FWIW, this study claims that Covid Incidence has a significant positive
+# correlation with rhinovirus incidence: https://onlinelibrary.wiley.com/doi/10.1111/irv.12930#:~:text=Figure%C2%A01%20suggests%20that%2C%20with%20the%20hindsight%20of%2018%E2%80%89months%20of%20observations%20for%20both%20hRV/EV%20and%20SARS%2DCoV%2D2%20infections%20in%20Canada%2C%20hRV/EV%20could%20have%20been%20used%20as%20a%20gauge%20for%20PHMs%20effectiveness%20as%20well%20as%20early%20warning%20for%20SARS%2DCoV%2D2%20resurgences]
+
 # TODOs for SIMON:
 #  - Check if national estimates can be applied to regions like Ohio during some specific time period.
 
@@ -213,49 +216,26 @@ rhinovirus_prevalence_using_colds = fall_rhinovirus_incidence_la_county.to_preva
 )
 
 
-# Could also be used as a source for rhinovirus incidence
-finland_pandemic_decrease_factor = Scalar(
+# hRV did not decrease much in Canada: https://onlinelibrary.wiley.com/doi/10.1111/irv.12930#:~:text=The%20causes%20of,when%20PHMs%20ease.
+# hRV also did not decrease much in Guangzhou, China:
+# https://onlinelibrary.wiley.com/doi/10.1002/iid3.381#:~:text=A%20total%20of%2061%20samples%20were%20collected%20and%2017%20(27.87%25)%20of%20which%20were%20positive%20for%20rhinovirus
+# This study finds the hRV actually increased in Australia: https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.47.2001847#:~:text=In%20contrast%2C%20rhinovirus%20detections%20were%20well%20above%20average.
+# hRV also increased in Japan: https://onlinelibrary.wiley.com/doi/10.1111/irv.12854#:~:text=the%20frequency%20of%20rhinovirus%20infection%20increased%20appreciably%20during%20the%20COVID%2D19%20pandemic
+finland_china_japan_australia_canada_pandemic_decrease_factor = Scalar(
     scalar=1,
+    # This source finds rhinovirus did not decrease during the pandmeic in
+    # Finland - Could also be used as a source for rhinovirus incidence
     source="https://onlinelibrary.wiley.com/doi/full/10.1002/jmv.27857#:~:text=Rhinovirus%20detections%20remained%20practically%20unchanged%20in%20all%20age%20groups%20throughout%20the%20pandemic%20period%20in%20Finland%20(Figure%C2%A02D).",
 )
 
-# Link for all RCGP reports (specific reference is given under source):
-#  https://www.rcgp.org.uk/clinical-and-research/our-programmes/research-and-surveillance-centre/public-health-data
-uk_pandemic_decrease_factor = Scalar(
-    scalar=0.2,
-    date="2020",
-    # See page 8 of the December 2020 report, around weeks 44 to 53
-    # The 5-year avg at this time is in blue, and the national avg in red below
-    # From this graph, the UK's decrease factor was around 0.2.
-    source="https://www.rcgp.org.uk/getmedia/e564cc01-bc66-4165-aba5-c762b693f50d/2020-December.zip",
-)
-
-
-la_estimated_pandemic_decrease_factor = Scalar(
-    # On page 5 of the uk_pandemic_decrease_factor source, we see that Covid
-    # incidence in the relevant weeks is around 14-28 per 100k per day.
-    # During fall 2020, LA County had an incidence of around 10-150 per 100k
-    # per day, usually closer to 10 and then spiking exponentially in
-    # December. This gives an average incidence slightly higher than the UK's.
-    # Additionally, in Finland, Rhinovirus barely decreased at all.
-    # So, there was clearly high variance in the decrease factor from place to
-    # place. For LA, I'm going to take 0.4 as a guess. For context, influenza's
-    # decrease factor was around 0.01 in LA during fall 2020, but influenza
-    # decreased more than rhino (https://www.laalmanac.com/health/he14f.php)
-    # (LA Covid Data: https://www.nytimes.com/interactive/2021/us/los-angeles-california-covid-cases.html)
-    scalar=0.4,
-    country="United States",
-    state="California",
-    county="Los Angeles",
-    date="2020",
-)
+# Given the many studies above that find that rhinovirus did not decrease
+# during the pandemic, I got rid of the pandemic_decrease_factor scalar
 
 
 def estimate_prevalences():
     return [
         rhinovirus_old_yearround_study_estimate.to_prevalence(
             rhinovirus_shedding_duration
-        )
-        * (la_estimated_pandemic_decrease_factor),
-        rhinovirus_prevalence_using_colds * (la_estimated_pandemic_decrease_factor),
+        ),
+        rhinovirus_prevalence_using_colds,
     ]
