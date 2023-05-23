@@ -278,6 +278,10 @@ class Population(Taggable):
 class Scalar(Variable):
     scalar: float
 
+    @staticmethod
+    def average(in1: "Scalar", in2: "Scalar"):
+        return Scalar(scalar=(in1.scalar + in2.scalar) / 2, inputs=[in1, in2])
+
 
 @dataclass(kw_only=True, eq=True, frozen=True)
 class Prevalence(Variable):
@@ -378,6 +382,13 @@ class IncidenceAbsolute(Taggable):
             inputs=[self, population],
             date_source=self,
             location_source=self,
+        )
+
+    def __truediv__(self, other: "IncidenceAbsolute"):
+        assert self.tag == other.tag
+        return Scalar(
+            scalar=self.annual_infections / other.annual_infections,
+            inputs=[self, other],
         )
 
 
