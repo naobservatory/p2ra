@@ -9,8 +9,6 @@ import stan  # type: ignore
 from mgs import Sample, SampleAttributes
 from pathogen_properties import Predictor, Variable
 
-V = TypeVar("V", bound=Variable)
-
 
 def is_match(
     sample_attrs: SampleAttributes,
@@ -26,6 +24,9 @@ def is_match(
         and ((county is None) or (county == sample_attrs.county))
         and (start <= sample_attrs.date <= end)
     )
+
+
+V = TypeVar("V", bound=Variable)
 
 
 def lookup_variable(
