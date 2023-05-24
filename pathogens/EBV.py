@@ -67,8 +67,18 @@ us_fraction_under_18 = Scalar(
     source="https://www.census.gov/quickfacts/fact/table/US",
 )
 
-under_18_population_US = us_population(year=2022) * us_fraction_under_18
-over_18_population_US = us_population(year=2022) - under_18_population_US
+under_18_population_US = Population(
+    people=us_population(year=2022).people * us_fraction_under_18.scalar,
+    country="United States",
+    date="2022",
+    tag="under 18",
+)
+over_18_population_US = Population(
+    people=us_population(year=2022).people - under_18_population_US.people,
+    country="United States",
+    date="2022",
+    tag="over 18",
+)
 
 # this estimate uses children 18-19 as a proxy for the adult population
 us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(
