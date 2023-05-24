@@ -40,7 +40,9 @@ rhinovirus_shedding_duration = SheddingDuration(
 la_county_under_18_population = Population(
     # 0.211 = the proportion of LA County residents under 18
     people=0.211
-    * us_population(state="California", county="Los Angeles County", year=2020).people,
+    * us_population(
+        state="California", county="Los Angeles County", year=2020
+    ).people,
     date="2020",
     tag="under 18",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
@@ -49,7 +51,9 @@ la_county_under_18_population = Population(
 la_county_adult_population = Population(
     # 0.789 = the proportion of LA County residents over 18
     people=0.789
-    * us_population(state="California", county="Los Angeles County", year=2020).people,
+    * us_population(
+        state="California", county="Los Angeles County", year=2020
+    ).people,
     date="2020",
     tag="over 18",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
@@ -151,13 +155,17 @@ la_county = Population(
     source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
 )
 
-la_county_40_plus = la_county - la_county_0_4 - la_county_5_19 - la_county_20_39
+la_county_40_plus = (
+    la_county - la_county_0_4 - la_county_5_19 - la_county_20_39
+)
 
-rhinovirus_old_yearround_study_estimate = IncidenceRate.weightedAverageByPopulation(
-    (rhinovirus_0_4, la_county_0_4),
-    (rhinovirus_5_19, la_county_5_19),
-    (rhinovirus_20_39, la_county_20_39),
-    (rhinovirus_40_plus, la_county_40_plus),
+rhinovirus_old_yearround_study_estimate = (
+    IncidenceRate.weightedAverageByPopulation(
+        (rhinovirus_0_4, la_county_0_4),
+        (rhinovirus_5_19, la_county_5_19),
+        (rhinovirus_20_39, la_county_20_39),
+        (rhinovirus_40_plus, la_county_40_plus),
+    )
 )
 
 #  "Adults catch two to three colds a year, while young children come down
@@ -201,35 +209,27 @@ fall_proportion_of_colds_caused_by_rhinovirus = Scalar(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7133757/",
 )
 
-# People get more colds in the fall. Since we are only interested in the fall,
-# it makes sense to increase the yearround number by some reasonable factor
-# Assuming people get no colds in the summer and an equal amount of colds
-# during the fall, winter, and spring, this factor should be about 1.33
-colds_fall_disproportionality = Scalar(scalar=1.33)
-
 fall_rhinovirus_incidence_la_county = (
-    colds_la_county * colds_fall_disproportionality
+    colds_la_county
 ) * fall_proportion_of_colds_caused_by_rhinovirus
 
-rhinovirus_prevalence_using_colds = fall_rhinovirus_incidence_la_county.to_prevalence(
-    rhinovirus_shedding_duration
+rhinovirus_prevalence_using_colds = (
+    fall_rhinovirus_incidence_la_county.to_prevalence(
+        rhinovirus_shedding_duration
+    )
 )
 
 
+# Rhinovirus incidence did not significantly change during the pandemic, so I
+# think we can apply these post-pandemic numbers to fall 2020 without further
+# adjustment.
 # hRV did not decrease much in Canada: https://onlinelibrary.wiley.com/doi/10.1111/irv.12930#:~:text=The%20causes%20of,when%20PHMs%20ease.
 # hRV also did not decrease much in Guangzhou, China:
 # https://onlinelibrary.wiley.com/doi/10.1002/iid3.381#:~:text=A%20total%20of%2061%20samples%20were%20collected%20and%2017%20(27.87%25)%20of%20which%20were%20positive%20for%20rhinovirus
-# This study finds the hRV actually increased in Australia: https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.47.2001847#:~:text=In%20contrast%2C%20rhinovirus%20detections%20were%20well%20above%20average.
-# hRV also increased in Japan: https://onlinelibrary.wiley.com/doi/10.1111/irv.12854#:~:text=the%20frequency%20of%20rhinovirus%20infection%20increased%20appreciably%20during%20the%20COVID%2D19%20pandemic
-finland_china_japan_australia_canada_pandemic_decrease_factor = Scalar(
-    scalar=1,
-    # This source finds rhinovirus did not decrease during the pandmeic in
-    # Finland - Could also be used as a source for rhinovirus incidence
-    source="https://onlinelibrary.wiley.com/doi/full/10.1002/jmv.27857#:~:text=Rhinovirus%20detections%20remained%20practically%20unchanged%20in%20all%20age%20groups%20throughout%20the%20pandemic%20period%20in%20Finland%20(Figure%C2%A02D).",
-)
-
-# Given the many studies above that find that rhinovirus did not decrease
-# during the pandemic, I got rid of the pandemic_decrease_factor scalar
+# This study finds that hRV actually increased slightly in Australia: https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.47.2001847#:~:text=In%20contrast%2C%20rhinovirus%20detections%20were%20well%20above%20average.
+# hRV also increased slightly in Japan: https://onlinelibrary.wiley.com/doi/10.1111/irv.12854#:~:text=the%20frequency%20of%20rhinovirus%20infection%20increased%20appreciably%20during%20the%20COVID%2D19%20pandemic
+# hRV also did not decrease in Finland - This source could also be used
+# as a source for rhinovirus incidence: "https://onlinelibrary.wiley.com/doi/full/10.1002/jmv.27857#:~:text=Rhinovirus%20detections%20remained%20practically%20unchanged%20in%20all%20age%20groups%20throughout%20the%20pandemic%20period%20in%20Finland%20(Figure%C2%A02D)."
 
 
 def estimate_prevalences():
