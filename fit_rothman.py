@@ -5,17 +5,17 @@ import numpy as np
 import pandas as pd
 
 import stats
-from mgs import BioProject, Enrichment, MGSData
-from pathogen_properties import Predictor
-from pathogens import pathogens
+from mgs import BioProject, MGSData
 
 
 def geom_mean(x: np.ndarray) -> float:
     return np.exp(np.mean(np.log(x)))
 
 
-def print_summary(pathogen: str, ra_per_predictor: np.ndarray) -> None:
-    title = f"{pathogen} relative abundance per predictor"
+def print_summary(
+    pathogen: str, predictor: str, ra_per_predictor: np.ndarray
+) -> None:
+    title = f"{pathogen} relative abundance per {predictor}"
     percentiles = [5, 25, 50, 75, 95]
     percentile_values = np.percentile(ra_per_predictor, percentiles)
     d = 1
@@ -38,23 +38,11 @@ def print_summary(pathogen: str, ra_per_predictor: np.ndarray) -> None:
 def start():
     bioproject = BioProject("PRJNA729801")  # Rothman
     mgs_data = MGSData.from_repo()
+    predictor = "incidence"
     for pathogen_name in ["sars_cov_2", "norovirus"]:
-        pathogen = pathogens[pathogen_name]
-        taxids = pathogen.pathogen_chars.taxids
-        samples = mgs_data.sample_attributes(
-            bioproject, enrichment=Enrichment.VIRAL
+        model = stats.build_model(
+            mgs_data, bioproject, pathogen_name, predictor
         )
-        incidences: list[Predictor] = pathogen.estimate_incidences()
-        data = [
-            stats.DataPoint(
-                sample=s,
-                attrs=attrs,
-                viral_reads=mgs_data.viral_reads(bioproject, taxids)[s],
-                predictor=stats.lookup_variable(attrs, incidences),
-            )
-            for s, attrs in samples.items()
-        ]
-        model = stats.Model(data=data)
         model.fit_model(random_seed=1)
         df = model.get_fit_dataframe()
         df.to_csv(
@@ -66,7 +54,7 @@ def start():
         ra_per_predictor = pd.pivot_table(
             df, index="draws", values=["ra_per_predictor"]
         )
-        print_summary(pathogen_name, ra_per_predictor)
+        print_summary(pathogen_name, predictor, ra_per_predictor)
 
 
 if __name__ == "__main__":

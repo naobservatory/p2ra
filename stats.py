@@ -6,8 +6,9 @@ import numpy as np
 import pandas as pd
 import stan  # type: ignore
 
-from mgs import Sample, SampleAttributes
+from mgs import Sample, SampleAttributes, Enrichment, MGSData, BioProject
 from pathogen_properties import Predictor, Variable
+from pathogens import pathogens
 
 
 def is_match(
@@ -131,3 +132,35 @@ class Model(Generic[P]):
         df.rename(columns={"reads": "total_reads"}, inplace=True)
 
         return df
+
+
+def build_model(
+    mgs_data: MGSData,
+    bioproject: BioProject,
+    pathogen_name: str,
+    predictor: str,
+) -> Model:
+    pathogen = pathogens[pathogen_name]
+    taxids = pathogen.pathogen_chars.taxids
+    samples = mgs_data.sample_attributes(
+        bioproject, enrichment=Enrichment.VIRAL
+    )
+    predictors: list[Predictor]
+    if predictor == "incidence":
+        predictors = pathogen.estimate_incidences()
+    elif predictor == "prevalence":
+        predictors = pathogen.estimate_prevalences()
+    else:
+        raise ValueError(
+            f"{predictor} must be one of 'incidence' or 'prevalence'"
+        )
+    data = [
+        DataPoint(
+            sample=s,
+            attrs=attrs,
+            viral_reads=mgs_data.viral_reads(bioproject, taxids)[s],
+            predictor=lookup_variable(attrs, predictors),
+        )
+        for s, attrs in samples.items()
+    ]
+    return Model(data=data)

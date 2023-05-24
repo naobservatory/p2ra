@@ -442,6 +442,16 @@ class TestStats(unittest.TestCase):
         with self.assertRaises(AssertionError):
             stats.lookup_variable(self.attrs, [v3])
 
+    def test_build_model(self):
+        bioproject = mgs.BioProject("PRJNA729801")  # Rothman
+        mgs_data = MGSData.from_repo()
+        predictor = "incidence"
+        for pathogen_name in ["sars_cov_2", "norovirus"]:
+            with self.subTest(pathogen=pathogen_name):
+                stats.build_model(
+                    mgs_data, bioproject, pathogen_name, predictor
+                )
+
 
 if __name__ == "__main__":
     unittest.main()
