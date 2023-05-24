@@ -1,5 +1,6 @@
+from dataclasses import dataclass
 from datetime import date
-from typing import TypeVar
+from typing import Any, TypeVar
 
 import numpy as np
 import pandas as pd
@@ -75,12 +76,12 @@ def fit_to_dataframe(
 stan_code = """
 data {
   int<lower=1> J;
-  array[J] int<lower=0> viral_reads;
-  vector[J] total_reads;
-  vector[J] incidence_per100k;
+  array[J] int<lower=0> y;
+  vector[J] n;
+  vector[J] x;
 }
 transformed data {
-  vector[J] mu = log(incidence_per100k);
+  vector[J] mu = log(x);
   real<lower=0> sigma = 0.5;
 }
 parameters {
@@ -93,13 +94,41 @@ model {
   phi ~ gamma(2, 2);
 
   theta ~ normal(mu, sigma);
-  viral_reads ~ neg_binomial_2_log(b + theta + log(total_reads), phi);
+  y ~ neg_binomial_2_log(b + theta + log(n), phi);
 }
 generated quantities {
   array[J] int<lower=0> y_tilde
-    = neg_binomial_2_log_rng(b + theta + log(total_reads), phi);
+    = neg_binomial_2_log_rng(b + theta + log(n), phi);
 }
 """
+
+
+@dataclass
+class Model:
+    x: str
+    data: dict[str, Any]
+    samples: dict[Sample, SampleAttributes]
+    y: str = "viral_reads"
+    fit: None | stan.model.Model = None
+
+    def fit_model(
+        self, random_seed: int, num_chains: int = 4, num_samples: int = 1000
+    ) -> None:
+        stan_data = {
+            "J": len(self.samples),
+            "n": self.data["total_reads"],
+            "x": self.data[self.x],
+            "y": self.data[self.y],
+        }
+        model = stan.build(stan_code, data=stan_data, random_seed=random_seed)
+        self.fit = model.sample(num_chains=num_chains, num_samples=num_samples)
+
+    def get_fit_dataframe(self) -> pd.DataFrame:
+        if not self.fit:
+            raise ValueError("Model not fit yet")
+        df = fit_to_dataframe(self.fit, self.samples)
+        df = pd.concat([pd.DataFrame(self.data), df], ignore_index=True)
+        return df
 
 
 def fit_model(
@@ -131,14 +160,6 @@ def fit_model(
         "plant": [s.fine_location for s in samples.values()],
         "observation_type": "data",
     }
-    stan_data = {
-        k: v
-        for k, v in data.items()
-        if k in ["viral_reads", "total_reads", "incidence_per100k"]
-    }
-    stan_data["J"] = len(samples)
-    model = stan.build(stan_code, data=stan_data, random_seed=random_seed)
-    fit = model.sample(num_chains=4, num_samples=1000)
-    df = fit_to_dataframe(fit, samples)
-    df = pd.concat([pd.DataFrame(data), df], ignore_index=True)
-    return df
+    model = Model(data=data, samples=samples, x="incidence_per100k")
+    model.fit_model(random_seed=random_seed)
+    return model.get_fit_dataframe()
