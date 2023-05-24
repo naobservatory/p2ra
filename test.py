@@ -393,6 +393,7 @@ class TestStats(unittest.TestCase):
         date=datetime.date.fromisoformat("2019-05-14"),
         reads=100,
         location="Loc",
+        enrichment=mgs.Enrichment.VIRAL,
     )
 
     def test_is_match(self):

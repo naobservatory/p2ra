@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import stan  # type: ignore
 
-from mgs import Sample, SampleAttributes, Enrichment, MGSData, BioProject
+from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
 from pathogen_properties import Predictor, Variable
 from pathogens import pathogens
 
