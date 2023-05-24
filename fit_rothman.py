@@ -2,10 +2,10 @@
 from textwrap import dedent
 
 import numpy as np
+import pandas as pd
 
 import stats
-from mgs import BioProject, Enrichment, MGSData
-from pathogens import pathogens
+from mgs import BioProject, MGSData
 
 
 def geom_mean(x: np.ndarray) -> float:
@@ -13,23 +13,21 @@ def geom_mean(x: np.ndarray) -> float:
 
 
 def print_summary(
-    pathogen: str, naive_ra_per100: float, model_ra_per100: np.ndarray
+    pathogen: str, predictor: str, ra_per_predictor: np.ndarray
 ) -> None:
-    title = f"{pathogen} relative abundance at 1% prevalence"
+    title = f"{pathogen} relative abundance per {predictor}"
     percentiles = [5, 25, 50, 75, 95]
-    percentile_values = np.percentile(model_ra_per100, percentiles)
+    percentile_values = np.percentile(ra_per_predictor, percentiles)
     d = 1
     sep = " " * 4
     output = f"""
     {"-" * len(title)}
     {title}
     {"-" * len(title)}
-    Naive estimate:
-    {naive_ra_per100:.{d}e}
     Posterior arithmetic mean:
-    {np.mean(model_ra_per100):.{d}e}
+    {np.mean(ra_per_predictor):.{d}e}
     Posterior geometric mean:
-    {geom_mean(model_ra_per100):.{d}e}
+    {geom_mean(ra_per_predictor):.{d}e}
     Posterior quantiles:
     {sep.join(f"{p:>{d+5}}%" for p in percentiles)}
     {sep.join(f"{x:.{d}e}" for x in percentile_values)}
@@ -37,42 +35,28 @@ def print_summary(
     print(dedent(output))
 
 
-per100k_to_per100 = 1e5 / 1e2
+def start():
+    bioproject = BioProject("PRJNA729801")  # Rothman
+    mgs_data = MGSData.from_repo()
+    predictor = "incidence"
+    for pathogen_name in ["sars_cov_2", "norovirus"]:
+        model = stats.build_model(
+            mgs_data, bioproject, pathogen_name, predictor
+        )
+        model.fit_model(random_seed=1)
+        df = model.dataframe
+        assert df is not None
+        df.to_csv(
+            f"fits/rothman-{pathogen_name}.tsv.gz",
+            sep="\t",
+            index=False,
+            compression="gzip",
+        )
+        ra_per_predictor = pd.pivot_table(
+            df, index="draws", values=["ra_per_predictor"]
+        )
+        print_summary(pathogen_name, predictor, ra_per_predictor)
+
 
 if __name__ == "__main__":
-    bioproject = BioProject("PRJNA729801")  # Rothman
-
-    mgs_data = MGSData.from_repo()
-    samples = mgs_data.sample_attributes(
-        bioproject, enrichment=Enrichment.VIRAL
-    ).keys()
-    all_reads = [mgs_data.total_reads(bioproject)[s] for s in samples]
-
-    for pathogen_name, pathogen in pathogens.items():
-        taxids = pathogen.pathogen_chars.taxids
-        virus_reads = [
-            mgs_data.viral_reads(bioproject, taxids)[s] for s in samples
-        ]
-
-        prevalence_estimates = pathogen.estimate_prevalences()
-        prevalence_per100k = np.mean(
-            [est.infections_per_100k for est in prevalence_estimates]
-        )
-
-        naive_ra_per100 = per100k_to_per100 * stats.naive_relative_abundance(
-            virus_reads,
-            all_reads,
-            prevalence_per100k,
-        )
-
-        fit = stats.fit_model(
-            num_samples=len(samples),
-            viral_read_counts=virus_reads,
-            total_read_counts=all_reads,
-            mean_log_prevalence=np.log(prevalence_per100k),
-            std_log_prevalence=1.0,
-            random_seed=1,
-        )
-        # TODO: Wrap the model fit so that we aren't exposed to stan variables
-        model_ra_per100 = per100k_to_per100 * np.exp(fit["b"])
-        print_summary(pathogen_name, naive_ra_per100, model_ra_per100)
+    start()
