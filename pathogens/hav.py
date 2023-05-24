@@ -123,7 +123,6 @@ def estimate_incidences() -> list[IncidenceRate]:
         * incidence_underreporting_scalar,
     ]
     for item in ohio_county_hav_incidences:
-        print(ohio_county_hav_incidences[item])
         estimates.append((ohio_county_hav_incidences[item]))
     return estimates
 
