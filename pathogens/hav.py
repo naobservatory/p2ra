@@ -115,13 +115,17 @@ with open(prevalence_data_filename("havCaseCountsOhioCounties.csv")) as file:
 
 
 def estimate_incidences() -> list[IncidenceRate]:
-    return [
+    estimates = [
         us_incidence_absolute_2018.to_rate(us_population_2018),
         king_county_confirmed_cases_rate_2017
         * incidence_underreporting_scalar,
         king_county_confirmed_cases_rate_2018
         * incidence_underreporting_scalar,
     ]
+    for item in ohio_county_hav_incidences:
+        print(ohio_county_hav_incidences[item])
+        estimates.append((ohio_county_hav_incidences[item]))
+    return estimates
 
 
 def estimate_prevalences() -> list[Prevalence]:
