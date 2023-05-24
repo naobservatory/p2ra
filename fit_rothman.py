@@ -44,7 +44,8 @@ def start():
             mgs_data, bioproject, pathogen_name, predictor
         )
         model.fit_model(random_seed=1)
-        df = model.get_fit_dataframe()
+        df = model.dataframe
+        assert df is not None
         df.to_csv(
             f"fits/rothman-{pathogen_name}.tsv.gz",
             sep="\t",

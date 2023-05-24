@@ -83,6 +83,7 @@ class DataPoint(Generic[P]):
 class Model(Generic[P]):
     data: list[DataPoint[P]]
     fit: None | stan.fit.Fit = None
+    dataframe: None | pd.DataFrame = None
 
     def fit_model(
         self, random_seed: int, num_chains: int = 4, num_samples: int = 1000
@@ -95,8 +96,9 @@ class Model(Generic[P]):
         }
         model = stan.build(stan_code, data=stan_data, random_seed=random_seed)
         self.fit = model.sample(num_chains=num_chains, num_samples=num_samples)
+        self.dataframe = self._make_dataframe()
 
-    def get_fit_dataframe(self) -> pd.DataFrame:
+    def _make_dataframe(self) -> pd.DataFrame:
         if not self.fit:
             raise ValueError("Model not fit yet")
 
