@@ -71,9 +71,9 @@ ohio_total_incidence_2021 = IncidenceRate(
     # I think it makes sense to report the total incidence, since chronic
     # cases still have an acute phase in which they shed. The number of
     # chronic cases in any given year has some lag attached, since chronic
-    # cases are probably not identified during their acute phase. However, the
-    # reported chronic incidence in any given year should still be
-    # approximately the number of new chronic cases for that year.
+    # cases are probably not identified during their acute phase, but this
+    # number still roughly represents our most recent guess at new chronic
+    # cases for 2021
     annual_infections_per_100k=16.5,
     country="United States",
     state="Ohio",
