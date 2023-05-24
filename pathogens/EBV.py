@@ -2,6 +2,7 @@ import csv
 from collections import Counter
 
 from pathogen_properties import *
+from populations import us_population
 
 background = """EBV stands for Epstein-Barr virus. It is a type of 
 herpes virus that infects humans and is known to cause infectious 
@@ -60,19 +61,14 @@ nhanes_18_19_yo_estimate = Prevalence(
     source="https://academic.oup.com/jid/article/208/8/1286/2192838#:~:text=years%2C%2069%25%3B%20and-,18%E2%80%9319%20years%2C%2089%25,-.%20Within%20each%20race",
 )
 
-under_18_population_US = Population(
-    people=0.222 * 333_287_557,
+us_fraction_under_18 = Scalar(
+    scalar=0.222,
     date="2022",
-    tag="US-2022",
-    source="https://www.census.gov/quickfacts/fact/table/US#",
+    source="https://www.census.gov/quickfacts/fact/table/US",
 )
 
-over_18_population_US = Population(
-    people=(333_287_557 - under_18_population_US.people),
-    date="2022",
-    tag="US-2022",
-    source="https://www.census.gov/quickfacts/fact/table/US#",
-)
+under_18_population_US = us_population(year=2022) * us_fraction_under_18
+over_18_population_US = us_population(year=2022) - under_18_population_US
 
 # this estimate uses children 18-19 as a proxy for the adult population
 us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(
@@ -80,6 +76,7 @@ us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(
     (nhanes_18_19_yo_estimate, over_18_population_US),
 )
 
+# (min_age, max_age) -> people within that age range
 denmark_age_groups: Counter[tuple[int, int]] = Counter()
 
 # Source for CSV: https://www.census.gov/data-tools/demo/idb/#/pop?COUNTRY_YEAR=2023&COUNTRY_YR_ANIM=2023&FIPS_SINGLE=DA&menu=popViz&FIPS=DA&POP_YEARS=2023&popPages=BYAGE
