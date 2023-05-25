@@ -6,7 +6,7 @@ data {
 }
 transformed data {
   vector[J] mu = log(x) - mean(log(x));
-  real<lower=0> sigma = 0.5;
+  real<lower=0> sigma = 0.1;
   vector[J] exposure = log(n) - mean(log(n));
 }
 parameters {
