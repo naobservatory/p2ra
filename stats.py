@@ -90,7 +90,7 @@ class Model(Generic[P]):
 
         df_output = pd.wide_to_long(
             self.fit.to_frame().reset_index(),
-            stubnames=["y_tilde", "theta"],
+            stubnames=["y_tilde", "theta", "theta_std"],
             i="draws",
             j="sample",
             sep=".",
