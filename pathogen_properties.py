@@ -68,16 +68,6 @@ class PathogenChars:
             object.__setattr__(self, "taxids", frozenset([taxid]))
 
 
-@staticmethod
-def _weightedAverageByPopulation(*pairs: tuple[float, "Population"]) -> float:
-    return float(
-        np.average(
-            [val for (val, population) in pairs],
-            weights=[population.people for (val, population) in pairs],
-        )
-    )
-
-
 def days_in_month(year: int, month: int) -> int:
     _, last_day = calendar.monthrange(year, month)
     return last_day
@@ -253,6 +243,17 @@ class Variable:
     def summarize_location(self) -> str:
         country, state, county = self.get_location()
         return ", ".join(x for x in [county, state, country] if x)
+
+    @staticmethod
+    def _weightedAverageByPopulation(
+        *pairs: tuple[float, "Population"]
+    ) -> float:
+        return float(
+            np.average(
+                [val for (val, population) in pairs],
+                weights=[population.people for (val, population) in pairs],
+            )
+        )
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
