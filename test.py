@@ -444,14 +444,18 @@ class TestStats(unittest.TestCase):
             stats.lookup_variable(self.attrs, [v3])
 
     def test_build_model(self):
-        bioproject = mgs.BioProject("PRJNA729801")  # Rothman
+        bioprojects = {
+            "crits-christoph": mgs.BioProject("PRJNA661613"),
+            "rothman": mgs.BioProject("PRJNA729801"),
+        }
         mgs_data = MGSData.from_repo()
         predictor = "incidence"
         for pathogen_name in ["sars_cov_2", "norovirus"]:
-            with self.subTest(pathogen=pathogen_name):
-                stats.build_model(
-                    mgs_data, bioproject, pathogen_name, predictor
-                )
+            for study, bioproject in bioprojects.items():
+                with self.subTest(study=study, pathogen=pathogen_name):
+                    stats.build_model(
+                        mgs_data, bioproject, pathogen_name, predictor
+                    )
 
 
 if __name__ == "__main__":
