@@ -1,6 +1,7 @@
 import abc
 import calendar
 import dataclasses
+import dataclasses
 import datetime
 import itertools
 import os.path
@@ -9,6 +10,8 @@ from collections.abc import Iterable
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import NewType, Optional
+
+import numpy as np
 
 import numpy as np
 
@@ -323,6 +326,15 @@ class Prevalence(Predictor):
             location_source=self,
         )
 
+    def __truediv__(self, scalar: Scalar) -> "Prevalence":
+        return Prevalence(
+            infections_per_100k=self.infections_per_100k / scalar.scalar,
+            inputs=[self, scalar],
+            active=self.active,
+            date_source=self,
+            location_source=self,
+        )
+
     def __add__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
         assert self.active == other.active
         assert self.parsed_start == other.parsed_start
@@ -351,6 +363,19 @@ class Prevalence(Predictor):
             location_source=pairs[0][1],
             date_source=pairs[0][1],
             inputs=itertools.chain.from_iterable(pairs),
+        )
+
+    def __sub__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
+        assert self.active == other.active
+        assert self.parsed_start == other.parsed_start
+        assert self.parsed_end == other.parsed_end
+        return Prevalence(
+            infections_per_100k=self.infections_per_100k
+            - other.infections_per_100k,
+            inputs=[self, other],
+            active=self.active,
+            date_source=self,
+            location_source=self,
         )
 
 
