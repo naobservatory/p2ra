@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from pathlib import Path
 from textwrap import dedent
 
 import numpy as np
@@ -36,12 +37,14 @@ def print_summary(
 
 
 bioprojects = {
-    "crits-christoph": BioProject("PRJNA661613"),
+    "crits_christoph": BioProject("PRJNA661613"),
     "rothman": BioProject("PRJNA729801"),
 }
 
 
 def start():
+    outdir = Path("fits")
+    outdir.mkdir(exist_ok=True)
     mgs_data = MGSData.from_repo()
     predictor = "incidence"
     for pathogen_name in ["sars_cov_2", "norovirus"]:
@@ -53,7 +56,7 @@ def start():
             df = model.dataframe
             assert df is not None
             df.to_csv(
-                f"fits/{study}-{pathogen_name}.tsv.gz",
+                outdir / f"{study}-{pathogen_name}.tsv.gz",
                 sep="\t",
                 index=False,
                 compression="gzip",
