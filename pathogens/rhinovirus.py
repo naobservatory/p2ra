@@ -66,10 +66,14 @@ which could lead to bias in this isolation rate). But for now, let's use this
 number. Checking a table of isolation rates across ages, the rate of
 Rhinoviruses among infections roughly holds true across ages."""
 annual_infections_per_100k_by_age_group = {
-    "0-4": 113.2 * 100,
-    "5-19": 25.3 * 100,
-    "20-39": 38.7 * 100,
-    "40+": 9.7 * 100,
+    # Formula: percent of illnesses that are rhionviruses * number of
+    # illnesses / person-years of followup * 100_000
+    "0-4": 0.39 * (2657 / 539) * 100_000,
+    # 0.21 was calculated from the table on page 6, since the paper does not
+    # give a number in writing for this age group
+    "5-19": 0.21 * (4373 / 1541) * 100_000,
+    "20-39": 0.5 * (3326 / 1523) * 100_000,
+    "40+": 0.36 * (2784 / 1757) * 100_000,
 }
 rhinovirus_incidence_rates_by_age = {
     age_group: IncidenceRate(
@@ -79,6 +83,7 @@ rhinovirus_incidence_rates_by_age = {
         country="United States",
         state="Michigan",
         county="Lenawee County",
+        # Numbers from pages 5 & 6 of source
         source="https://doi.org/10.1017/S0950268800050779",
     )
     for age_group, incidence in annual_infections_per_100k_by_age_group.items()
