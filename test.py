@@ -203,6 +203,32 @@ class TestMGS(unittest.TestCase):
         self.assertEqual(mgs.count_reads(taxtree, sample_counts), expected)
 
 
+class TestWeightedAverageByPopulation(unittest.TestCase):
+    def test_weightedAverageByPopulation(self):
+        prevalences = [
+            Prevalence(
+                infections_per_100k=i,
+                date="2000-01-0%s" % i,
+                active=Active.ACTIVE,
+            )
+            for i in range(1, 5)
+        ]
+        populations = [
+            Population(
+                people=100_000 * i,
+                date="2000-01-0%s" % i,
+            )
+            for i in range(1, 5)
+        ]
+        self.assertAlmostEqual(
+            (1 * 100_000 + 2 * 200_000 + 3 * 300_000 + 4 * 400_000)
+            / (100_000 * (1 + 2 + 3 + 4)),
+            Prevalence.weightedAverageByPopulation(
+                *zip(prevalences, populations)
+            ).infections_per_100k,
+        )
+
+
 class TestMGSData(unittest.TestCase):
     mgs_data = MGSData.from_repo()
     bioproject = mgs.BioProject("PRJNA729801")  # Rothman

@@ -1,4 +1,5 @@
 import calendar
+import dataclasses
 import datetime
 import math
 import os.path
@@ -7,6 +8,8 @@ from collections.abc import Iterable
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import NewType, Optional
+
+import numpy as np
 
 # Enums, short for enumerations, are a data type in Python used to represent a set of named values,
 # which are typically used to define a set of related constants with unique names.
@@ -295,6 +298,15 @@ class Prevalence(Variable):
             location_source=self,
         )
 
+    def __truediv__(self, scalar: Scalar) -> "Prevalence":
+        return Prevalence(
+            infections_per_100k=self.infections_per_100k / scalar.scalar,
+            inputs=[self, scalar],
+            active=self.active,
+            date_source=self,
+            location_source=self,
+        )
+
     def __add__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
         assert self.active == other.active
         assert self.parsed_start == other.parsed_start
@@ -306,6 +318,34 @@ class Prevalence(Variable):
             active=self.active,
             date_source=self,
             location_source=self,
+        )
+
+    def __sub__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
+        assert self.active == other.active
+        assert self.parsed_start == other.parsed_start
+        assert self.parsed_end == other.parsed_end
+        return Prevalence(
+            infections_per_100k=self.infections_per_100k
+            - other.infections_per_100k,
+            inputs=[self, other],
+            active=self.active,
+            date_source=self,
+            location_source=self,
+        )
+
+    @staticmethod
+    def weightedAverageByPopulation(*pairs: tuple["Prevalence", "Population"]):
+        return dataclasses.replace(
+            pairs[0][0],
+            infections_per_100k=np.average(
+                [
+                    prevalence.infections_per_100k
+                    for prevalence, population in pairs
+                ],
+                weights=[
+                    population.people for prevalence, population in pairs
+                ],
+            ),
         )
 
 
