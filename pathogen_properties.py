@@ -1,5 +1,7 @@
 import calendar
+import dataclasses
 import datetime
+import itertools
 import math
 import os.path
 import re
@@ -7,6 +9,8 @@ from collections.abc import Iterable
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import NewType, Optional
+
+import numpy as np
 
 # Enums, short for enumerations, are a data type in Python used to represent a set of named values,
 # which are typically used to define a set of related constants with unique names.
@@ -62,6 +66,16 @@ class PathogenChars:
             # __setattr__. See
             # https://stackoverflow.com/questions/53756788/how-to-set-the-value-of-dataclass-field-in-post-init-when-frozen-true/54119384#54119384
             object.__setattr__(self, "taxids", frozenset([taxid]))
+
+
+@staticmethod
+def _weightedAverageByPopulation(*pairs: tuple[float, "Population"]) -> float:
+    return float(
+        np.average(
+            [val for (val, population) in pairs],
+            weights=[population.people for (val, population) in pairs],
+        )
+    )
 
 
 def days_in_month(year: int, month: int) -> int:
@@ -308,6 +322,23 @@ class Prevalence(Variable):
             location_source=self,
         )
 
+    @staticmethod
+    def weightedAverageByPopulation(
+        *pairs: tuple["Prevalence", "Population"]
+    ) -> "Prevalence":
+        return dataclasses.replace(
+            pairs[0][0],
+            infections_per_100k=Variable._weightedAverageByPopulation(
+                *[
+                    (prevalence.infections_per_100k, population)
+                    for (prevalence, population) in pairs
+                ]
+            ),
+            location_source=pairs[0][1],
+            date_source=pairs[0][1],
+            inputs=itertools.chain.from_iterable(pairs),
+        )
+
 
 @dataclass(kw_only=True, eq=True, frozen=True)
 class PrevalenceAbsolute(Taggable):
@@ -359,6 +390,23 @@ class IncidenceRate(Variable):
             inputs=[self, scalar],
             date_source=self,
             location_source=self,
+        )
+
+    @staticmethod
+    def weightedAverageByPopulation(
+        *pairs: tuple["IncidenceRate", "Population"]
+    ) -> "IncidenceRate":
+        return dataclasses.replace(
+            pairs[0][0],
+            annual_infections_per_100k=Variable._weightedAverageByPopulation(
+                *[
+                    (incidence.annual_infections_per_100k, population)
+                    for (incidence, population) in pairs
+                ]
+            ),
+            location_source=pairs[0][1],
+            date_source=pairs[0][1],
+            inputs=itertools.chain.from_iterable(pairs),
         )
 
 
