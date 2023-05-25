@@ -27,15 +27,6 @@ LA_county_cases_in_2020 = IncidenceAbsolute(
     source="https://westnile.ca.gov/pdfs/VBDSAnnualReport20.pdf#?page=23",
 )
 
-west_nile_duration = SheddingDuration(
-    # Symptoms last for 3-6 days usually, but sometimes for up to a month. I'm
-    # going to use 7 days as an estimate, since I cannot find a better source
-    # on this
-    days=10,
-    confidence_interval=(2, 18),
-    source="https://myhealth.alberta.ca/Health/aftercareinformation/pages/conditions.aspx?hwid=abo5809#:~:text=In%20mild%20cases%20of%20West%20Nile%2C%20symptoms%20usually%20last%20for%203%20to%206%20days%2C%20and%20you%20can%20recover%20at%20home.%20If%20you%20get%20a%20more%20severe%20case%20of%20West%20Nile%2C%20symptoms%20can%20last%20for%20weeks%20or%20months%2C%20and%20you%20may%20need%20to%20stay%20in%20the%20hospital%20so%20you%20can%20get%20medicine%20to%20help%20you%20recover.",
-)
-
 # 3/4 of people with WNV are asymptomatic, and therefore probably did not get
 # tested
 asymptomatic_multiplier = Scalar(
@@ -44,12 +35,16 @@ asymptomatic_multiplier = Scalar(
 )
 
 
-def estimate_prevalences():
+def estimate_incidences() -> list[IncidenceRate]:
     return [
         LA_county_cases_in_2020.to_rate(
             us_population(
                 county="Los Angeles County", state="California", year=2020
             )
-        ).to_prevalence(west_nile_duration)
+        )
         * asymptomatic_multiplier
     ]
+
+
+def estimate_prevalences() -> list[Prevalence]:
+    return []

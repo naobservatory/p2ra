@@ -15,14 +15,6 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(2697049),
 )
 
-shedding_duration = SheddingDuration(
-    days=18,
-    # "In a review of 28 studies, the pooled median duration of viral RNA
-    # detection in respiratory specimens was 18 days following the onset of
-    # symptoms."
-    source="https://www.uptodate.com/contents/covid-19-epidemiology-virology-and-prevention/print",
-)
-
 underreporting = Scalar(
     scalar=4.0,
     confidence_interval=(3.4, 4.7),
@@ -54,7 +46,7 @@ target_counties = set(
 )
 
 
-def estimate_prevalences():
+def estimate_incidences() -> list[IncidenceRate]:
     estimates = []
 
     # From the COVID-19 Data Repository by the Center for Systems Science and
@@ -65,8 +57,6 @@ def estimate_prevalences():
         prevalence_data_filename("time_series_covid19_confirmed_US.csv")
     ) as inf:
         for row in csv.reader(inf):
-            incidences = []
-
             truncated_county = row[5]
             state = row[6]
 
@@ -125,7 +115,7 @@ def estimate_prevalences():
                     date=date.isoformat(),
                 )
 
-                incidences.append(
+                estimates.append(
                     cases.to_rate(
                         us_population(
                             county=county, state=state, year=date.year
@@ -133,7 +123,9 @@ def estimate_prevalences():
                     )
                     * underreporting
                 )
-            estimates.extend(
-                shedding_duration.prevalences_from_incidences(incidences)
-            )
+
     return estimates
+
+
+def estimate_prevalences() -> list[Prevalence]:
+    return []

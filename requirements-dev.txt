@@ -2,3 +2,4 @@
 mypy
 black
 isort
+pandas-stubs
