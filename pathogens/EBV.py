@@ -25,7 +25,7 @@ pathogen_chars = PathogenChars(
 # "We conducted a sero-epidemiological survey using serum samples from 2325
 # individuals between 0 and 25 years old to assess prevalence of detectable
 # anti-EBV antibodies."
-UK_seroprevalence_0_to_25 = Prevalence(
+uk_seroprevalence_0_to_25 = Prevalence(
     # This study is not used in the estimate,
     # but is used to check that the later estimate is reasonable
     infections_per_100k=0.853 * 100_000,
@@ -63,16 +63,13 @@ nhanes_18_19_yo_estimate = Prevalence(
 
 us_fraction_under_18 = Scalar(
     scalar=0.222,
-    date="2022",
-    source="https://www.census.gov/quickfacts/fact/table/US",
-)
 
 under_18_population_US = Population(
     people=us_population(year=2022).people * us_fraction_under_18.scalar,
-    country="United States",
     date="2022",
-    tag="under 18",
-)
+    tag = "under 18",
+    country="United States",
+  
 over_18_population_US = Population(
     people=us_population(year=2022).people - under_18_population_US.people,
     country="United States",
@@ -198,7 +195,7 @@ def estimate_prevalences():
     return [
         us_seroprevalence_2003_2010,
         denmark_overall_seroprevalence,
-        UK_seroprevalence_0_to_25,
+        uk_seroprevalence_0_to_25,
     ]
 
 
