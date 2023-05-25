@@ -132,9 +132,9 @@ dmypy.json
 .pyre/
 
 # settings.json
-settings.json
+settings.json 
 
 # Mac stuff
 .DS_Store
 
-settings.json
+fits/*.tsv.gz

@@ -1,8 +1,8 @@
+import abc
 import calendar
 import dataclasses
 import datetime
 import itertools
-import math
 import os.path
 import re
 from collections.abc import Iterable
@@ -293,13 +293,26 @@ class Population(Taggable):
 class Scalar(Variable):
     scalar: float
 
+    @staticmethod
+    def average(in1: "Scalar", in2: "Scalar"):
+        return Scalar(scalar=(in1.scalar + in2.scalar) / 2, inputs=[in1, in2])
+
+
+class Predictor(abc.ABC, Variable):
+    @abc.abstractmethod
+    def get_data(self) -> float:
+        ...
+
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class Prevalence(Variable):
+class Prevalence(Predictor):
     """What fraction of people have this pathogen at some moment"""
 
     active: Active
     infections_per_100k: float
+
+    def get_data(self) -> float:
+        return self.infections_per_100k
 
     def __mul__(self, scalar: Scalar) -> "Prevalence":
         return Prevalence(
@@ -379,10 +392,13 @@ class Number(Variable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class IncidenceRate(Variable):
+class IncidenceRate(Predictor):
     """What fraction of people get this pathogen annually"""
 
     annual_infections_per_100k: float
+
+    def get_data(self) -> float:
+        return self.annual_infections_per_100k
 
     def __mul__(self, scalar: Scalar) -> "IncidenceRate":
         return IncidenceRate(
@@ -427,6 +443,13 @@ class IncidenceAbsolute(Taggable):
             inputs=[self, population],
             date_source=self,
             location_source=self,
+        )
+
+    def __truediv__(self, other: "IncidenceAbsolute"):
+        assert self.tag == other.tag
+        return Scalar(
+            scalar=self.annual_infections / other.annual_infections,
+            inputs=[self, other],
         )
 
 
