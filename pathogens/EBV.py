@@ -63,13 +63,15 @@ nhanes_18_19_yo_estimate = Prevalence(
 
 us_fraction_under_18 = Scalar(
     scalar=0.222,
+)
 
 under_18_population_US = Population(
     people=us_population(year=2022).people * us_fraction_under_18.scalar,
     date="2022",
-    tag = "under 18",
+    tag="under 18",
     country="United States",
-  
+)
+
 over_18_population_US = Population(
     people=us_population(year=2022).people - under_18_population_US.people,
     country="United States",
