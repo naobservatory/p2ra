@@ -26,14 +26,6 @@ pathogen_chars = PathogenChars(
 )
 
 
-rhinovirus_shedding_duration = SheddingDuration(
-    # This estimate is for nasal shedding
-    days=12,
-    confidence_interval=(10, 14),
-    source="https://erj.ersjournals.com/content/44/1/169#:~:text=Virus%20shedding%20lasts%20on%20average%20for%2010%E2%80%9314%20days%20in%20immunocompetent%20subjects",
-)
-
-
 la_county_under_18_population = Population(
     # 0.211 = the proportion of LA County residents under 18
     people=0.211
@@ -41,6 +33,9 @@ la_county_under_18_population = Population(
         state="California", county="Los Angeles County", year=2020
     ).people,
     date="2020",
+    country="United States",
+    state="California",
+    county="Los Angeles County",
     tag="under 18",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
 )
@@ -52,6 +47,9 @@ la_county_adult_population = Population(
         state="California", county="Los Angeles County", year=2020
     ).people,
     date="2020",
+    country="United States",
+    state="California",
+    county="Los Angeles County",
     tag="over 18",
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia#:~:text=Persons%20under-,18,-years%2C%20percent",
 )
@@ -76,14 +74,15 @@ annual_infections_per_100k_by_age_group = {
 rhinovirus_incidence_rates_by_age = {
     age_group: IncidenceRate(
         annual_infections_per_100k=incidence,
+        start_date="1976",
+        end_date="1981",
+        country="United States",
+        state="Michigan",
+        county="Lenawee County",
         source="https://doi.org/10.1017/S0950268800050779",
-        parsed_start="1976",
-        parsed_end="1981",
-        location_source="Lenawee County, Michigan, United States",
     )
     for age_group, incidence in annual_infections_per_100k_by_age_group.items()
 }
-
 people_per_age_group = {
     "0-4": 285_140 + 273_131,
     "5-19": (306_835 + 291_053) + (320_666 + 303_381) + (317_657 + 306_849),
@@ -113,41 +112,6 @@ la_county_populations_by_age = {
     for age_group, numPeople in people_per_age_group.items()
 }
 
-la_county_0_4 = Population(
-    people=285_140 + 273_131,
-)
-la_county_5_19 = Population(
-    people=(306_835 + 291_053) + (320_666 + 303_381) + (317_657 + 306_849),
-    date="2020",
-    country="United States",
-    state="California",
-    county="Los Angeles County",
-    source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
-)
-la_county_20_39 = Population(
-    people=(330_183 + 327_625)
-    + (406_008 + 399_410)
-    + (413_566 + 394_103)
-    + (370_948 + 355_002),
-    date="2020",
-    country="United States",
-    state="California",
-    county="Los Angeles County",
-    source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
-)
-la_county = Population(
-    people=4_965_022 + 5_048_987,
-    date="2020",
-    country="United States",
-    state="California",
-    county="Los Angeles County",
-    source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
-)
-
-la_county_40_plus = (
-    la_county - la_county_0_4 - la_county_5_19 - la_county_20_39
-)
-
 rhinovirus_1970s_tecumseh_study_la_estimate = (
     IncidenceRate.weightedAverageByPopulation(
         (
@@ -168,7 +132,6 @@ rhinovirus_1970s_tecumseh_study_la_estimate = (
         ),
     )
 )
-
 
 average_colds_per_year_adults = IncidenceRate(
     annual_infections_per_100k=2.5 * 100_000,
@@ -223,12 +186,12 @@ fall_proportion_of_colds_caused_by_rhinovirus = Scalar(
 # as a source for rhinovirus incidence: "https://onlinelibrary.wiley.com/doi/full/10.1002/jmv.27857#:~:text=Rhinovirus%20detections%20remained%20practically%20unchanged%20in%20all%20age%20groups%20throughout%20the%20pandemic%20period%20in%20Finland%20(Figure%C2%A02D)."
 
 
+def estimate_incidences():
+    return (
+        rhinovirus_1970s_tecumseh_study_la_estimate,
+        colds_la_county * fall_proportion_of_colds_caused_by_rhinovirus,
+    )
+
+
 def estimate_prevalences():
-    return [
-        rhinovirus_1970s_tecumseh_study_la_estimate.to_prevalence(
-            rhinovirus_shedding_duration
-        ),
-        (
-            colds_la_county * fall_proportion_of_colds_caused_by_rhinovirus
-        ).to_prevalence(rhinovirus_shedding_duration),
-    ]
+    return ()

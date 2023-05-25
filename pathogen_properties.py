@@ -352,6 +352,7 @@ class Prevalence(Predictor):
                 ]
             ),
             location_source=pairs[0][1],
+            date_source=pairs[0][1],
             inputs=itertools.chain.from_iterable(pairs),
         )
 
@@ -424,6 +425,7 @@ class IncidenceRate(Predictor):
                 ]
             ),
             location_source=pairs[0][1],
+            date_source=pairs[0][1],
             inputs=itertools.chain.from_iterable(pairs),
         )
 
