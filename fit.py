@@ -13,9 +13,9 @@ def geom_mean(x: np.ndarray) -> float:
 
 
 def print_summary(
-    pathogen: str, predictor: str, ra_per_predictor: np.ndarray
+    study: str, pathogen: str, predictor: str, ra_per_predictor: np.ndarray
 ) -> None:
-    title = f"{pathogen} relative abundance per {predictor}"
+    title = f"{study.title()}: {pathogen} relative abundance per {predictor}"
     percentiles = [5, 25, 50, 75, 95]
     percentile_values = np.percentile(ra_per_predictor, percentiles)
     d = 1
@@ -35,27 +35,33 @@ def print_summary(
     print(dedent(output))
 
 
+bioprojects = {
+    "crits-christoph": BioProject("PRJNA661613"),
+    "rothman": BioProject("PRJNA729801"),
+}
+
+
 def start():
-    bioproject = BioProject("PRJNA729801")  # Rothman
     mgs_data = MGSData.from_repo()
     predictor = "incidence"
     for pathogen_name in ["sars_cov_2", "norovirus"]:
-        model = stats.build_model(
-            mgs_data, bioproject, pathogen_name, predictor
-        )
-        model.fit_model(random_seed=1)
-        df = model.dataframe
-        assert df is not None
-        df.to_csv(
-            f"fits/rothman-{pathogen_name}.tsv.gz",
-            sep="\t",
-            index=False,
-            compression="gzip",
-        )
-        ra_per_predictor = pd.pivot_table(
-            df, index="draws", values=["ra_per_predictor"]
-        )
-        print_summary(pathogen_name, predictor, ra_per_predictor)
+        for study, bioproject in bioprojects.items():
+            model = stats.build_model(
+                mgs_data, bioproject, pathogen_name, predictor
+            )
+            model.fit_model(random_seed=1)
+            df = model.dataframe
+            assert df is not None
+            df.to_csv(
+                f"fits/{study}-{pathogen_name}.tsv.gz",
+                sep="\t",
+                index=False,
+                compression="gzip",
+            )
+            ra_per_predictor = pd.pivot_table(
+                df, index="draws", values=["ra_per_predictor"]
+            )
+            print_summary(study, pathogen_name, predictor, ra_per_predictor)
 
 
 if __name__ == "__main__":
