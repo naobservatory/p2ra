@@ -66,14 +66,14 @@ us_population_2019 = Population(
 )
 
 
-ohio_total_incidence_2021 = IncidenceRate(
+ohio_acute_incidence_2021 = IncidenceRate(
     # This source reports both an acute and a total (acute+chronic) incidence.
-    # I think it makes sense to report the total incidence, since chronic
-    # cases still have an acute phase in which they shed. The number of
-    # chronic cases in any given year has some lag attached, since chronic
-    # cases are probably not identified during their acute phase, but this
-    # number still roughly represents our most recent guess at new chronic
-    # cases for 2021
+    # We still report both chronic and acute cases as acute incidence, since
+    # chronic cases always have an acute phase in which they shed. Not all
+    # chronic cases are identified in the year they occur, so the  number of
+    # chronic cases in any given year has some lag attached. Given that
+    # chronic cases didn't vary much between years, and more recent years
+    # should be more accurate, we do not currently account for this lag.
     annual_infections_per_100k=16.5,
     country="United States",
     state="Ohio",
@@ -90,5 +90,5 @@ def estimate_prevalences() -> list[Prevalence]:
 def estimate_incidences() -> list[IncidenceRate]:
     return [
         cdc_estimated_acute_2019.to_rate(us_population_2019),
-        ohio_total_incidence_2021,
+        ohio_acute_incidence_2021,
     ]
