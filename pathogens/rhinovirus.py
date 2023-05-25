@@ -12,9 +12,6 @@ Rhinovirus is not as seasonal as viruses like influenza or coronviruses.
 0114871.g001)
 (https://academic.oup.com/view-large/figure/89888454/195-6-773-fig003.jpeg)"""
 
-# FWIW, this study claims that Covid Incidence has a significant positive
-# correlation with rhinovirus incidence: https://onlinelibrary.wiley.com/doi/10.1111/irv.12930#:~:text=Figure%C2%A01%20suggests%20that%2C%20with%20the%20hindsight%20of%2018%E2%80%89months%20of%20observations%20for%20both%20hRV/EV%20and%20SARS%2DCoV%2D2%20infections%20in%20Canada%2C%20hRV/EV%20could%20have%20been%20used%20as%20a%20gauge%20for%20PHMs%20effectiveness%20as%20well%20as%20early%20warning%20for%20SARS%2DCoV%2D2%20resurgences]
-
 # TODOs for SIMON:
 #  - Check if national estimates can be applied to regions like Ohio during some specific time period.
 
@@ -70,62 +67,54 @@ cases of respiratory illnesses, they only sampled 2227 of cases for isolation,
 which could lead to bias in this isolation rate). But for now, let's use this
 number. Checking a table of isolation rates across ages, the rate of
 Rhinoviruses among infections roughly holds true across ages."""
-rhinovirus_0_4 = IncidenceRate(
-    annual_infections_per_100k=113.2 * 100,
-    # Table 2, Rhinoviruses.
-    # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
-    # USA, 1976-81. Actual rates per 1000 person year"
-    source="https://doi.org/10.1017/S0950268800050779",
-    start_date="1976",
-    end_date="1981",
-    country="United States",
-    state="Michigan",
-    county="Lenawee County",
+annual_infections_per_100k_by_age_group = {
+    "0-4": 113.2 * 100,
+    "5-19": 25.3 * 100,
+    "20-39": 38.7 * 100,
+    "40+": 9.7 * 100,
+}
+rhinovirus_incidence_rates_by_age = {
+    age_group: IncidenceRate(
+        annual_infections_per_100k=incidence,
+        source="https://doi.org/10.1017/S0950268800050779",
+        parsed_start="1976",
+        parsed_end="1981",
+        location_source="Lenawee County, Michigan, United States",
+    )
+    for age_group, incidence in annual_infections_per_100k_by_age_group.items()
+}
+
+people_per_age_group = {
+    "0-4": 285_140 + 273_131,
+    "5-19": (306_835 + 291_053) + (320_666 + 303_381) + (317_657 + 306_849),
+    "20-39": (330_183 + 327_625)
+    + (406_008 + 399_410)
+    + (413_566 + 394_103)
+    + (370_948 + 355_002),
+    "overall": 4_965_022 + 5_048_987,
+}
+
+people_per_age_group["40+"] = (
+    people_per_age_group["overall"]
+    - people_per_age_group["0-4"]
+    - people_per_age_group["5-19"]
+    - people_per_age_group["20-39"]
 )
-rhinovirus_5_19 = IncidenceRate(
-    annual_infections_per_100k=25.3 * 100,
-    # Table 2, Rhinoviruses
-    # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
-    # USA, 1976-81. Actual rates per 1000 person year"
-    source="https://doi.org/10.1017/S0950268800050779",
-    start_date="1976",
-    end_date="1981",
-    country="United States",
-    state="Michigan",
-    county="Lenawee County",
-)
-rhinovirus_20_39 = IncidenceRate(
-    annual_infections_per_100k=38.7 * 100,
-    # Table 2, Rhinoviruses
-    # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
-    # USA, 1976-81. Actual rates per 1000 person year"
-    source="https://doi.org/10.1017/S0950268800050779",
-    start_date="1976",
-    end_date="1981",
-    country="United States",
-    state="Michigan",
-    county="Lenawee County",
-)
-rhinovirus_40_plus = IncidenceRate(
-    annual_infections_per_100k=9.7 * 100,
-    # Table 2, Rhinoviruses
-    # "Annual isolation rates of respiratory viruses, Tecumseh Michigan,
-    # USA, 1976-81. Actual rates per 1000 person year"
-    source="https://doi.org/10.1017/S0950268800050779",
-    start_date="1976",
-    end_date="1981",
-    country="United States",
-    state="Michigan",
-    county="Lenawee County",
-)
+
+la_county_populations_by_age = {
+    age_group: Population(
+        people=numPeople,
+        date="2020",
+        country="United States",
+        state="California",
+        county="Los Angeles County",
+        source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
+    )
+    for age_group, numPeople in people_per_age_group.items()
+}
 
 la_county_0_4 = Population(
     people=285_140 + 273_131,
-    date="2020",
-    country="United States",
-    state="California",
-    county="Los Angeles County",
-    source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
 )
 la_county_5_19 = Population(
     people=(306_835 + 291_053) + (320_666 + 303_381) + (317_657 + 306_849),
@@ -159,24 +148,34 @@ la_county_40_plus = (
     la_county - la_county_0_4 - la_county_5_19 - la_county_20_39
 )
 
-rhinovirus_old_yearround_study_estimate = (
+rhinovirus_1970s_tecumseh_study_la_estimate = (
     IncidenceRate.weightedAverageByPopulation(
-        (rhinovirus_0_4, la_county_0_4),
-        (rhinovirus_5_19, la_county_5_19),
-        (rhinovirus_20_39, la_county_20_39),
-        (rhinovirus_40_plus, la_county_40_plus),
+        (
+            rhinovirus_incidence_rates_by_age["0-4"],
+            la_county_populations_by_age["0-4"],
+        ),
+        (
+            rhinovirus_incidence_rates_by_age["5-19"],
+            la_county_populations_by_age["5-19"],
+        ),
+        (
+            rhinovirus_incidence_rates_by_age["20-39"],
+            la_county_populations_by_age["20-39"],
+        ),
+        (
+            rhinovirus_incidence_rates_by_age["40+"],
+            la_county_populations_by_age["40+"],
+        ),
     )
 )
 
-#  "Adults catch two to three colds a year, while young children come down
-# with a cold four or more times a year."
-# These numbers basically just seem reasonable to me and seem to be
-# generally reasonable according to the internet. I think this is more
-# accurate than trusting a very-old study with questionable methods
+
 average_colds_per_year_adults = IncidenceRate(
     annual_infections_per_100k=2.5 * 100_000,
     country="United States",
     date="2023",
+    # "Adults catch two to three colds a year, while young children come down
+    # with a cold four or more times a year."
     # These numbers basically just seem reasonable to me and seem to be
     # generally reasonable according to the internet. I think this is more
     # accurate than trusting a very-old study with questionable methods
@@ -187,6 +186,8 @@ average_colds_per_year_children = IncidenceRate(
     annual_infections_per_100k=4 * 100_000,
     country="United States",
     date="2023",
+    # "Adults catch two to three colds a year, while young children come down
+    # with a cold four or more times a year."
     # These numbers basically just seem reasonable to me and seem to be
     # generally reasonable according to the internet. I think this is more
     # accurate than trusting a very-old study with questionable methods
@@ -209,16 +210,6 @@ fall_proportion_of_colds_caused_by_rhinovirus = Scalar(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7133757/",
 )
 
-fall_rhinovirus_incidence_la_county = (
-    colds_la_county
-) * fall_proportion_of_colds_caused_by_rhinovirus
-
-rhinovirus_prevalence_using_colds = (
-    fall_rhinovirus_incidence_la_county.to_prevalence(
-        rhinovirus_shedding_duration
-    )
-)
-
 
 # Rhinovirus incidence did not significantly change during the pandemic, so I
 # think we can apply these post-pandemic numbers to fall 2020 without further
@@ -234,8 +225,10 @@ rhinovirus_prevalence_using_colds = (
 
 def estimate_prevalences():
     return [
-        rhinovirus_old_yearround_study_estimate.to_prevalence(
+        rhinovirus_1970s_tecumseh_study_la_estimate.to_prevalence(
             rhinovirus_shedding_duration
         ),
-        rhinovirus_prevalence_using_colds,
+        (
+            colds_la_county * fall_proportion_of_colds_caused_by_rhinovirus
+        ).to_prevalence(rhinovirus_shedding_duration),
     ]
