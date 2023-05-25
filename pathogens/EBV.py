@@ -58,12 +58,14 @@ nhanes_18_19_yo_estimate = Prevalence(
 
 under_18_population_US = Population(
     people=0.222 * us_population(year=2022).people,
+    country="United States",
     date="2022",
     source="https://www.census.gov/quickfacts/fact/table/US#",
 )
 
 over_18_population_US = Population(
     people=0.778 * us_population(year=2022).people,
+    country="United States",
     date="2022",
     source="https://www.census.gov/quickfacts/fact/table/US#",
 )
@@ -71,12 +73,14 @@ over_18_population_US = Population(
 
 # this estimate uses children 18-19 as a proxy for the adult population
 us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(
-    nhanes_18_19_yo_estimate,
-    over_18_population_US,
-    nhanes_age_8_19_estimate,
-    under_18_population_US,
+    (nhanes_18_19_yo_estimate, over_18_population_US),
+    (nhanes_age_8_19_estimate, under_18_population_US),
 )
 
 
 def estimate_prevalences():
     return [us_seroprevalence_2003_2010, uk_seroprevalence_0_to_25]
+
+
+def estimate_incidences():
+    return ()
