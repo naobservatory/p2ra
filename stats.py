@@ -116,16 +116,10 @@ class Model(Generic[P]):
 
         return df
 
-    def get_per_draw_statistics(
-        self, values: list[str] = ["phi", "b", "b_std", "ra_per_predictor"]
-    ) -> pd.DataFrame:
-        if self.dataframe is None:
+    def get_per_draw_statistics(self) -> pd.DataFrame:
+        if self.fit is None:
             raise ValueError("Model not fit yet")
-        return pd.pivot_table(
-            self.dataframe,
-            index="draws",
-            values=values,
-        )
+        return self.fit.to_frame()
 
     def plot_posterior_histograms(self) -> matplotlib.figure.Figure:
         # TODO: Make sure this stays in sync with model.stan
@@ -133,7 +127,7 @@ class Model(Generic[P]):
             ("phi", np.linspace(0, 6, 1000), gamma(2.0, scale=2.0)),
             ("b_std", np.linspace(-4, 4, 1000), norm(scale=2)),
         ]
-        per_draw_df = self.get_per_draw_statistics([p for p, _, _ in params])
+        per_draw_df = self.get_per_draw_statistics()
         fig, axes = plt.subplots(
             1, len(params), layout="constrained", figsize=(6, 3)
         )
