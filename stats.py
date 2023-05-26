@@ -3,9 +3,13 @@ from datetime import date
 from pathlib import Path
 from typing import Generic, TypeVar
 
+import matplotlib  # type: ignore
+import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 import pandas as pd
+import seaborn as sns  # type: ignore
 import stan  # type: ignore
+from scipy.stats import gamma, norm  # type: ignore
 
 from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
 from pathogen_properties import Predictor, Variable
@@ -76,7 +80,7 @@ class Model(Generic[P]):
         self.dataframe = self._make_dataframe()
 
     def _make_dataframe(self) -> pd.DataFrame:
-        if not self.fit:
+        if self.fit is None:
             raise ValueError("Model not fit yet")
 
         df_input = pd.DataFrame(
@@ -112,6 +116,67 @@ class Model(Generic[P]):
 
         return df
 
+    def get_per_draw_statistics(
+        self, values: list[str] = ["phi", "b", "b_std", "ra_per_predictor"]
+    ) -> pd.DataFrame:
+        if self.dataframe is None:
+            raise ValueError("Model not fit yet")
+        return pd.pivot_table(
+            self.dataframe,
+            index="draws",
+            values=values,
+        )
+
+    def plot_posterior_histograms(self) -> matplotlib.figure.Figure:
+        # TODO: Make sure this stays in sync with model.stan
+        params = [
+            ("phi", np.linspace(0, 6, 1000), gamma(2.0, scale=2.0)),
+            ("b_std", np.linspace(-4, 4, 1000), norm(scale=2)),
+        ]
+        per_draw_df = self.get_per_draw_statistics([p for p, _, _ in params])
+        fig, axes = plt.subplots(
+            1, len(params), layout="constrained", figsize=(6, 3)
+        )
+        for (param, x, prior), ax in zip(params, axes):
+            posterior_hist(
+                data=per_draw_df, param=param, prior_x=x, prior=prior, ax=ax
+            )
+        return fig
+
+    def plot_posterior_samples(
+        self, x: str, y: str, **kwargs
+    ) -> sns.FacetGrid:
+        # Plot posterior predictive draws
+        data = self.dataframe
+        if data is None:
+            raise ValueError("Model not fit yet")
+        g = sns.relplot(
+            data=data[
+                (data["observation_type"] == "posterior") & (data["draws"] < 9)
+            ],
+            x=x,
+            y=y,
+            col="draws",
+            col_wrap=3,
+            height=4,
+            **kwargs,
+        )
+        g.set_titles("Posterior draw {col_name:1.0f}")
+        # Plot data
+        ax = g.facet_axis(0, 0)
+        for col in ax.collections:
+            col.remove()
+        sns.scatterplot(
+            data=data[data["observation_type"] == "data"],
+            x=x,
+            y=y,
+            ax=ax,
+            legend=False,
+            **kwargs,
+        )
+        ax.set_title("Observed", fontdict={"size": 10})
+        return g
+
 
 def build_model(
     mgs_data: MGSData,
@@ -143,3 +208,11 @@ def build_model(
         for s, attrs in samples.items()
     ]
     return Model(data=data)
+
+
+def posterior_hist(data, param: str, prior_x, prior, ax=None):
+    sns.lineplot(
+        x=prior_x, y=prior.pdf(prior_x), color="black", label="prior", ax=ax
+    )
+    sns.histplot(data=data, x=param, stat="density", bins=40, ax=ax)
+    return ax
