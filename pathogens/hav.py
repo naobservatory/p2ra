@@ -21,7 +21,9 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(12092),
 )
 
-cdc_underreporting_factor_2019 = Scalar(
+cdc_underreporting_factor_2019_2020 = Scalar(
+    # Underreporting factors for 2019 and 2020 are the same. Source for 2020:
+    # https://www.cdc.gov/hepatitis/statistics/2020surveillance/introduction/technical-notes.htm#:~:text=The%20published%20multipliers%20have%20since%20been%20corrected%20by%20CDC%20to%20indicate%20that%20each%20reported%20case%20of%20acute%20hepatitis%20A%20represents%202.0%20estimated%20infections%20(95%25%20bootstrap%20CI%3A%201.4%E2%80%932.2)
     scalar=2,
     confidence_interval=(1.4, 2.2),
     coverage_probability=0.95,
@@ -62,6 +64,23 @@ us_estimated_incidence_absolute_2019 = IncidenceAbsolute(
 )
 
 
+ohio_reported_incidence_rate_2019 = IncidenceRate(
+    annual_infections_per_100k=15.4,
+    date="2019",
+    country="United States",
+    state="Ohio",
+    source="https://www.cdc.gov/hepatitis/statistics/2020surveillance/hepatitis-a/table-1.1.htm#:~:text=Ohio,2.4",
+)
+
+ohio_reported_incidence_rate_2020 = IncidenceRate(
+    annual_infections_per_100k=2.4,
+    date="2020",
+    country="United States",
+    state="Ohio",
+    source="https://www.cdc.gov/hepatitis/statistics/2020surveillance/hepatitis-a/table-1.1.htm#:~:text=Ohio,2.4",
+    # Source provides yearly statewide data going back to 2016 for 30+ states
+)
+
 king_county_confirmed_cases_rate_2017 = IncidenceRate(
     annual_infections_per_100k=0.5,
     country="United States",
@@ -79,15 +98,6 @@ king_county_confirmed_cases_rate_2018 = IncidenceRate(
     county="King",
     date="2018",
     source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
-)
-
-ohio_reported_incidence_rate_2020 = IncidenceRate(
-    annual_infections_per_100k=2.4,
-    date="2020",
-    country="United States",
-    state="Ohio",
-    source="https://www.cdc.gov/hepatitis/statistics/2020surveillance/hepatitis-a/table-1.1.htm#:~:text=Ohio,2.4",
-    # Source provides yearly statewide data going back to 2016 for 30+ states
 )
 
 ohio_county_hav_incidences = {}
@@ -113,9 +123,14 @@ def estimate_incidences() -> list[IncidenceRate]:
     estimates = [
         us_estimated_incidence_absolute_2018.to_rate(us_population_2018),
         us_estimated_incidence_absolute_2019.to_rate(us_population_2019),
-        king_county_confirmed_cases_rate_2017 * cdc_underreporting_factor_2019,
-        king_county_confirmed_cases_rate_2018 * cdc_underreporting_factor_2019,
-        ohio_reported_incidence_rate_2020,
+        king_county_confirmed_cases_rate_2017
+        * cdc_underreporting_factor_2019_2020,
+        king_county_confirmed_cases_rate_2018
+        * cdc_underreporting_factor_2019_2020,
+        ohio_reported_incidence_rate_2020
+        * cdc_underreporting_factor_2019_2020,
+        ohio_reported_incidence_rate_2019
+        * cdc_underreporting_factor_2019_2020,
     ]
     for item in ohio_county_hav_incidences:
         estimates.append((ohio_county_hav_incidences[item]))
