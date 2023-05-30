@@ -28,6 +28,21 @@ cdc_underreporting_factor_2019 = Scalar(
     country="United States",
     source="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=The%20published%20multipliers%20have%20since%20been%20corrected%20by%20CDC%20to%20indicate%20that%20each%20reported%20case%20of%20acute%20hepatitis%20A%20represents%202.0%20estimated%20infections%20(95%25%20bootstrap%20CI%3A%201.4%E2%80%932.2)",
 )
+
+us_population_2018 = Population(
+    people=327.2 * 1e6,
+    country="United States",
+    date="2018",
+    source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
+)
+
+us_population_2019 = Population(
+    people=328.2 * 1e6,
+    country="United States",
+    date="2019",
+    source="https://data.census.gov/table?q=2019+us+population&t=Civilian+Population&tid=ACSDP1Y2019.DP05",
+)
+
 us_estimated_incidence_absolute_2018 = IncidenceAbsolute(
     annual_infections=12_474,
     confidence_interval=(17_500, 27_400),
@@ -96,12 +111,8 @@ with open(prevalence_data_filename("havCaseCountsOhioCounties.csv")) as file:
 
 def estimate_incidences() -> list[IncidenceRate]:
     estimates = [
-        us_estimated_incidence_absolute_2018.to_rate(
-            us_population(year="2018")
-        ),
-        us_estimated_incidence_absolute_2019.to_rate(
-            us_population(year="2019")
-        ),
+        us_estimated_incidence_absolute_2018.to_rate(us_population_2018),
+        us_estimated_incidence_absolute_2019.to_rate(us_population_2019),
         king_county_confirmed_cases_rate_2017 * cdc_underreporting_factor_2019,
         king_county_confirmed_cases_rate_2018 * cdc_underreporting_factor_2019,
         ohio_reported_incidence_rate_2020,
