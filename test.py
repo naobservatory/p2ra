@@ -7,8 +7,8 @@ from collections import Counter
 import mgs
 import pathogens
 import populations
-from fit_covid import lookup_incidence
-from mgs import MGSData
+import stats
+from mgs import MGSData, SampleAttributes
 from pathogen_properties import *
 from tree import Tree
 
@@ -385,16 +385,77 @@ class TestPopulations(unittest.TestCase):
         )
 
 
-class TestCovid(unittest.TestCase):
-    def test_lookup_incidence(self):
-        pathogen = "sars_cov_2"
-        bioproject = mgs.BioProject("PRJNA729801")  # Rothman
-        mgs_data = MGSData.from_repo()
-        samples = mgs_data.sample_attributes(
-            bioproject, enrichment=mgs.Enrichment.VIRAL
+class TestStats(unittest.TestCase):
+    attrs = SampleAttributes(
+        country="United States",
+        state="Pennsylvania",
+        county="Allegheny County",
+        date=datetime.date.fromisoformat("2019-05-14"),
+        reads=100,
+        location="Loc",
+        enrichment=mgs.Enrichment.VIRAL,
+    )
+
+    def test_is_match(self):
+        v1 = Variable(country="United States", date="2019")
+        self.assertTrue(stats.is_match(self.attrs, v1))
+        v2 = Variable(country="United States", date="2019-05-14")
+        self.assertTrue(stats.is_match(self.attrs, v2))
+        v3 = Variable(country="United States", date="2019-05-15")
+        self.assertFalse(stats.is_match(self.attrs, v3))
+        v4 = Variable(
+            country="United States",
+            start_date="2019-05-01",
+            end_date="2019-06-02",
         )
-        prevs = lookup_incidence(samples, pathogen)
-        self.assertEqual(len(samples), len(prevs))
+        self.assertTrue(stats.is_match(self.attrs, v4))
+        v5 = Variable(
+            country="United States",
+            state="Pennsylvania",
+            county="Allegheny County",
+            date="2019",
+        )
+        self.assertTrue(stats.is_match(self.attrs, v5))
+        v6 = Variable(
+            country="United States",
+            state="Pennsylvania",
+            county="Beaver County",
+            date="2019",
+        )
+        self.assertFalse(stats.is_match(self.attrs, v6))
+        v7 = Variable(
+            country="United States",
+            state="Ohio",
+            county="Lake County",
+            date="2019",
+        )
+        self.assertFalse(stats.is_match(self.attrs, v7))
+
+    def test_lookup_variable(self):
+        v1 = Variable(country="United States", date="2019")
+        v2 = Variable(country="United States", date="2019-05-14")
+        v3 = Variable(country="United States", date="2019-05-15")
+        self.assertEqual(stats.lookup_variable(self.attrs, [v1, v3]), v1)
+        self.assertEqual(stats.lookup_variable(self.attrs, [v2, v3]), v2)
+        self.assertEqual(stats.lookup_variable(self.attrs, [v3, v1]), v1)
+        with self.assertRaises(AssertionError):
+            stats.lookup_variable(self.attrs, [v1, v2])
+        with self.assertRaises(AssertionError):
+            stats.lookup_variable(self.attrs, [v3])
+
+    def test_build_model(self):
+        bioprojects = {
+            "crits-christoph": mgs.BioProject("PRJNA661613"),
+            "rothman": mgs.BioProject("PRJNA729801"),
+        }
+        mgs_data = MGSData.from_repo()
+        predictor = "incidence"
+        for pathogen_name in ["sars_cov_2", "norovirus"]:
+            for study, bioproject in bioprojects.items():
+                with self.subTest(study=study, pathogen=pathogen_name):
+                    stats.build_model(
+                        mgs_data, bioproject, pathogen_name, predictor
+                    )
 
 
 if __name__ == "__main__":
