@@ -21,29 +21,29 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(12092),
 )
 
-
-us_incidence_absolute_2018 = IncidenceAbsolute(
-    annual_infections=12474,
-    confidence_interval=(17500, 27400),
+cdc_underreporting_factor_2019 = Scalar(
+    scalar=2,
+    confidence_interval=(1.4, 2.2),
+    coverage_probability=0.95,
+    country="United States",
+    source="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=The%20published%20multipliers%20have%20since%20been%20corrected%20by%20CDC%20to%20indicate%20that%20each%20reported%20case%20of%20acute%20hepatitis%20A%20represents%202.0%20estimated%20infections%20(95%25%20bootstrap%20CI%3A%201.4%E2%80%932.2)",
+)
+us_estimated_incidence_absolute_2018 = IncidenceAbsolute(
+    annual_infections=12_474,
+    confidence_interval=(17_500, 27_400),
     coverage_probability=0.95,
     country="United States",
     date="2018",
     source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/HepA.htm",
 )
 
-us_population_2018 = Population(
-    people=327.2 * 1e6,
-    country="United States",
-    date="2018",
-    source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
-)
-
-acute_underreporting_factor = Scalar(
-    scalar=2,
-    confidence_interval=(1.4, 2.2),
+us_estimated_incidence_absolute_2019 = IncidenceAbsolute(
+    annual_infections=37_700,
+    confidence_interval=(26_400, 41_500),
     coverage_probability=0.95,
     country="United States",
-    source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/pdfs/2018HepSurveillanceRpt.pdf?#page=8",
+    date="2019",
+    source="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=During%202019%2C%20a%20total%20of%2018%2C846%20hepatitis%20A%20cases%20were%20reported%20to%20CDC%2C%20corresponding%20to%2037%2C700%20estimated%20infections%20(95%25%20confidence%20interval%20%5BCI%5D%3A%2026%2C400%E2%80%9341%2C500)%20after%20adjusting%20for%20case%20underascertainment%20and%20underreporting%20(see%20Technical%20Notes)%20(9).",
 )
 
 
@@ -66,13 +66,13 @@ king_county_confirmed_cases_rate_2018 = IncidenceRate(
     source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
 )
 
-ohio_hav_prevalence_2020 = Prevalence(
-    infections_per_100k=2.4,
+ohio_reported_incidence_rate_2020 = IncidenceRate(
+    annual_infections_per_100k=2.4,
     date="2020",
     country="United States",
     state="Ohio",
-    active=Active.ACTIVE,
-    source="https://www.cdc.gov/hepatitis/statistics/2020surveillance/hepatitis-a/figure-1.3.htm",
+    source="https://www.cdc.gov/hepatitis/statistics/2020surveillance/hepatitis-a/table-1.1.htm#:~:text=Ohio,2.4",
+    # Source provides yearly statewide data going back to 2016 for 30+ states
 )
 
 ohio_county_hav_incidences = {}
@@ -96,9 +96,15 @@ with open(prevalence_data_filename("havCaseCountsOhioCounties.csv")) as file:
 
 def estimate_incidences() -> list[IncidenceRate]:
     estimates = [
-        us_incidence_absolute_2018.to_rate(us_population_2018),
-        king_county_confirmed_cases_rate_2017 * acute_underreporting_factor,
-        king_county_confirmed_cases_rate_2018 * acute_underreporting_factor,
+        us_estimated_incidence_absolute_2018.to_rate(
+            us_population(year="2018")
+        ),
+        us_estimated_incidence_absolute_2019.to_rate(
+            us_population(year="2019")
+        ),
+        king_county_confirmed_cases_rate_2017 * cdc_underreporting_factor_2019,
+        king_county_confirmed_cases_rate_2018 * cdc_underreporting_factor_2019,
+        ohio_reported_incidence_rate_2020,
     ]
     for item in ohio_county_hav_incidences:
         estimates.append((ohio_county_hav_incidences[item]))
@@ -106,4 +112,4 @@ def estimate_incidences() -> list[IncidenceRate]:
 
 
 def estimate_prevalences() -> list[Prevalence]:
-    return [ohio_hav_prevalence_2020]
+    return []
