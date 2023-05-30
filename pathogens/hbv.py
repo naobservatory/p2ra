@@ -19,8 +19,8 @@ background = """Hepatitis B is a liver infection caused by the Hepatitis B
 # All other fields can be left as default.
 # 3. I currently lean against arriving at an underreporting factor for chronic
 # infections, as this would eat up too much time and looks too hacky on first
-# glance. If I don't calculate such a factor, I would currently drop reported
-# chronic infections, as the estimated prevalence  numbers provided by
+# glance. If I don't calculate such a factor, I would  drop reported chronic
+# infections, as the estimated prevalence  numbers provided by
 # `estimated_chronic_prevalence_us_2020` provide a cleaner picture of overall
 # chronic Hep B disease burden.
 
