@@ -17,9 +17,12 @@ background = """Hepatitis B is a liver infection caused by the Hepatitis B
 # - Select time period of death": 2022, and
 # - Select underlying cause of death: B16 (Acute hepatitis B).
 # All other fields can be left as default.
-# 3. Consider adding an underreporting factor for chronic infections. If I don't
-#  do this we might drop reported chronic infections, as these do not correspond
-# to prevalence by a factor of around 100x.
+# 3. I currently lean against arriving at an underreporting factor for chronic
+# infections, as this would eat up too much time and looks too hacky on first
+# glance. If I don't calculate such a factor, I would currently drop reported
+# chronic infections, as the estimated prevalence  numbers provided by
+# `estimated_chronic_prevalence_us_2020` provide a cleaner picture of overall
+# chronic Hep B disease burden.
 
 
 pathogen_chars = PathogenChars(
