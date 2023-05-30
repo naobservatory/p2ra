@@ -125,5 +125,4 @@ def estimate_incidences() -> list[IncidenceRate]:
         ohio_reported_acute_incidence_2021
         * cdc_acute_underreporting_factor_2020,
         ohio_reported_chronic_incidence_2021,
-        # We do not have an underreporting factor for chronic incidence
     ]
