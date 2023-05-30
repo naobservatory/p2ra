@@ -2,16 +2,15 @@ import csv
 from collections import Counter
 
 from pathogen_properties import *
-from populations import us_population
 
-background = """EBV stands for Epstein-Barr virus. It is a type of 
-herpes virus that infects humans and is known to cause infectious 
-mononucleosis, also known as mono or glandular fever. 
-EBV is a common virus that is transmitted through contact with infected
-saliva, such as through kissing, sharing utensils, or close contact with
-an infected person's respiratory droplets. EBV is a widespread virus that 
-can persist in the body for life, although most people infected with EBV 
-do not develop symptoms or have mild symptoms that resemble the flu."""
+background = """Epstein-Barr virus (EBV) is a type of  herpes virus that
+infects humans and is known to cause infectious mononucleosis, also known
+as mono or glandular fever. EBV is a common virus that is transmitted 
+through contact with infected saliva, such as through kissing, sharing 
+utensils, or close contact with an infected person's respiratory droplets.
+EBV is a widespread virus that can persist in the body for life, although
+most people infected with EBV do not develop symptoms or have mild symptoms
+that resemble the flu."""
 
 # TODO: Simon will look into incidence of mononucleosis in the US. There is
 # also the question of mono being a proxy for EBV infection, or activation.
@@ -22,14 +21,28 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(10376),
 )
 
-# "We conducted a sero-epidemiological survey using serum samples from 2325
-# individuals between 0 and 25 years old to assess prevalence of detectable
-# anti-EBV antibodies."
+
+under_18_population_US = Population(
+    people=333_287_557 * 0.222,
+    # This is the same number as is used in populations.py
+    date="2022",
+    country="United States",
+    source="https://www.census.gov/quickfacts/fact/table/US/LFE046221#:~:text=%EE%A0%BF-,22.2%25,-Persons%2065%20years",
+)
+
+over_18_population_US = Population(
+    people=333_287_557 * (1 - 0.222),
+    country="United States",
+    date="2022",
+    source="https://www.census.gov/quickfacts/fact/table/US/LFE046221#:~:text=%EE%A0%BF-,22.2%25,-Persons%2065%20years",
+)
+
 uk_seroprevalence_0_to_25 = Prevalence(
-    # This study is not used in the estimate,
-    # but is used to check that the later estimate is reasonable
     infections_per_100k=0.853 * 100_000,
-    country="UK",
+    # Given very high seroprevalence, and lifetime persistence of EBV, we
+    # we treat this data as corresponding to seroprevalence across the
+    # entire population.
+    country="United Kingdom",
     start_date="2002",
     end_date="2013",
     number_of_participants=2325,
@@ -37,8 +50,7 @@ uk_seroprevalence_0_to_25 = Prevalence(
     source="https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-020-09049-x#:~:text=1982/2325%20individuals%20(85.3%25)%20were%20EBV%20seropositive",
 )
 
-# Children ages 6-19
-nhanes_age_6_19_estimate = Prevalence(
+nhanes_6_19_yo_seroprevalence_estimate_2003_2010 = Prevalence(
     infections_per_100k=0.665 * 100_000,
     confidence_interval=(0.643 * 100_000, 0.687 * 100_000),
     coverage_probability=0.95,
@@ -50,46 +62,36 @@ nhanes_age_6_19_estimate = Prevalence(
     source="https://pubmed.ncbi.nlm.nih.gov/23717674/#:~:text=Overall%20EBV%20seroprevalence%20was%2066.5%25%20(95%25%20CI%2064.3%25%2D68.7%25.)",
 )
 
-nhanes_18_19_yo_estimate = Prevalence(
-    # This number comes from 2009-2010 and pulls only the most recent data
-    # from the Balfour NHANES estimate above
+nhanes_18_19_yo_seroprevalence_estimate_2009_2010 = Prevalence(
+    # Only using data from NHANES 2009-2010, for 18-19 year olds.
     infections_per_100k=0.89 * 100_000,
-    start_date="2003",
+    # Given very high seroprevalence, and lifetime persistence of EBV, we
+    # we treat this data as corresponding to seroprevalence across the
+    # entire adult population.
+    confidence_interval=(0.81 * 100_000, 0.94 * 100_000),
+    coverage_probability=0.95,
+    number_of_participants=508,
+    start_date="2009",
     end_date="2010",
     country="United States",
     active=Active.LATENT,
-    source="https://academic.oup.com/jid/article/208/8/1286/2192838#:~:text=years%2C%2069%25%3B%20and-,18%E2%80%9319%20years%2C%2089%25,-.%20Within%20each%20race",
+    source="https://academic.oup.com/jid/article/208/8/1286/2192838#:~:text=273-,89%20(81%E2%80%9394)D%C2%A0,-.337%C2%A0",
 )
 
-us_fraction_under_18 = Scalar(
-    scalar=0.222,
-)
 
-under_18_population_US = Population(
-    people=us_population(year=2022).people * us_fraction_under_18.scalar,
-    date="2022",
-    tag="under 18",
-    country="United States",
-)
-
-over_18_population_US = Population(
-    people=us_population(year=2022).people - under_18_population_US.people,
-    country="United States",
-    date="2022",
-    tag="over 18",
-)
-
-# this estimate uses children 18-19 as a proxy for the adult population
 us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(
-    (nhanes_age_6_19_estimate, under_18_population_US),
-    (nhanes_18_19_yo_estimate, over_18_population_US),
+    (nhanes_6_19_yo_seroprevalence_estimate_2003_2010, under_18_population_US),
+    (nhanes_18_19_yo_seroprevalence_estimate_2009_2010, over_18_population_US),
+    # As noted previously, given very high seroprevalence, and lifetime
+    # persistence of EBV, we treat this 18 to 19yo data as corresponding
+    # to seroprevalence across the entire adult population.
 )
 
-# (min_age, max_age) -> people within that age range
-denmark_age_groups: Counter[tuple[int, int]] = Counter()
 
 # Source for CSV: https://www.census.gov/data-tools/demo/idb/#/pop?COUNTRY_YEAR=2023&COUNTRY_YR_ANIM=2023&FIPS_SINGLE=DA&menu=popViz&FIPS=DA&POP_YEARS=2023&popPages=BYAGE
 with open(prevalence_data_filename("DenmarkPopulationData.csv")) as file:
+    denmark_age_groups: Counter[tuple[int, int]] = Counter()
+    # (min_age, max_age) -> people within that age range
     reader = csv.reader(file)
     next(reader)  # Skip the header
 
@@ -130,60 +132,28 @@ with open(prevalence_data_filename("DenmarkPopulationData.csv")) as file:
             source="https://www.census.gov/data-tools/demo/idb/#/pop?COUNTRY_YEAR=2023&COUNTRY_YR_ANIM=2023&FIPS_SINGLE=DA&menu=popViz&FIPS=DA&POP_YEARS=2023&popPages=BYAGE",
         )
 
-# These estimates apply seroprevalence estimates from 1983 to Denmark's
-# current population.
-denmark_seroprevalences = {
-    (0, 0): Prevalence(
-        infections_per_100k=0.15 * 100_000,
-        date="2023",
-        country="Denmark",
-        active=Active.LATENT,
-        # See page 336 of the study (page 3 of the pdf)
-        source="10.3109/inf.1983.15.issue-4.03",
-    ),
-    (1, 3): Prevalence(
-        infections_per_100k=0.28 * 100_000,
-        date="2023",
-        country="Denmark",
-        active=Active.LATENT,
-        # See page 336 of the study (page 3 of the pdf)
-        source="10.3109/inf.1983.15.issue-4.03",
-    ),
-    (4, 14): Prevalence(
-        infections_per_100k=0.625 * 100_000,
-        date="2023",
-        country="Denmark",
-        active=Active.LATENT,
-        # See page 336 of the study (page 3 of the pdf)
-        source="10.3109/inf.1983.15.issue-4.03",
-    ),
-    (15, 17): Prevalence(
-        infections_per_100k=0.8 * 100_000,
-        date="2023",
-        country="Denmark",
-        active=Active.LATENT,
-        # See page 336 of the study (page 3 of the pdf)
-        source="10.3109/inf.1983.15.issue-4.03",
-    ),
-    (18, 29): Prevalence(
-        infections_per_100k=0.86 * 100_000,
-        date="2023",
-        country="Denmark",
-        active=Active.LATENT,
-        # See page 336 of the study (page 3 of the pdf)
-        source="10.3109/inf.1983.15.issue-4.03",
-    ),
-    (30, 100): Prevalence(
-        infections_per_100k=0.95 * 100_000,
-        date="2023",
-        country="Denmark",
-        active=Active.LATENT,
-        # See page 336 of the study (page 3 of the pdf)
-        source="10.3109/inf.1983.15.issue-4.03",
-    ),
+denmark_infection_rates = {
+    (0, 0): 0.15 * 100_000,
+    (1, 3): 0.28 * 100_000,
+    (4, 14): 0.625 * 100_000,
+    (15, 17): 0.8 * 100_000,
+    (18, 29): 0.86 * 100_000,
+    (30, 100): 0.95 * 100_000,
 }
 
-denmark_overall_seroprevalence = Prevalence.weightedAverageByPopulation(
+DENMARK_SEROPREVALENCE_SOURCE = "10.3109/inf.1983.15.issue-4.03"
+
+denmark_seroprevalences = {}
+for age_range in denmark_infection_rates:
+    denmark_seroprevalences[age_range] = Prevalence(
+        infections_per_100k=denmark_infection_rates[age_range],
+        date="1983",
+        country="Denmark",
+        active=Active.LATENT,
+        source=DENMARK_SEROPREVALENCE_SOURCE,
+    )
+
+denmark_seroprevalence = Prevalence.weightedAverageByPopulation(
     (denmark_seroprevalences[0, 0], denmark_populations[0, 0]),
     (denmark_seroprevalences[1, 3], denmark_populations[1, 3]),
     (denmark_seroprevalences[4, 14], denmark_populations[4, 14]),
@@ -196,7 +166,7 @@ denmark_overall_seroprevalence = Prevalence.weightedAverageByPopulation(
 def estimate_prevalences():
     return [
         us_seroprevalence_2003_2010,
-        denmark_overall_seroprevalence,
+        denmark_seroprevalence,
         uk_seroprevalence_0_to_25,
     ]
 
