@@ -1,10 +1,15 @@
 from dataclasses import dataclass
 from datetime import date
+from pathlib import Path
 from typing import Generic, TypeVar
 
+import matplotlib  # type: ignore
+import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 import pandas as pd
+import seaborn as sns  # type: ignore
 import stan  # type: ignore
+from scipy.stats import gamma, norm  # type: ignore
 
 from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
 from pathogen_properties import Predictor, Variable
@@ -39,35 +44,6 @@ def lookup_variable(
     return matches[0]
 
 
-stan_code = """
-data {
-  int<lower=1> J;
-  array[J] int<lower=0> y;
-  vector[J] n;
-  vector[J] x;
-}
-transformed data {
-  vector[J] mu = log(x);
-  real<lower=0> sigma = 0.5;
-}
-parameters {
-  real b;                 // log conversion factor
-  real<lower=0> phi;      // inverse overdispersion
-  vector[J] theta;        // true log incidence
-}
-model {
-  b ~ normal(0, 10);
-  phi ~ gamma(2, 2);
-
-  theta ~ normal(mu, sigma);
-  y ~ neg_binomial_2_log(b + theta + log(n), phi);
-}
-generated quantities {
-  array[J] int<lower=0> y_tilde
-    = neg_binomial_2_log_rng(b + theta + log(n), phi);
-}
-"""
-
 P = TypeVar("P", bound=Predictor)
 
 
@@ -79,6 +55,9 @@ class DataPoint(Generic[P]):
     predictor: P
 
 
+STANFILE = Path("model.stan")
+
+
 @dataclass
 class Model(Generic[P]):
     data: list[DataPoint[P]]
@@ -88,6 +67,8 @@ class Model(Generic[P]):
     def fit_model(
         self, random_seed: int, num_chains: int = 4, num_samples: int = 1000
     ) -> None:
+        with open(STANFILE, "r") as stanfile:
+            stan_code = stanfile.read()
         stan_data = {
             "J": len(self.data),
             "y": np.array([dp.viral_reads for dp in self.data]),
@@ -99,7 +80,7 @@ class Model(Generic[P]):
         self.dataframe = self._make_dataframe()
 
     def _make_dataframe(self) -> pd.DataFrame:
-        if not self.fit:
+        if self.fit is None:
             raise ValueError("Model not fit yet")
 
         df_input = pd.DataFrame(
@@ -113,7 +94,7 @@ class Model(Generic[P]):
 
         df_output = pd.wide_to_long(
             self.fit.to_frame().reset_index(),
-            stubnames=["y_tilde", "theta"],
+            stubnames=["y_tilde", "theta", "theta_std"],
             i="draws",
             j="sample",
             sep=".",
@@ -134,6 +115,61 @@ class Model(Generic[P]):
         df.rename(columns={"reads": "total_reads"}, inplace=True)
 
         return df
+
+    def get_per_draw_statistics(self) -> pd.DataFrame:
+        if self.fit is None:
+            raise ValueError("Model not fit yet")
+        return self.fit.to_frame()
+
+    def plot_posterior_histograms(self) -> matplotlib.figure.Figure:
+        # TODO: Make sure this stays in sync with model.stan
+        params = [
+            ("phi", np.linspace(0, 6, 1000), gamma(2.0, scale=2.0)),
+            ("b_std", np.linspace(-4, 4, 1000), norm(scale=2)),
+        ]
+        per_draw_df = self.get_per_draw_statistics()
+        fig, axes = plt.subplots(
+            1, len(params), layout="constrained", figsize=(6, 3)
+        )
+        for (param, x, prior), ax in zip(params, axes):
+            posterior_hist(
+                data=per_draw_df, param=param, prior_x=x, prior=prior, ax=ax
+            )
+        return fig
+
+    def plot_posterior_samples(
+        self, x: str, y: str, **kwargs
+    ) -> sns.FacetGrid:
+        # Plot posterior predictive draws
+        data = self.dataframe
+        if data is None:
+            raise ValueError("Model not fit yet")
+        g = sns.relplot(
+            data=data[
+                (data["observation_type"] == "posterior") & (data["draws"] < 9)
+            ],
+            x=x,
+            y=y,
+            col="draws",
+            col_wrap=3,
+            height=4,
+            **kwargs,
+        )
+        g.set_titles("Posterior draw {col_name:1.0f}")
+        # Plot data
+        ax = g.facet_axis(0, 0)
+        for col in ax.collections:
+            col.remove()
+        sns.scatterplot(
+            data=data[data["observation_type"] == "data"],
+            x=x,
+            y=y,
+            ax=ax,
+            legend=False,
+            **kwargs,
+        )
+        ax.set_title("Observed", fontdict={"size": 10})
+        return g
 
 
 def build_model(
@@ -166,3 +202,11 @@ def build_model(
         for s, attrs in samples.items()
     ]
     return Model(data=data)
+
+
+def posterior_hist(data, param: str, prior_x, prior, ax=None):
+    sns.lineplot(
+        x=prior_x, y=prior.pdf(prior_x), color="black", label="prior", ax=ax
+    )
+    sns.histplot(data=data, x=param, stat="density", bins=40, ax=ax)
+    return ax

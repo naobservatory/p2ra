@@ -137,4 +137,6 @@ settings.json
 # Mac stuff
 .DS_Store
 
-fits/*.tsv.gz
+# Model output
+fits/*
+fig/*
