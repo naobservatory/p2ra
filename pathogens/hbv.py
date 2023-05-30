@@ -12,10 +12,14 @@ background = """Hepatitis B is a liver infection caused by the Hepatitis B
 # (evidence of active acute or chronic infection):
 # https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/HEPBD_J.htm
 # 2. Incorporate an estimate based on mortality date. This data can be acquired
-# from the CDC WONDER database (https://wonder.cdc.gov/mcd-icd10-provisional.html). Parameters for relevant query is:
+# from the CDC WONDER database (https://wonder.cdc.gov/mcd-icd10-provisional.html).
+# Parameters for relevant query is:
 # - Select time period of death": 2022, and
-# - Slect underlying cause of death: B16 (Acute hepatitis B).
+# - Select underlying cause of death: B16 (Acute hepatitis B).
 # All other fields can be left as default.
+# 3. Consider adding an underreporting factor for chronic infections. If I don't
+#  do this we might drop reported chronic infections, as these do not correspond
+# to prevalence by a factor of around 100x.
 
 
 pathogen_chars = PathogenChars(
