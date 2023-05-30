@@ -132,7 +132,7 @@ dmypy.json
 .pyre/
 
 # settings.json
-settings.json 
+settings.json
 
 # Mac stuff
 .DS_Store
