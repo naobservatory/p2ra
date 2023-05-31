@@ -31,7 +31,10 @@ ger_adult_seroprevalence_estimate = Prevalence(
 
 adult_seroprevalence_raleigh_durham_US = Prevalence(
     infections_per_100k=0.56 * 100_000,
-    # Overall CMV seroprevalence was 56.7% (95%CI: 54.8–58.7%), with a higher seroprevalence in women (62.3%) than in men (51.0%). Seroprevalence increased with age: from 31.8% to 63.7% in men and from 44.1% to 77.6% in women when comparing the 18–29 with the 70–79 year age-group
+    # Overall CMV seroprevalence was 56.7% (95%CI: 54.8–58.7%), with a higher
+    # seroprevalence in women (62.3%) than in men (51.0%). Seroprevalence
+    # increased with age: from 31.8% to 63.7% in men and from 44.1% to 77.6%
+    #  in women when comparing the 18–29 with the 70–79 year age-group
     number_of_participants=694,
     date="2020",
     country="US",
