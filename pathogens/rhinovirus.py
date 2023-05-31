@@ -74,12 +74,15 @@ for age_group, incidence in tecumseh_rhinovirus_infections_by_age.items():
         country="United States",
         state="Michigan",
         county="Lenawee County",
-        source="https://doi.org/10.1017/S0950268800050779",
+        source="TECUMSEH_SURVEILLANCE_STUDY_1993 ",
     )
     rhinovirus_incidence_rates_by_age[age_group] = incidence_rate
 
+LA_DEMOGRAPHIC_DATA_2020 = (
+    "http://proximityone.com/chartgraphics/pp06037_2020_001.htm"
+)
+
 la_age_groups = {
-    # source: http://proximityone.com/chartgraphics/pp06037_2020_001.htm
     "0-4": 285_140 + 273_131,
     "5-19": (306_835 + 291_053) + (320_666 + 303_381) + (317_657 + 306_849),
     "20-39": (330_183 + 327_625)
@@ -117,7 +120,7 @@ for age_group, n_people in la_age_groups.items():
         country="United States",
         state="California",
         county="Los Angeles County",
-        source="http://proximityone.com/chartgraphics/pp06037_2020_001.htm",
+        source=LA_DEMOGRAPHIC_DATA_2020,
     )
     la_county_populations_by_age[age_group] = age_group_population
 
