@@ -45,6 +45,8 @@ bioprojects = {
 def start():
     outdir = Path("fits")
     outdir.mkdir(exist_ok=True)
+    figdir = Path("fig")
+    figdir.mkdir(exist_ok=True)
     mgs_data = MGSData.from_repo()
     predictor = "incidence"
     for pathogen_name in ["sars_cov_2", "norovirus"]:
@@ -53,6 +55,21 @@ def start():
                 mgs_data, bioproject, pathogen_name, predictor
             )
             model.fit_model(random_seed=1)
+            fig_hist = model.plot_posterior_histograms()
+            fig_hist.savefig(figdir / f"{study}-{pathogen_name}-posthist.pdf")
+            xys = [
+                ("date", "viral_reads"),
+                ("date", "predictor"),
+                ("predictor", "viral_reads"),
+            ]
+            for x, y in xys:
+                g = model.plot_posterior_samples(
+                    x, y, style="county", hue="fine_location"
+                )
+                if y == "predictor":
+                    g.set(yscale="log")
+                g.savefig(figdir / f"{study}-{pathogen_name}-{y}-vs-{x}.pdf")
+
             df = model.dataframe
             assert df is not None
             df.to_csv(
