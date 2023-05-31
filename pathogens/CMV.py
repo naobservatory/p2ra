@@ -59,3 +59,7 @@ def estimate_prevalences():
         ger_adult_seroprevalence_estimate,
         adult_seroprevalence_raleigh_durham_US,
     ]
+
+
+def estimate_incidences():
+    return []
