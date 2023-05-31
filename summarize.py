@@ -3,8 +3,35 @@ import calendar
 import sys
 
 import pathogens
+from pathogen_properties import Variable
 
 MAX_ESTIMATES_FOR_PATHOGEN = 5
+
+
+def pretty_date(estimate: Variable) -> str:
+    start_date, end_date = estimate.get_dates()
+    _, end_date_month_last_day = calendar.monthrange(
+        end_date.year, end_date.month
+    )
+    if start_date == end_date:
+        return str(start_date)
+    elif start_date.year != end_date.year:
+        return f"{start_date.year} to {end_date.year}"
+    elif (
+        start_date.month == 1
+        and start_date.day == 1
+        and end_date.month == 12
+        and end_date.day == 31
+    ):
+        return str(start_date.year)
+    elif (
+        start_date.month == end_date.month
+        and start_date.day == 1
+        and end_date.day == end_date_month_last_day
+    ):
+        return f"{start_date.year}-{start_date.month:02d}"
+    else:
+        return f"{start_date} to {end_date}"
 
 
 def start(pathogen_names):
@@ -17,47 +44,28 @@ def start(pathogen_names):
 
         to_print = []  # key, line
 
-        for n, estimate in enumerate(pathogen.estimate_prevalences()):
-            date = "no date"
-            date_summary = estimate.summarize_date()
-            if date_summary:
-                start_date, end_date = date_summary
-                _, end_date_month_last_day = calendar.monthrange(
-                    end_date.year, end_date.month
-                )
-                if start_date == end_date:
-                    date = start_date
-                elif start_date.year != end_date.year:
-                    date = f"{start_date.year} to {end_date.year}"
-                elif (
-                    start_date.month == 1
-                    and start_date.day == 1
-                    and end_date.month == 12
-                    and end_date.day == 31
-                ):
-                    date = start_date.year
-                elif (
-                    start_date.month == end_date.month
-                    and start_date.day == 1
-                    and end_date.day == end_date_month_last_day
-                ):
-                    date = f"{start_date.year}-{start_date.month:02d}"
-                else:
-                    date = f"{start_date} to {end_date}"
-
-            location = estimate.summarize_location()
-
-            prevalence = "%.2f per 100k" % estimate.infections_per_100k
+        def save(estimate: Variable, details: str):
             taxid = ""
             if estimate.taxid:
                 taxid = "; %s" % estimate.taxid
+            date = pretty_date(estimate)
+            location = estimate.summarize_location()
             line = "%s (%s; %s%s)" % (
-                prevalence.rjust(18),
+                details.rjust(18),
                 location,
                 date,
                 taxid,
             )
-            to_print.append(((location, str(date)), line))
+            to_print.append(((location, date), line))
+
+        for estimate in pathogen.estimate_prevalences():
+            save(estimate, "%.2f per 100k" % estimate.infections_per_100k)
+
+        for estimate in pathogen.estimate_incidences():
+            save(
+                estimate,
+                "%.2f per 100k/y" % estimate.annual_infections_per_100k,
+            )
 
         to_print.sort()
         for _, line in to_print[:maximum]:

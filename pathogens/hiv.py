@@ -1,4 +1,5 @@
 from pathogen_properties import *
+from populations import us_population
 
 background = """HIV is a sexually-transmitted retrovirus which gradually
 weakens the immune system."""
@@ -24,7 +25,6 @@ us_infected_2019 = PrevalenceAbsolute(
     infections=1.2e6,
     country="United States",
     date="2019",
-    tag="usa-2019",
     active=Active.LATENT,
     source="https://www.cdc.gov/hiv/library/reports/hiv-surveillance/vol-26-no-2/content/national-profile.html#:~:text=Among%20the%20estimated-,1.2%20million%20people,-living%20with%20HIV",
 )
@@ -33,7 +33,6 @@ us_population_2019 = Population(
     people=328_231_337,
     country="United States",
     date="2019-01-01",
-    tag="usa-2019",
     source="https://www.census.gov/newsroom/press-releases/2019/new-years-population.html",
 )
 
@@ -41,7 +40,7 @@ la_unsuppressed_fraction_2020 = Scalar(
     scalar=1 - 0.6,
     country="United States",
     state="California",
-    county="Los Angeles",
+    county="Los Angeles County",
     date="2020",
     source="https://web.archive.org/web/20201202004910/https://www.lacounty.hiv/",
 )
@@ -50,28 +49,25 @@ la_infected_2020 = PrevalenceAbsolute(
     infections=57_700,
     country="United States",
     state="California",
-    county="Los Angeles",
+    county="Los Angeles County",
     date="2020",
-    tag="la-2020",
     active=Active.LATENT,
     source="https://web.archive.org/web/20201202004910/https://www.lacounty.hiv/",
 )
 
-la_population_2020 = Population(
-    people=10_014_009,
-    country="United States",
-    state="California",
-    county="Los Angeles",
-    date="2020-04-01",
-    tag="la-2020",
-    source="https://www.census.gov/quickfacts/losangelescountycalifornia",
-)
 
-
-def estimate_prevalences():
+def estimate_prevalences() -> list[Prevalence]:
     return [
         us_infected_2019.to_rate(us_population_2019)
         * us_unsuppressed_fraction_2019,
-        la_infected_2020.to_rate(la_population_2020)
+        la_infected_2020.to_rate(
+            us_population(
+                state="California", county="Los Angeles County", year=2020
+            )
+        )
         * la_unsuppressed_fraction_2020,
     ]
+
+
+def estimate_incidences() -> list[IncidenceRate]:
+    return []

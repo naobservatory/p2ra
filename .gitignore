@@ -133,8 +133,13 @@ dmypy.json
 
 # VScode 
 .vscode/settings.json
+*.code-workspace
 # settings.json
 settings.json
 
 # Mac stuff
 .DS_Store
+
+# Model output
+fits/*
+fig/*
