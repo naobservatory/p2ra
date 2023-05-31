@@ -8,7 +8,10 @@ The virus is not as seasonal as viruses like influenza or coronviruses.
 
 
 # TODOs for SIMON:
-#  - Check if national estimates can be applied to regions like Ohio during some specific time period.
+#  - Check if national estimates can be applied to regions like Ohio during
+#  some specific time period.
+#  - Check if Tecumseh based estimate should be adjusted for seasonality,
+#  similar to the colds_la_county estimate.
 
 RHINOVIRUS_A = TaxID(147711)
 RHINOVIRUS_B = TaxID(147712)
