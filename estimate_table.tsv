@@ -1,0 +1,1273 @@
+pathogen_name	study	fine_location	state	county	date	estimated
+sars_cov_2	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+sars_cov_2	crits_christoph	Marin	California	Marin County	2020-07-01	True
+sars_cov_2	crits_christoph	Marin	California	Marin County	2020-07-01	True
+sars_cov_2	crits_christoph	SF	California	San Francisco County	2020-06-30	True
+sars_cov_2	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+sars_cov_2	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+sars_cov_2	crits_christoph	Berkeley	California	Alameda County	2020-06-30	True
+sars_cov_2	rothman	SB	California	San Diego County	2020-09-10	True
+sars_cov_2	rothman	SB	California	San Diego County	2020-09-24	True
+sars_cov_2	rothman	SB	California	San Diego County	2020-08-27	True
+sars_cov_2	rothman	SB	California	San Diego County	2020-08-13	True
+sars_cov_2	rothman	SB	California	San Diego County	2020-10-22	True
+sars_cov_2	rothman	PL	California	San Diego County	2020-09-24	True
+sars_cov_2	rothman	PL	California	San Diego County	2020-09-10	True
+sars_cov_2	rothman	PL	California	San Diego County	2020-08-27	True
+sars_cov_2	rothman	PL	California	San Diego County	2020-08-13	True
+sars_cov_2	rothman	PL	California	San Diego County	2020-10-22	True
+sars_cov_2	rothman	OC	California	Orange County	2020-09-30	True
+sars_cov_2	rothman	OC	California	Orange County	2020-09-23	True
+sars_cov_2	rothman	OC	California	Orange County	2020-09-16	True
+sars_cov_2	rothman	OC	California	Orange County	2020-09-03	True
+sars_cov_2	rothman	OC	California	Orange County	2020-09-02	True
+sars_cov_2	rothman	OC	California	Orange County	2020-08-26	True
+sars_cov_2	rothman	OC	California	Orange County	2020-08-19	True
+sars_cov_2	rothman	OC	California	Orange County	2020-08-12	True
+sars_cov_2	rothman	OC	California	Orange County	2020-10-07	True
+sars_cov_2	rothman	NC	California	San Diego County	2020-09-11	True
+sars_cov_2	rothman	NC	California	San Diego County	2020-08-28	True
+sars_cov_2	rothman	NC	California	San Diego County	2020-08-14	True
+sars_cov_2	rothman	NC	California	San Diego County	2020-10-23	True
+sars_cov_2	rothman	NC	California	San Diego County	2020-10-09	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-09-22	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-09-15	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-09-08	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-09-01	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-08-25	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-08-18	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-08-11	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-10-13	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-10-06	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-10-27	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-10-20	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-09-15	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-09-08	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-09-01	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-08-25	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-08-18	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-08-11	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-10-27	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-10-20	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-10-13	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-10-02	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-09-23	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-11-04	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-11-18	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-11-11	True
+sars_cov_2	rothman	SB	California	San Diego County	2020-11-05	True
+sars_cov_2	rothman	SB	California	San Diego County	2020-10-08	True
+sars_cov_2	rothman	PL	California	San Diego County	2020-12-28	True
+sars_cov_2	rothman	PL	California	San Diego County	2020-12-22	True
+sars_cov_2	rothman	PL	California	San Diego County	2020-12-14	True
+sars_cov_2	rothman	PL	California	San Diego County	2020-11-05	True
+sars_cov_2	rothman	PL	California	San Diego County	2020-11-30	True
+sars_cov_2	rothman	PL	California	San Diego County	2020-11-29	True
+sars_cov_2	rothman	PL	California	San Diego County	2021-01-04	True
+sars_cov_2	rothman	PL	California	San Diego County	2021-01-03	True
+sars_cov_2	rothman	OC	California	Orange County	2020-12-21	True
+sars_cov_2	rothman	OC	California	Orange County	2020-12-14	True
+sars_cov_2	rothman	OC	California	Orange County	2020-11-09	True
+sars_cov_2	rothman	OC	California	Orange County	2020-11-04	True
+sars_cov_2	rothman	OC	California	Orange County	2020-11-25	True
+sars_cov_2	rothman	OC	California	Orange County	2020-11-18	True
+sars_cov_2	rothman	OC	California	Orange County	2020-11-11	True
+sars_cov_2	rothman	NC	California	San Diego County	2020-09-25	True
+sars_cov_2	rothman	NC	California	San Diego County	2020-11-06	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-09-29	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-11-03	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-11-17	True
+sars_cov_2	rothman	JWPCP	California	Los Angeles County	2020-11-10	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-09-29	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-09-22	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-12-29	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-12-22	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-12-15	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-12-04	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-12-01	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-11-03	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-11-24	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2020-11-17	True
+sars_cov_2	rothman	HTP	California	Los Angeles County	2021-01-03	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-09-30	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-09-16	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-09-09	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-09-02	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-08-26	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-08-19	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-08-12	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-10-28	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-10-21	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-10-14	True
+sars_cov_2	rothman	SJ	California	Los Angeles County	2020-10-07	True
+sars_cov_2	rothman	OC	California	Orange County	2020-10-21	True
+sars_cov_2	rothman	ESC	California	San Diego County	2020-07-27	True
+sars_cov_2	rothman	ESC	California	San Diego County	2020-07-20	True
+sars_cov_2	spurbeck	I	Ohio	Greene County	2022-01-09	True
+sars_cov_2	spurbeck	I	Ohio	Greene County	2022-01-02	True
+sars_cov_2	spurbeck	H	Ohio	Franklin County	2021-12-26	True
+sars_cov_2	spurbeck	H	Ohio	Franklin County	2021-12-19	True
+sars_cov_2	spurbeck	H	Ohio	Franklin County	2021-12-05	True
+sars_cov_2	spurbeck	H	Ohio	Franklin County	2022-01-09	True
+sars_cov_2	spurbeck	H	Ohio	Franklin County	2022-01-02	True
+sars_cov_2	spurbeck	G	Ohio	Licking County	2021-12-26	True
+sars_cov_2	spurbeck	G	Ohio	Licking County	2021-12-19	True
+sars_cov_2	spurbeck	A	Ohio	Summit County	2021-12-12	True
+sars_cov_2	spurbeck	G	Ohio	Licking County	2021-12-12	True
+sars_cov_2	spurbeck	G	Ohio	Licking County	2021-12-05	True
+sars_cov_2	spurbeck	G	Ohio	Licking County	2022-01-09	True
+sars_cov_2	spurbeck	G	Ohio	Licking County	2022-01-02	True
+sars_cov_2	spurbeck	F	Ohio	Franklin County	2021-12-26	True
+sars_cov_2	spurbeck	F	Ohio	Franklin County	2021-12-19	True
+sars_cov_2	spurbeck	F	Ohio	Franklin County	2021-12-12	True
+sars_cov_2	spurbeck	F	Ohio	Franklin County	2021-12-05	True
+sars_cov_2	spurbeck	F	Ohio	Franklin County	2022-01-09	True
+sars_cov_2	spurbeck	F	Ohio	Franklin County	2022-01-02	True
+sars_cov_2	spurbeck	A	Ohio	Summit County	2021-12-05	True
+sars_cov_2	spurbeck	E	Ohio	Sandusky County	2021-12-26	True
+sars_cov_2	spurbeck	E	Ohio	Sandusky County	2021-12-19	True
+sars_cov_2	spurbeck	E	Ohio	Sandusky County	2021-12-12	True
+sars_cov_2	spurbeck	E	Ohio	Sandusky County	2021-12-05	True
+sars_cov_2	spurbeck	E	Ohio	Sandusky County	2022-01-09	True
+sars_cov_2	spurbeck	E	Ohio	Sandusky County	2022-01-02	True
+sars_cov_2	spurbeck	D	Ohio	Lawrence County	2021-12-19	True
+sars_cov_2	spurbeck	D	Ohio	Lawrence County	2021-12-12	True
+sars_cov_2	spurbeck	D	Ohio	Lawrence County	2021-12-05	True
+sars_cov_2	spurbeck	J	Ohio	Montogmery County	2022-01-09	False
+sars_cov_2	spurbeck	J	Ohio	Montogmery County	2022-01-02	False
+sars_cov_2	spurbeck	I	Ohio	Greene County	2021-12-26	True
+sars_cov_2	spurbeck	I	Ohio	Greene County	2021-12-19	True
+sars_cov_2	spurbeck	I	Ohio	Greene County	2021-12-12	True
+sars_cov_2	spurbeck	A	Ohio	Summit County	2021-12-19	True
+sars_cov_2	spurbeck	I	Ohio	Greene County	2021-12-05	True
+sars_cov_2	spurbeck	D	Ohio	Lawrence County	2022-01-09	True
+sars_cov_2	spurbeck	A	Ohio	Summit County	2022-01-09	True
+sars_cov_2	spurbeck	C	Ohio	Lucas County	2021-12-19	True
+sars_cov_2	spurbeck	C	Ohio	Lucas County	2021-12-05	True
+sars_cov_2	spurbeck	C	Ohio	Lucas County	2022-01-09	True
+sars_cov_2	spurbeck	C	Ohio	Lucas County	2022-01-02	True
+sars_cov_2	spurbeck	B	Ohio	Trumbull County	2021-12-26	True
+sars_cov_2	spurbeck	B	Ohio	Trumbull County	2021-12-19	True
+sars_cov_2	spurbeck	B	Ohio	Trumbull County	2021-12-12	True
+sars_cov_2	spurbeck	B	Ohio	Trumbull County	2021-12-05	True
+sars_cov_2	spurbeck	B	Ohio	Trumbull County	2022-01-09	True
+sars_cov_2	spurbeck	B	Ohio	Trumbull County	2022-01-02	True
+sars_cov_2	spurbeck	A	Ohio	Summit County	2021-12-26	True
+sars_cov_2	spurbeck	J	Ohio	Montogmery County	2021-12-26	False
+sars_cov_2	spurbeck	J	Ohio	Montogmery County	2021-12-19	False
+sars_cov_2	spurbeck	J	Ohio	Montogmery County	2021-12-12	False
+sars_cov_2	spurbeck	J	Ohio	Montogmery County	2021-12-05	False
+sars_cov_2	spurbeck	A	Ohio	Summit County	2022-01-02	True
+hiv	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+hiv	crits_christoph	Marin	California	Marin County	2020-07-01	False
+hiv	crits_christoph	Marin	California	Marin County	2020-07-01	False
+hiv	crits_christoph	SF	California	San Francisco County	2020-06-30	False
+hiv	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+hiv	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+hiv	crits_christoph	Berkeley	California	Alameda County	2020-06-30	False
+hiv	rothman	SB	California	San Diego County	2020-09-10	False
+hiv	rothman	SB	California	San Diego County	2020-09-24	False
+hiv	rothman	SB	California	San Diego County	2020-08-27	False
+hiv	rothman	SB	California	San Diego County	2020-08-13	False
+hiv	rothman	SB	California	San Diego County	2020-10-22	False
+hiv	rothman	PL	California	San Diego County	2020-09-24	False
+hiv	rothman	PL	California	San Diego County	2020-09-10	False
+hiv	rothman	PL	California	San Diego County	2020-08-27	False
+hiv	rothman	PL	California	San Diego County	2020-08-13	False
+hiv	rothman	PL	California	San Diego County	2020-10-22	False
+hiv	rothman	OC	California	Orange County	2020-09-30	False
+hiv	rothman	OC	California	Orange County	2020-09-23	False
+hiv	rothman	OC	California	Orange County	2020-09-16	False
+hiv	rothman	OC	California	Orange County	2020-09-03	False
+hiv	rothman	OC	California	Orange County	2020-09-02	False
+hiv	rothman	OC	California	Orange County	2020-08-26	False
+hiv	rothman	OC	California	Orange County	2020-08-19	False
+hiv	rothman	OC	California	Orange County	2020-08-12	False
+hiv	rothman	OC	California	Orange County	2020-10-07	False
+hiv	rothman	NC	California	San Diego County	2020-09-11	False
+hiv	rothman	NC	California	San Diego County	2020-08-28	False
+hiv	rothman	NC	California	San Diego County	2020-08-14	False
+hiv	rothman	NC	California	San Diego County	2020-10-23	False
+hiv	rothman	NC	California	San Diego County	2020-10-09	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-09-22	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-09-15	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-09-08	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-09-01	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-08-25	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-08-18	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-08-11	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-10-13	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-10-06	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-10-27	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-10-20	False
+hiv	rothman	HTP	California	Los Angeles County	2020-09-15	False
+hiv	rothman	HTP	California	Los Angeles County	2020-09-08	False
+hiv	rothman	HTP	California	Los Angeles County	2020-09-01	False
+hiv	rothman	HTP	California	Los Angeles County	2020-08-25	False
+hiv	rothman	HTP	California	Los Angeles County	2020-08-18	False
+hiv	rothman	HTP	California	Los Angeles County	2020-08-11	False
+hiv	rothman	HTP	California	Los Angeles County	2020-10-27	False
+hiv	rothman	HTP	California	Los Angeles County	2020-10-20	False
+hiv	rothman	HTP	California	Los Angeles County	2020-10-13	False
+hiv	rothman	HTP	California	Los Angeles County	2020-10-02	False
+hiv	rothman	SJ	California	Los Angeles County	2020-09-23	False
+hiv	rothman	SJ	California	Los Angeles County	2020-11-04	False
+hiv	rothman	SJ	California	Los Angeles County	2020-11-18	False
+hiv	rothman	SJ	California	Los Angeles County	2020-11-11	False
+hiv	rothman	SB	California	San Diego County	2020-11-05	False
+hiv	rothman	SB	California	San Diego County	2020-10-08	False
+hiv	rothman	PL	California	San Diego County	2020-12-28	False
+hiv	rothman	PL	California	San Diego County	2020-12-22	False
+hiv	rothman	PL	California	San Diego County	2020-12-14	False
+hiv	rothman	PL	California	San Diego County	2020-11-05	False
+hiv	rothman	PL	California	San Diego County	2020-11-30	False
+hiv	rothman	PL	California	San Diego County	2020-11-29	False
+hiv	rothman	PL	California	San Diego County	2021-01-04	False
+hiv	rothman	PL	California	San Diego County	2021-01-03	False
+hiv	rothman	OC	California	Orange County	2020-12-21	False
+hiv	rothman	OC	California	Orange County	2020-12-14	False
+hiv	rothman	OC	California	Orange County	2020-11-09	False
+hiv	rothman	OC	California	Orange County	2020-11-04	False
+hiv	rothman	OC	California	Orange County	2020-11-25	False
+hiv	rothman	OC	California	Orange County	2020-11-18	False
+hiv	rothman	OC	California	Orange County	2020-11-11	False
+hiv	rothman	NC	California	San Diego County	2020-09-25	False
+hiv	rothman	NC	California	San Diego County	2020-11-06	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-09-29	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-11-03	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-11-17	False
+hiv	rothman	JWPCP	California	Los Angeles County	2020-11-10	False
+hiv	rothman	HTP	California	Los Angeles County	2020-09-29	False
+hiv	rothman	HTP	California	Los Angeles County	2020-09-22	False
+hiv	rothman	HTP	California	Los Angeles County	2020-12-29	False
+hiv	rothman	HTP	California	Los Angeles County	2020-12-22	False
+hiv	rothman	HTP	California	Los Angeles County	2020-12-15	False
+hiv	rothman	HTP	California	Los Angeles County	2020-12-04	False
+hiv	rothman	HTP	California	Los Angeles County	2020-12-01	False
+hiv	rothman	HTP	California	Los Angeles County	2020-11-03	False
+hiv	rothman	HTP	California	Los Angeles County	2020-11-24	False
+hiv	rothman	HTP	California	Los Angeles County	2020-11-17	False
+hiv	rothman	HTP	California	Los Angeles County	2021-01-03	False
+hiv	rothman	SJ	California	Los Angeles County	2020-09-30	False
+hiv	rothman	SJ	California	Los Angeles County	2020-09-16	False
+hiv	rothman	SJ	California	Los Angeles County	2020-09-09	False
+hiv	rothman	SJ	California	Los Angeles County	2020-09-02	False
+hiv	rothman	SJ	California	Los Angeles County	2020-08-26	False
+hiv	rothman	SJ	California	Los Angeles County	2020-08-19	False
+hiv	rothman	SJ	California	Los Angeles County	2020-08-12	False
+hiv	rothman	SJ	California	Los Angeles County	2020-10-28	False
+hiv	rothman	SJ	California	Los Angeles County	2020-10-21	False
+hiv	rothman	SJ	California	Los Angeles County	2020-10-14	False
+hiv	rothman	SJ	California	Los Angeles County	2020-10-07	False
+hiv	rothman	OC	California	Orange County	2020-10-21	False
+hiv	rothman	ESC	California	San Diego County	2020-07-27	False
+hiv	rothman	ESC	California	San Diego County	2020-07-20	False
+hiv	spurbeck	I	Ohio	Greene County	2022-01-09	False
+hiv	spurbeck	I	Ohio	Greene County	2022-01-02	False
+hiv	spurbeck	H	Ohio	Franklin County	2021-12-26	False
+hiv	spurbeck	H	Ohio	Franklin County	2021-12-19	False
+hiv	spurbeck	H	Ohio	Franklin County	2021-12-05	False
+hiv	spurbeck	H	Ohio	Franklin County	2022-01-09	False
+hiv	spurbeck	H	Ohio	Franklin County	2022-01-02	False
+hiv	spurbeck	G	Ohio	Licking County	2021-12-26	False
+hiv	spurbeck	G	Ohio	Licking County	2021-12-19	False
+hiv	spurbeck	A	Ohio	Summit County	2021-12-12	False
+hiv	spurbeck	G	Ohio	Licking County	2021-12-12	False
+hiv	spurbeck	G	Ohio	Licking County	2021-12-05	False
+hiv	spurbeck	G	Ohio	Licking County	2022-01-09	False
+hiv	spurbeck	G	Ohio	Licking County	2022-01-02	False
+hiv	spurbeck	F	Ohio	Franklin County	2021-12-26	False
+hiv	spurbeck	F	Ohio	Franklin County	2021-12-19	False
+hiv	spurbeck	F	Ohio	Franklin County	2021-12-12	False
+hiv	spurbeck	F	Ohio	Franklin County	2021-12-05	False
+hiv	spurbeck	F	Ohio	Franklin County	2022-01-09	False
+hiv	spurbeck	F	Ohio	Franklin County	2022-01-02	False
+hiv	spurbeck	A	Ohio	Summit County	2021-12-05	False
+hiv	spurbeck	E	Ohio	Sandusky County	2021-12-26	False
+hiv	spurbeck	E	Ohio	Sandusky County	2021-12-19	False
+hiv	spurbeck	E	Ohio	Sandusky County	2021-12-12	False
+hiv	spurbeck	E	Ohio	Sandusky County	2021-12-05	False
+hiv	spurbeck	E	Ohio	Sandusky County	2022-01-09	False
+hiv	spurbeck	E	Ohio	Sandusky County	2022-01-02	False
+hiv	spurbeck	D	Ohio	Lawrence County	2021-12-19	False
+hiv	spurbeck	D	Ohio	Lawrence County	2021-12-12	False
+hiv	spurbeck	D	Ohio	Lawrence County	2021-12-05	False
+hiv	spurbeck	J	Ohio	Montogmery County	2022-01-09	False
+hiv	spurbeck	J	Ohio	Montogmery County	2022-01-02	False
+hiv	spurbeck	I	Ohio	Greene County	2021-12-26	False
+hiv	spurbeck	I	Ohio	Greene County	2021-12-19	False
+hiv	spurbeck	I	Ohio	Greene County	2021-12-12	False
+hiv	spurbeck	A	Ohio	Summit County	2021-12-19	False
+hiv	spurbeck	I	Ohio	Greene County	2021-12-05	False
+hiv	spurbeck	D	Ohio	Lawrence County	2022-01-09	False
+hiv	spurbeck	A	Ohio	Summit County	2022-01-09	False
+hiv	spurbeck	C	Ohio	Lucas County	2021-12-19	False
+hiv	spurbeck	C	Ohio	Lucas County	2021-12-05	False
+hiv	spurbeck	C	Ohio	Lucas County	2022-01-09	False
+hiv	spurbeck	C	Ohio	Lucas County	2022-01-02	False
+hiv	spurbeck	B	Ohio	Trumbull County	2021-12-26	False
+hiv	spurbeck	B	Ohio	Trumbull County	2021-12-19	False
+hiv	spurbeck	B	Ohio	Trumbull County	2021-12-12	False
+hiv	spurbeck	B	Ohio	Trumbull County	2021-12-05	False
+hiv	spurbeck	B	Ohio	Trumbull County	2022-01-09	False
+hiv	spurbeck	B	Ohio	Trumbull County	2022-01-02	False
+hiv	spurbeck	A	Ohio	Summit County	2021-12-26	False
+hiv	spurbeck	J	Ohio	Montogmery County	2021-12-26	False
+hiv	spurbeck	J	Ohio	Montogmery County	2021-12-19	False
+hiv	spurbeck	J	Ohio	Montogmery County	2021-12-12	False
+hiv	spurbeck	J	Ohio	Montogmery County	2021-12-05	False
+hiv	spurbeck	A	Ohio	Summit County	2022-01-02	False
+influenza	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+influenza	crits_christoph	Marin	California	Marin County	2020-07-01	False
+influenza	crits_christoph	Marin	California	Marin County	2020-07-01	False
+influenza	crits_christoph	SF	California	San Francisco County	2020-06-30	False
+influenza	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+influenza	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+influenza	crits_christoph	Berkeley	California	Alameda County	2020-06-30	False
+influenza	rothman	SB	California	San Diego County	2020-09-10	False
+influenza	rothman	SB	California	San Diego County	2020-09-24	False
+influenza	rothman	SB	California	San Diego County	2020-08-27	False
+influenza	rothman	SB	California	San Diego County	2020-08-13	False
+influenza	rothman	SB	California	San Diego County	2020-10-22	False
+influenza	rothman	PL	California	San Diego County	2020-09-24	False
+influenza	rothman	PL	California	San Diego County	2020-09-10	False
+influenza	rothman	PL	California	San Diego County	2020-08-27	False
+influenza	rothman	PL	California	San Diego County	2020-08-13	False
+influenza	rothman	PL	California	San Diego County	2020-10-22	False
+influenza	rothman	OC	California	Orange County	2020-09-30	False
+influenza	rothman	OC	California	Orange County	2020-09-23	False
+influenza	rothman	OC	California	Orange County	2020-09-16	False
+influenza	rothman	OC	California	Orange County	2020-09-03	False
+influenza	rothman	OC	California	Orange County	2020-09-02	False
+influenza	rothman	OC	California	Orange County	2020-08-26	False
+influenza	rothman	OC	California	Orange County	2020-08-19	False
+influenza	rothman	OC	California	Orange County	2020-08-12	False
+influenza	rothman	OC	California	Orange County	2020-10-07	False
+influenza	rothman	NC	California	San Diego County	2020-09-11	False
+influenza	rothman	NC	California	San Diego County	2020-08-28	False
+influenza	rothman	NC	California	San Diego County	2020-08-14	False
+influenza	rothman	NC	California	San Diego County	2020-10-23	False
+influenza	rothman	NC	California	San Diego County	2020-10-09	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-09-22	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-09-15	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-09-08	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-09-01	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-08-25	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-08-18	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-08-11	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-10-13	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-10-06	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-10-27	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-10-20	False
+influenza	rothman	HTP	California	Los Angeles County	2020-09-15	False
+influenza	rothman	HTP	California	Los Angeles County	2020-09-08	False
+influenza	rothman	HTP	California	Los Angeles County	2020-09-01	False
+influenza	rothman	HTP	California	Los Angeles County	2020-08-25	False
+influenza	rothman	HTP	California	Los Angeles County	2020-08-18	False
+influenza	rothman	HTP	California	Los Angeles County	2020-08-11	False
+influenza	rothman	HTP	California	Los Angeles County	2020-10-27	False
+influenza	rothman	HTP	California	Los Angeles County	2020-10-20	False
+influenza	rothman	HTP	California	Los Angeles County	2020-10-13	False
+influenza	rothman	HTP	California	Los Angeles County	2020-10-02	False
+influenza	rothman	SJ	California	Los Angeles County	2020-09-23	False
+influenza	rothman	SJ	California	Los Angeles County	2020-11-04	False
+influenza	rothman	SJ	California	Los Angeles County	2020-11-18	False
+influenza	rothman	SJ	California	Los Angeles County	2020-11-11	False
+influenza	rothman	SB	California	San Diego County	2020-11-05	False
+influenza	rothman	SB	California	San Diego County	2020-10-08	False
+influenza	rothman	PL	California	San Diego County	2020-12-28	False
+influenza	rothman	PL	California	San Diego County	2020-12-22	False
+influenza	rothman	PL	California	San Diego County	2020-12-14	False
+influenza	rothman	PL	California	San Diego County	2020-11-05	False
+influenza	rothman	PL	California	San Diego County	2020-11-30	False
+influenza	rothman	PL	California	San Diego County	2020-11-29	False
+influenza	rothman	PL	California	San Diego County	2021-01-04	False
+influenza	rothman	PL	California	San Diego County	2021-01-03	False
+influenza	rothman	OC	California	Orange County	2020-12-21	False
+influenza	rothman	OC	California	Orange County	2020-12-14	False
+influenza	rothman	OC	California	Orange County	2020-11-09	False
+influenza	rothman	OC	California	Orange County	2020-11-04	False
+influenza	rothman	OC	California	Orange County	2020-11-25	False
+influenza	rothman	OC	California	Orange County	2020-11-18	False
+influenza	rothman	OC	California	Orange County	2020-11-11	False
+influenza	rothman	NC	California	San Diego County	2020-09-25	False
+influenza	rothman	NC	California	San Diego County	2020-11-06	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-09-29	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-11-03	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-11-17	False
+influenza	rothman	JWPCP	California	Los Angeles County	2020-11-10	False
+influenza	rothman	HTP	California	Los Angeles County	2020-09-29	False
+influenza	rothman	HTP	California	Los Angeles County	2020-09-22	False
+influenza	rothman	HTP	California	Los Angeles County	2020-12-29	False
+influenza	rothman	HTP	California	Los Angeles County	2020-12-22	False
+influenza	rothman	HTP	California	Los Angeles County	2020-12-15	False
+influenza	rothman	HTP	California	Los Angeles County	2020-12-04	False
+influenza	rothman	HTP	California	Los Angeles County	2020-12-01	False
+influenza	rothman	HTP	California	Los Angeles County	2020-11-03	False
+influenza	rothman	HTP	California	Los Angeles County	2020-11-24	False
+influenza	rothman	HTP	California	Los Angeles County	2020-11-17	False
+influenza	rothman	HTP	California	Los Angeles County	2021-01-03	False
+influenza	rothman	SJ	California	Los Angeles County	2020-09-30	False
+influenza	rothman	SJ	California	Los Angeles County	2020-09-16	False
+influenza	rothman	SJ	California	Los Angeles County	2020-09-09	False
+influenza	rothman	SJ	California	Los Angeles County	2020-09-02	False
+influenza	rothman	SJ	California	Los Angeles County	2020-08-26	False
+influenza	rothman	SJ	California	Los Angeles County	2020-08-19	False
+influenza	rothman	SJ	California	Los Angeles County	2020-08-12	False
+influenza	rothman	SJ	California	Los Angeles County	2020-10-28	False
+influenza	rothman	SJ	California	Los Angeles County	2020-10-21	False
+influenza	rothman	SJ	California	Los Angeles County	2020-10-14	False
+influenza	rothman	SJ	California	Los Angeles County	2020-10-07	False
+influenza	rothman	OC	California	Orange County	2020-10-21	False
+influenza	rothman	ESC	California	San Diego County	2020-07-27	False
+influenza	rothman	ESC	California	San Diego County	2020-07-20	False
+influenza	spurbeck	I	Ohio	Greene County	2022-01-09	False
+influenza	spurbeck	I	Ohio	Greene County	2022-01-02	False
+influenza	spurbeck	H	Ohio	Franklin County	2021-12-26	False
+influenza	spurbeck	H	Ohio	Franklin County	2021-12-19	False
+influenza	spurbeck	H	Ohio	Franklin County	2021-12-05	False
+influenza	spurbeck	H	Ohio	Franklin County	2022-01-09	False
+influenza	spurbeck	H	Ohio	Franklin County	2022-01-02	False
+influenza	spurbeck	G	Ohio	Licking County	2021-12-26	False
+influenza	spurbeck	G	Ohio	Licking County	2021-12-19	False
+influenza	spurbeck	A	Ohio	Summit County	2021-12-12	False
+influenza	spurbeck	G	Ohio	Licking County	2021-12-12	False
+influenza	spurbeck	G	Ohio	Licking County	2021-12-05	False
+influenza	spurbeck	G	Ohio	Licking County	2022-01-09	False
+influenza	spurbeck	G	Ohio	Licking County	2022-01-02	False
+influenza	spurbeck	F	Ohio	Franklin County	2021-12-26	False
+influenza	spurbeck	F	Ohio	Franklin County	2021-12-19	False
+influenza	spurbeck	F	Ohio	Franklin County	2021-12-12	False
+influenza	spurbeck	F	Ohio	Franklin County	2021-12-05	False
+influenza	spurbeck	F	Ohio	Franklin County	2022-01-09	False
+influenza	spurbeck	F	Ohio	Franklin County	2022-01-02	False
+influenza	spurbeck	A	Ohio	Summit County	2021-12-05	False
+influenza	spurbeck	E	Ohio	Sandusky County	2021-12-26	False
+influenza	spurbeck	E	Ohio	Sandusky County	2021-12-19	False
+influenza	spurbeck	E	Ohio	Sandusky County	2021-12-12	False
+influenza	spurbeck	E	Ohio	Sandusky County	2021-12-05	False
+influenza	spurbeck	E	Ohio	Sandusky County	2022-01-09	False
+influenza	spurbeck	E	Ohio	Sandusky County	2022-01-02	False
+influenza	spurbeck	D	Ohio	Lawrence County	2021-12-19	False
+influenza	spurbeck	D	Ohio	Lawrence County	2021-12-12	False
+influenza	spurbeck	D	Ohio	Lawrence County	2021-12-05	False
+influenza	spurbeck	J	Ohio	Montogmery County	2022-01-09	False
+influenza	spurbeck	J	Ohio	Montogmery County	2022-01-02	False
+influenza	spurbeck	I	Ohio	Greene County	2021-12-26	False
+influenza	spurbeck	I	Ohio	Greene County	2021-12-19	False
+influenza	spurbeck	I	Ohio	Greene County	2021-12-12	False
+influenza	spurbeck	A	Ohio	Summit County	2021-12-19	False
+influenza	spurbeck	I	Ohio	Greene County	2021-12-05	False
+influenza	spurbeck	D	Ohio	Lawrence County	2022-01-09	False
+influenza	spurbeck	A	Ohio	Summit County	2022-01-09	False
+influenza	spurbeck	C	Ohio	Lucas County	2021-12-19	False
+influenza	spurbeck	C	Ohio	Lucas County	2021-12-05	False
+influenza	spurbeck	C	Ohio	Lucas County	2022-01-09	False
+influenza	spurbeck	C	Ohio	Lucas County	2022-01-02	False
+influenza	spurbeck	B	Ohio	Trumbull County	2021-12-26	False
+influenza	spurbeck	B	Ohio	Trumbull County	2021-12-19	False
+influenza	spurbeck	B	Ohio	Trumbull County	2021-12-12	False
+influenza	spurbeck	B	Ohio	Trumbull County	2021-12-05	False
+influenza	spurbeck	B	Ohio	Trumbull County	2022-01-09	False
+influenza	spurbeck	B	Ohio	Trumbull County	2022-01-02	False
+influenza	spurbeck	A	Ohio	Summit County	2021-12-26	False
+influenza	spurbeck	J	Ohio	Montogmery County	2021-12-26	False
+influenza	spurbeck	J	Ohio	Montogmery County	2021-12-19	False
+influenza	spurbeck	J	Ohio	Montogmery County	2021-12-12	False
+influenza	spurbeck	J	Ohio	Montogmery County	2021-12-05	False
+influenza	spurbeck	A	Ohio	Summit County	2022-01-02	False
+norovirus	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+norovirus	crits_christoph	Marin	California	Marin County	2020-07-01	True
+norovirus	crits_christoph	Marin	California	Marin County	2020-07-01	True
+norovirus	crits_christoph	SF	California	San Francisco County	2020-06-30	True
+norovirus	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+norovirus	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+norovirus	crits_christoph	Berkeley	California	Alameda County	2020-06-30	True
+norovirus	rothman	SB	California	San Diego County	2020-09-10	True
+norovirus	rothman	SB	California	San Diego County	2020-09-24	True
+norovirus	rothman	SB	California	San Diego County	2020-08-27	True
+norovirus	rothman	SB	California	San Diego County	2020-08-13	True
+norovirus	rothman	SB	California	San Diego County	2020-10-22	True
+norovirus	rothman	PL	California	San Diego County	2020-09-24	True
+norovirus	rothman	PL	California	San Diego County	2020-09-10	True
+norovirus	rothman	PL	California	San Diego County	2020-08-27	True
+norovirus	rothman	PL	California	San Diego County	2020-08-13	True
+norovirus	rothman	PL	California	San Diego County	2020-10-22	True
+norovirus	rothman	OC	California	Orange County	2020-09-30	True
+norovirus	rothman	OC	California	Orange County	2020-09-23	True
+norovirus	rothman	OC	California	Orange County	2020-09-16	True
+norovirus	rothman	OC	California	Orange County	2020-09-03	True
+norovirus	rothman	OC	California	Orange County	2020-09-02	True
+norovirus	rothman	OC	California	Orange County	2020-08-26	True
+norovirus	rothman	OC	California	Orange County	2020-08-19	True
+norovirus	rothman	OC	California	Orange County	2020-08-12	True
+norovirus	rothman	OC	California	Orange County	2020-10-07	True
+norovirus	rothman	NC	California	San Diego County	2020-09-11	True
+norovirus	rothman	NC	California	San Diego County	2020-08-28	True
+norovirus	rothman	NC	California	San Diego County	2020-08-14	True
+norovirus	rothman	NC	California	San Diego County	2020-10-23	True
+norovirus	rothman	NC	California	San Diego County	2020-10-09	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-09-22	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-09-15	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-09-08	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-09-01	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-08-25	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-08-18	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-08-11	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-10-13	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-10-06	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-10-27	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-10-20	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-09-15	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-09-08	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-09-01	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-08-25	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-08-18	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-08-11	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-10-27	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-10-20	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-10-13	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-10-02	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-09-23	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-11-04	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-11-18	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-11-11	True
+norovirus	rothman	SB	California	San Diego County	2020-11-05	True
+norovirus	rothman	SB	California	San Diego County	2020-10-08	True
+norovirus	rothman	PL	California	San Diego County	2020-12-28	True
+norovirus	rothman	PL	California	San Diego County	2020-12-22	True
+norovirus	rothman	PL	California	San Diego County	2020-12-14	True
+norovirus	rothman	PL	California	San Diego County	2020-11-05	True
+norovirus	rothman	PL	California	San Diego County	2020-11-30	True
+norovirus	rothman	PL	California	San Diego County	2020-11-29	True
+norovirus	rothman	PL	California	San Diego County	2021-01-04	True
+norovirus	rothman	PL	California	San Diego County	2021-01-03	True
+norovirus	rothman	OC	California	Orange County	2020-12-21	True
+norovirus	rothman	OC	California	Orange County	2020-12-14	True
+norovirus	rothman	OC	California	Orange County	2020-11-09	True
+norovirus	rothman	OC	California	Orange County	2020-11-04	True
+norovirus	rothman	OC	California	Orange County	2020-11-25	True
+norovirus	rothman	OC	California	Orange County	2020-11-18	True
+norovirus	rothman	OC	California	Orange County	2020-11-11	True
+norovirus	rothman	NC	California	San Diego County	2020-09-25	True
+norovirus	rothman	NC	California	San Diego County	2020-11-06	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-09-29	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-11-03	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-11-17	True
+norovirus	rothman	JWPCP	California	Los Angeles County	2020-11-10	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-09-29	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-09-22	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-12-29	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-12-22	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-12-15	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-12-04	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-12-01	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-11-03	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-11-24	True
+norovirus	rothman	HTP	California	Los Angeles County	2020-11-17	True
+norovirus	rothman	HTP	California	Los Angeles County	2021-01-03	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-09-30	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-09-16	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-09-09	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-09-02	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-08-26	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-08-19	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-08-12	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-10-28	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-10-21	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-10-14	True
+norovirus	rothman	SJ	California	Los Angeles County	2020-10-07	True
+norovirus	rothman	OC	California	Orange County	2020-10-21	True
+norovirus	rothman	ESC	California	San Diego County	2020-07-27	True
+norovirus	rothman	ESC	California	San Diego County	2020-07-20	True
+norovirus	spurbeck	I	Ohio	Greene County	2022-01-09	False
+norovirus	spurbeck	I	Ohio	Greene County	2022-01-02	False
+norovirus	spurbeck	H	Ohio	Franklin County	2021-12-26	True
+norovirus	spurbeck	H	Ohio	Franklin County	2021-12-19	True
+norovirus	spurbeck	H	Ohio	Franklin County	2021-12-05	True
+norovirus	spurbeck	H	Ohio	Franklin County	2022-01-09	False
+norovirus	spurbeck	H	Ohio	Franklin County	2022-01-02	False
+norovirus	spurbeck	G	Ohio	Licking County	2021-12-26	True
+norovirus	spurbeck	G	Ohio	Licking County	2021-12-19	True
+norovirus	spurbeck	A	Ohio	Summit County	2021-12-12	True
+norovirus	spurbeck	G	Ohio	Licking County	2021-12-12	True
+norovirus	spurbeck	G	Ohio	Licking County	2021-12-05	True
+norovirus	spurbeck	G	Ohio	Licking County	2022-01-09	False
+norovirus	spurbeck	G	Ohio	Licking County	2022-01-02	False
+norovirus	spurbeck	F	Ohio	Franklin County	2021-12-26	True
+norovirus	spurbeck	F	Ohio	Franklin County	2021-12-19	True
+norovirus	spurbeck	F	Ohio	Franklin County	2021-12-12	True
+norovirus	spurbeck	F	Ohio	Franklin County	2021-12-05	True
+norovirus	spurbeck	F	Ohio	Franklin County	2022-01-09	False
+norovirus	spurbeck	F	Ohio	Franklin County	2022-01-02	False
+norovirus	spurbeck	A	Ohio	Summit County	2021-12-05	True
+norovirus	spurbeck	E	Ohio	Sandusky County	2021-12-26	True
+norovirus	spurbeck	E	Ohio	Sandusky County	2021-12-19	True
+norovirus	spurbeck	E	Ohio	Sandusky County	2021-12-12	True
+norovirus	spurbeck	E	Ohio	Sandusky County	2021-12-05	True
+norovirus	spurbeck	E	Ohio	Sandusky County	2022-01-09	False
+norovirus	spurbeck	E	Ohio	Sandusky County	2022-01-02	False
+norovirus	spurbeck	D	Ohio	Lawrence County	2021-12-19	True
+norovirus	spurbeck	D	Ohio	Lawrence County	2021-12-12	True
+norovirus	spurbeck	D	Ohio	Lawrence County	2021-12-05	True
+norovirus	spurbeck	J	Ohio	Montogmery County	2022-01-09	False
+norovirus	spurbeck	J	Ohio	Montogmery County	2022-01-02	False
+norovirus	spurbeck	I	Ohio	Greene County	2021-12-26	True
+norovirus	spurbeck	I	Ohio	Greene County	2021-12-19	True
+norovirus	spurbeck	I	Ohio	Greene County	2021-12-12	True
+norovirus	spurbeck	A	Ohio	Summit County	2021-12-19	True
+norovirus	spurbeck	I	Ohio	Greene County	2021-12-05	True
+norovirus	spurbeck	D	Ohio	Lawrence County	2022-01-09	False
+norovirus	spurbeck	A	Ohio	Summit County	2022-01-09	False
+norovirus	spurbeck	C	Ohio	Lucas County	2021-12-19	True
+norovirus	spurbeck	C	Ohio	Lucas County	2021-12-05	True
+norovirus	spurbeck	C	Ohio	Lucas County	2022-01-09	False
+norovirus	spurbeck	C	Ohio	Lucas County	2022-01-02	False
+norovirus	spurbeck	B	Ohio	Trumbull County	2021-12-26	True
+norovirus	spurbeck	B	Ohio	Trumbull County	2021-12-19	True
+norovirus	spurbeck	B	Ohio	Trumbull County	2021-12-12	True
+norovirus	spurbeck	B	Ohio	Trumbull County	2021-12-05	True
+norovirus	spurbeck	B	Ohio	Trumbull County	2022-01-09	False
+norovirus	spurbeck	B	Ohio	Trumbull County	2022-01-02	False
+norovirus	spurbeck	A	Ohio	Summit County	2021-12-26	True
+norovirus	spurbeck	J	Ohio	Montogmery County	2021-12-26	True
+norovirus	spurbeck	J	Ohio	Montogmery County	2021-12-19	True
+norovirus	spurbeck	J	Ohio	Montogmery County	2021-12-12	True
+norovirus	spurbeck	J	Ohio	Montogmery County	2021-12-05	True
+norovirus	spurbeck	A	Ohio	Summit County	2022-01-02	False
+west_nile_virus	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+west_nile_virus	crits_christoph	Marin	California	Marin County	2020-07-01	False
+west_nile_virus	crits_christoph	Marin	California	Marin County	2020-07-01	False
+west_nile_virus	crits_christoph	SF	California	San Francisco County	2020-06-30	False
+west_nile_virus	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+west_nile_virus	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+west_nile_virus	crits_christoph	Berkeley	California	Alameda County	2020-06-30	False
+west_nile_virus	rothman	SB	California	San Diego County	2020-09-10	False
+west_nile_virus	rothman	SB	California	San Diego County	2020-09-24	False
+west_nile_virus	rothman	SB	California	San Diego County	2020-08-27	False
+west_nile_virus	rothman	SB	California	San Diego County	2020-08-13	False
+west_nile_virus	rothman	SB	California	San Diego County	2020-10-22	False
+west_nile_virus	rothman	PL	California	San Diego County	2020-09-24	False
+west_nile_virus	rothman	PL	California	San Diego County	2020-09-10	False
+west_nile_virus	rothman	PL	California	San Diego County	2020-08-27	False
+west_nile_virus	rothman	PL	California	San Diego County	2020-08-13	False
+west_nile_virus	rothman	PL	California	San Diego County	2020-10-22	False
+west_nile_virus	rothman	OC	California	Orange County	2020-09-30	False
+west_nile_virus	rothman	OC	California	Orange County	2020-09-23	False
+west_nile_virus	rothman	OC	California	Orange County	2020-09-16	False
+west_nile_virus	rothman	OC	California	Orange County	2020-09-03	False
+west_nile_virus	rothman	OC	California	Orange County	2020-09-02	False
+west_nile_virus	rothman	OC	California	Orange County	2020-08-26	False
+west_nile_virus	rothman	OC	California	Orange County	2020-08-19	False
+west_nile_virus	rothman	OC	California	Orange County	2020-08-12	False
+west_nile_virus	rothman	OC	California	Orange County	2020-10-07	False
+west_nile_virus	rothman	NC	California	San Diego County	2020-09-11	False
+west_nile_virus	rothman	NC	California	San Diego County	2020-08-28	False
+west_nile_virus	rothman	NC	California	San Diego County	2020-08-14	False
+west_nile_virus	rothman	NC	California	San Diego County	2020-10-23	False
+west_nile_virus	rothman	NC	California	San Diego County	2020-10-09	False
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-09-22	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-09-15	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-09-08	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-09-01	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-08-25	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-08-18	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-08-11	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-10-13	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-10-06	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-10-27	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-10-20	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-09-15	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-09-08	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-09-01	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-08-25	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-08-18	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-08-11	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-10-27	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-10-20	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-10-13	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-10-02	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-09-23	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-11-04	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-11-18	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-11-11	True
+west_nile_virus	rothman	SB	California	San Diego County	2020-11-05	False
+west_nile_virus	rothman	SB	California	San Diego County	2020-10-08	False
+west_nile_virus	rothman	PL	California	San Diego County	2020-12-28	False
+west_nile_virus	rothman	PL	California	San Diego County	2020-12-22	False
+west_nile_virus	rothman	PL	California	San Diego County	2020-12-14	False
+west_nile_virus	rothman	PL	California	San Diego County	2020-11-05	False
+west_nile_virus	rothman	PL	California	San Diego County	2020-11-30	False
+west_nile_virus	rothman	PL	California	San Diego County	2020-11-29	False
+west_nile_virus	rothman	PL	California	San Diego County	2021-01-04	False
+west_nile_virus	rothman	PL	California	San Diego County	2021-01-03	False
+west_nile_virus	rothman	OC	California	Orange County	2020-12-21	False
+west_nile_virus	rothman	OC	California	Orange County	2020-12-14	False
+west_nile_virus	rothman	OC	California	Orange County	2020-11-09	False
+west_nile_virus	rothman	OC	California	Orange County	2020-11-04	False
+west_nile_virus	rothman	OC	California	Orange County	2020-11-25	False
+west_nile_virus	rothman	OC	California	Orange County	2020-11-18	False
+west_nile_virus	rothman	OC	California	Orange County	2020-11-11	False
+west_nile_virus	rothman	NC	California	San Diego County	2020-09-25	False
+west_nile_virus	rothman	NC	California	San Diego County	2020-11-06	False
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-09-29	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-11-03	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-11-17	True
+west_nile_virus	rothman	JWPCP	California	Los Angeles County	2020-11-10	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-09-29	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-09-22	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-12-29	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-12-22	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-12-15	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-12-04	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-12-01	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-11-03	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-11-24	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2020-11-17	True
+west_nile_virus	rothman	HTP	California	Los Angeles County	2021-01-03	False
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-09-30	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-09-16	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-09-09	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-09-02	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-08-26	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-08-19	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-08-12	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-10-28	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-10-21	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-10-14	True
+west_nile_virus	rothman	SJ	California	Los Angeles County	2020-10-07	True
+west_nile_virus	rothman	OC	California	Orange County	2020-10-21	False
+west_nile_virus	rothman	ESC	California	San Diego County	2020-07-27	False
+west_nile_virus	rothman	ESC	California	San Diego County	2020-07-20	False
+west_nile_virus	spurbeck	I	Ohio	Greene County	2022-01-09	False
+west_nile_virus	spurbeck	I	Ohio	Greene County	2022-01-02	False
+west_nile_virus	spurbeck	H	Ohio	Franklin County	2021-12-26	False
+west_nile_virus	spurbeck	H	Ohio	Franklin County	2021-12-19	False
+west_nile_virus	spurbeck	H	Ohio	Franklin County	2021-12-05	False
+west_nile_virus	spurbeck	H	Ohio	Franklin County	2022-01-09	False
+west_nile_virus	spurbeck	H	Ohio	Franklin County	2022-01-02	False
+west_nile_virus	spurbeck	G	Ohio	Licking County	2021-12-26	False
+west_nile_virus	spurbeck	G	Ohio	Licking County	2021-12-19	False
+west_nile_virus	spurbeck	A	Ohio	Summit County	2021-12-12	False
+west_nile_virus	spurbeck	G	Ohio	Licking County	2021-12-12	False
+west_nile_virus	spurbeck	G	Ohio	Licking County	2021-12-05	False
+west_nile_virus	spurbeck	G	Ohio	Licking County	2022-01-09	False
+west_nile_virus	spurbeck	G	Ohio	Licking County	2022-01-02	False
+west_nile_virus	spurbeck	F	Ohio	Franklin County	2021-12-26	False
+west_nile_virus	spurbeck	F	Ohio	Franklin County	2021-12-19	False
+west_nile_virus	spurbeck	F	Ohio	Franklin County	2021-12-12	False
+west_nile_virus	spurbeck	F	Ohio	Franklin County	2021-12-05	False
+west_nile_virus	spurbeck	F	Ohio	Franklin County	2022-01-09	False
+west_nile_virus	spurbeck	F	Ohio	Franklin County	2022-01-02	False
+west_nile_virus	spurbeck	A	Ohio	Summit County	2021-12-05	False
+west_nile_virus	spurbeck	E	Ohio	Sandusky County	2021-12-26	False
+west_nile_virus	spurbeck	E	Ohio	Sandusky County	2021-12-19	False
+west_nile_virus	spurbeck	E	Ohio	Sandusky County	2021-12-12	False
+west_nile_virus	spurbeck	E	Ohio	Sandusky County	2021-12-05	False
+west_nile_virus	spurbeck	E	Ohio	Sandusky County	2022-01-09	False
+west_nile_virus	spurbeck	E	Ohio	Sandusky County	2022-01-02	False
+west_nile_virus	spurbeck	D	Ohio	Lawrence County	2021-12-19	False
+west_nile_virus	spurbeck	D	Ohio	Lawrence County	2021-12-12	False
+west_nile_virus	spurbeck	D	Ohio	Lawrence County	2021-12-05	False
+west_nile_virus	spurbeck	J	Ohio	Montogmery County	2022-01-09	False
+west_nile_virus	spurbeck	J	Ohio	Montogmery County	2022-01-02	False
+west_nile_virus	spurbeck	I	Ohio	Greene County	2021-12-26	False
+west_nile_virus	spurbeck	I	Ohio	Greene County	2021-12-19	False
+west_nile_virus	spurbeck	I	Ohio	Greene County	2021-12-12	False
+west_nile_virus	spurbeck	A	Ohio	Summit County	2021-12-19	False
+west_nile_virus	spurbeck	I	Ohio	Greene County	2021-12-05	False
+west_nile_virus	spurbeck	D	Ohio	Lawrence County	2022-01-09	False
+west_nile_virus	spurbeck	A	Ohio	Summit County	2022-01-09	False
+west_nile_virus	spurbeck	C	Ohio	Lucas County	2021-12-19	False
+west_nile_virus	spurbeck	C	Ohio	Lucas County	2021-12-05	False
+west_nile_virus	spurbeck	C	Ohio	Lucas County	2022-01-09	False
+west_nile_virus	spurbeck	C	Ohio	Lucas County	2022-01-02	False
+west_nile_virus	spurbeck	B	Ohio	Trumbull County	2021-12-26	False
+west_nile_virus	spurbeck	B	Ohio	Trumbull County	2021-12-19	False
+west_nile_virus	spurbeck	B	Ohio	Trumbull County	2021-12-12	False
+west_nile_virus	spurbeck	B	Ohio	Trumbull County	2021-12-05	False
+west_nile_virus	spurbeck	B	Ohio	Trumbull County	2022-01-09	False
+west_nile_virus	spurbeck	B	Ohio	Trumbull County	2022-01-02	False
+west_nile_virus	spurbeck	A	Ohio	Summit County	2021-12-26	False
+west_nile_virus	spurbeck	J	Ohio	Montogmery County	2021-12-26	False
+west_nile_virus	spurbeck	J	Ohio	Montogmery County	2021-12-19	False
+west_nile_virus	spurbeck	J	Ohio	Montogmery County	2021-12-12	False
+west_nile_virus	spurbeck	J	Ohio	Montogmery County	2021-12-05	False
+west_nile_virus	spurbeck	A	Ohio	Summit County	2022-01-02	False
+dengue	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+dengue	crits_christoph	Marin	California	Marin County	2020-07-01	True
+dengue	crits_christoph	Marin	California	Marin County	2020-07-01	True
+dengue	crits_christoph	SF	California	San Francisco County	2020-06-30	True
+dengue	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+dengue	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+dengue	crits_christoph	Berkeley	California	Alameda County	2020-06-30	True
+dengue	rothman	SB	California	San Diego County	2020-09-10	True
+dengue	rothman	SB	California	San Diego County	2020-09-24	True
+dengue	rothman	SB	California	San Diego County	2020-08-27	True
+dengue	rothman	SB	California	San Diego County	2020-08-13	True
+dengue	rothman	SB	California	San Diego County	2020-10-22	True
+dengue	rothman	PL	California	San Diego County	2020-09-24	True
+dengue	rothman	PL	California	San Diego County	2020-09-10	True
+dengue	rothman	PL	California	San Diego County	2020-08-27	True
+dengue	rothman	PL	California	San Diego County	2020-08-13	True
+dengue	rothman	PL	California	San Diego County	2020-10-22	True
+dengue	rothman	OC	California	Orange County	2020-09-30	True
+dengue	rothman	OC	California	Orange County	2020-09-23	True
+dengue	rothman	OC	California	Orange County	2020-09-16	True
+dengue	rothman	OC	California	Orange County	2020-09-03	True
+dengue	rothman	OC	California	Orange County	2020-09-02	True
+dengue	rothman	OC	California	Orange County	2020-08-26	True
+dengue	rothman	OC	California	Orange County	2020-08-19	True
+dengue	rothman	OC	California	Orange County	2020-08-12	True
+dengue	rothman	OC	California	Orange County	2020-10-07	True
+dengue	rothman	NC	California	San Diego County	2020-09-11	True
+dengue	rothman	NC	California	San Diego County	2020-08-28	True
+dengue	rothman	NC	California	San Diego County	2020-08-14	True
+dengue	rothman	NC	California	San Diego County	2020-10-23	True
+dengue	rothman	NC	California	San Diego County	2020-10-09	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-09-22	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-09-15	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-09-08	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-09-01	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-08-25	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-08-18	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-08-11	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-10-13	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-10-06	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-10-27	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-10-20	True
+dengue	rothman	HTP	California	Los Angeles County	2020-09-15	True
+dengue	rothman	HTP	California	Los Angeles County	2020-09-08	True
+dengue	rothman	HTP	California	Los Angeles County	2020-09-01	True
+dengue	rothman	HTP	California	Los Angeles County	2020-08-25	True
+dengue	rothman	HTP	California	Los Angeles County	2020-08-18	True
+dengue	rothman	HTP	California	Los Angeles County	2020-08-11	True
+dengue	rothman	HTP	California	Los Angeles County	2020-10-27	True
+dengue	rothman	HTP	California	Los Angeles County	2020-10-20	True
+dengue	rothman	HTP	California	Los Angeles County	2020-10-13	True
+dengue	rothman	HTP	California	Los Angeles County	2020-10-02	True
+dengue	rothman	SJ	California	Los Angeles County	2020-09-23	True
+dengue	rothman	SJ	California	Los Angeles County	2020-11-04	True
+dengue	rothman	SJ	California	Los Angeles County	2020-11-18	True
+dengue	rothman	SJ	California	Los Angeles County	2020-11-11	True
+dengue	rothman	SB	California	San Diego County	2020-11-05	True
+dengue	rothman	SB	California	San Diego County	2020-10-08	True
+dengue	rothman	PL	California	San Diego County	2020-12-28	True
+dengue	rothman	PL	California	San Diego County	2020-12-22	True
+dengue	rothman	PL	California	San Diego County	2020-12-14	True
+dengue	rothman	PL	California	San Diego County	2020-11-05	True
+dengue	rothman	PL	California	San Diego County	2020-11-30	True
+dengue	rothman	PL	California	San Diego County	2020-11-29	True
+dengue	rothman	PL	California	San Diego County	2021-01-04	False
+dengue	rothman	PL	California	San Diego County	2021-01-03	False
+dengue	rothman	OC	California	Orange County	2020-12-21	True
+dengue	rothman	OC	California	Orange County	2020-12-14	True
+dengue	rothman	OC	California	Orange County	2020-11-09	True
+dengue	rothman	OC	California	Orange County	2020-11-04	True
+dengue	rothman	OC	California	Orange County	2020-11-25	True
+dengue	rothman	OC	California	Orange County	2020-11-18	True
+dengue	rothman	OC	California	Orange County	2020-11-11	True
+dengue	rothman	NC	California	San Diego County	2020-09-25	True
+dengue	rothman	NC	California	San Diego County	2020-11-06	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-09-29	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-11-03	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-11-17	True
+dengue	rothman	JWPCP	California	Los Angeles County	2020-11-10	True
+dengue	rothman	HTP	California	Los Angeles County	2020-09-29	True
+dengue	rothman	HTP	California	Los Angeles County	2020-09-22	True
+dengue	rothman	HTP	California	Los Angeles County	2020-12-29	True
+dengue	rothman	HTP	California	Los Angeles County	2020-12-22	True
+dengue	rothman	HTP	California	Los Angeles County	2020-12-15	True
+dengue	rothman	HTP	California	Los Angeles County	2020-12-04	True
+dengue	rothman	HTP	California	Los Angeles County	2020-12-01	True
+dengue	rothman	HTP	California	Los Angeles County	2020-11-03	True
+dengue	rothman	HTP	California	Los Angeles County	2020-11-24	True
+dengue	rothman	HTP	California	Los Angeles County	2020-11-17	True
+dengue	rothman	HTP	California	Los Angeles County	2021-01-03	False
+dengue	rothman	SJ	California	Los Angeles County	2020-09-30	True
+dengue	rothman	SJ	California	Los Angeles County	2020-09-16	True
+dengue	rothman	SJ	California	Los Angeles County	2020-09-09	True
+dengue	rothman	SJ	California	Los Angeles County	2020-09-02	True
+dengue	rothman	SJ	California	Los Angeles County	2020-08-26	True
+dengue	rothman	SJ	California	Los Angeles County	2020-08-19	True
+dengue	rothman	SJ	California	Los Angeles County	2020-08-12	True
+dengue	rothman	SJ	California	Los Angeles County	2020-10-28	True
+dengue	rothman	SJ	California	Los Angeles County	2020-10-21	True
+dengue	rothman	SJ	California	Los Angeles County	2020-10-14	True
+dengue	rothman	SJ	California	Los Angeles County	2020-10-07	True
+dengue	rothman	OC	California	Orange County	2020-10-21	True
+dengue	rothman	ESC	California	San Diego County	2020-07-27	True
+dengue	rothman	ESC	California	San Diego County	2020-07-20	True
+dengue	spurbeck	I	Ohio	Greene County	2022-01-09	False
+dengue	spurbeck	I	Ohio	Greene County	2022-01-02	False
+dengue	spurbeck	H	Ohio	Franklin County	2021-12-26	False
+dengue	spurbeck	H	Ohio	Franklin County	2021-12-19	False
+dengue	spurbeck	H	Ohio	Franklin County	2021-12-05	False
+dengue	spurbeck	H	Ohio	Franklin County	2022-01-09	False
+dengue	spurbeck	H	Ohio	Franklin County	2022-01-02	False
+dengue	spurbeck	G	Ohio	Licking County	2021-12-26	False
+dengue	spurbeck	G	Ohio	Licking County	2021-12-19	False
+dengue	spurbeck	A	Ohio	Summit County	2021-12-12	False
+dengue	spurbeck	G	Ohio	Licking County	2021-12-12	False
+dengue	spurbeck	G	Ohio	Licking County	2021-12-05	False
+dengue	spurbeck	G	Ohio	Licking County	2022-01-09	False
+dengue	spurbeck	G	Ohio	Licking County	2022-01-02	False
+dengue	spurbeck	F	Ohio	Franklin County	2021-12-26	False
+dengue	spurbeck	F	Ohio	Franklin County	2021-12-19	False
+dengue	spurbeck	F	Ohio	Franklin County	2021-12-12	False
+dengue	spurbeck	F	Ohio	Franklin County	2021-12-05	False
+dengue	spurbeck	F	Ohio	Franklin County	2022-01-09	False
+dengue	spurbeck	F	Ohio	Franklin County	2022-01-02	False
+dengue	spurbeck	A	Ohio	Summit County	2021-12-05	False
+dengue	spurbeck	E	Ohio	Sandusky County	2021-12-26	False
+dengue	spurbeck	E	Ohio	Sandusky County	2021-12-19	False
+dengue	spurbeck	E	Ohio	Sandusky County	2021-12-12	False
+dengue	spurbeck	E	Ohio	Sandusky County	2021-12-05	False
+dengue	spurbeck	E	Ohio	Sandusky County	2022-01-09	False
+dengue	spurbeck	E	Ohio	Sandusky County	2022-01-02	False
+dengue	spurbeck	D	Ohio	Lawrence County	2021-12-19	False
+dengue	spurbeck	D	Ohio	Lawrence County	2021-12-12	False
+dengue	spurbeck	D	Ohio	Lawrence County	2021-12-05	False
+dengue	spurbeck	J	Ohio	Montogmery County	2022-01-09	False
+dengue	spurbeck	J	Ohio	Montogmery County	2022-01-02	False
+dengue	spurbeck	I	Ohio	Greene County	2021-12-26	False
+dengue	spurbeck	I	Ohio	Greene County	2021-12-19	False
+dengue	spurbeck	I	Ohio	Greene County	2021-12-12	False
+dengue	spurbeck	A	Ohio	Summit County	2021-12-19	False
+dengue	spurbeck	I	Ohio	Greene County	2021-12-05	False
+dengue	spurbeck	D	Ohio	Lawrence County	2022-01-09	False
+dengue	spurbeck	A	Ohio	Summit County	2022-01-09	False
+dengue	spurbeck	C	Ohio	Lucas County	2021-12-19	False
+dengue	spurbeck	C	Ohio	Lucas County	2021-12-05	False
+dengue	spurbeck	C	Ohio	Lucas County	2022-01-09	False
+dengue	spurbeck	C	Ohio	Lucas County	2022-01-02	False
+dengue	spurbeck	B	Ohio	Trumbull County	2021-12-26	False
+dengue	spurbeck	B	Ohio	Trumbull County	2021-12-19	False
+dengue	spurbeck	B	Ohio	Trumbull County	2021-12-12	False
+dengue	spurbeck	B	Ohio	Trumbull County	2021-12-05	False
+dengue	spurbeck	B	Ohio	Trumbull County	2022-01-09	False
+dengue	spurbeck	B	Ohio	Trumbull County	2022-01-02	False
+dengue	spurbeck	A	Ohio	Summit County	2021-12-26	False
+dengue	spurbeck	J	Ohio	Montogmery County	2021-12-26	False
+dengue	spurbeck	J	Ohio	Montogmery County	2021-12-19	False
+dengue	spurbeck	J	Ohio	Montogmery County	2021-12-12	False
+dengue	spurbeck	J	Ohio	Montogmery County	2021-12-05	False
+dengue	spurbeck	A	Ohio	Summit County	2022-01-02	False
+hav	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+hav	crits_christoph	Marin	California	Marin County	2020-07-01	False
+hav	crits_christoph	Marin	California	Marin County	2020-07-01	False
+hav	crits_christoph	SF	California	San Francisco County	2020-06-30	False
+hav	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+hav	crits_christoph	Oakland	California	Alameda County	2020-06-30	False
+hav	crits_christoph	Berkeley	California	Alameda County	2020-06-30	False
+hav	rothman	SB	California	San Diego County	2020-09-10	False
+hav	rothman	SB	California	San Diego County	2020-09-24	False
+hav	rothman	SB	California	San Diego County	2020-08-27	False
+hav	rothman	SB	California	San Diego County	2020-08-13	False
+hav	rothman	SB	California	San Diego County	2020-10-22	False
+hav	rothman	PL	California	San Diego County	2020-09-24	False
+hav	rothman	PL	California	San Diego County	2020-09-10	False
+hav	rothman	PL	California	San Diego County	2020-08-27	False
+hav	rothman	PL	California	San Diego County	2020-08-13	False
+hav	rothman	PL	California	San Diego County	2020-10-22	False
+hav	rothman	OC	California	Orange County	2020-09-30	False
+hav	rothman	OC	California	Orange County	2020-09-23	False
+hav	rothman	OC	California	Orange County	2020-09-16	False
+hav	rothman	OC	California	Orange County	2020-09-03	False
+hav	rothman	OC	California	Orange County	2020-09-02	False
+hav	rothman	OC	California	Orange County	2020-08-26	False
+hav	rothman	OC	California	Orange County	2020-08-19	False
+hav	rothman	OC	California	Orange County	2020-08-12	False
+hav	rothman	OC	California	Orange County	2020-10-07	False
+hav	rothman	NC	California	San Diego County	2020-09-11	False
+hav	rothman	NC	California	San Diego County	2020-08-28	False
+hav	rothman	NC	California	San Diego County	2020-08-14	False
+hav	rothman	NC	California	San Diego County	2020-10-23	False
+hav	rothman	NC	California	San Diego County	2020-10-09	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-09-22	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-09-15	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-09-08	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-09-01	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-08-25	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-08-18	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-08-11	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-10-13	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-10-06	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-10-27	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-10-20	False
+hav	rothman	HTP	California	Los Angeles County	2020-09-15	False
+hav	rothman	HTP	California	Los Angeles County	2020-09-08	False
+hav	rothman	HTP	California	Los Angeles County	2020-09-01	False
+hav	rothman	HTP	California	Los Angeles County	2020-08-25	False
+hav	rothman	HTP	California	Los Angeles County	2020-08-18	False
+hav	rothman	HTP	California	Los Angeles County	2020-08-11	False
+hav	rothman	HTP	California	Los Angeles County	2020-10-27	False
+hav	rothman	HTP	California	Los Angeles County	2020-10-20	False
+hav	rothman	HTP	California	Los Angeles County	2020-10-13	False
+hav	rothman	HTP	California	Los Angeles County	2020-10-02	False
+hav	rothman	SJ	California	Los Angeles County	2020-09-23	False
+hav	rothman	SJ	California	Los Angeles County	2020-11-04	False
+hav	rothman	SJ	California	Los Angeles County	2020-11-18	False
+hav	rothman	SJ	California	Los Angeles County	2020-11-11	False
+hav	rothman	SB	California	San Diego County	2020-11-05	False
+hav	rothman	SB	California	San Diego County	2020-10-08	False
+hav	rothman	PL	California	San Diego County	2020-12-28	False
+hav	rothman	PL	California	San Diego County	2020-12-22	False
+hav	rothman	PL	California	San Diego County	2020-12-14	False
+hav	rothman	PL	California	San Diego County	2020-11-05	False
+hav	rothman	PL	California	San Diego County	2020-11-30	False
+hav	rothman	PL	California	San Diego County	2020-11-29	False
+hav	rothman	PL	California	San Diego County	2021-01-04	False
+hav	rothman	PL	California	San Diego County	2021-01-03	False
+hav	rothman	OC	California	Orange County	2020-12-21	False
+hav	rothman	OC	California	Orange County	2020-12-14	False
+hav	rothman	OC	California	Orange County	2020-11-09	False
+hav	rothman	OC	California	Orange County	2020-11-04	False
+hav	rothman	OC	California	Orange County	2020-11-25	False
+hav	rothman	OC	California	Orange County	2020-11-18	False
+hav	rothman	OC	California	Orange County	2020-11-11	False
+hav	rothman	NC	California	San Diego County	2020-09-25	False
+hav	rothman	NC	California	San Diego County	2020-11-06	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-09-29	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-11-03	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-11-17	False
+hav	rothman	JWPCP	California	Los Angeles County	2020-11-10	False
+hav	rothman	HTP	California	Los Angeles County	2020-09-29	False
+hav	rothman	HTP	California	Los Angeles County	2020-09-22	False
+hav	rothman	HTP	California	Los Angeles County	2020-12-29	False
+hav	rothman	HTP	California	Los Angeles County	2020-12-22	False
+hav	rothman	HTP	California	Los Angeles County	2020-12-15	False
+hav	rothman	HTP	California	Los Angeles County	2020-12-04	False
+hav	rothman	HTP	California	Los Angeles County	2020-12-01	False
+hav	rothman	HTP	California	Los Angeles County	2020-11-03	False
+hav	rothman	HTP	California	Los Angeles County	2020-11-24	False
+hav	rothman	HTP	California	Los Angeles County	2020-11-17	False
+hav	rothman	HTP	California	Los Angeles County	2021-01-03	False
+hav	rothman	SJ	California	Los Angeles County	2020-09-30	False
+hav	rothman	SJ	California	Los Angeles County	2020-09-16	False
+hav	rothman	SJ	California	Los Angeles County	2020-09-09	False
+hav	rothman	SJ	California	Los Angeles County	2020-09-02	False
+hav	rothman	SJ	California	Los Angeles County	2020-08-26	False
+hav	rothman	SJ	California	Los Angeles County	2020-08-19	False
+hav	rothman	SJ	California	Los Angeles County	2020-08-12	False
+hav	rothman	SJ	California	Los Angeles County	2020-10-28	False
+hav	rothman	SJ	California	Los Angeles County	2020-10-21	False
+hav	rothman	SJ	California	Los Angeles County	2020-10-14	False
+hav	rothman	SJ	California	Los Angeles County	2020-10-07	False
+hav	rothman	OC	California	Orange County	2020-10-21	False
+hav	rothman	ESC	California	San Diego County	2020-07-27	False
+hav	rothman	ESC	California	San Diego County	2020-07-20	False
+hav	spurbeck	I	Ohio	Greene County	2022-01-09	False
+hav	spurbeck	I	Ohio	Greene County	2022-01-02	False
+hav	spurbeck	H	Ohio	Franklin County	2021-12-26	False
+hav	spurbeck	H	Ohio	Franklin County	2021-12-19	False
+hav	spurbeck	H	Ohio	Franklin County	2021-12-05	False
+hav	spurbeck	H	Ohio	Franklin County	2022-01-09	False
+hav	spurbeck	H	Ohio	Franklin County	2022-01-02	False
+hav	spurbeck	G	Ohio	Licking County	2021-12-26	False
+hav	spurbeck	G	Ohio	Licking County	2021-12-19	False
+hav	spurbeck	A	Ohio	Summit County	2021-12-12	False
+hav	spurbeck	G	Ohio	Licking County	2021-12-12	False
+hav	spurbeck	G	Ohio	Licking County	2021-12-05	False
+hav	spurbeck	G	Ohio	Licking County	2022-01-09	False
+hav	spurbeck	G	Ohio	Licking County	2022-01-02	False
+hav	spurbeck	F	Ohio	Franklin County	2021-12-26	False
+hav	spurbeck	F	Ohio	Franklin County	2021-12-19	False
+hav	spurbeck	F	Ohio	Franklin County	2021-12-12	False
+hav	spurbeck	F	Ohio	Franklin County	2021-12-05	False
+hav	spurbeck	F	Ohio	Franklin County	2022-01-09	False
+hav	spurbeck	F	Ohio	Franklin County	2022-01-02	False
+hav	spurbeck	A	Ohio	Summit County	2021-12-05	False
+hav	spurbeck	E	Ohio	Sandusky County	2021-12-26	False
+hav	spurbeck	E	Ohio	Sandusky County	2021-12-19	False
+hav	spurbeck	E	Ohio	Sandusky County	2021-12-12	False
+hav	spurbeck	E	Ohio	Sandusky County	2021-12-05	False
+hav	spurbeck	E	Ohio	Sandusky County	2022-01-09	False
+hav	spurbeck	E	Ohio	Sandusky County	2022-01-02	False
+hav	spurbeck	D	Ohio	Lawrence County	2021-12-19	False
+hav	spurbeck	D	Ohio	Lawrence County	2021-12-12	False
+hav	spurbeck	D	Ohio	Lawrence County	2021-12-05	False
+hav	spurbeck	J	Ohio	Montogmery County	2022-01-09	False
+hav	spurbeck	J	Ohio	Montogmery County	2022-01-02	False
+hav	spurbeck	I	Ohio	Greene County	2021-12-26	False
+hav	spurbeck	I	Ohio	Greene County	2021-12-19	False
+hav	spurbeck	I	Ohio	Greene County	2021-12-12	False
+hav	spurbeck	A	Ohio	Summit County	2021-12-19	False
+hav	spurbeck	I	Ohio	Greene County	2021-12-05	False
+hav	spurbeck	D	Ohio	Lawrence County	2022-01-09	False
+hav	spurbeck	A	Ohio	Summit County	2022-01-09	False
+hav	spurbeck	C	Ohio	Lucas County	2021-12-19	False
+hav	spurbeck	C	Ohio	Lucas County	2021-12-05	False
+hav	spurbeck	C	Ohio	Lucas County	2022-01-09	False
+hav	spurbeck	C	Ohio	Lucas County	2022-01-02	False
+hav	spurbeck	B	Ohio	Trumbull County	2021-12-26	False
+hav	spurbeck	B	Ohio	Trumbull County	2021-12-19	False
+hav	spurbeck	B	Ohio	Trumbull County	2021-12-12	False
+hav	spurbeck	B	Ohio	Trumbull County	2021-12-05	False
+hav	spurbeck	B	Ohio	Trumbull County	2022-01-09	False
+hav	spurbeck	B	Ohio	Trumbull County	2022-01-02	False
+hav	spurbeck	A	Ohio	Summit County	2021-12-26	False
+hav	spurbeck	J	Ohio	Montogmery County	2021-12-26	False
+hav	spurbeck	J	Ohio	Montogmery County	2021-12-19	False
+hav	spurbeck	J	Ohio	Montogmery County	2021-12-12	False
+hav	spurbeck	J	Ohio	Montogmery County	2021-12-05	False
+hav	spurbeck	A	Ohio	Summit County	2022-01-02	False
+hcv	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+hcv	crits_christoph	Marin	California	Marin County	2020-07-01	True
+hcv	crits_christoph	Marin	California	Marin County	2020-07-01	True
+hcv	crits_christoph	SF	California	San Francisco County	2020-06-30	True
+hcv	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+hcv	crits_christoph	Oakland	California	Alameda County	2020-06-30	True
+hcv	crits_christoph	Berkeley	California	Alameda County	2020-06-30	True
+hcv	rothman	SB	California	San Diego County	2020-09-10	True
+hcv	rothman	SB	California	San Diego County	2020-09-24	True
+hcv	rothman	SB	California	San Diego County	2020-08-27	True
+hcv	rothman	SB	California	San Diego County	2020-08-13	True
+hcv	rothman	SB	California	San Diego County	2020-10-22	True
+hcv	rothman	PL	California	San Diego County	2020-09-24	True
+hcv	rothman	PL	California	San Diego County	2020-09-10	True
+hcv	rothman	PL	California	San Diego County	2020-08-27	True
+hcv	rothman	PL	California	San Diego County	2020-08-13	True
+hcv	rothman	PL	California	San Diego County	2020-10-22	True
+hcv	rothman	OC	California	Orange County	2020-09-30	True
+hcv	rothman	OC	California	Orange County	2020-09-23	True
+hcv	rothman	OC	California	Orange County	2020-09-16	True
+hcv	rothman	OC	California	Orange County	2020-09-03	True
+hcv	rothman	OC	California	Orange County	2020-09-02	True
+hcv	rothman	OC	California	Orange County	2020-08-26	True
+hcv	rothman	OC	California	Orange County	2020-08-19	True
+hcv	rothman	OC	California	Orange County	2020-08-12	True
+hcv	rothman	OC	California	Orange County	2020-10-07	True
+hcv	rothman	NC	California	San Diego County	2020-09-11	True
+hcv	rothman	NC	California	San Diego County	2020-08-28	True
+hcv	rothman	NC	California	San Diego County	2020-08-14	True
+hcv	rothman	NC	California	San Diego County	2020-10-23	True
+hcv	rothman	NC	California	San Diego County	2020-10-09	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-09-22	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-09-15	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-09-08	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-09-01	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-08-25	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-08-18	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-08-11	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-10-13	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-10-06	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-10-27	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-10-20	True
+hcv	rothman	HTP	California	Los Angeles County	2020-09-15	True
+hcv	rothman	HTP	California	Los Angeles County	2020-09-08	True
+hcv	rothman	HTP	California	Los Angeles County	2020-09-01	True
+hcv	rothman	HTP	California	Los Angeles County	2020-08-25	True
+hcv	rothman	HTP	California	Los Angeles County	2020-08-18	True
+hcv	rothman	HTP	California	Los Angeles County	2020-08-11	True
+hcv	rothman	HTP	California	Los Angeles County	2020-10-27	True
+hcv	rothman	HTP	California	Los Angeles County	2020-10-20	True
+hcv	rothman	HTP	California	Los Angeles County	2020-10-13	True
+hcv	rothman	HTP	California	Los Angeles County	2020-10-02	True
+hcv	rothman	SJ	California	Los Angeles County	2020-09-23	True
+hcv	rothman	SJ	California	Los Angeles County	2020-11-04	True
+hcv	rothman	SJ	California	Los Angeles County	2020-11-18	True
+hcv	rothman	SJ	California	Los Angeles County	2020-11-11	True
+hcv	rothman	SB	California	San Diego County	2020-11-05	True
+hcv	rothman	SB	California	San Diego County	2020-10-08	True
+hcv	rothman	PL	California	San Diego County	2020-12-28	True
+hcv	rothman	PL	California	San Diego County	2020-12-22	True
+hcv	rothman	PL	California	San Diego County	2020-12-14	True
+hcv	rothman	PL	California	San Diego County	2020-11-05	True
+hcv	rothman	PL	California	San Diego County	2020-11-30	True
+hcv	rothman	PL	California	San Diego County	2020-11-29	True
+hcv	rothman	PL	California	San Diego County	2021-01-04	False
+hcv	rothman	PL	California	San Diego County	2021-01-03	False
+hcv	rothman	OC	California	Orange County	2020-12-21	True
+hcv	rothman	OC	California	Orange County	2020-12-14	True
+hcv	rothman	OC	California	Orange County	2020-11-09	True
+hcv	rothman	OC	California	Orange County	2020-11-04	True
+hcv	rothman	OC	California	Orange County	2020-11-25	True
+hcv	rothman	OC	California	Orange County	2020-11-18	True
+hcv	rothman	OC	California	Orange County	2020-11-11	True
+hcv	rothman	NC	California	San Diego County	2020-09-25	True
+hcv	rothman	NC	California	San Diego County	2020-11-06	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-09-29	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-11-03	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-11-17	True
+hcv	rothman	JWPCP	California	Los Angeles County	2020-11-10	True
+hcv	rothman	HTP	California	Los Angeles County	2020-09-29	True
+hcv	rothman	HTP	California	Los Angeles County	2020-09-22	True
+hcv	rothman	HTP	California	Los Angeles County	2020-12-29	True
+hcv	rothman	HTP	California	Los Angeles County	2020-12-22	True
+hcv	rothman	HTP	California	Los Angeles County	2020-12-15	True
+hcv	rothman	HTP	California	Los Angeles County	2020-12-04	True
+hcv	rothman	HTP	California	Los Angeles County	2020-12-01	True
+hcv	rothman	HTP	California	Los Angeles County	2020-11-03	True
+hcv	rothman	HTP	California	Los Angeles County	2020-11-24	True
+hcv	rothman	HTP	California	Los Angeles County	2020-11-17	True
+hcv	rothman	HTP	California	Los Angeles County	2021-01-03	False
+hcv	rothman	SJ	California	Los Angeles County	2020-09-30	True
+hcv	rothman	SJ	California	Los Angeles County	2020-09-16	True
+hcv	rothman	SJ	California	Los Angeles County	2020-09-09	True
+hcv	rothman	SJ	California	Los Angeles County	2020-09-02	True
+hcv	rothman	SJ	California	Los Angeles County	2020-08-26	True
+hcv	rothman	SJ	California	Los Angeles County	2020-08-19	True
+hcv	rothman	SJ	California	Los Angeles County	2020-08-12	True
+hcv	rothman	SJ	California	Los Angeles County	2020-10-28	True
+hcv	rothman	SJ	California	Los Angeles County	2020-10-21	True
+hcv	rothman	SJ	California	Los Angeles County	2020-10-14	True
+hcv	rothman	SJ	California	Los Angeles County	2020-10-07	True
+hcv	rothman	OC	California	Orange County	2020-10-21	True
+hcv	rothman	ESC	California	San Diego County	2020-07-27	True
+hcv	rothman	ESC	California	San Diego County	2020-07-20	True
+hcv	spurbeck	I	Ohio	Greene County	2022-01-09	False
+hcv	spurbeck	I	Ohio	Greene County	2022-01-02	False
+hcv	spurbeck	H	Ohio	Franklin County	2021-12-26	True
+hcv	spurbeck	H	Ohio	Franklin County	2021-12-19	True
+hcv	spurbeck	H	Ohio	Franklin County	2021-12-05	True
+hcv	spurbeck	H	Ohio	Franklin County	2022-01-09	False
+hcv	spurbeck	H	Ohio	Franklin County	2022-01-02	False
+hcv	spurbeck	G	Ohio	Licking County	2021-12-26	True
+hcv	spurbeck	G	Ohio	Licking County	2021-12-19	True
+hcv	spurbeck	A	Ohio	Summit County	2021-12-12	True
+hcv	spurbeck	G	Ohio	Licking County	2021-12-12	True
+hcv	spurbeck	G	Ohio	Licking County	2021-12-05	True
+hcv	spurbeck	G	Ohio	Licking County	2022-01-09	False
+hcv	spurbeck	G	Ohio	Licking County	2022-01-02	False
+hcv	spurbeck	F	Ohio	Franklin County	2021-12-26	True
+hcv	spurbeck	F	Ohio	Franklin County	2021-12-19	True
+hcv	spurbeck	F	Ohio	Franklin County	2021-12-12	True
+hcv	spurbeck	F	Ohio	Franklin County	2021-12-05	True
+hcv	spurbeck	F	Ohio	Franklin County	2022-01-09	False
+hcv	spurbeck	F	Ohio	Franklin County	2022-01-02	False
+hcv	spurbeck	A	Ohio	Summit County	2021-12-05	True
+hcv	spurbeck	E	Ohio	Sandusky County	2021-12-26	True
+hcv	spurbeck	E	Ohio	Sandusky County	2021-12-19	True
+hcv	spurbeck	E	Ohio	Sandusky County	2021-12-12	True
+hcv	spurbeck	E	Ohio	Sandusky County	2021-12-05	True
+hcv	spurbeck	E	Ohio	Sandusky County	2022-01-09	False
+hcv	spurbeck	E	Ohio	Sandusky County	2022-01-02	False
+hcv	spurbeck	D	Ohio	Lawrence County	2021-12-19	True
+hcv	spurbeck	D	Ohio	Lawrence County	2021-12-12	True
+hcv	spurbeck	D	Ohio	Lawrence County	2021-12-05	True
+hcv	spurbeck	J	Ohio	Montogmery County	2022-01-09	False
+hcv	spurbeck	J	Ohio	Montogmery County	2022-01-02	False
+hcv	spurbeck	I	Ohio	Greene County	2021-12-26	True
+hcv	spurbeck	I	Ohio	Greene County	2021-12-19	True
+hcv	spurbeck	I	Ohio	Greene County	2021-12-12	True
+hcv	spurbeck	A	Ohio	Summit County	2021-12-19	True
+hcv	spurbeck	I	Ohio	Greene County	2021-12-05	True
+hcv	spurbeck	D	Ohio	Lawrence County	2022-01-09	False
+hcv	spurbeck	A	Ohio	Summit County	2022-01-09	False
+hcv	spurbeck	C	Ohio	Lucas County	2021-12-19	True
+hcv	spurbeck	C	Ohio	Lucas County	2021-12-05	True
+hcv	spurbeck	C	Ohio	Lucas County	2022-01-09	False
+hcv	spurbeck	C	Ohio	Lucas County	2022-01-02	False
+hcv	spurbeck	B	Ohio	Trumbull County	2021-12-26	True
+hcv	spurbeck	B	Ohio	Trumbull County	2021-12-19	True
+hcv	spurbeck	B	Ohio	Trumbull County	2021-12-12	True
+hcv	spurbeck	B	Ohio	Trumbull County	2021-12-05	True
+hcv	spurbeck	B	Ohio	Trumbull County	2022-01-09	False
+hcv	spurbeck	B	Ohio	Trumbull County	2022-01-02	False
+hcv	spurbeck	A	Ohio	Summit County	2021-12-26	True
+hcv	spurbeck	J	Ohio	Montogmery County	2021-12-26	True
+hcv	spurbeck	J	Ohio	Montogmery County	2021-12-19	True
+hcv	spurbeck	J	Ohio	Montogmery County	2021-12-12	True
+hcv	spurbeck	J	Ohio	Montogmery County	2021-12-05	True
+hcv	spurbeck	A	Ohio	Summit County	2022-01-02	False
