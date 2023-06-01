@@ -35,13 +35,11 @@ def is_match(
 V = TypeVar("V", bound=Variable)
 
 
-def lookup_variable(
+def lookup_variables(
     attrs: SampleAttributes,
     vars: list[V],
-) -> V:
-    matches = [v for v in vars if is_match(attrs, v)]
-    assert len(matches) == 1
-    return matches[0]
+) -> list[V]:
+    return [v for v in vars if is_match(attrs, v)]
 
 
 P = TypeVar("P", bound=Predictor)
@@ -197,9 +195,10 @@ def build_model(
             sample=s,
             attrs=attrs,
             viral_reads=mgs_data.viral_reads(bioproject, taxids)[s],
-            predictor=lookup_variable(attrs, predictors),
+            predictor=variable,
         )
         for s, attrs in samples.items()
+        for variable in lookup_variables(attrs, predictors)
     ]
     return Model(data=data)
 
