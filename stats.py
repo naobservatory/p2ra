@@ -170,6 +170,11 @@ class Model(Generic[P]):
         return g
 
 
+def choose_predictor(predictors: list[Predictor]) -> Predictor:
+    assert len(predictors) == 1
+    return predictors[0]
+
+
 def build_model(
     mgs_data: MGSData,
     bioproject: BioProject,
@@ -195,10 +200,9 @@ def build_model(
             sample=s,
             attrs=attrs,
             viral_reads=mgs_data.viral_reads(bioproject, taxids)[s],
-            predictor=variable,
+            predictor=choose_predictor(lookup_variables(attrs, predictors)),
         )
         for s, attrs in samples.items()
-        for variable in lookup_variables(attrs, predictors)
     ]
     return Model(data=data)
 

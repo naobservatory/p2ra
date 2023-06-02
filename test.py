@@ -453,8 +453,16 @@ class TestStats(unittest.TestCase):
         for pathogen_name in ["sars_cov_2", "norovirus"]:
             for study, bioproject in bioprojects.items():
                 with self.subTest(study=study, pathogen=pathogen_name):
-                    stats.build_model(
+                    model = stats.build_model(
                         mgs_data, bioproject, pathogen_name, predictor
+                    )
+                    self.assertEqual(
+                        len(model.data),
+                        len(
+                            mgs_data.sample_attributes(
+                                bioproject, enrichment=mgs.Enrichment.VIRAL
+                            )
+                        ),
                     )
 
 
