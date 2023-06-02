@@ -108,7 +108,7 @@ king_county_confirmed_cases_rate_2018 = IncidenceRate(
     source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
 )
 
-to_2021_incidence = Scalar(scalar=1 / 4.5, date="2021")
+to_yearly_incidence = Scalar(scalar=1 / 4.5)
 
 
 ohio_county_hav_incidences = []
@@ -132,8 +132,8 @@ with open(prevalence_data_filename("havCaseCountsOhioCounties.csv")) as file:
             annual_infections=infections,
         )
         incidence = dataclasses.replace(
-            aggregate_incidence_2018_to_2022 * to_2021_incidence,
-            date_source=to_2021_incidence,
+            aggregate_incidence_2018_to_2022 * to_yearly_incidence,
+            date_source=Variable(date="2021"),
         )
 
         ohio_county_hav_incidences.append(
