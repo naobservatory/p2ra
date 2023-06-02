@@ -457,17 +457,17 @@ class TestStats(unittest.TestCase):
         )
         self.assertFalse(stats.is_match(self.attrs, v7))
 
-    def test_lookup_variable(self):
+    def test_lookup_variables(self):
         v1 = Variable(country="United States", date="2019")
         v2 = Variable(country="United States", date="2019-05-14")
         v3 = Variable(country="United States", date="2019-05-15")
-        self.assertEqual(stats.lookup_variable(self.attrs, [v1, v3]), v1)
-        self.assertEqual(stats.lookup_variable(self.attrs, [v2, v3]), v2)
-        self.assertEqual(stats.lookup_variable(self.attrs, [v3, v1]), v1)
-        with self.assertRaises(AssertionError):
-            stats.lookup_variable(self.attrs, [v1, v2])
-        with self.assertRaises(AssertionError):
-            stats.lookup_variable(self.attrs, [v3])
+        self.assertEqual(stats.lookup_variables(self.attrs, [v1, v3]), [v1])
+        self.assertEqual(stats.lookup_variables(self.attrs, [v2, v3]), [v2])
+        self.assertEqual(stats.lookup_variables(self.attrs, [v3, v1]), [v1])
+        self.assertEqual(
+            stats.lookup_variables(self.attrs, [v1, v2]), [v1, v2]
+        )
+        self.assertEqual(stats.lookup_variables(self.attrs, [v3]), [])
 
     def test_build_model(self):
         bioprojects = {
@@ -479,8 +479,16 @@ class TestStats(unittest.TestCase):
         for pathogen_name in ["sars_cov_2", "norovirus"]:
             for study, bioproject in bioprojects.items():
                 with self.subTest(study=study, pathogen=pathogen_name):
-                    stats.build_model(
+                    model = stats.build_model(
                         mgs_data, bioproject, pathogen_name, predictor
+                    )
+                    self.assertEqual(
+                        len(model.data),
+                        len(
+                            mgs_data.sample_attributes(
+                                bioproject, enrichment=mgs.Enrichment.VIRAL
+                            )
+                        ),
                     )
 
 
