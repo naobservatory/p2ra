@@ -6,10 +6,10 @@ transmitted through close contact with infected body fluids, such as saliva,
 urine, blood, semen, and breast milk. CMV can also be transmitted during
 pregnancy.
 
-In healthy individuals with intact immune systems, CMV infection typically
-lasts for a few weeks to a few months. However, the virus can remain dormant
-in the body for life  after the acute phase, and may reactivate later under
-certain circumstances such as when the immune system is weakened.
+Most people infected with CMV show no signs or symptoms. However, the virus 
+remains dormant in latently infected cells and may reactivate later under 
+certain circumstances, for instance when the immune system is weakened during 
+organ transplantation.
 """
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
@@ -17,11 +17,11 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(10359),
 )
 
-ger_adult_seroprevalence_estimate = Prevalence(
+de_adult_seroprevalence_estimate = Prevalence(
     # Estimate is for 18-79 year olds. In reality, this implies slightly lower
     # than 57% for the overall population including children
-    infections_per_100k=0.567 * 100000,
-    confidence_interval=(0.548 * 100000, 0.587 * 100000),
+    infections_per_100k=0.567 * 100_000,
+    confidence_interval=(0.548 * 100_000, 0.587 * 100_000),
     number_of_participants=6552,
     country="Germany",
     date="1998",
@@ -55,11 +55,26 @@ nhanes_6_to_49_US_seroprevalence = Prevalence(
     end_date="2004",
 )
 
+nhanes_6_to_49_US_urine_shedding = Prevalence(
+    infections_per_100k=0.0383 * 100_000,
+    # Among 6,828 CMV IgG-positive subjects tested, 537 had CMV DNA detected
+    # in urine—a shedding prevalence of 9.70%. Among persons 6–49 years,
+    # shedding prevalence was 3.83%. The prevalence of urinary shedding was
+    # inversely associated with increasing age (26.60%, 6.50%, and 3.45% in
+    # CMV IgG-positive subjects aged 6–11, 12–19, and 20–49 years, respectively
+    country="US",
+    active=Active.ACTIVE,
+    number_of_participants=6828,
+    start_date="1999",
+    end_date="2004",
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6097960/#:~:text=Among%206%2C828%20CMV%20IgG%2Dpositive%20subjects%20tested%2C%20537,11%2C%2012%E2%80%9319%2C%20and%2020%E2%80%9349%20years%2C%20respectively",
+)
+
 
 def estimate_prevalences():
     return [
         nhanes_6_to_49_US_seroprevalence,
-        ger_adult_seroprevalence_estimate,
+        de_adult_seroprevalence_estimate,
         adult_seroprevalence_raleigh_durham_US,
     ]
 
