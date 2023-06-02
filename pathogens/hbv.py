@@ -7,14 +7,15 @@ background = """Hepatitis B is a liver infection caused by the Hepatitis B
  carcinoma"""
 
 # TODO:
-# - Add in-house NHANES estimate. Specifically, we could present NHANES data
+# 1. Add in-house NHANES estimate. Specifically, we could present NHANES data
 # for HBV-core antibody (evidence of past infection), and HBV-surface antigen
 # (evidence of active acute or chronic infection):
 # https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/HEPBD_J.htm
-# - Incorporate an estimate based on mortality date. This data can be acquired
-# from the CDC WONDER database (https://wonder.cdc.gov/mcd-icd10-provisional.html). Parameters for relevant query is:
+# 2. Incorporate an estimate based on mortality date. This data can be acquired
+# from the CDC WONDER database (https://wonder.cdc.gov/mcd-icd10-provisional.html).
+# Parameters for relevant query is:
 # - Select time period of death": 2022, and
-# - Slect underlying cause of death: B16 (Acute hepatitis B).
+# - Select underlying cause of death: B16 (Acute hepatitis B).
 # All other fields can be left as default.
 
 
@@ -24,22 +25,40 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(10407),
 )
 
+us_population_2019 = Population(
+    people=328.2 * 1e6,
+    country="United States",
+    date="2019",
+    source="https://data.census.gov/table?q=us+population+2019&tid=ACSDP1Y2019.DP05",
+)
+
+cdc_acute_underreporting_factor_2020 = Scalar(
+    scalar=6.5,
+    confidence_interval=(3.7, 15.9),
+    coverage_probability=0.95,
+    country="United States",
+    source="https://www.cdc.gov/hepatitis/statistics/2020surveillance/introduction/technical-notes.htm#:~:text=each%20reported%20case%20of%20acute%20hepatitis%20B%20represents%206.5%20estimated%20infections%20(95%25%20bootstrap%20CI%3A%203.7%E2%80%9315.9",
+)
+
+
 cdc_estimated_acute_2019 = IncidenceAbsolute(
     annual_infections=20_700,
     # During 2019, a total of 3,192 acute hepatitis B cases were reported to
     # CDC, resulting in 20,700 estimated infections (95% CI: 11,800–50,800)
-    # after adjusting for case underascertainment and underreporting
+    # after adjusting for case underascertainment and underreporting.
     confidence_interval=(11_800, 50_800),  # 95% Bootstrap Confidence Interval
     coverage_probability=0.95,
     country="United States",
     # I picked 2019 rates, as estimated rates in 2020 were 30% lower, even
-    # while deaths stayed the same: https://www.cdc.gov/hepatitis/statistics/2020surveillance/introduction/national-profile.htm#:~:text=hepatitis%20B%20transmission.-,Data%20from%20death%20certificates%20filed%20in%20the%20vital%20records%20offices%20of,same%20as%20the%20rate%20during%202019%20(0.42%20deaths%20per%20100%2C000%20population).,-Hepatitis%20C
+    # while deaths stayed the same, pointing to undercounting due to
+    # COVID-19: https://www.cdc.gov/hepatitis/statistics/2020surveillance/introduction/national-profile.htm#:~:text=hepatitis%20B%20transmission.-,Data%20from%20death%20certificates%20filed%20in%20the%20vital%20records%20offices%20of,same%20as%20the%20rate%20during%202019%20(0.42%20deaths%20per%20100%2C000%20population).,-Hepatitis%20C
     date="2019",
     source="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=20%2C700%20estimated%20infections%20(95%25%20CI%3A%2011%2C800%E2%80%9350%2C800)",
     methods="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=To%20account%20for,CI%3A%2011.0%E2%80%9347.4).",
 )
 
-estimated_chronic_us_2020 = PrevalenceAbsolute(
+
+estimated_chronic_prevalence_us_2020 = PrevalenceAbsolute(
     infections=1_721_027,
     # This is their mid estimate in table 4, second to last row. The estimate
     # listed in their paper and on the last line of the table doesn't add up.
@@ -58,17 +77,28 @@ estimated_chronic_us_2020 = PrevalenceAbsolute(
 )
 
 
-us_population_2019 = Population(
-    people=328.2 * 1e6,
+ohio_reported_acute_incidence_2021 = IncidenceRate(
+    # This source reports both acute and total (acute+chronic) reported incidence.
+    # We only report acute incidence here, as chronic prevalence is covered by
+    # the national estimate.
+    annual_infections_per_100k=0.9,
     country="United States",
-    date="2019",
-    source="https://data.census.gov/table?q=us+population+2019&tid=ACSDP1Y2019.DP05",
+    state="Ohio",
+    date="2021",
+    # Note that this source has yearly data for 2017-2021 if it's ever needed
+    source="https://odh.ohio.gov/know-our-programs/viral-hepatitis/data-statistics/hbv_5yr_report",
 )
 
 
 def estimate_prevalences() -> list[Prevalence]:
-    return [estimated_chronic_us_2020.to_rate(us_population(year=2020))]
+    return [
+        estimated_chronic_prevalence_us_2020.to_rate(us_population(year=2020))
+    ]
 
 
 def estimate_incidences() -> list[IncidenceRate]:
-    return [cdc_estimated_acute_2019.to_rate(us_population_2019)]
+    return [
+        cdc_estimated_acute_2019.to_rate(us_population_2019),
+        ohio_reported_acute_incidence_2021
+        * cdc_acute_underreporting_factor_2020,
+    ]
