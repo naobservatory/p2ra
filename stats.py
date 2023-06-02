@@ -35,13 +35,11 @@ def is_match(
 V = TypeVar("V", bound=Variable)
 
 
-def lookup_variable(
+def lookup_variables(
     attrs: SampleAttributes,
     vars: list[V],
-) -> V:
-    matches = [v for v in vars if is_match(attrs, v)]
-    assert len(matches) == 1
-    return matches[0]
+) -> list[V]:
+    return [v for v in vars if is_match(attrs, v)]
 
 
 P = TypeVar("P", bound=Predictor)
@@ -172,6 +170,11 @@ class Model(Generic[P]):
         return g
 
 
+def choose_predictor(predictors: list[Predictor]) -> Predictor:
+    assert len(predictors) == 1
+    return predictors[0]
+
+
 def build_model(
     mgs_data: MGSData,
     bioproject: BioProject,
@@ -197,7 +200,7 @@ def build_model(
             sample=s,
             attrs=attrs,
             viral_reads=mgs_data.viral_reads(bioproject, taxids)[s],
-            predictor=lookup_variable(attrs, predictors),
+            predictor=choose_predictor(lookup_variables(attrs, predictors)),
         )
         for s, attrs in samples.items()
     ]

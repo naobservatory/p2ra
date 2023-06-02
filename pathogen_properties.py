@@ -283,16 +283,6 @@ class Taggable(Variable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class Population(Taggable):
-    """A number of people"""
-
-    people: float
-
-    def __sub__(self, other: "Population") -> "Population":
-        return dataclasses.replace(self, people=self.people - other.people)
-
-
-@dataclass(kw_only=True, eq=True, frozen=True)
 class Scalar(Variable):
     scalar: float
 
@@ -308,6 +298,29 @@ class Predictor(abc.ABC, Variable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
+class Population(Taggable):
+    """A number of people"""
+
+    people: float
+
+    def __mul__(self, scalar: Scalar) -> "Population":
+        return Population(
+            people=self.people * scalar.scalar,
+            inputs=[self, scalar],
+            date_source=self,
+            location_source=self,
+        )
+
+    def __sub__(self: "Population", other: "Population") -> "Population":
+        return Population(
+            people=self.people - other.people,
+            inputs=[self, other],
+            date_source=self,
+            location_source=self,
+        )
+
+
+@dataclass(kw_only=True, eq=True, frozen=True)
 class Prevalence(Predictor):
     """What fraction of people have this pathogen at some moment"""
 
@@ -320,6 +333,15 @@ class Prevalence(Predictor):
     def __mul__(self, scalar: Scalar) -> "Prevalence":
         return Prevalence(
             infections_per_100k=self.infections_per_100k * scalar.scalar,
+            inputs=[self, scalar],
+            active=self.active,
+            date_source=self,
+            location_source=self,
+        )
+
+    def __truediv__(self, scalar: Scalar) -> "Prevalence":
+        return Prevalence(
+            infections_per_100k=self.infections_per_100k / scalar.scalar,
             inputs=[self, scalar],
             active=self.active,
             date_source=self,
@@ -354,6 +376,19 @@ class Prevalence(Predictor):
             location_source=pairs[0][1],
             date_source=pairs[0][1],
             inputs=itertools.chain.from_iterable(pairs),
+        )
+
+    def __sub__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
+        assert self.active == other.active
+        assert self.parsed_start == other.parsed_start
+        assert self.parsed_end == other.parsed_end
+        return Prevalence(
+            infections_per_100k=self.infections_per_100k
+            - other.infections_per_100k,
+            inputs=[self, other],
+            active=self.active,
+            date_source=self,
+            location_source=self,
         )
 
 
