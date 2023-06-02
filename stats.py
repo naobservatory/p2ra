@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, Optional
 
 import matplotlib  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
@@ -15,22 +15,57 @@ from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
 from pathogen_properties import Predictor, Variable
 from pathogens import pathogens
 
+county_neighbors = {
+    "Los Angeles County": [
+        "Orange County",
+        "San Diego County",
+    ],
+    "San Francisco County": [
+        "Alameda County",
+        "Marin County",
+    ],
+}
 
-def is_match(
+def county_is_close(county_a, county_b):
+    def helper(county_1, county_2):
+        return county_1 in county_neighbors and county_2 in county_neighbors[county_1]
+    return helper(county_a, county_b) or helper(county_b, county_a)
+            
+def date_distance(start, end, target):
+    if start <= target <= end:
+        return 0
+    return min(abs((start - target).days),
+               abs((end - target).days))
+
+def match_quality(
     sample_attrs: SampleAttributes,
     variable: Variable,
-) -> bool:
+) -> Optional[int]:
     country, state, county = variable.get_location()
     start, end = variable.get_dates()
     assert isinstance(sample_attrs.date, date)
-    return (
-        (variable.taxid is None)  # TODO: allow other taxids
-        and (country == sample_attrs.country)
-        and ((state is None) or (state == sample_attrs.state))
-        and ((county is None) or (county == sample_attrs.county))
-        and (start <= sample_attrs.date <= end)
-    )
 
+    if country != sample_attrs.country:
+        return None
+    if state is not None and state != sample_attrs.state:
+        return None
+
+    quality = 0
+    if county is not None:
+        if county == sample_attrs.county:
+            # Prefer an exact match
+            quality += 10
+        elif not county_is_close(county, sample_attrs.county):
+            # If no an exact match, require same metro area
+            return None
+
+    days_off = date_distance(start, end, sample_attrs.date)
+    max_days_off = 7*2 # don't allow date matches more than two weeks out
+    if days_off > max_days_off:
+        return None
+    quality -= days_off
+
+    return quality
 
 V = TypeVar("V", bound=Variable)
 
@@ -39,7 +74,21 @@ def lookup_variables(
     attrs: SampleAttributes,
     vars: list[V],
 ) -> list[V]:
-    return [v for v in vars if is_match(attrs, v)]
+    # Rank all matches by how close they are, then return all the ones tied for
+    # best if there are any acceptable ones.
+    #
+    # We prefer matches that are temporally and geographically close.
+
+    qualities = [
+        (quality, var)
+        for var in vars
+        if (quality := match_quality(attrs, var)) is not None
+    ]
+    
+    if not qualities:
+        return []
+    best_quality = max(quality for (quality, var) in qualities)
+    return [var for (quality, var) in qualities if quality == best_quality]
 
 
 P = TypeVar("P", bound=Predictor)
@@ -171,8 +220,11 @@ class Model(Generic[P]):
 
 
 def choose_predictor(predictors: list[Predictor]) -> Predictor:
-    assert len(predictors) == 1
-    return predictors[0]
+    # TODO: allow other taxids
+    non_taxid_predictors = [
+        predictor for predictor in predictors if not predictor.taxid]
+    assert len(non_taxid_predictors) == 1
+    return non_taxid_predictors[0]
 
 
 def build_model(
