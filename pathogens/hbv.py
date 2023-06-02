@@ -99,7 +99,6 @@ def estimate_prevalences() -> list[Prevalence]:
 def estimate_incidences() -> list[IncidenceRate]:
     return [
         cdc_estimated_acute_2019.to_rate(us_population_2019),
-        cdc_reported_chronic_2019,
         ohio_reported_acute_incidence_2021
         * cdc_acute_underreporting_factor_2020,
     ]
