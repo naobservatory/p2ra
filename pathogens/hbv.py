@@ -17,12 +17,6 @@ background = """Hepatitis B is a liver infection caused by the Hepatitis B
 # - Select time period of death": 2022, and
 # - Select underlying cause of death: B16 (Acute hepatitis B).
 # All other fields can be left as default.
-# 3. I currently lean against arriving at an underreporting factor for chronic
-# infections, as this would eat up too much time and looks too hacky on first
-# glance. If I don't calculate such a factor, I would  drop reported chronic
-# infections, as the estimated prevalence  numbers provided by
-# `estimated_chronic_prevalence_us_2020` provide a cleaner picture of overall
-# chronic Hep B disease burden.
 
 
 pathogen_chars = PathogenChars(
@@ -63,14 +57,6 @@ cdc_estimated_acute_2019 = IncidenceAbsolute(
     methods="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=To%20account%20for,CI%3A%2011.0%E2%80%9347.4).",
 )
 
-cdc_reported_chronic_2019 = IncidenceRate(
-    annual_infections_per_100k=5.9,  # no CI provided
-    # For chronic incidence we do not currently use an underreporting factor.
-    country="United States",
-    date="2019",
-    source="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#ref09:~:text=A%20total%20of%2013%2C859%20new%20cases%20of%20chronic%20hepatitis%20B%20were%20reported%20to%20CDC%20during%202019%2C%20corresponding%20to%20a%20rate%20of%205.9%20cases%20per%20100%2C000%20population.",
-)
-
 
 estimated_chronic_prevalence_us_2020 = PrevalenceAbsolute(
     infections=1_721_027,
@@ -93,24 +79,13 @@ estimated_chronic_prevalence_us_2020 = PrevalenceAbsolute(
 
 ohio_reported_acute_incidence_2021 = IncidenceRate(
     # This source reports both acute and total (acute+chronic) reported incidence.
-    # We report both acute and chronic incidence seperately.
+    # We only report acute incidence here, as chronic prevalence is covered by
+    # the national estimate.
     annual_infections_per_100k=0.9,
     country="United States",
     state="Ohio",
     date="2021",
     # Note that this source has yearly data for 2017-2021 if it's ever needed
-    source="https://odh.ohio.gov/know-our-programs/viral-hepatitis/data-statistics/hbv_5yr_report",
-)
-
-ohio_reported_chronic_incidence_2021 = IncidenceRate(
-    # Same source as above, here we subtract the acute incidence from
-    # the total incidence.
-    # For chronic incidence we do not currently use an underreporting factor.
-    annual_infections_per_100k=16.5 - 0.9,
-    # Importantly, these are newly identified cases and do not represent prevalence.
-    country="United States",
-    county="Ohio",
-    date="2021",
     source="https://odh.ohio.gov/know-our-programs/viral-hepatitis/data-statistics/hbv_5yr_report",
 )
 
@@ -127,5 +102,4 @@ def estimate_incidences() -> list[IncidenceRate]:
         cdc_reported_chronic_2019,
         ohio_reported_acute_incidence_2021
         * cdc_acute_underreporting_factor_2020,
-        ohio_reported_chronic_incidence_2021,
     ]
