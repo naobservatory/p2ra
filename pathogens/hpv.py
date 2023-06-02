@@ -21,7 +21,7 @@ pathogen_chars = PathogenChars(
 )
 
 
-nhanes_2013_2016_18_59_yo_prevalence_estimate = Prevalence(
+nhanes_2013_2016_18_59_yo_prevalence = Prevalence(
     infections_per_100k=0.400 * 100_000,
     # Among 15–59-year-olds, 2013–2016 prevalence of any HPV infection was 40.
     # 0% overall, 41.8% among males, and 38.4% among females.
@@ -35,7 +35,7 @@ nhanes_2013_2016_18_59_yo_prevalence_estimate = Prevalence(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10037549/#:~:text=Any%20HPV-,40.0%20(39.2%2C%2040.9),-41.8%20(40.6%2C%2042.9",
 )
 
-estimated_2018_18_59_yo_incidence_estimate = IncidenceAbsolute(
+nhanes_based_2018_18_59_yo_incidence = IncidenceAbsolute(
     annual_infections=23.6 * 1_000_000,
     # Among 15–59-year-olds, incidence of any HPV infection was 1222 per 10,
     # 000 persons, with 23.6 million persons acquiring any HPV infection in 2018.
