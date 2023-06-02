@@ -56,10 +56,8 @@ population_18_to_59 = Population(
 
 
 def estimate_prevalences():
-    return [nhanes_2013_2016_18_59_yo_prevalence_estimate]
+    return [nhanes_2013_2016_18_59_yo_prevalence]
 
 
 def estimate_incidences():
-    return [
-        estimated_2018_18_59_yo_incidence_estimate.to_rate(population_18_to_59)
-    ]
+    return [nhanes_based_2018_18_59_yo_incidence.to_rate(population_18_to_59)]
