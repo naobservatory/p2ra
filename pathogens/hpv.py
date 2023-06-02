@@ -17,7 +17,7 @@ associated with cancer."""
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=10566,
+    taxid=TaxID(10566),
 )
 
 
