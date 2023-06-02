@@ -403,6 +403,14 @@ class IncidenceAbsolute(Taggable):
             inputs=[self, other],
         )
 
+    def __mul__(self, scalar: Scalar) -> "IncidenceAbsolute":
+        return IncidenceAbsolute(
+            annual_infections=self.annual_infections * scalar.scalar,
+            inputs=[self, scalar],
+            date_source=self,
+            location_source=self,
+        )
+
 
 def prevalence_data_filename(filename):
     return os.path.join(os.path.dirname(__file__), "prevalence-data", filename)

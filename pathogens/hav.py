@@ -1,4 +1,5 @@
 import csv
+import dataclasses
 
 from pathogen_properties import *
 from populations import us_population
@@ -21,15 +22,22 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(12092),
 )
 
-cdc_underreporting_factor_2019_2020 = Scalar(
-    # Underreporting factors for 2019 and 2020 are the same. Source for 2020:
-    # https://www.cdc.gov/hepatitis/statistics/2020surveillance/introduction/technical-notes.htm#:~:text=The%20published%20multipliers%20have%20since%20been%20corrected%20by%20CDC%20to%20indicate%20that%20each%20reported%20case%20of%20acute%20hepatitis%20A%20represents%202.0%20estimated%20infections%20(95%25%20bootstrap%20CI%3A%201.4%E2%80%932.2)
+cdc_underreporting_factor_2019 = Scalar(
     scalar=2,
     confidence_interval=(1.4, 2.2),
     coverage_probability=0.95,
     country="United States",
     source="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=The%20published%20multipliers%20have%20since%20been%20corrected%20by%20CDC%20to%20indicate%20that%20each%20reported%20case%20of%20acute%20hepatitis%20A%20represents%202.0%20estimated%20infections%20(95%25%20bootstrap%20CI%3A%201.4%E2%80%932.2)",
 )
+
+cdc_underreporting_factor_2020 = Scalar(
+    scalar=2,
+    confidence_interval=(1.4, 2.2),
+    coverage_probability=0.95,
+    country="United States",
+    source="https://www.cdc.gov/hepatitis/statistics/2020surveillance/introduction/technical-notes.htm#:~:text=The%20published%20multipliers%20have%20since%20been%20corrected%20by%20CDC%20to%20indicate%20that%20each%20reported%20case%20of%20acute%20hepatitis%20A%20represents%202.0%20estimated%20infections%20(95%25%20bootstrap%20CI%3A%201.4%E2%80%932.2).",
+)
+
 
 us_population_2018 = Population(
     people=327.2 * 1e6,
@@ -46,7 +54,7 @@ us_population_2019 = Population(
 )
 
 us_estimated_incidence_absolute_2018 = IncidenceAbsolute(
-    annual_infections=12_474,
+    annual_infections=24_900,
     confidence_interval=(17_500, 27_400),
     coverage_probability=0.95,
     country="United States",
@@ -100,7 +108,10 @@ king_county_confirmed_cases_rate_2018 = IncidenceRate(
     source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
 )
 
-ohio_county_hav_incidences = {}
+to_2021_incidence = Scalar(scalar=1 / 4.5, date="2021")
+
+
+ohio_county_hav_incidences = []
 
 
 # Data source: https://odh.ohio.gov/know-our-programs/Hepatitis-Surveillance-Program/Hepatitis-A-Statewide-Community-Outbreak/
@@ -109,31 +120,41 @@ with open(prevalence_data_filename("havCaseCountsOhioCounties.csv")) as file:
     reader = csv.reader(file)
     next(reader)
     for row in reader:
-        row[0] = row[0] + " County"
-        ohio_county_hav_incidences[row[0]] = IncidenceAbsolute(
+        county_name = row[0]
+        county = county_name + " County"
+        infections = int(row[1])
+        aggregate_incidence_2018_to_2022 = IncidenceAbsolute(
             country="United States",
             state="Ohio",
-            date="2021",
-            county=row[0],
-            annual_infections=int(row[1]) / 4.5,
-        ).to_rate(us_population(year=2021, state="Ohio", county=row[0]))
+            start_date="2018-01-05",
+            end_date="2022-07-03",
+            county=county,
+            annual_infections=infections,
+        )
+        incidence = dataclasses.replace(
+            aggregate_incidence_2018_to_2022 * to_2021_incidence,
+            date_source=to_2021_incidence,
+        )
+
+        ohio_county_hav_incidences.append(
+            incidence.to_rate(
+                us_population(year=2021, state="Ohio", county=county)
+            )
+            * cdc_underreporting_factor_2020
+        )
 
 
 def estimate_incidences() -> list[IncidenceRate]:
     estimates = [
         us_estimated_incidence_absolute_2018.to_rate(us_population_2018),
         us_estimated_incidence_absolute_2019.to_rate(us_population_2019),
-        king_county_confirmed_cases_rate_2017
-        * cdc_underreporting_factor_2019_2020,
-        king_county_confirmed_cases_rate_2018
-        * cdc_underreporting_factor_2019_2020,
-        ohio_reported_incidence_rate_2020
-        * cdc_underreporting_factor_2019_2020,
-        ohio_reported_incidence_rate_2019
-        * cdc_underreporting_factor_2019_2020,
+        king_county_confirmed_cases_rate_2017 * cdc_underreporting_factor_2019,
+        king_county_confirmed_cases_rate_2018 * cdc_underreporting_factor_2019,
+        ohio_reported_incidence_rate_2020 * cdc_underreporting_factor_2020,
+        ohio_reported_incidence_rate_2019 * cdc_underreporting_factor_2019,
+        *ohio_county_hav_incidences,
     ]
-    for item in ohio_county_hav_incidences:
-        estimates.append((ohio_county_hav_incidences[item]))
+
     return estimates
 
 
