@@ -38,7 +38,7 @@ target_counties = set(
         "Lawrence County, Ohio",
         "Licking County, Ohio",
         "Lucas County, Ohio",
-        "Montogmery County, Ohio",
+        "Montgomery County, Ohio",
         "Sandusky County, Ohio",
         "Summit County, Ohio",
         "Trumbull County, Ohio",
