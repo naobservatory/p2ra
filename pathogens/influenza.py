@@ -162,12 +162,12 @@ def compare_incidence_to_positive_tests(
 
     assert min_date
     assert max_date
-    public_health_labs_infections = IncidenceAbsolute(
+    clinical_labs_infections = IncidenceAbsolute(
         annual_infections=annual_infections,
         tag="us-%s-%s" % (min_date.year, max_date.year),
     )
 
-    return official_incidence / public_health_labs_infections
+    return official_incidence / clinical_labs_infections
 
 
 def estimate_incidences() -> list[IncidenceRate]:

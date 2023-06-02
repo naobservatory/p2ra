@@ -1,12 +1,16 @@
 import abc
 import calendar
+import dataclasses
 import datetime
+import itertools
 import os.path
 import re
 from collections.abc import Iterable
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import NewType, Optional
+
+import numpy as np
 
 # Enums, short for enumerations, are a data type in Python used to represent a set of named values,
 # which are typically used to define a set of related constants with unique names.
@@ -240,6 +244,17 @@ class Variable:
         country, state, county = self.get_location()
         return ", ".join(x for x in [county, state, country] if x)
 
+    @staticmethod
+    def _weightedAverageByPopulation(
+        *pairs: tuple[float, "Population"]
+    ) -> float:
+        return float(
+            np.average(
+                [val for (val, population) in pairs],
+                weights=[population.people for (val, population) in pairs],
+            )
+        )
+
 
 @dataclass(kw_only=True, eq=True, frozen=True)
 class Taggable(Variable):
@@ -268,13 +283,6 @@ class Taggable(Variable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class Population(Taggable):
-    """A number of people"""
-
-    people: float
-
-
-@dataclass(kw_only=True, eq=True, frozen=True)
 class Scalar(Variable):
     scalar: float
 
@@ -287,6 +295,29 @@ class Predictor(abc.ABC, Variable):
     @abc.abstractmethod
     def get_data(self) -> float:
         ...
+
+
+@dataclass(kw_only=True, eq=True, frozen=True)
+class Population(Taggable):
+    """A number of people"""
+
+    people: float
+
+    def __mul__(self, scalar: Scalar) -> "Population":
+        return Population(
+            people=self.people * scalar.scalar,
+            inputs=[self, scalar],
+            date_source=self,
+            location_source=self,
+        )
+
+    def __sub__(self: "Population", other: "Population") -> "Population":
+        return Population(
+            people=self.people - other.people,
+            inputs=[self, other],
+            date_source=self,
+            location_source=self,
+        )
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
@@ -308,6 +339,15 @@ class Prevalence(Predictor):
             location_source=self,
         )
 
+    def __truediv__(self, scalar: Scalar) -> "Prevalence":
+        return Prevalence(
+            infections_per_100k=self.infections_per_100k / scalar.scalar,
+            inputs=[self, scalar],
+            active=self.active,
+            date_source=self,
+            location_source=self,
+        )
+
     def __add__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
         assert self.active == other.active
         assert self.parsed_start == other.parsed_start
@@ -315,6 +355,36 @@ class Prevalence(Predictor):
         return Prevalence(
             infections_per_100k=self.infections_per_100k
             + other.infections_per_100k,
+            inputs=[self, other],
+            active=self.active,
+            date_source=self,
+            location_source=self,
+        )
+
+    @staticmethod
+    def weightedAverageByPopulation(
+        *pairs: tuple["Prevalence", "Population"]
+    ) -> "Prevalence":
+        return dataclasses.replace(
+            pairs[0][0],
+            infections_per_100k=Variable._weightedAverageByPopulation(
+                *[
+                    (prevalence.infections_per_100k, population)
+                    for (prevalence, population) in pairs
+                ]
+            ),
+            location_source=pairs[0][1],
+            date_source=pairs[0][1],
+            inputs=itertools.chain.from_iterable(pairs),
+        )
+
+    def __sub__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
+        assert self.active == other.active
+        assert self.parsed_start == other.parsed_start
+        assert self.parsed_end == other.parsed_end
+        return Prevalence(
+            infections_per_100k=self.infections_per_100k
+            - other.infections_per_100k,
             inputs=[self, other],
             active=self.active,
             date_source=self,
@@ -375,6 +445,23 @@ class IncidenceRate(Predictor):
             inputs=[self, scalar],
             date_source=self,
             location_source=self,
+        )
+
+    @staticmethod
+    def weightedAverageByPopulation(
+        *pairs: tuple["IncidenceRate", "Population"]
+    ) -> "IncidenceRate":
+        return dataclasses.replace(
+            pairs[0][0],
+            annual_infections_per_100k=Variable._weightedAverageByPopulation(
+                *[
+                    (incidence.annual_infections_per_100k, population)
+                    for (incidence, population) in pairs
+                ]
+            ),
+            location_source=pairs[0][1],
+            date_source=pairs[0][1],
+            inputs=itertools.chain.from_iterable(pairs),
         )
 
 
