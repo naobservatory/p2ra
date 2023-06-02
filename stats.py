@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
-from typing import Generic, TypeVar, Optional
+from typing import Generic, Optional, TypeVar
 
 import matplotlib  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
@@ -26,16 +26,22 @@ county_neighbors = {
     ],
 }
 
+
 def county_is_close(county_a, county_b):
     def helper(county_1, county_2):
-        return county_1 in county_neighbors and county_2 in county_neighbors[county_1]
+        return (
+            county_1 in county_neighbors
+            and county_2 in county_neighbors[county_1]
+        )
+
     return helper(county_a, county_b) or helper(county_b, county_a)
-            
+
+
 def date_distance(start, end, target):
     if start <= target <= end:
         return 0
-    return min(abs((start - target).days),
-               abs((end - target).days))
+    return min(abs((start - target).days), abs((end - target).days))
+
 
 def match_quality(
     sample_attrs: SampleAttributes,
@@ -47,10 +53,14 @@ def match_quality(
 
     if country != sample_attrs.country:
         return None
-    if state is not None and state != sample_attrs.state:
-        return None
 
     quality = 0
+    if state is not None:
+        if state != sample_attrs.state:
+            return None
+        # Prefer the specific state.
+        quality += 20
+
     if county is not None:
         if county == sample_attrs.county:
             # Prefer an exact match
@@ -60,12 +70,13 @@ def match_quality(
             return None
 
     days_off = date_distance(start, end, sample_attrs.date)
-    max_days_off = 7*2 # don't allow date matches more than two weeks out
+    max_days_off = 7 * 2  # don't allow date matches more than two weeks out
     if days_off > max_days_off:
         return None
     quality -= days_off
 
     return quality
+
 
 V = TypeVar("V", bound=Variable)
 
@@ -84,7 +95,7 @@ def lookup_variables(
         for var in vars
         if (quality := match_quality(attrs, var)) is not None
     ]
-    
+
     if not qualities:
         return []
     best_quality = max(quality for (quality, var) in qualities)
@@ -222,7 +233,8 @@ class Model(Generic[P]):
 def choose_predictor(predictors: list[Predictor]) -> Predictor:
     # TODO: allow other taxids
     non_taxid_predictors = [
-        predictor for predictor in predictors if not predictor.taxid]
+        predictor for predictor in predictors if not predictor.taxid
+    ]
     assert len(non_taxid_predictors) == 1
     return non_taxid_predictors[0]
 

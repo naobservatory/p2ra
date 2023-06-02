@@ -20,9 +20,6 @@ def start():
     missing = []
 
     for pathogen_name, pathogen in pathogens.items():
-        if pathogen_name in ["west_nile_virus", "dengue"]:
-            continue # We don't care about these
-        
         if pathogen.pathogen_chars.na_type != NAType.RNA:
             continue
 
