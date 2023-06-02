@@ -24,24 +24,18 @@ pathogen_chars = PathogenChars(
 )
 
 
-la_county_under_18_population = Population(
-    # 0.211 = the proportion of LA County residents under 18
-    people=0.211 * 9_818_605,
-    date="2020",
-    country="United States",
-    state="California",
-    county="Los Angeles County",
+la_fraction_u18 = Scalar(
+    scalar=0.211,
     source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia/AGE135221#AGE135221",
 )
+la_population_u18 = (
+    us_population(year=2020, state="California", county="Los Angeles County")
+    * la_fraction_u18
+)
 
-la_county_adult_population = Population(
-    # 0.789 = the proportion of LA County residents over 18
-    people=0.789 * 9_818_605,
-    date="2020",
-    country="United States",
-    state="California",
-    county="Los Angeles County",
-    source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia/AGE135221#AGE135221",
+la_population_18plus = (
+    u(year=2020, state="California", county="Los Angeles County")
+    - la_population_u18
 )
 
 
@@ -89,27 +83,8 @@ la_age_groups = {
     + (406_008 + 399_410)
     + (413_566 + 394_103)
     + (370_948 + 355_002),
-    "40+": 4_965_022  # subtracting <40yo population from total population
-    + 5_048_987
-    - (
-        285_140
-        + 273_131
-        + 306_835
-        + 291_053
-        + 320_666
-        + 303_381
-        + 317_657
-        + 306_849
-        + 330_183
-        + 327_625
-        + 406_008
-        + 399_410
-        + 413_566
-        + 394_103
-        + 370_948
-        + 355_002
-    ),
 }
+
 
 la_county_populations_by_age = {}
 
@@ -124,7 +99,16 @@ for age_group, n_people in la_age_groups.items():
     )
     la_county_populations_by_age[age_group] = age_group_population
 
+
+la_county_populations_by_age["40+"] = us_population(
+    year=2020, state="California", county="Los Angeles County"
+) - sum(la_county_populations_by_age.values())
+
 rhinovirus_1970s_tecumseh_based_la_estimate = (
+    # This calculation rests on the assumption that people still get the same
+    # number of annual rhinoviruses for their age as they did in Tecumseh in
+    # the 70s. Here, we merely adjust for the the difference in age breakdown
+    # between the two contexts.
     IncidenceRate.weightedAverageByPopulation(
         (
             rhinovirus_incidence_rates_by_age["0-4"],
@@ -164,8 +148,8 @@ average_colds_per_year_children = IncidenceRate(
 
 
 colds_la_county = IncidenceRate.weightedAverageByPopulation(
-    (average_colds_per_year_children, la_county_under_18_population),
-    (average_colds_per_year_adults, la_county_adult_population),
+    (average_colds_per_year_children, la_population_u18),
+    (average_colds_per_year_adults, la_population_18plus),
 )
 
 
