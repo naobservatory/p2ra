@@ -1,6 +1,9 @@
+import csv
 import datetime
+from collections import Counter
 
 from pathogen_properties import *
+from populations import us_population
 
 background = """SARS-CoV-2 is an airborne coronavirus, responsible for the
 2019- pandemic"""
@@ -9,71 +12,66 @@ background = """SARS-CoV-2 is an airborne coronavirus, responsible for the
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.ENVELOPED,
-    taxid=2697049,
-)
-
-shedding_duration = SheddingDuration(
-    days=18,
-    # "In a review of 28 studies, the pooled median duration of viral RNA
-    # detection in respiratory specimens was 18 days following the onset of
-    # symptoms."
-    source="https://www.uptodate.com/contents/covid-19-epidemiology-virology-and-prevention/print",
+    taxid=TaxID(2697049),
 )
 
 underreporting = Scalar(
     scalar=4.0,
     confidence_interval=(3.4, 4.7),
-    coverage_probability_perc_point=95,
+    coverage_probability=0.95,
     country="United States",
     start_date="2020-02",
     end_date="2021-09",
     source="https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/burden.html#:~:text=1%20in%204.0%20(95%25%20UI*%203.4%20%E2%80%93%204.7)%20COVID%E2%80%9319%20infections%20were%20reported.",
 )
 
-county_populations = {
-    "San Diego": Population(
-        people=3_298_635,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="San Diego",
-        tag="San Diego 2020",
-        source="https://www.census.gov/quickfacts/fact/table/sandiegocountycalifornia/PST045221",
-    ),
-    "Los Angeles": Population(
-        people=10_014_042,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="Los Angeles",
-        tag="Los Angeles 2020",
-        source="https://www.census.gov/quickfacts/fact/table/losangelescountycalifornia/PST045222",
-    ),
-    "Orange": Population(
-        people=3_186_989,
-        date="2020-04-01",
-        country="United States",
-        state="California",
-        county="Orange",
-        tag="Orange 2020",
-        source="https://www.census.gov/quickfacts/orangecountycalifornia",
-    ),
-}
+target_counties = set(
+    [
+        "San Diego County, California",
+        "Los Angeles County, California",
+        "Orange County, California",
+        "Alameda County, California",
+        "Marin County, California",
+        "San Francisco County, California",
+        "Franklin County, Ohio",
+        "Greene County, Ohio",
+        "Lawrence County, Ohio",
+        "Licking County, Ohio",
+        "Lucas County, Ohio",
+        "Montgomery County, Ohio",
+        "Sandusky County, Ohio",
+        "Summit County, Ohio",
+        "Trumbull County, Ohio",
+    ]
+)
 
 
-def estimate_prevalences():
+def estimate_incidences() -> list[IncidenceRate]:
     estimates = []
 
+    # From the COVID-19 Data Repository by the Center for Systems Science and
+    # Engineering (CSSE) at Johns Hopkins University
+    #
+    # Downloaded 2023-05-02 from https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv
     with open(
-        prevalence_data_filename("southern-ca-cumulative-covid-cases.tsv")
+        prevalence_data_filename("time_series_covid19_confirmed_US.csv")
     ) as inf:
-        for line in inf:
-            bits = line.strip().split("\t")
-            county = bits[5]
+        for row in csv.reader(inf):
+            truncated_county = row[5]
+            state = row[6]
+
+            # The time series data names counties like "Franklin", but the full
+            # name the census uses is "Franklin County".  Use the full names
+            # for consistency.
+            county = "%s County" % truncated_county
+            county_state = "%s, %s" % (county, state)
+
+            if county_state not in target_counties:
+                continue
 
             # In the tsv file, cumulative case counts start at column 11 with
             # counts for 2020-01-22.
-            case_counts = [int(x) for x in bits[11:]]
+            case_counts = [int(x) for x in row[11:]]
             day = datetime.date.fromisoformat("2020-01-22")
 
             # For computing a 7-day centered moving average.  We want a moving
@@ -83,8 +81,8 @@ def estimate_prevalences():
             for prev_case_count, case_count in zip(
                 case_counts, case_counts[1:]
             ):
-                # increment day at the beginning because zip means case_count never
-                # takes in the initial value.
+                # increment day at the beginning because zip means case_count
+                # never takes in the initial value.
                 day = day + datetime.timedelta(days=1)
 
                 # case counts are cumulative, but we want daily cases
@@ -94,25 +92,40 @@ def estimate_prevalences():
 
                 # centered moving average
                 # https://www.jefftk.com/p/careful-with-trailing-averages
-                date = str(day - datetime.timedelta(days=3))
+                date = day - datetime.timedelta(days=3)
+                if date.year > 2022:
+                    continue
+
+                # Right now we use the same underreporting figure for both
+                # Spring/Fall 2020 and Winter 2021-2022.
+                #
+                # TODO: we can probably get a better undereporting figure for
+                # the omicron surge and this is likely too small.  The CDC 4x
+                # figure is not intended to cover this time period, this was
+                # after rapid tests were starting to be available, and omicron
+                # was relatively mild.
+
+                annual_infections = sum(latest) * 52
+
                 cases = IncidenceAbsolute(
-                    annual_infections=sum(latest) * 52,
+                    annual_infections=annual_infections,
                     country="United States",
-                    state="California",
+                    state=state,
                     county=county,
-                    date=date,
-                    tag="%s 2020" % county,
-                )
-                estimates.append(
-                    cases.to_rate(county_populations[county])
-                    .to_prevalence(shedding_duration)
-                    .scale(underreporting)
-                    .target(
-                        country="United States",
-                        state="California",
-                        county=county,
-                        date=date,
-                    )
+                    date=date.isoformat(),
                 )
 
-        return estimates
+                estimates.append(
+                    cases.to_rate(
+                        us_population(
+                            county=county, state=state, year=date.year
+                        )
+                    )
+                    * underreporting
+                )
+
+    return estimates
+
+
+def estimate_prevalences() -> list[Prevalence]:
+    return []

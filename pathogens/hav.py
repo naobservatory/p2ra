@@ -10,17 +10,21 @@ weeks."""
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=208726,
+    # Using 12092 (Hepatitis A virus) instead of its child 208726 (Human
+    # hepatitis A virus) because the MGS pipeline assigns reads to 12092.
+    # Which happens because the Virus-Host DB
+    # (https://www.genome.jp/virushostdb/view/) doesn't seem to know about
+    # 208726.
+    taxid=TaxID(12092),
 )
 
 
 us_incidence_absolute_2018 = IncidenceAbsolute(
     annual_infections=12474,
     confidence_interval=(17500, 27400),
-    coverage_probability_perc_point=95,
+    coverage_probability=0.95,
     country="United States",
     date="2018",
-    tag="us-2018",
     source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/HepA.htm",
 )
 
@@ -28,47 +32,17 @@ us_population_2018 = Population(
     people=327.2 * 1e6,
     country="United States",
     date="2018",
-    tag="us-2018",
     source="https://data.census.gov/table?q=2018+us+population&t=Civilian+Population",
 )
 
-hva_shedding_duration = SheddingDuration(
-    days=14,
-    confidence_interval=(7, 21),
+acute_underreporting_factor = Scalar(
+    scalar=2,
+    confidence_interval=(1.4, 2.2),
+    coverage_probability=0.95,
     country="United States",
-    source="https://www.cdc.gov/vaccines/pubs/pinkbook/hepa.html#:~:text=Viral%20shedding%20persists%20for%201%20to%203%20weeks.",
+    source="https://www.cdc.gov/hepatitis/statistics/2018surveillance/pdfs/2018HepSurveillanceRpt.pdf?#page=8",
 )
 
-incidence_underreporting_scalar = Scalar(
-    scalar=1 / 0.59,
-    confidence_interval=(
-        1 / 0.84,
-        1 / 0.32,
-    ),
-    coverage_probability_perc_point=95,
-    country="United States",
-    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4906888/#:~:text=Diagnosed%20hepatitis%20A,clear%20reporting%20responsibilities.",
-)
-
-king_county_absolute_2017 = IncidenceAbsolute(
-    annual_infections=11,
-    country="United States",
-    state="Washington",
-    county="King",
-    date="2017",
-    tag="King 2017",
-    source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
-)
-
-king_county_absolute_2018 = IncidenceAbsolute(
-    annual_infections=14,
-    country="United States",
-    state="Washington",
-    county="King",
-    date="2018",
-    tag="King 2018",
-    source="https://doh.wa.gov/sites/default/files/2023-01/420-004-CDAnnualReport2021.pdf?uid=642c448518316#page=28",
-)
 
 king_county_confirmed_cases_rate_2017 = IncidenceRate(
     annual_infections_per_100k=0.5,
@@ -90,15 +64,13 @@ king_county_confirmed_cases_rate_2018 = IncidenceRate(
 )
 
 
-def estimate_prevalences():
+def estimate_incidences() -> list[IncidenceRate]:
     return [
-        us_incidence_absolute_2018.to_rate(us_population_2018).to_prevalence(
-            hva_shedding_duration
-        ),
-        king_county_confirmed_cases_rate_2017.to_prevalence(
-            hva_shedding_duration
-        ).scale(incidence_underreporting_scalar),
-        king_county_confirmed_cases_rate_2018.to_prevalence(
-            hva_shedding_duration
-        ).scale(incidence_underreporting_scalar),
+        us_incidence_absolute_2018.to_rate(us_population_2018),
+        king_county_confirmed_cases_rate_2017 * acute_underreporting_factor,
+        king_county_confirmed_cases_rate_2018 * acute_underreporting_factor,
     ]
+
+
+def estimate_prevalences() -> list[Prevalence]:
+    return []

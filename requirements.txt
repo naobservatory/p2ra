@@ -1,2 +1,7 @@
 pystan~=3.6
 numpy
+pydantic
+pandas
+matplotlib
+seaborn
+scipy

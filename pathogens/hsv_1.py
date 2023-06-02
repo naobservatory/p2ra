@@ -9,7 +9,7 @@ infection and potential symptoms, most HSV-1 infections persist lifelong."""
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.ENVELOPED,
-    taxid=10298,
+    taxid=TaxID(10298),
 )
 
 
@@ -19,6 +19,7 @@ cdc_2015_2016_nhanes_seroprevalence = Prevalence(
     start_date="2015",
     end_date="2016",
     country="United States",
+    active=Active.LATENT,
     source="https://web.archive.org/web/20220707050306/https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm",
 )
 cdc_2015_2016_nhanes_estimate = Prevalence(
@@ -27,6 +28,7 @@ cdc_2015_2016_nhanes_estimate = Prevalence(
     country="United States",
     start_date="2015",
     end_date="2016",
+    active=Active.LATENT,
     source="https://www.cdc.gov/nchs/data/databriefs/db304_table.pdf#page=1",
     methods="https://www.cdc.gov/nchs/products/databriefs/db304.htm#:~:text=Data%20for%20this,p%20%3C%200.05",
 )
@@ -37,13 +39,18 @@ tear_and_saliva_prevalence = Prevalence(
     country="United States",
     state="Louisiana",
     date="2005",
+    active=Active.LATENT,
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1200985/#:~:text=Frequency%20of%20HSV%2D1%20DNA%20shedding%20over,swab%20data%20(subjects%2030%2C%2038%20not%20available).",
 )
 
 
-def estimate_prevalences():
+def estimate_prevalences() -> list[Prevalence]:
     return [
         cdc_2015_2016_nhanes_seroprevalence,
         cdc_2015_2016_nhanes_estimate,
         tear_and_saliva_prevalence,
     ]
+
+
+def estimate_incidences() -> list[IncidenceRate]:
+    return []
