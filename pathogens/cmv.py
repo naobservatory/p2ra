@@ -37,7 +37,7 @@ adult_seroprevalence_raleigh_durham_US = Prevalence(
     #  in women when comparing the 18–29 with the 70–79 year age-group
     number_of_participants=694,
     date="2020",
-    country="US",
+    country="United States",
     state="North Carolina",
     # Study is actually from the Raleigh-Durham-Chapel Hill Metropolitan Area
     county="Raleigh County",
@@ -47,7 +47,7 @@ adult_seroprevalence_raleigh_durham_US = Prevalence(
 
 nhanes_6_to_49_US_seroprevalence = Prevalence(
     infections_per_100k=0.504 * 100_000,
-    country="US",
+    country="United States",
     active=Active.LATENT,
     number_of_participants=15_310,
     source="https://pubmed.ncbi.nlm.nih.gov/20426575/#:~:text=the%20overall%20age%2Dadjusted%20CMV%20seroprevalence%20was%2050.4%25",
@@ -62,7 +62,7 @@ nhanes_6_to_49_US_urine_shedding = Prevalence(
     # shedding prevalence was 3.83%. The prevalence of urinary shedding was
     # inversely associated with increasing age (26.60%, 6.50%, and 3.45% in
     # CMV IgG-positive subjects aged 6–11, 12–19, and 20–49 years, respectively
-    country="US",
+    country="United States",
     active=Active.ACTIVE,
     number_of_participants=6828,
     start_date="1999",
