@@ -1,7 +1,6 @@
 from pathogen_properties import *
 from populations import us_population
 
-
 background = """Human papilloma virus is DNA virus with over 100 different 
 subtypes that have varying clinical significance. Together HPV-infections are 
 among the most common STIs globally, though prevalence is in decline following 
