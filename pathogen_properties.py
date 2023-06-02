@@ -283,13 +283,6 @@ class Taggable(Variable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
-class Population(Taggable):
-    """A number of people"""
-
-    people: float
-
-
-@dataclass(kw_only=True, eq=True, frozen=True)
 class Scalar(Variable):
     scalar: float
 
@@ -302,6 +295,27 @@ class Predictor(abc.ABC, Variable):
     @abc.abstractmethod
     def get_data(self) -> float:
         ...
+
+
+@dataclass(kw_only=True, eq=True, frozen=True)
+class Population(Taggable):
+    """A number of people"""
+
+    people: float
+
+    def __mul__(self, scalar: Scalar) -> "Population":
+        return Population(
+            people=self.people * scalar.scalar,
+            inputs=[self, scalar],
+        )
+
+    def __sub__(self: "Population", other: "Population") -> "Population":
+        return Population(
+            people=self.people - other.people,
+            inputs=[self, other],
+            date_source=self,
+            location_source=self,
+        )
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)

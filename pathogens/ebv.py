@@ -2,6 +2,7 @@ import csv
 from collections import Counter
 
 from pathogen_properties import *
+from populations import us_population
 
 background = """Epstein-Barr virus (EBV) is a type of  herpes virus that
 infects humans and is known to cause infectious mononucleosis, also known
@@ -21,13 +22,20 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(10376),
 )
 
+us_fraction_u18 = Scalar(
+    scalar=0.222,
+    source="https://www.census.gov/quickfacts/fact/table/US/LFE046221#:~:text=%EE%A0%BF-,22.2%25,-Persons%2065%20years",
+)
+us_population_u18 = us_population(year=2022) * us_fraction_u18
+
+us_population_18plus = us_population(year=2022) - us_population_u18
 
 under_18_population_US = Population(
     people=333_287_557 * 0.222,
     # This is the same number as is used in populations.py
     date="2022",
     country="United States",
-    source="https://www.census.gov/quickfacts/fact/table/US/LFE046221#:~:text=%EE%A0%BF-,22.2%25,-Persons%2065%20years",
+    source="",
 )
 
 over_18_population_US = Population(
@@ -132,21 +140,19 @@ with open(prevalence_data_filename("DenmarkPopulationData.csv")) as file:
             source="https://www.census.gov/data-tools/demo/idb/#/pop?COUNTRY_YEAR=2023&COUNTRY_YR_ANIM=2023&FIPS_SINGLE=DA&menu=popViz&FIPS=DA&POP_YEARS=2023&popPages=BYAGE",
         )
 
-denmark_infection_rates = {
-    (0, 0): 0.15 * 100_000,
-    (1, 3): 0.28 * 100_000,
-    (4, 14): 0.625 * 100_000,
-    (15, 17): 0.8 * 100_000,
-    (18, 29): 0.86 * 100_000,
-    (30, 100): 0.95 * 100_000,
-}
-
 DENMARK_SEROPREVALENCE_SOURCE = "10.3109/inf.1983.15.issue-4.03"
 
 denmark_seroprevalences = {}
-for age_range in denmark_infection_rates:
+for age_range, seroprevalence in [
+    ((0, 0), 0.15 * 100_000),
+    ((1, 3), 0.28 * 100_000),
+    ((4, 14), 0.625 * 100_000),
+    ((15, 17), 0.8 * 100_000),
+    ((18, 29), 0.86 * 100_000),
+    ((30, 100), 0.95 * 100_000),
+]:
     denmark_seroprevalences[age_range] = Prevalence(
-        infections_per_100k=denmark_infection_rates[age_range],
+        infections_per_100k=seroprevalence,
         date="1983",
         country="Denmark",
         active=Active.LATENT,
