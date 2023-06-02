@@ -30,20 +30,6 @@ us_population_u18 = us_population(year=2022) * us_fraction_u18
 
 us_population_18plus = us_population(year=2022) - us_population_u18
 
-under_18_population_US = Population(
-    people=333_287_557 * 0.222,
-    # This is the same number as is used in populations.py
-    date="2022",
-    country="United States",
-    source="",
-)
-
-over_18_population_US = Population(
-    people=333_287_557 * (1 - 0.222),
-    country="United States",
-    date="2022",
-    source="https://www.census.gov/quickfacts/fact/table/US/LFE046221#:~:text=%EE%A0%BF-,22.2%25,-Persons%2065%20years",
-)
 
 uk_seroprevalence_0_to_25 = Prevalence(
     infections_per_100k=0.853 * 100_000,
@@ -88,8 +74,8 @@ nhanes_18_19_yo_seroprevalence_estimate_2009_2010 = Prevalence(
 
 
 us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(
-    (nhanes_6_19_yo_seroprevalence_estimate_2003_2010, under_18_population_US),
-    (nhanes_18_19_yo_seroprevalence_estimate_2009_2010, over_18_population_US),
+    (nhanes_6_19_yo_seroprevalence_estimate_2003_2010, us_population_u18),
+    (nhanes_18_19_yo_seroprevalence_estimate_2009_2010, us_population_18plus),
     # As noted previously, given very high seroprevalence, and lifetime
     # persistence of EBV, we treat this 18 to 19yo data as corresponding
     # to seroprevalence across the entire adult population.

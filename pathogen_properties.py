@@ -307,6 +307,8 @@ class Population(Taggable):
         return Population(
             people=self.people * scalar.scalar,
             inputs=[self, scalar],
+            date_source=self,
+            location_source=self,
         )
 
     def __sub__(self: "Population", other: "Population") -> "Population":
