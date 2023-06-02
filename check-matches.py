@@ -25,7 +25,7 @@ def start():
         
         if pathogen.pathogen_chars.na_type != NAType.RNA:
             continue
-        
+
         incidences = pathogen.estimate_incidences()
         prevalences = pathogen.estimate_prevalences()
 
