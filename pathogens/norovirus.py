@@ -91,7 +91,7 @@ def load_nors_outbreaks() -> (
     # Click "Download all NORS Dashboard data (Excel)."
     # Exported from Google Sheets as CSV.
     #
-    # Data runs through the end of 2021.
+    # Data entries start in 1971 and run through the end of 2021.
     with open(prevalence_data_filename("cdc-nors-outbreak-data.tsv")) as inf:
         cols = None
         for line in inf:
