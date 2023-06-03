@@ -298,6 +298,24 @@ class Predictor(abc.ABC, Variable):
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
+class Number(Variable):
+    """Generic number.  Use this for weird one-off things
+
+    If some concept is being used by more than two estimates it should get a
+    more specific Variable subclass."""
+
+    number: float
+
+    def __truediv__(self, other: "Number") -> Scalar:
+        return Scalar(
+            scalar=self.number / other.number,
+            inputs=[self, other],
+            date_source=self,
+            location_source=self,
+        )
+
+
+@dataclass(kw_only=True, eq=True, frozen=True)
 class Population(Taggable):
     """A number of people"""
 
@@ -311,9 +329,25 @@ class Population(Taggable):
             location_source=self,
         )
 
-    def __sub__(self: "Population", other: "Population") -> "Population":
+    def __sub__(self, other: "Population") -> "Population":
         return Population(
             people=self.people - other.people,
+            inputs=[self, other],
+            date_source=self,
+            location_source=self,
+        )
+
+    def __add__(self, other: "Population") -> "Population":
+        return Population(
+            people=self.people + other.people,
+            inputs=[self, other],
+            date_source=self,
+            location_source=self,
+        )
+
+    def __radd__(self, other: Number) -> "Population":
+        return Population(
+            people=self.people + other.number,
             inputs=[self, other],
             date_source=self,
             location_source=self,
@@ -406,24 +440,6 @@ class PrevalenceAbsolute(Taggable):
             infections_per_100k=self.infections * 100000 / population.people,
             inputs=[self, population],
             active=self.active,
-            date_source=self,
-            location_source=self,
-        )
-
-
-@dataclass(kw_only=True, eq=True, frozen=True)
-class Number(Variable):
-    """Generic number.  Use this for weird one-off things
-
-    If some concept is being used by more than two estimates it should get a
-    more specific Variable subclass."""
-
-    number: float
-
-    def __truediv__(self, other: "Number") -> Scalar:
-        return Scalar(
-            scalar=self.number / other.number,
-            inputs=[self, other],
             date_source=self,
             location_source=self,
         )

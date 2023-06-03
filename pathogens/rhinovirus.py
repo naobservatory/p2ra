@@ -88,6 +88,7 @@ la_age_groups = {
 
 la_county_populations_by_age = {}
 
+
 for age_group, n_people in la_age_groups.items():
     age_group_population = Population(
         people=n_people,
@@ -99,21 +100,9 @@ for age_group, n_people in la_age_groups.items():
     )
     la_county_populations_by_age[age_group] = age_group_population
 
-
-under_40_population = Population(
-    people=sum(la_county_populations_by_age.values()),
-    date="2020",
-    country="United States",
-    state="California",
-    county="Los Angeles County",
-    source=LA_DEMOGRAPHIC_DATA_2020,
-)
-
-
-la_county_populations_by_age["40+"] = (
-    us_population(year=2020, state="California", county="Los Angeles County")
-    - under_40_population
-)
+la_county_populations_by_age["40+"] = us_population(
+    year=2020, state="California", county="Los Angeles County"
+) - sum(la_county_populations_by_age.values(), start=Number(number=0))
 
 
 rhinovirus_1970s_tecumseh_based_la_estimate = (
