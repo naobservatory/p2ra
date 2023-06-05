@@ -18,7 +18,6 @@ that resemble the flu."""
 
 # TODO: Simon will look into incidence of mononucleosis in the US. There is
 # also the question of mono being a proxy for EBV infection, or activation.
-# TODO: Currently, nhanes_18_19_yo_seroprevalence_estimate_2009_2010
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
