@@ -1,0 +1,19 @@
+Age   ,Ethnicity        ,Size ,Mean ,CI_low ,CI_high
+Total ,White            ,2461 ,  64 ,    58 ,     69
+Total ,Black            ,2469 ,  88 ,    85 ,     91
+Total ,Mexican American ,2586 ,  88 ,    84 ,     90
+6_8   ,White            , 440 ,  48 ,    40 ,     56
+6_8   ,Black            , 412 ,  80 ,    73 ,     85
+6_8   ,Mexican American , 490 ,  80 ,    74 ,     84
+9_11  ,White            , 487 ,  55 ,    48 ,     62
+9_11  ,Black            , 443 ,  83 ,    78 ,     88
+9_11  ,Mexican American , 517 ,  83 ,    76 ,     87
+12_14 ,White            , 542 ,  58 ,    50 ,     65
+12_14 ,Black            , 602 ,  89 ,    85 ,     92
+12_14 ,Mexican American , 648 ,  87 ,    82 ,     90
+15_17 ,White            , 609 ,  70 ,    64 ,     75
+15_17 ,Black            , 603 ,  91 ,    87 ,     94
+15_17 ,Mexican American , 575 ,  91 ,    87 ,     94
+18_19 ,White            , 383 ,  83 ,    78 ,     87
+18_19 ,Black            , 409 ,  94 ,    91 ,     96
+18_19 ,Mexican American , 356 ,  94 ,    89 ,     97
