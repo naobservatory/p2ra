@@ -21,9 +21,11 @@ pathogen_chars = PathogenChars(
 
 
 nhanes_2013_2016_18_59_yo_prevalence = Prevalence(
+    # Among 15–59-year-olds, 2013–2016 prevalence of any HPV infection was 40%
+    # overall, 41.8% among males, and 38.4% among females.
     infections_per_100k=0.400 * 100_000,
-    # Among 15–59-year-olds, 2013–2016 prevalence of any HPV infection was 40.
-    # 0% overall, 41.8% among males, and 38.4% among females.
+    # We assume that measurements for 18 to 59 year olds roughly correspond to 
+    # the true all-age population prevalence.
     confidence_interval=(0.392 * 100_000, 0.409 * 100_000),
     coverage_probability=0.5,  # confidence_interval
     number_of_participants=8005,
@@ -34,15 +36,15 @@ nhanes_2013_2016_18_59_yo_prevalence = Prevalence(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10037549/#:~:text=Any%20HPV-,40.0%20(39.2%2C%2040.9),-41.8%20(40.6%2C%2042.9",
 )
 
-nhanes_based_2018_18_59_yo_incidence = IncidenceAbsolute(
-    annual_infections=23.6 * 1_000_000,
-    # Among 15–59-year-olds, incidence of any HPV infection was 1222 per 10,
-    # 000 persons, with 23.6 million persons acquiring any HPV infection in 2018.
-    confidence_interval=(18.7 * 1_000_000, 27.8 * 1_000_000),
+nhanes_based_2018_18_59_yo_incidence = IncidenceRate(
+    annual_infections_per_100k=1222 * 10 # incidence per 10k -> per 100k.
+    # We assume that measurements for 18 to 59 year olds roughly correspond to 
+    # the true all-age population prevalence.
+    confidence_interval=(969 * 10, 1436 * 10),
     coverage_probability=0.5,  # uncertainty interval
     country="United States",
     date="2018",
-    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10037549/#:~:text=Any%20HPV-,23.6%20(18.7%2C%2027.8),-11.8%20(9.5%2C%2012.9",
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10037549/#:~:text=Any%20HPV-,1222%20(969%2C%201436),-1223%20(983%2C%201332",
 )
 
 
