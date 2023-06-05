@@ -18,7 +18,9 @@ class TestPathogens(unittest.TestCase):
         self.assertIn("hsv_1", pathogens.pathogens)
 
     def test_summarize_location(self):
-        us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
+        us_2019, us_2020, us_2021, la_2020 = pathogens.pathogens[
+            "hiv"
+        ].estimate_prevalences()
         self.assertEqual(us_2019.summarize_location(), "United States")
         self.assertEqual(
             la_2020.summarize_location(),
@@ -26,7 +28,9 @@ class TestPathogens(unittest.TestCase):
         )
 
     def test_dates(self):
-        us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
+        us_2019, us_2020, us_2021, la_2020 = pathogens.pathogens[
+            "hiv"
+        ].estimate_prevalences()
         self.assertEqual(us_2019.parsed_start, datetime.date(2019, 1, 1))
         self.assertEqual(us_2019.parsed_end, datetime.date(2019, 12, 31))
 
@@ -422,52 +426,78 @@ class TestStats(unittest.TestCase):
         enrichment=mgs.Enrichment.VIRAL,
     )
 
-    def test_is_match(self):
+    def test_match_quality(self):
         v1 = Variable(country="United States", date="2019")
-        self.assertTrue(stats.is_match(self.attrs, v1))
+        self.assertEqual(stats.match_quality(self.attrs, v1), 0)
         v2 = Variable(country="United States", date="2019-05-14")
-        self.assertTrue(stats.is_match(self.attrs, v2))
+        self.assertEqual(stats.match_quality(self.attrs, v2), 0)
         v3 = Variable(country="United States", date="2019-05-15")
-        self.assertFalse(stats.is_match(self.attrs, v3))
+        # One day off, so -1.
+        self.assertEqual(stats.match_quality(self.attrs, v3), -1)
         v4 = Variable(
             country="United States",
             start_date="2019-05-01",
             end_date="2019-06-02",
         )
-        self.assertTrue(stats.is_match(self.attrs, v4))
+        self.assertEqual(stats.match_quality(self.attrs, v4), 0)
         v5 = Variable(
             country="United States",
             state="Pennsylvania",
             county="Allegheny County",
             date="2019",
         )
-        self.assertTrue(stats.is_match(self.attrs, v5))
+        # Higher score for state and county match.
+        self.assertEqual(stats.match_quality(self.attrs, v5), 30)
         v6 = Variable(
             country="United States",
             state="Pennsylvania",
             county="Beaver County",
             date="2019",
         )
-        self.assertFalse(stats.is_match(self.attrs, v6))
+        self.assertIsNone(stats.match_quality(self.attrs, v6))
         v7 = Variable(
             country="United States",
             state="Ohio",
             county="Lake County",
             date="2019",
         )
-        self.assertFalse(stats.is_match(self.attrs, v7))
+        self.assertIsNone(stats.match_quality(self.attrs, v7))
 
     def test_lookup_variables(self):
         v1 = Variable(country="United States", date="2019")
         v2 = Variable(country="United States", date="2019-05-14")
         v3 = Variable(country="United States", date="2019-05-15")
+        v4 = Variable(country="United States", date="2019-05-16")
+        v5 = Variable(country="United States", date="2019-05-31")
+        v6 = Variable(
+            country="United States", state="Pennsylvania", date="2019"
+        )
+        v7 = Variable(
+            country="United States",
+            state="Pennsylvania",
+            county="Allegheny County",
+            date="2019",
+        )
+
         self.assertEqual(stats.lookup_variables(self.attrs, [v1, v3]), [v1])
+        # Prefer v2 to v3 because it's an exact match.
         self.assertEqual(stats.lookup_variables(self.attrs, [v2, v3]), [v2])
         self.assertEqual(stats.lookup_variables(self.attrs, [v3, v1]), [v1])
         self.assertEqual(
             stats.lookup_variables(self.attrs, [v1, v2]), [v1, v2]
         )
-        self.assertEqual(stats.lookup_variables(self.attrs, [v3]), [])
+        # Accept v3 because it's pretty close (one day off).
+        self.assertEqual(stats.lookup_variables(self.attrs, [v3]), [v3])
+        # Prefer v3 over v4 because it's closer.
+        self.assertEqual(stats.lookup_variables(self.attrs, [v3, v4]), [v3])
+        # Don't accept v5 because it's too far off.
+        self.assertEqual(stats.lookup_variables(self.attrs, [v5]), [])
+
+        # Prefer state match over general country
+        self.assertEqual(stats.lookup_variables(self.attrs, [v1, v6]), [v6])
+
+        # Prefer county match over state
+        self.assertEqual(stats.lookup_variables(self.attrs, [v6, v7]), [v7])
 
     def test_build_model(self):
         bioprojects = {
@@ -490,6 +520,45 @@ class TestStats(unittest.TestCase):
                             )
                         ),
                     )
+
+
+class TestPathogensMatchStudies(unittest.TestCase):
+    def test_pathogens_match_studies(self):
+        # Every RNA pathogen should have at least one estimate for every sample
+        # in the projects we're working with.
+        rna_bioprojects = {
+            "crits_christoph": mgs.BioProject("PRJNA661613"),
+            "rothman": mgs.BioProject("PRJNA729801"),
+            "spurbeck": mgs.BioProject("PRJNA924011"),
+        }
+
+        mgs_data = mgs.MGSData.from_repo()
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            if pathogen.pathogen_chars.na_type != NAType.RNA:
+                continue
+
+            with self.subTest(pathogen=pathogen_name):
+                incidences = pathogen.estimate_incidences()
+                prevalences = pathogen.estimate_prevalences()
+
+                for study, bioproject in rna_bioprojects.items():
+                    with self.subTest(study=study):
+                        for (
+                            sample,
+                            sample_attributes,
+                        ) in mgs_data.sample_attributes(
+                            bioproject, enrichment=mgs.Enrichment.VIRAL
+                        ).items():
+                            with self.subTest(sample=sample):
+                                self.assertNotEqual(
+                                    stats.lookup_variables(
+                                        sample_attributes,
+                                        itertools.chain(
+                                            incidences, prevalences
+                                        ),
+                                    ),
+                                    [],
+                                )
 
 
 if __name__ == "__main__":

@@ -65,8 +65,19 @@ king_county_confirmed_cases_rate_2018 = IncidenceRate(
 
 
 def estimate_incidences() -> list[IncidenceRate]:
+    us_2018 = us_incidence_absolute_2018.to_rate(us_population_2018)
+    # 2019 was very similar to 2018, so extrapolation seems reasonable.
+    us_2019 = dataclasses.replace(us_2018, date_source=Variable(date="2019"))
+    # It's not clear how much the pandemic slowed down HepA transmission.
+    # For now, assume somewhat dubiously that it didn't.
+    us_2020 = dataclasses.replace(us_2018, date_source=Variable(date="2020"))
+    us_2021 = dataclasses.replace(us_2018, date_source=Variable(date="2021"))
+
     return [
-        us_incidence_absolute_2018.to_rate(us_population_2018),
+        us_2018,
+        us_2019,
+        us_2020,
+        us_2021,
         king_county_confirmed_cases_rate_2017 * acute_underreporting_factor,
         king_county_confirmed_cases_rate_2018 * acute_underreporting_factor,
     ]
