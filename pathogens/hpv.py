@@ -24,7 +24,7 @@ nhanes_2013_2016_18_59_yo_prevalence = Prevalence(
     # Among 15–59-year-olds, 2013–2016 prevalence of any HPV infection was 40%
     # overall, 41.8% among males, and 38.4% among females.
     infections_per_100k=0.400 * 100_000,
-    # We assume that measurements for 18 to 59 year olds roughly correspond to 
+    # We assume that measurements for 18 to 59 year olds roughly correspond to
     # the true all-age population prevalence.
     confidence_interval=(0.392 * 100_000, 0.409 * 100_000),
     coverage_probability=0.5,  # confidence_interval
@@ -37,8 +37,8 @@ nhanes_2013_2016_18_59_yo_prevalence = Prevalence(
 )
 
 nhanes_based_2018_18_59_yo_incidence = IncidenceRate(
-    annual_infections_per_100k=1222 * 10 # incidence per 10k -> per 100k.
-    # We assume that measurements for 18 to 59 year olds roughly correspond to 
+    annual_infections_per_100k=1222 * 10,  # incidence per 10k -> per 100k.
+    # We assume that measurements for 18 to 59 year olds roughly correspond to
     # the true all-age population prevalence.
     confidence_interval=(969 * 10, 1436 * 10),
     coverage_probability=0.5,  # uncertainty interval
@@ -48,17 +48,9 @@ nhanes_based_2018_18_59_yo_incidence = IncidenceRate(
 )
 
 
-population_18_to_59 = Population(
-    people=327_167_439 - 73_352_242 - 73_085_935,  # total - u_18 - over_59
-    source="https://data.census.gov/table?q=2018+acs&tid=ACSST1Y2018.S0101",
-    date="2018",
-    country="United States",
-)
-
-
 def estimate_prevalences():
     return [nhanes_2013_2016_18_59_yo_prevalence]
 
 
 def estimate_incidences():
-    return [nhanes_based_2018_18_59_yo_incidence.to_rate(population_18_to_59)]
+    return [nhanes_based_2018_18_59_yo_incidence]
