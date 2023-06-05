@@ -1,5 +1,8 @@
 import csv
 from collections import Counter
+from typing import Dict, List
+
+import numpy as np
 
 from pathogen_properties import *
 from populations import us_population
@@ -15,6 +18,7 @@ that resemble the flu."""
 
 # TODO: Simon will look into incidence of mononucleosis in the US. There is
 # also the question of mono being a proxy for EBV infection, or activation.
+# TODO: Currently, nhanes_18_19_yo_seroprevalence_estimate_2009_2010
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
@@ -44,38 +48,110 @@ uk_seroprevalence_0_to_25 = Prevalence(
     source="https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-020-09049-x#:~:text=1982/2325%20individuals%20(85.3%25)%20were%20EBV%20seropositive",
 )
 
-nhanes_6_19_yo_seroprevalence_estimate_2003_2010 = Prevalence(
-    infections_per_100k=0.665 * 100_000,
-    confidence_interval=(0.643 * 100_000, 0.687 * 100_000),
-    coverage_probability=0.95,
-    country="United States",
-    start_date="2003",
-    end_date="2010",
-    number_of_participants=8417,
-    active=Active.LATENT,
-    source="https://pubmed.ncbi.nlm.nih.gov/23717674/#:~:text=Overall%20EBV%20seroprevalence%20was%2066.5%25%20(95%25%20CI%2064.3%25%2D68.7%25.)",
-)
 
-nhanes_18_19_yo_seroprevalence_estimate_2009_2010 = Prevalence(
-    # Only using data from NHANES 2009-2010, for 18-19 year olds.
-    infections_per_100k=0.89 * 100_000,
-    # Given very high seroprevalence, and lifetime persistence of EBV, we
-    # we treat this data as corresponding to seroprevalence across the
-    # entire adult population.
-    confidence_interval=(0.81 * 100_000, 0.94 * 100_000),
-    coverage_probability=0.95,
-    number_of_participants=508,
-    start_date="2009",
-    end_date="2010",
-    country="United States",
-    active=Active.LATENT,
-    source="https://academic.oup.com/jid/article/208/8/1286/2192838#:~:text=273-,89%20(81%E2%80%9394)D%C2%A0,-.337%C2%A0",
-)
+EBV_US_2003_2010_SEROPREVALENCE = "https://academic.oup.com/jid/article/208/8/1286/2192838#:~:text=Table%201.Demographic%20Factors%20Associated%20With%20Epstein%E2%80%93Barr%20Virus%20(EBV)%20Antibody%20(Ab)%20Prevalence%2C%20by%20Race/Ethnicity%E2%80%94National%20Health%20and%20Nutrition%20Examination%20Survey%20Cycles%202003%E2%80%932004%2C%202005%E2%80%932006%2C%202007%E2%80%932008%2C%20and%202009%E2%80%932010"
 
+with open(prevalence_data_filename("ebv_6_19_nhanes_2003_2010.csv")) as inf:
+    # Extracted from Table 1 of the above paper. This study aggregates NHANES
+    # EBV seroprevalence measurements from 2003-2010 for 5 to 19 year olds.
+    # We do not have seroprevalence data for 19+ year olds; given that EBV
+    # stays latent after infection we treat the 18 to 19 year old cohort
+    # prevalence as the prevalence of the overall adult US population.
+
+    cols = None
+
+    age_6_17: Dict[str, List] = {
+        "mean": [],
+        "ci_lower": [],
+        "ci_upper": [],
+        "weights": [],
+        "cohort_sizes": [],
+    }
+
+    age_18_19: Dict[str, List] = {
+        "mean": [],
+        "ci_lower": [],
+        "ci_upper": [],
+        "weights": [],
+        "cohort_sizes": [],
+    }
+
+    total_participants = 0
+
+    for row in csv.reader(inf):
+        if cols is None:
+            cols = row
+            continue
+        age = row[0].strip()
+        cohort_size = int(row[2])
+        mean = float(row[3]) / 100
+        ci_lower = float(row[4]) / 100
+        ci_upper = float(row[5]) / 100
+
+        if age == "Total":
+            total_participants += cohort_size
+            continue
+
+        elif age != "18_19":
+            age_6_17["mean"].append(mean)
+            age_6_17["ci_lower"].append(ci_lower)
+            age_6_17["ci_upper"].append(ci_upper)
+            age_6_17["weights"].append(cohort_size / total_participants)
+            age_6_17["cohort_sizes"].append(cohort_size)
+            continue
+
+        elif age == "18_19":
+            age_18_19["mean"].append(mean)
+            age_18_19["ci_lower"].append(ci_lower)
+            age_18_19["ci_upper"].append(ci_upper)
+            age_18_19["weights"].append(cohort_size / total_participants)
+            age_18_19["cohort_sizes"].append(cohort_size)
+
+    mean_18_19 = np.average(age_18_19["mean"], weights=age_18_19["weights"])
+    ci_upper_18_19 = np.average(
+        age_18_19["ci_upper"], weights=age_18_19["weights"]
+    )
+    ci_lower_18_19 = np.average(
+        age_18_19["ci_lower"], weights=age_18_19["weights"]
+    )
+
+    mean_6_17 = np.average(age_6_17["mean"], weights=age_6_17["weights"])
+    ci_upper_6_17 = np.average(
+        age_6_17["ci_upper"], weights=age_6_17["weights"]
+    )
+    ci_lower_6_17 = np.average(
+        age_6_17["ci_lower"], weights=age_6_17["weights"]
+    )
+
+    nhanes_6_17_yo_seroprevalence_2003_2010 = Prevalence(
+        infections_per_100k=mean_6_17 * 100_000,
+        confidence_interval=(ci_lower_6_17 * 100_000, ci_upper_6_17 * 100_000),
+        coverage_probability=0.95,
+        country="United States",
+        start_date="2003",
+        end_date="2010",
+        number_of_participants=8417,
+        active=Active.LATENT,
+        source=EBV_US_2003_2010_SEROPREVALENCE,
+    )
+
+    nhanes_18_19_yo_seroprevalence_2003_2010 = Prevalence(
+        infections_per_100k=mean_18_19 * 100_000,
+        confidence_interval=(
+            ci_lower_18_19 * 100_000,
+            ci_upper_18_19 * 100_000,
+        ),
+        coverage_probability=0.95,
+        country="United States",
+        start_date="2003",
+        end_date="2010",
+        active=Active.LATENT,
+        source=EBV_US_2003_2010_SEROPREVALENCE,
+    )
 
 us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(
-    (nhanes_6_19_yo_seroprevalence_estimate_2003_2010, us_population_u18),
-    (nhanes_18_19_yo_seroprevalence_estimate_2009_2010, us_population_18plus),
+    (nhanes_6_17_yo_seroprevalence_2003_2010, us_population_u18),
+    (nhanes_18_19_yo_seroprevalence_2003_2010, us_population_18plus),
     # As noted previously, given very high seroprevalence, and lifetime
     # persistence of EBV, we treat this 18 to 19yo data as corresponding
     # to seroprevalence across the entire adult population.
