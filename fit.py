@@ -5,16 +5,18 @@ from textwrap import dedent
 import numpy as np
 import pandas as pd
 
+import pathogens
 import stats
 from mgs import BioProject, MGSData
+from pathogen_properties import Predictor, by_taxids
 
 
-def geom_mean(x: np.ndarray) -> float:
+def geom_mean(x: pd.DataFrame) -> float:
     return np.exp(np.mean(np.log(x)))
 
 
 def print_summary(
-    study: str, pathogen: str, predictor: str, ra_per_predictor: np.ndarray
+    study: str, pathogen: str, predictor: str, ra_per_predictor: pd.DataFrame
 ) -> None:
     title = f"{study.title()}: {pathogen} relative abundance per {predictor}"
     percentiles = [5, 25, 50, 75, 95]
@@ -42,7 +44,7 @@ bioprojects = {
 }
 
 
-def start():
+def start() -> None:
     outdir = Path("fits")
     outdir.mkdir(exist_ok=True)
     figdir = Path("fig")
@@ -50,38 +52,62 @@ def start():
     mgs_data = MGSData.from_repo()
     predictor = "incidence"
     for pathogen_name in ["sars_cov_2", "norovirus"]:
+        pathogen = pathogens.pathogens[pathogen_name]
         for study, bioproject in bioprojects.items():
-            model = stats.build_model(
-                mgs_data, bioproject, pathogen_name, predictor
-            )
-            model.fit_model(random_seed=1)
-            fig_hist = model.plot_posterior_histograms()
-            fig_hist.savefig(figdir / f"{study}-{pathogen_name}-posthist.pdf")
-            xys = [
-                ("date", "viral_reads"),
-                ("date", "predictor"),
-                ("predictor", "viral_reads"),
-            ]
-            for x, y in xys:
-                g = model.plot_posterior_samples(
-                    x, y, style="county", hue="fine_location"
+            predictors: list[Predictor]
+            if predictor == "incidence":
+                predictors = pathogen.estimate_incidences()
+            elif predictor == "prevalence":
+                predictors = pathogen.estimate_prevalences()
+            else:
+                raise ValueError(
+                    f"{predictor} must be one of 'incidence' or 'prevalence'"
                 )
-                if y == "predictor":
-                    g.set(yscale="log")
-                g.savefig(figdir / f"{study}-{pathogen_name}-{y}-vs-{x}.pdf")
 
-            df = model.dataframe
-            assert df is not None
-            df.to_csv(
-                outdir / f"{study}-{pathogen_name}.tsv.gz",
-                sep="\t",
-                index=False,
-                compression="gzip",
-            )
-            ra_per_predictor = pd.pivot_table(
-                df, index="draws", values=["ra_per_predictor"]
-            )
-            print_summary(study, pathogen_name, predictor, ra_per_predictor)
+            for taxids, grouped_predictors in by_taxids(
+                pathogen.pathogen_chars, predictors
+            ).items():
+                model = stats.build_model(
+                    mgs_data,
+                    bioproject,
+                    pathogen.pathogen_chars,
+                    grouped_predictors,
+                    taxids,
+                )
+                model.fit_model(random_seed=1)
+                fig_hist = model.plot_posterior_histograms()
+                fig_hist.savefig(
+                    figdir / f"{study}-{pathogen_name}-posthist.pdf"
+                )
+                xys = [
+                    ("date", "viral_reads"),
+                    ("date", "predictor"),
+                    ("predictor", "viral_reads"),
+                ]
+                for x, y in xys:
+                    g = model.plot_posterior_samples(
+                        x, y, style="county", hue="fine_location"
+                    )
+                    if y == "predictor":
+                        g.set(yscale="log")
+                    g.savefig(
+                        figdir / f"{study}-{pathogen_name}-{y}-vs-{x}.pdf"
+                    )
+
+                df = model.dataframe
+                assert df is not None
+                df.to_csv(
+                    outdir / f"{study}-{pathogen_name}.tsv.gz",
+                    sep="\t",
+                    index=False,
+                    compression="gzip",
+                )
+                ra_per_predictor = pd.pivot_table(
+                    df, index="draws", values=["ra_per_predictor"]
+                )
+                print_summary(
+                    study, pathogen_name, predictor, ra_per_predictor
+                )
 
 
 if __name__ == "__main__":

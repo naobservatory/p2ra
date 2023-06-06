@@ -12,7 +12,13 @@ import stan  # type: ignore
 from scipy.stats import gamma, norm  # type: ignore
 
 from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
-from pathogen_properties import Predictor, Variable
+from pathogen_properties import (
+    PathogenChars,
+    Predictor,
+    TaxID,
+    Variable,
+    by_taxids,
+)
 from pathogens import pathogens
 
 county_neighbors = {
@@ -231,41 +237,32 @@ class Model(Generic[P]):
 
 
 def choose_predictor(predictors: list[Predictor]) -> Predictor:
-    # TODO: allow other taxids
-    non_taxid_predictors = [
-        predictor for predictor in predictors if not predictor.taxid
-    ]
-    assert len(non_taxid_predictors) == 1
-    return non_taxid_predictors[0]
+    assert len(predictors) == 1
+    return predictors[0]
 
 
 def build_model(
     mgs_data: MGSData,
     bioproject: BioProject,
-    pathogen_name: str,
-    predictor: str,
+    pathogen_chars: PathogenChars,
+    predictors: list[Predictor],
+    taxids: frozenset[TaxID],
 ) -> Model:
-    pathogen = pathogens[pathogen_name]
-    taxids = pathogen.pathogen_chars.taxids
     samples = mgs_data.sample_attributes(
         bioproject, enrichment=Enrichment.VIRAL
     )
-    predictors: list[Predictor]
-    if predictor == "incidence":
-        predictors = pathogen.estimate_incidences()
-    elif predictor == "prevalence":
-        predictors = pathogen.estimate_prevalences()
-    else:
-        raise ValueError(
-            f"{predictor} must be one of 'incidence' or 'prevalence'"
-        )
     data = [
         DataPoint(
             sample=s,
             attrs=attrs,
             viral_reads=mgs_data.viral_reads(bioproject, taxids)[s],
-            predictor=choose_predictor(lookup_variables(attrs, predictors)),
+            predictor=choose_predictor(
+                lookup_variables(attrs, grouped_predictors)
+            ),
         )
+        for taxids, grouped_predictors in by_taxids(
+            pathogen_chars, predictors
+        ).items()
         for s, attrs in samples.items()
     ]
     return Model(data=data)

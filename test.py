@@ -59,6 +59,24 @@ class TestPathogens(unittest.TestCase):
                 for estimate in pathogen.estimate_prevalences():
                     estimate.get_dates()
 
+    def test_by_taxids(self):
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                for taxids, estimates in by_taxids(
+                    pathogen.pathogen_chars, pathogen.estimate_prevalences()
+                ).items():
+                    self.assertNotEqual(len(taxids), 0)
+                    self.assertNotEqual(len(estimates), 0)
+                    for estimate in estimates:
+                        if estimate.taxid:
+                            self.assertEqual(
+                                frozenset([estimate.taxid]), taxids
+                            )
+                        else:
+                            self.assertEqual(
+                                pathogen.pathogen_chars.taxids, taxids
+                            )
+
 
 class TestMMWRWeek(unittest.TestCase):
     def test_mmwr_week(self):
@@ -505,21 +523,28 @@ class TestStats(unittest.TestCase):
             "rothman": mgs.BioProject("PRJNA729801"),
         }
         mgs_data = MGSData.from_repo()
-        predictor = "incidence"
         for pathogen_name in ["sars_cov_2", "norovirus"]:
+            pathogen = pathogens.pathogens[pathogen_name]
             for study, bioproject in bioprojects.items():
                 with self.subTest(study=study, pathogen=pathogen_name):
-                    model = stats.build_model(
-                        mgs_data, bioproject, pathogen_name, predictor
-                    )
-                    self.assertEqual(
-                        len(model.data),
-                        len(
-                            mgs_data.sample_attributes(
-                                bioproject, enrichment=mgs.Enrichment.VIRAL
-                            )
-                        ),
-                    )
+                    for taxids, predictors in by_taxids(
+                        pathogen.pathogen_chars, pathogen.estimate_incidences()
+                    ).items():
+                        model = stats.build_model(
+                            mgs_data,
+                            bioproject,
+                            pathogen.pathogen_chars,
+                            predictors,
+                            taxids,
+                        )
+                        self.assertEqual(
+                            len(model.data),
+                            len(
+                                mgs_data.sample_attributes(
+                                    bioproject, enrichment=mgs.Enrichment.VIRAL
+                                )
+                            ),
+                        )
 
 
 class TestPathogensMatchStudies(unittest.TestCase):
