@@ -170,7 +170,7 @@ def compare_incidence_to_positive_tests(
     return official_incidence / clinical_labs_infections
 
 
-def estimate_incidences() -> list[IncidenceRate]:
+def estimate_incidences() -> dict[TaxIDs, IncidenceRate]:
     # State -> Week -> (PositiveA, PositiveB)
     weekly_data = load_weekly_data()
 
@@ -218,7 +218,10 @@ def estimate_incidences() -> list[IncidenceRate]:
         else:
             return None
 
-    incidences = []
+    incidences = {
+        frozenset(FLU_A): [],
+        frozenset(FLU_B): [],
+    }
     for state in ["California", "Ohio"]:
         for parsed_start in weekly_data[state]:
             positive_a, positive_b = weekly_data[state][parsed_start]
@@ -242,22 +245,17 @@ def estimate_incidences() -> list[IncidenceRate]:
                     date=parsed_start.isoformat(),
                 )
 
-                incidences.append(
-                    dataclasses.replace(
-                        (
-                            incidence.to_rate(
-                                us_population(
-                                    state=state, year=parsed_start.year
-                                )
-                            )
-                            * underreporting
-                        ),
-                        taxid=taxid,
+                incidences[frozenset(taxid)].append(
+                    incidence.to_rate(
+                        us_population(
+                            state=state, year=parsed_start.year
+                        )
                     )
+                    * underreporting
                 )
 
     return incidences
 
 
-def estimate_prevalences() -> list[Prevalence]:
-    return []
+def estimate_prevalences() -> dict[TaxIDs, Prevalence]:
+    return {}

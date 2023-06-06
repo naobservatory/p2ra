@@ -8,11 +8,11 @@ fever blisters (https://www.hopkinsmedicine.org/health/conditions-and-diseases/
 herpes-hsv1-and-hsv2). After initial infection and potential symptoms, most
 HSV-1 infections persist lifelong."""
 
+HSV_2 = TaxID(10310)
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.ENVELOPED,
-    taxid=TaxID(10310),
 )
 
 
@@ -102,13 +102,13 @@ us_population_2018_18_to_49yo = Population(
 )
 
 
-def estimate_prevalences() -> list[Prevalence]:
-    return [
+def estimate_prevalences() -> dict[TaxIDs, Prevalence]:
+    return {frozenset(HSV_2): [
         cdc_2015_2016_nhanes_seroprevalence,
         cdc_2015_2016_nhanes_estimate,
         cdc_2018_nhanes_estimate.to_rate(us_population_2018_18_to_49yo),
-    ]
+    ]}
 
 
-def estimate_incidences() -> list[IncidenceRate]:
-    return []
+def estimate_incidences() -> dict[TaxIDs, IncidenceRate]:
+    return {}

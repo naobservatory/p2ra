@@ -40,32 +40,12 @@ class Active(Enum):
 
 
 TaxID = NewType("TaxID", int)
-
+TaxIDs = frozenset[TaxID]
 
 @dataclass(kw_only=True, eq=True, frozen=True)
 class PathogenChars:
     na_type: NAType
     enveloped: Enveloped
-    # Set exactly one of taxid or taxids; read taxids.
-    #
-    # Normally you only should set taxid.  Set taxids in cases like the flu
-    # where surveillance generally conflates Flu A and Flu B but they don't
-    # form a clade.
-    taxid: InitVar[Optional[TaxID]] = None
-    taxids: Optional[frozenset[TaxID]] = None
-    # If we produce any estimates more specific than the overall taxid,
-    # subtaxids will contain all the secondary taxonomic ids we can generate.
-    subtaxids: frozenset[TaxID] = frozenset()
-
-    def __post_init__(self, taxid: Optional[TaxID]):
-        assert bool(taxid) ^ bool(self.taxids)  # Exactly one should be set.
-        if taxid:
-            # A python wart is that frozen dataclasses don't have an exception
-            # for __post_init__, and it thinks assignments here are mutation
-            # instead of initialization.  That's why we're assigning with
-            # __setattr__. See
-            # https://stackoverflow.com/questions/53756788/how-to-set-the-value-of-dataclass-field-in-post-init-when-frozen-true/54119384#54119384
-            object.__setattr__(self, "taxids", frozenset([taxid]))
 
 
 def days_in_month(year: int, month: int) -> int:
@@ -112,7 +92,6 @@ class Variable:
     # Read these via get_dates(), which asserts that they're set.
     parsed_start: Optional[datetime.date] = None
     parsed_end: Optional[datetime.date] = None
-    taxid: Optional[TaxID] = None
     inputs: InitVar[Optional[Iterable["Variable"]]] = None
     all_inputs: set["Variable"] = field(default_factory=set)
 

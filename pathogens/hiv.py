@@ -1,16 +1,13 @@
-import dataclasses
-
 from pathogen_properties import *
 from populations import us_population
 
 background = """HIV is a sexually-transmitted retrovirus which gradually
 weakens the immune system."""
 
-
+HIV=TaxID(11676)
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.ENVELOPED,
-    taxid=TaxID(11676),
 )
 
 # Controlled HIV has basically no sheddding, and we're really only interested
@@ -58,7 +55,7 @@ la_infected_2020 = PrevalenceAbsolute(
 )
 
 
-def estimate_prevalences() -> list[Prevalence]:
+def estimate_prevalences() -> dict[TaxIDs, Prevalence]:
     us_2019 = (
         us_infected_2019.to_rate(us_population_2019)
         * us_unsuppressed_fraction_2019
@@ -68,7 +65,7 @@ def estimate_prevalences() -> list[Prevalence]:
     # it's about the same in 2020 and 2021 as it was in 2019.
     us_2020 = dataclasses.replace(us_2019, date_source=Variable(date="2020"))
     us_2021 = dataclasses.replace(us_2019, date_source=Variable(date="2021"))
-    return [
+    return {frozenset(HIV): [
         us_2019,
         us_2020,
         us_2021,
@@ -78,8 +75,8 @@ def estimate_prevalences() -> list[Prevalence]:
             )
         )
         * la_unsuppressed_fraction_2020,
-    ]
+    ]}
 
 
-def estimate_incidences() -> list[IncidenceRate]:
-    return []
+def estimate_incidences() -> dict[TaxIDs, IncidenceRate]:
+    return {}

@@ -8,11 +8,11 @@ from populations import us_population
 background = """SARS-CoV-2 is an airborne coronavirus, responsible for the
 2019- pandemic"""
 
+SARS_COV_2=TaxID(2697049)
 
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.ENVELOPED,
-    taxid=TaxID(2697049),
 )
 
 underreporting = Scalar(
@@ -46,7 +46,7 @@ target_counties = set(
 )
 
 
-def estimate_incidences() -> list[IncidenceRate]:
+def estimate_incidences() -> dict[TaxIDs, IncidenceRate]:
     estimates = []
 
     # From the COVID-19 Data Repository by the Center for Systems Science and
@@ -124,8 +124,10 @@ def estimate_incidences() -> list[IncidenceRate]:
                     * underreporting
                 )
 
-    return estimates
+    return {
+        frozenset(SARS_COV_2): estimates,
+    }
 
 
-def estimate_prevalences() -> list[Prevalence]:
-    return []
+def estimate_prevalences() -> dict[TaxIDs, Prevalence]:
+    return {}
