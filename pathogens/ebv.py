@@ -50,6 +50,79 @@ uk_seroprevalence_0_to_25 = Prevalence(
 
 EBV_US_2003_2010_SEROPREVALENCE = "https://academic.oup.com/jid/article/208/8/1286/2192838#:~:text=Table%201.Demographic%20Factors%20Associated%20With%20Epstein%E2%80%93Barr%20Virus%20(EBV)%20Antibody%20(Ab)%20Prevalence%2C%20by%20Race/Ethnicity%E2%80%94National%20Health%20and%20Nutrition%20Examination%20Survey%20Cycles%202003%E2%80%932004%2C%202005%E2%80%932006%2C%202007%E2%80%932008%2C%20and%202009%E2%80%932010"
 
+CENSUS_QUERY = "https://data.census.gov/table?q=Annual+Estimates+of+the+Resident+Population+by+Single+Year"
+
+# Initialize the dictionaries for each race
+race_cohorts = {
+    "black_age_cohorts": defaultdict(int),
+    "latino_age_cohorts": defaultdict(int),
+    "white_age_cohorts": defaultdict(int),
+}
+
+digit_extractor = re.compile("\d+")
+
+for race, cohort_dict in race_cohorts.items():
+    with open(f"prevalence-data/{race}.csv") as inf:
+        reader = csv.reader(inf)
+
+        # Skip first two non-age lines
+        next(reader)
+        next(reader)
+
+        for row in reader:
+            age = row[0]
+            number = int(row[1].replace(",", ""))
+
+            # Check if the row is a gender specification row
+            if age.strip() in ["Male:", "Female:"]:
+                continue
+
+            # Set age to '0' for 'Under 1 year' label
+            if age.strip() == "Under 1 year":
+                age = 0
+            else:
+                # Extract all integers and take the first one as age.
+                age_digits = digit_extractor.findall(age)
+                age = int(age_digits[0]) if age_digits else None
+
+            if age is not None:
+                if age <= 18:
+                    cohort_dict[age] += number
+                else:
+                    cohort_dict["adults"] += number
+
+          
+
+
+
+
+with open(prevalence_data_filename("DECENNIALDHC2020.PCT12B-2023-06-06T203002.csv")) as inf:
+    for row in csv.reader(inf):
+        # skip first two lines
+
+
+
+        age, number = [x.replace(",", "").replace(" ", "_"). for x in row]
+        if age in ["Label_(Grouping)","Total","Male:","Female"]: 
+            continue
+            # skipping non-age rows
+        if age in black_age_cohorts.keys():
+            black_age_cohorts[age] = number
+        else:
+            black_age_cohorts[age] = number
+            
+
+
+
+
+
+
+
+
+
+
+
+
 with open(prevalence_data_filename("ebv_6_19_nhanes_2003_2010.csv")) as inf:
     # Extracted from Table 1 of the above paper. This study aggregates NHANES
     # EBV seroprevalence measurements from 2003-2010 for 5 to 19 year olds.
@@ -57,6 +130,29 @@ with open(prevalence_data_filename("ebv_6_19_nhanes_2003_2010.csv")) as inf:
     # stays latent after infection we treat the 18 to 19 year old cohort
     # prevalence as the prevalence of the overall adult US population.
 
+    # We furthermore rescale the prevalence among different ethnic groups in the US NHANES data by national shares different ethnicities
+        estimate_weights: list[tuple[Prevalence, Population]] = []
+        for row in csv.reader(inf):
+            age, ethnicity, size, mean, ci_low, ci_high = [x.strip() for x in row]
+            if age in ["Age", "Total"]: continue
+
+            prevalence = Prevalence(
+                    infections_per_100k=float(mean) * 100_000,
+                    confidence_interval=(float(ci_low) * 100_000, float(ci_high) * 100_000),
+                    coverage_probability=0.95,
+                    number_of_participants=size,
+                    country="United States",
+                    start_date="2003",
+                    end_date="2010",
+                    active=Active.LATENT,
+                    source=EBV_US_2003_2010_SEROPREVALENCE,
+            )
+            
+
+            population = Population( ... ) 
+        estimate_weights.append((prevalence, population))
+
+        us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(estimate_weights)
     cols = None
 
     age_6_17: Dict[str, List] = {
