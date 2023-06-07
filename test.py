@@ -552,25 +552,26 @@ class TestPathogensMatchStudies(unittest.TestCase):
                 continue
 
             with self.subTest(pathogen=pathogen_name):
-                incidences = pathogen.estimate_incidences()
-                prevalences = pathogen.estimate_prevalences()
-
-                for study, bioproject in mgs.rna_bioprojects.items():
-                    with self.subTest(study=study):
-                        for (
-                            sample,
-                            sample_attributes,
-                        ) in mgs_data.sample_attributes(
-                            bioproject, enrichment=mgs.Enrichment.VIRAL
-                        ).items():
-                            with self.subTest(sample=sample):
-                                self.assertNotEqual(
-                                    stats.lookup_variables(
-                                        sample_attributes,
-                                        incidences + prevalences,
-                                    ),
-                                    [],
-                                )
+                for taxids, predictors in by_taxids(
+                    pathogen.pathogen_chars,
+                    pathogen.estimate_incidences()
+                    + pathogen.estimate_prevalences(),
+                ).items():
+                    for study, bioproject in mgs.rna_bioprojects.items():
+                        with self.subTest(study=study):
+                            for (
+                                sample,
+                                sample_attributes,
+                            ) in mgs_data.sample_attributes(
+                                bioproject, enrichment=mgs.Enrichment.VIRAL
+                            ).items():
+                                with self.subTest(sample=sample):
+                                    self.assertNotEqual(
+                                        stats.lookup_variables(
+                                            sample_attributes, predictors
+                                        ),
+                                        [],
+                                    )
 
 
 if __name__ == "__main__":
