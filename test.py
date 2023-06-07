@@ -547,10 +547,7 @@ class TestPathogensMatchStudies(unittest.TestCase):
         # Every RNA pathogen should have at least one estimate for every sample
         # in the projects we're working with.
         mgs_data = mgs.MGSData.from_repo()
-        for pathogen_name, pathogen in pathogens.pathogens.items():
-            if pathogen.pathogen_chars.na_type != NAType.RNA:
-                continue
-
+        for pathogen_name, pathogen in pathogens.rna_viruses.items():
             with self.subTest(pathogen=pathogen_name):
                 for taxids, predictors in by_taxids(
                     pathogen.pathogen_chars,
