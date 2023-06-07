@@ -18,6 +18,16 @@ MGS_REPO_DEFAULTS = {
     "ref": "data-2023-06-02",
 }
 
+BioProject = NewType("BioProject", str)
+Sample = NewType("Sample", str)
+
+
+rna_bioprojects = {
+    "crits_christoph": BioProject("PRJNA661613"),
+    "rothman": BioProject("PRJNA729801"),
+    "spurbeck": BioProject("PRJNA924011"),
+}
+
 
 @dataclass
 class GitHubRepo:
@@ -38,10 +48,6 @@ class GitHubRepo:
                     f"Failed to download {file_url}. "
                     f"Response status code: {response.status}"
                 )
-
-
-BioProject = NewType("BioProject", str)
-Sample = NewType("Sample", str)
 
 
 def load_bioprojects(repo: GitHubRepo) -> dict[BioProject, list[Sample]]:

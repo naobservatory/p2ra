@@ -12,14 +12,7 @@ import stan  # type: ignore
 from scipy.stats import gamma, norm  # type: ignore
 
 from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
-from pathogen_properties import (
-    PathogenChars,
-    Predictor,
-    TaxID,
-    Variable,
-    by_taxids,
-)
-from pathogens import pathogens
+from pathogen_properties import Predictor, TaxID, Variable
 
 county_neighbors = {
     "Los Angeles County": [
@@ -104,7 +97,7 @@ def lookup_variables(
 
     if not qualities:
         return []
-    best_quality = max(quality for (quality, var) in qualities)
+    best_quality = max(quality for (quality, _) in qualities)
     return [var for (quality, var) in qualities if quality == best_quality]
 
 
@@ -244,7 +237,6 @@ def choose_predictor(predictors: list[Predictor]) -> Predictor:
 def build_model(
     mgs_data: MGSData,
     bioproject: BioProject,
-    pathogen_chars: PathogenChars,
     predictors: list[Predictor],
     taxids: frozenset[TaxID],
 ) -> Model:
@@ -256,13 +248,8 @@ def build_model(
             sample=s,
             attrs=attrs,
             viral_reads=mgs_data.viral_reads(bioproject, taxids)[s],
-            predictor=choose_predictor(
-                lookup_variables(attrs, grouped_predictors)
-            ),
+            predictor=choose_predictor(lookup_variables(attrs, predictors)),
         )
-        for taxids, grouped_predictors in by_taxids(
-            pathogen_chars, predictors
-        ).items()
         for s, attrs in samples.items()
     ]
     return Model(data=data)
