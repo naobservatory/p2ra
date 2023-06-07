@@ -529,7 +529,6 @@ class TestStats(unittest.TestCase):
                         model = stats.build_model(
                             mgs_data,
                             bioproject,
-                            pathogen.pathogen_chars,
                             predictors,
                             taxids,
                         )

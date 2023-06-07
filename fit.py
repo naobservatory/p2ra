@@ -70,7 +70,6 @@ def start() -> None:
                 model = stats.build_model(
                     mgs_data,
                     bioproject,
-                    pathogen.pathogen_chars,
                     grouped_predictors,
                     taxids,
                 )
