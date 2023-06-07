@@ -533,10 +533,7 @@ class TestPathogensMatchStudies(unittest.TestCase):
         }
 
         mgs_data = mgs.MGSData.from_repo()
-        for pathogen_name, pathogen in pathogens.pathogens.items():
-            if pathogen.pathogen_chars.na_type != NAType.RNA:
-                continue
-
+        for pathogen_name, pathogen in pathogens.rna_viruses.items():
             with self.subTest(pathogen=pathogen_name):
                 incidences = pathogen.estimate_incidences()
                 prevalences = pathogen.estimate_prevalences()
