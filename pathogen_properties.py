@@ -493,3 +493,21 @@ class IncidenceAbsolute(Taggable):
 
 def prevalence_data_filename(filename):
     return os.path.join(os.path.dirname(__file__), "prevalence-data", filename)
+
+
+def by_taxids(
+    pathogen_chars: PathogenChars, predictors: list[Predictor]
+) -> dict[frozenset[TaxID], list[Predictor]]:
+    out: dict[frozenset[TaxID], list[Predictor]] = {}
+
+    for predictor in predictors:
+        taxids = pathogen_chars.taxids
+        if predictor.taxid:
+            taxids = frozenset([predictor.taxid])
+        assert taxids
+
+        if taxids not in out:
+            out[taxids] = []
+
+        out[taxids].append(predictor)
+    return out

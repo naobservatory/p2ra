@@ -12,8 +12,7 @@ import stan  # type: ignore
 from scipy.stats import gamma, norm  # type: ignore
 
 from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
-from pathogen_properties import Predictor, Variable
-from pathogens import pathogens
+from pathogen_properties import Predictor, TaxID, Variable
 
 county_neighbors = {
     "Los Angeles County": [
@@ -98,7 +97,7 @@ def lookup_variables(
 
     if not qualities:
         return []
-    best_quality = max(quality for (quality, var) in qualities)
+    best_quality = max(quality for (quality, _) in qualities)
     return [var for (quality, var) in qualities if quality == best_quality]
 
 
@@ -231,34 +230,19 @@ class Model(Generic[P]):
 
 
 def choose_predictor(predictors: list[Predictor]) -> Predictor:
-    # TODO: allow other taxids
-    non_taxid_predictors = [
-        predictor for predictor in predictors if not predictor.taxid
-    ]
-    assert len(non_taxid_predictors) == 1
-    return non_taxid_predictors[0]
+    assert len(predictors) == 1
+    return predictors[0]
 
 
 def build_model(
     mgs_data: MGSData,
     bioproject: BioProject,
-    pathogen_name: str,
-    predictor: str,
+    predictors: list[Predictor],
+    taxids: frozenset[TaxID],
 ) -> Model:
-    pathogen = pathogens[pathogen_name]
-    taxids = pathogen.pathogen_chars.taxids
     samples = mgs_data.sample_attributes(
         bioproject, enrichment=Enrichment.VIRAL
     )
-    predictors: list[Predictor]
-    if predictor == "incidence":
-        predictors = pathogen.estimate_incidences()
-    elif predictor == "prevalence":
-        predictors = pathogen.estimate_prevalences()
-    else:
-        raise ValueError(
-            f"{predictor} must be one of 'incidence' or 'prevalence'"
-        )
     data = [
         DataPoint(
             sample=s,

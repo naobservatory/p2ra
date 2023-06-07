@@ -8,7 +8,6 @@ import mgs
 import pathogens
 import populations
 import stats
-from mgs import MGSData, SampleAttributes
 from pathogen_properties import *
 from tree import Tree
 
@@ -58,6 +57,24 @@ class TestPathogens(unittest.TestCase):
             with self.subTest(pathogen=pathogen_name):
                 for estimate in pathogen.estimate_prevalences():
                     estimate.get_dates()
+
+    def test_by_taxids(self):
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                for taxids, estimates in by_taxids(
+                    pathogen.pathogen_chars, pathogen.estimate_prevalences()
+                ).items():
+                    self.assertNotEqual(len(taxids), 0)
+                    self.assertNotEqual(len(estimates), 0)
+                    for estimate in estimates:
+                        if estimate.taxid:
+                            self.assertEqual(
+                                frozenset([estimate.taxid]), taxids
+                            )
+                        else:
+                            self.assertEqual(
+                                pathogen.pathogen_chars.taxids, taxids
+                            )
 
 
 class TestMMWRWeek(unittest.TestCase):
@@ -202,8 +219,9 @@ class TestMGS(unittest.TestCase):
 
     def test_load_bioprojects(self):
         bps = mgs.load_bioprojects(self.repo)
-        # Rothman
-        self.assertIn(mgs.BioProject("PRJNA729801"), bps)
+        for study, bp in mgs.rna_bioprojects.items():
+            with self.subTest(study=study):
+                self.assertIn(bp, bps)
 
     def test_load_sample_attributes(self):
         samples = mgs.load_sample_attributes(self.repo)
@@ -268,13 +286,13 @@ class TestWeightedAverageByPopulation(unittest.TestCase):
 
 
 class TestMGSData(unittest.TestCase):
-    mgs_data = MGSData.from_repo()
-    bioproject = mgs.BioProject("PRJNA729801")  # Rothman
+    mgs_data = mgs.MGSData.from_repo()
+    bioproject = mgs.rna_bioprojects["rothman"]
     sample = mgs.Sample("SRR14530726")  # Random Rothman sample
     taxids = pathogens.pathogens["norovirus"].pathogen_chars.taxids
 
     def test_from_repo(self):
-        self.assertIsInstance(MGSData.from_repo(), MGSData)
+        self.assertIsInstance(mgs.MGSData.from_repo(), mgs.MGSData)
 
     def test_sample_attributes(self):
         samples = self.mgs_data.sample_attributes(self.bioproject)
@@ -416,7 +434,7 @@ class TestPopulations(unittest.TestCase):
 
 
 class TestStats(unittest.TestCase):
-    attrs = SampleAttributes(
+    attrs = mgs.SampleAttributes(
         country="United States",
         state="Pennsylvania",
         county="Allegheny County",
@@ -500,65 +518,60 @@ class TestStats(unittest.TestCase):
         self.assertEqual(stats.lookup_variables(self.attrs, [v6, v7]), [v7])
 
     def test_build_model(self):
-        bioprojects = {
-            "crits-christoph": mgs.BioProject("PRJNA661613"),
-            "rothman": mgs.BioProject("PRJNA729801"),
-        }
-        mgs_data = MGSData.from_repo()
-        predictor = "incidence"
+        mgs_data = mgs.MGSData.from_repo()
         for pathogen_name in ["sars_cov_2", "norovirus"]:
-            for study, bioproject in bioprojects.items():
+            pathogen = pathogens.pathogens[pathogen_name]
+            for study, bioproject in mgs.rna_bioprojects.items():
                 with self.subTest(study=study, pathogen=pathogen_name):
-                    model = stats.build_model(
-                        mgs_data, bioproject, pathogen_name, predictor
-                    )
-                    self.assertEqual(
-                        len(model.data),
-                        len(
-                            mgs_data.sample_attributes(
-                                bioproject, enrichment=mgs.Enrichment.VIRAL
-                            )
-                        ),
-                    )
+                    for taxids, predictors in by_taxids(
+                        pathogen.pathogen_chars, pathogen.estimate_incidences()
+                    ).items():
+                        model = stats.build_model(
+                            mgs_data,
+                            bioproject,
+                            predictors,
+                            taxids,
+                        )
+                        self.assertEqual(
+                            len(model.data),
+                            len(
+                                mgs_data.sample_attributes(
+                                    bioproject, enrichment=mgs.Enrichment.VIRAL
+                                )
+                            ),
+                        )
 
 
 class TestPathogensMatchStudies(unittest.TestCase):
     def test_pathogens_match_studies(self):
         # Every RNA pathogen should have at least one estimate for every sample
         # in the projects we're working with.
-        rna_bioprojects = {
-            "crits_christoph": mgs.BioProject("PRJNA661613"),
-            "rothman": mgs.BioProject("PRJNA729801"),
-            "spurbeck": mgs.BioProject("PRJNA924011"),
-        }
-
         mgs_data = mgs.MGSData.from_repo()
         for pathogen_name, pathogen in pathogens.pathogens.items():
             if pathogen.pathogen_chars.na_type != NAType.RNA:
                 continue
 
             with self.subTest(pathogen=pathogen_name):
-                incidences = pathogen.estimate_incidences()
-                prevalences = pathogen.estimate_prevalences()
-
-                for study, bioproject in rna_bioprojects.items():
-                    with self.subTest(study=study):
-                        for (
-                            sample,
-                            sample_attributes,
-                        ) in mgs_data.sample_attributes(
-                            bioproject, enrichment=mgs.Enrichment.VIRAL
-                        ).items():
-                            with self.subTest(sample=sample):
-                                self.assertNotEqual(
-                                    stats.lookup_variables(
-                                        sample_attributes,
-                                        itertools.chain(
-                                            incidences, prevalences
+                for taxids, predictors in by_taxids(
+                    pathogen.pathogen_chars,
+                    pathogen.estimate_incidences()
+                    + pathogen.estimate_prevalences(),
+                ).items():
+                    for study, bioproject in mgs.rna_bioprojects.items():
+                        with self.subTest(study=study):
+                            for (
+                                sample,
+                                sample_attributes,
+                            ) in mgs_data.sample_attributes(
+                                bioproject, enrichment=mgs.Enrichment.VIRAL
+                            ).items():
+                                with self.subTest(sample=sample):
+                                    self.assertNotEqual(
+                                        stats.lookup_variables(
+                                            sample_attributes, predictors
                                         ),
-                                    ),
-                                    [],
-                                )
+                                        [],
+                                    )
 
 
 if __name__ == "__main__":
