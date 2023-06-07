@@ -1,6 +1,7 @@
 import csv
 from collections import Counter
 from typing import Dict, List
+from collections import defaultdict
 
 import numpy as np
 
@@ -48,21 +49,20 @@ uk_seroprevalence_0_to_25 = Prevalence(
 )
 
 
-EBV_US_2003_2010_SEROPREVALENCE = "https://academic.oup.com/jid/article/208/8/1286/2192838#:~:text=Table%201.Demographic%20Factors%20Associated%20With%20Epstein%E2%80%93Barr%20Virus%20(EBV)%20Antibody%20(Ab)%20Prevalence%2C%20by%20Race/Ethnicity%E2%80%94National%20Health%20and%20Nutrition%20Examination%20Survey%20Cycles%202003%E2%80%932004%2C%202005%E2%80%932006%2C%202007%E2%80%932008%2C%20and%202009%E2%80%932010"
-
 CENSUS_QUERY = "https://data.census.gov/table?q=Annual+Estimates+of+the+Resident+Population+by+Single+Year"
 
-# Initialize the dictionaries for each race
+
 race_cohorts = {
-    "black_age_cohorts": defaultdict(int),
-    "latino_age_cohorts": defaultdict(int),
-    "white_age_cohorts": defaultdict(int),
+    "black_age_cohorts": {},
+    "latino_age_cohorts": {},
+    "white_age_cohorts": {},
 }
+
 
 digit_extractor = re.compile("\d+")
 
 for race, cohort_dict in race_cohorts.items():
-    with open(f"prevalence-data/{race}.csv") as inf:
+    with open(prevalence_data_filename(f"{race}.csv")) as inf:
         reader = csv.reader(inf)
 
         # Skip first two non-age lines
@@ -70,57 +70,35 @@ for race, cohort_dict in race_cohorts.items():
         next(reader)
 
         for row in reader:
-            age = row[0]
+            cohort_age = row[0]
             number = int(row[1].replace(",", ""))
 
             # Check if the row is a gender specification row
-            if age.strip() in ["Male:", "Female:"]:
+            if cohort_age.strip() in ["Male:", "Female:"]:
                 continue
 
-            # Set age to '0' for 'Under 1 year' label
-            if age.strip() == "Under 1 year":
-                age = 0
+            # Set cohort_age to '0' for 'Under 1 year' label
+            if cohort_age.strip() == "Under 1 year":
+                cohort_age = 0
             else:
                 # Extract all integers and take the first one as age.
-                age_digits = digit_extractor.findall(age)
-                age = int(age_digits[0]) if age_digits else None
+                age_digits = digit_extractor.findall(cohort_age)
+                cohort_age = int(age_digits[0]) if age_digits else None
 
-            if age is not None:
-                if age <= 18:
-                    cohort_dict[age] += number
-                else:
-                    cohort_dict["adults"] += number
-
-          
-
-
-
-
-with open(prevalence_data_filename("DECENNIALDHC2020.PCT12B-2023-06-06T203002.csv")) as inf:
-    for row in csv.reader(inf):
-        # skip first two lines
+            if cohort_age is not None:
+                if cohort_age <= 18:
+                    if cohort_age in cohort_dict:
+                        cohort_dict[cohort_age] += number
+                    else:
+                        cohort_dict[cohort_age] = number
+                elif cohort_age > 18:
+                    if "adults" in cohort_dict:
+                        cohort_dict["adults"] += number
+                    else:
+                        cohort_dict["adults"] = number
 
 
-
-        age, number = [x.replace(",", "").replace(" ", "_"). for x in row]
-        if age in ["Label_(Grouping)","Total","Male:","Female"]: 
-            continue
-            # skipping non-age rows
-        if age in black_age_cohorts.keys():
-            black_age_cohorts[age] = number
-        else:
-            black_age_cohorts[age] = number
-            
-
-
-
-
-
-
-
-
-
-
+EBV_US_2003_2010_SEROPREVALENCE = "https://academic.oup.com/jid/article/208/8/1286/2192838#:~:text=Table%201.Demographic%20Factors%20Associated%20With%20Epstein%E2%80%93Barr%20Virus%20(EBV)%20Antibody%20(Ab)%20Prevalence%2C%20by%20Race/Ethnicity%E2%80%94National%20Health%20and%20Nutrition%20Examination%20Survey%20Cycles%202003%E2%80%932004%2C%202005%E2%80%932006%2C%202007%E2%80%932008%2C%20and%202009%E2%80%932010"
 
 
 with open(prevalence_data_filename("ebv_6_19_nhanes_2003_2010.csv")) as inf:
@@ -131,127 +109,67 @@ with open(prevalence_data_filename("ebv_6_19_nhanes_2003_2010.csv")) as inf:
     # prevalence as the prevalence of the overall adult US population.
 
     # We furthermore rescale the prevalence among different ethnic groups in the US NHANES data by national shares different ethnicities
-        estimate_weights: list[tuple[Prevalence, Population]] = []
-        for row in csv.reader(inf):
-            age, ethnicity, size, mean, ci_low, ci_high = [x.strip() for x in row]
-            if age in ["Age", "Total"]: continue
 
-            prevalence = Prevalence(
-                    infections_per_100k=float(mean) * 100_000,
-                    confidence_interval=(float(ci_low) * 100_000, float(ci_high) * 100_000),
-                    coverage_probability=0.95,
-                    number_of_participants=size,
+    ethnicity_mapping = {
+        "Mexican American": "latino_age_cohorts",
+        "Black": "black_age_cohorts",
+        "White": "white_age_cohorts",
+    }
+    estimate_weights: list[tuple[Prevalence, Population]] = []
+    for row in csv.reader(inf):
+        age_range, ethnicity, size, mean, ci_low, ci_high = [
+            x.strip() for x in row
+        ]
+        if age_range in ["Age", "Total"]:
+            continue
+
+        prevalence = Prevalence(
+            infections_per_100k=float(mean)
+            * 1_000,  # percentage points to per
+            # 100k,
+            confidence_interval=(
+                float(ci_low) * 1_000,
+                float(ci_high) * 1_000,
+            ),
+            coverage_probability=0.95,
+            number_of_participants=size,
+            country="United States",
+            start_date="2003",
+            end_date="2010",
+            active=Active.LATENT,
+            source=EBV_US_2003_2010_SEROPREVALENCE,
+        )
+
+        if ethnicity in ethnicity_mapping:
+            cohort_size = 0
+            if (
+                age_range == "18_19"
+            ):  # Matching 18-19 year old EBV+ rates with adult population
+                population = Population(
+                    people=race_cohorts[ethnicity_mapping[ethnicity]][
+                        "adults"
+                    ],
+                    source=CENSUS_QUERY,
                     country="United States",
-                    start_date="2003",
-                    end_date="2010",
-                    active=Active.LATENT,
-                    source=EBV_US_2003_2010_SEROPREVALENCE,
-            )
-            
+                    date="2020",
+                )
 
-            population = Population( ... ) 
+                continue
+
+            for age in range(*list(map(int, age_range.split("_")))):
+                cohort_size += race_cohorts[ethnicity_mapping[ethnicity]][age]
+                population = Population(
+                    people=cohort_size,
+                    source=CENSUS_QUERY,
+                    country="United States",
+                    date="2020",
+                )
+
         estimate_weights.append((prevalence, population))
 
-        us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(estimate_weights)
-    cols = None
-
-    age_6_17: Dict[str, List] = {
-        "mean": [],
-        "ci_lower": [],
-        "ci_upper": [],
-        "weights": [],
-        "cohort_sizes": [],
-    }
-
-    age_18_19: Dict[str, List] = {
-        "mean": [],
-        "ci_lower": [],
-        "ci_upper": [],
-        "weights": [],
-        "cohort_sizes": [],
-    }
-
-    total_participants = 0
-
-    for row in csv.reader(inf):
-        if cols is None:
-            cols = row
-            continue
-        age = row[0].strip()
-        cohort_size = int(row[2])
-        mean = float(row[3]) / 100
-        ci_lower = float(row[4]) / 100
-        ci_upper = float(row[5]) / 100
-
-        if age == "Total":
-            total_participants += cohort_size
-            continue
-
-        elif age != "18_19":
-            age_6_17["mean"].append(mean)
-            age_6_17["ci_lower"].append(ci_lower)
-            age_6_17["ci_upper"].append(ci_upper)
-            age_6_17["weights"].append(cohort_size / total_participants)
-            age_6_17["cohort_sizes"].append(cohort_size)
-            continue
-
-        elif age == "18_19":
-            age_18_19["mean"].append(mean)
-            age_18_19["ci_lower"].append(ci_lower)
-            age_18_19["ci_upper"].append(ci_upper)
-            age_18_19["weights"].append(cohort_size / total_participants)
-            age_18_19["cohort_sizes"].append(cohort_size)
-
-    mean_18_19 = np.average(age_18_19["mean"], weights=age_18_19["weights"])
-    ci_upper_18_19 = np.average(
-        age_18_19["ci_upper"], weights=age_18_19["weights"]
+    us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(
+        *estimate_weights
     )
-    ci_lower_18_19 = np.average(
-        age_18_19["ci_lower"], weights=age_18_19["weights"]
-    )
-
-    mean_6_17 = np.average(age_6_17["mean"], weights=age_6_17["weights"])
-    ci_upper_6_17 = np.average(
-        age_6_17["ci_upper"], weights=age_6_17["weights"]
-    )
-    ci_lower_6_17 = np.average(
-        age_6_17["ci_lower"], weights=age_6_17["weights"]
-    )
-
-    nhanes_6_17_yo_seroprevalence_2003_2010 = Prevalence(
-        infections_per_100k=mean_6_17 * 100_000,
-        confidence_interval=(ci_lower_6_17 * 100_000, ci_upper_6_17 * 100_000),
-        coverage_probability=0.95,
-        number_of_participants=sum(age_6_17["cohort_sizes"]),
-        country="United States",
-        start_date="2003",
-        end_date="2010",
-        active=Active.LATENT,
-        source=EBV_US_2003_2010_SEROPREVALENCE,
-    )
-
-    nhanes_18_19_yo_seroprevalence_2003_2010 = Prevalence(
-        infections_per_100k=mean_18_19 * 100_000,
-        confidence_interval=(
-            ci_lower_18_19 * 100_000,
-            ci_upper_18_19 * 100_000,
-        ),
-        coverage_probability=0.95,
-        number_of_participants=sum(age_18_19["cohort_sizes"]),
-        country="United States",
-        start_date="2003",
-        end_date="2010",
-        active=Active.LATENT,
-        source=EBV_US_2003_2010_SEROPREVALENCE,
-    )
-
-us_seroprevalence_2003_2010 = Prevalence.weightedAverageByPopulation(
-    (nhanes_6_17_yo_seroprevalence_2003_2010, us_population_u18),
-    (nhanes_18_19_yo_seroprevalence_2003_2010, us_population_18plus),
-    # As noted previously, given very high seroprevalence, and lifetime
-    # persistence of EBV, we treat this 18 to 19yo data as corresponding
-    # to seroprevalence across the entire adult population.
-)
 
 
 # Source for CSV: https://www.census.gov/data-tools/demo/idb/#/pop?COUNTRY_YEAR=2023&COUNTRY_YR_ANIM=2023&FIPS_SINGLE=DA&menu=popViz&FIPS=DA&POP_YEARS=2023&popPages=BYAGE
