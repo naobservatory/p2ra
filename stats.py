@@ -12,14 +12,7 @@ import stan  # type: ignore
 from scipy.stats import gamma, norm  # type: ignore
 
 from mgs import BioProject, Enrichment, MGSData, Sample, SampleAttributes
-from pathogen_properties import (
-    PathogenChars,
-    Predictor,
-    TaxID,
-    Variable,
-    by_taxids,
-)
-from pathogens import pathogens
+from pathogen_properties import Predictor, TaxID, Variable
 
 county_neighbors = {
     "Los Angeles County": [
