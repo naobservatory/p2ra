@@ -34,28 +34,6 @@ reported_acute_ohio_2021 = IncidenceRate(
 )
 
 
-reported_total_ohio_2020 = Prevalence(
-    # Total hepatitis equals all hepatitis C cases, "acute", "chronic", and
-    # "perinatal"
-    infections_per_100k=110.6,
-    date="2020",
-    country="United States",
-    state="Ohio",
-    source="https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_M1HGGIK0N0JO00QO9DDDDM3000-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8",
-    active=Active.LATENT,
-)
-
-
-reported_total_ohio_2021 = Prevalence(
-    infections_per_100k=105.4,
-    date="2021",
-    country="United States",
-    state="Ohio",
-    source="https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_M1HGGIK0N0JO00QO9DDDDM3000-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8",
-    active=Active.LATENT,
-)
-
-
 cdc_estimated_acute_44_us_states_2020 = IncidenceRate(
     annual_infections_per_100k=1.5,
     # The CDC gives a CI for its 66,700 estimated infections (95% CI:
@@ -121,6 +99,11 @@ acute_underreporting_factor = Scalar(
 
 ohio_counties_case_rates = {
     # source: https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_K9I401S01H7F40QBNJU3SO1F56-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8
+    # We ended up not using total cases, which could be used to arrive at
+    # chronic incidence by subtracting acute cases [total - acute]. This is
+    # because because we i) do not have an underreporting factor for chronic
+    # incidence, and ii) prevalence is a better measure for the chronic
+    # version of Hep C.
     "Franklin": {
         "2020": {"acute": 0.8, "total": 74.3},
         "2021": {"acute": 1.5, "total": 86.8},
@@ -188,23 +171,6 @@ def estimate_incidences():
 
 def estimate_prevalences() -> list[Prevalence]:
     estimates = [
-        reported_total_ohio_2020,
-        reported_total_ohio_2021,
         estimated_current_infection_us_2013_2016,
     ]
-    for county in ohio_counties_case_rates:
-        for year in ohio_counties_case_rates[county]:
-            estimates.append(
-                Prevalence(
-                    infections_per_100k=ohio_counties_case_rates[county][year][
-                        "total"
-                    ],
-                    date=year,
-                    country="United States",
-                    state="Ohio",
-                    county=county,
-                    active=Active.LATENT,
-                    source=OHIO_COUNTY_ESTIMATES_SOURCE,
-                )
-            )
     return estimates
