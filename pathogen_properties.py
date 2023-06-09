@@ -511,3 +511,14 @@ def by_taxids(
 
         out[taxids].append(predictor)
     return out
+
+
+# We don't want to predict zero of any pathogen, both because they almost never
+# go truely to zero and because modeling will be taking logs of our output.
+# Instead, consider our limit of detection to be a single event (an outbreak or
+# reported postive test), and when we have no recorded events figure there were
+# actually 0.1.
+#
+# It might be better to handle this in the modeling step, but by the time we
+# get to that point the granularity of the input data has been discarded.
+QUANTITY_WHEN_NONE_OBSERVED = 0.1
