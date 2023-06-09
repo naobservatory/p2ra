@@ -89,20 +89,18 @@ class TestPathogens(unittest.TestCase):
                         pathogen.estimate_incidences(),
                     ),
                 ]:
-                    seen = set()
                     for taxids, estimates in by_taxids(
                         pathogen.pathogen_chars, predictors
                     ).items():
+                        seen = set()
                         for estimate in estimates:
                             key = (
                                 estimate.get_dates(),
                                 estimate.summarize_location(),
-                                taxids,
-                                estimate.primary,
                             )
                             if key in seen:
                                 self.fail(
-                                    f"Duplicate {label} estimate found for {pathogen_name}: {key}. Drop duplicate estimates or flag as primary/secondary."
+                                    f"Duplicate {label} estimate found for {pathogen_name}: {key}."
                                 )
                             seen.add(key)
 

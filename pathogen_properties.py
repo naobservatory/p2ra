@@ -39,11 +39,6 @@ class Active(Enum):
     LATENT = "Latent"
 
 
-class Primary(Enum):
-    PRIMARY = "Primary"
-    SECONDARY = "Secondary"
-
-
 TaxID = NewType("TaxID", int)
 
 
@@ -330,7 +325,6 @@ class Prevalence(Predictor):
     """What fraction of people have this pathogen at some moment"""
 
     active: Active
-    primary: Optional[Primary] = None
     infections_per_100k: float
 
     def get_data(self) -> float:
@@ -343,7 +337,6 @@ class Prevalence(Predictor):
             active=self.active,
             date_source=self,
             location_source=self,
-            primary=self.primary,
         )
 
     def __truediv__(self, scalar: Scalar) -> "Prevalence":
@@ -353,7 +346,6 @@ class Prevalence(Predictor):
             active=self.active,
             date_source=self,
             location_source=self,
-            primary=self.primary,
         )
 
     def __add__(self: "Prevalence", other: "Prevalence") -> "Prevalence":
@@ -367,7 +359,6 @@ class Prevalence(Predictor):
             active=self.active,
             date_source=self,
             location_source=self,
-            primary=self.primary,
         )
 
     @staticmethod
@@ -398,7 +389,6 @@ class Prevalence(Predictor):
             active=self.active,
             date_source=self,
             location_source=self,
-            primary=self.primary,
         )
 
 
@@ -408,7 +398,6 @@ class PrevalenceAbsolute(Taggable):
 
     infections: float
     active: Active
-    primary: Optional[Primary] = None
 
     def to_rate(self, population: Population) -> Prevalence:
         self.assert_comparable(population)
@@ -419,7 +408,6 @@ class PrevalenceAbsolute(Taggable):
             active=self.active,
             date_source=self,
             location_source=self,
-            primary=self.primary,
         )
 
 
@@ -446,7 +434,6 @@ class IncidenceRate(Predictor):
     """What fraction of people get this pathogen annually"""
 
     annual_infections_per_100k: float
-    primary: Optional[Primary] = None
 
     def get_data(self) -> float:
         return self.annual_infections_per_100k
@@ -458,7 +445,6 @@ class IncidenceRate(Predictor):
             inputs=[self, scalar],
             date_source=self,
             location_source=self,
-            primary=self.primary,
         )
 
     @staticmethod
@@ -476,7 +462,6 @@ class IncidenceRate(Predictor):
             location_source=pairs[0][1],
             date_source=pairs[0][1],
             inputs=itertools.chain.from_iterable(pairs),
-            # HOW TO IMPLEMENT something like `primary=self.primary` here?
         )
 
 
@@ -485,7 +470,6 @@ class IncidenceAbsolute(Taggable):
     """How many people get this pathogen annually"""
 
     annual_infections: float
-    primary: Optional[Primary] = None
 
     def to_rate(self, population: Population) -> IncidenceRate:
         self.assert_comparable(population)
@@ -497,7 +481,6 @@ class IncidenceAbsolute(Taggable):
             inputs=[self, population],
             date_source=self,
             location_source=self,
-            primary=self.primary,
         )
 
     def __truediv__(self, other: "IncidenceAbsolute"):

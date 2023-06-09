@@ -16,18 +16,6 @@ pathogen_chars = PathogenChars(
 )
 
 
-cdc_2015_2016_nhanes_seroprevalence = Prevalence(
-    infections_per_100k=478 / 2815 * 100_000,
-    number_of_participants=2815,
-    country="United States",
-    start_date="2015",
-    end_date="2016",
-    active=Active.LATENT,
-    primary=Primary.SECONDARY,
-    source="https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm#:~:text=3710-,LBXHE2%20%2D%20Herpes%20Simplex%20Virus%20Type%202,-Variable%20Name%3A,",
-)
-
-
 cdc_2018_nhanes_estimate = PrevalenceAbsolute(
     infections=18.6 * 1e6,
     confidence_interval=(18.1 * 1e6, 19.0 * 1e6),
@@ -44,10 +32,11 @@ cdc_2015_2016_nhanes_estimate = Prevalence(
     infections_per_100k=0.121 * 100_000,
     country="United States",
     confidence_interval=(0.0966 * 100_000, 0.1495 * 100_000),
+    # This CDC estimate is based on the following NHANES data:
+    # https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm#:~:text=3710-,LBXHE2%20%2D%20Herpes%20Simplex%20Virus%20Type%202,-Variable%20Name%3A
     start_date="2015",
     end_date="2016",
     active=Active.LATENT,
-    primary=Primary.PRIMARY,
     source="https://www.cdc.gov/nchs/data/databriefs/db304_table.pdf?#page=3",
     methods="https://www.cdc.gov/nchs/products/databriefs/db304.htm#:~:text=Estimates%20were%20calculated,p%20%3C%200.05.",
 )
@@ -106,7 +95,6 @@ us_population_2018_18_to_49yo = Population(
 
 def estimate_prevalences() -> list[Prevalence]:
     return [
-        cdc_2015_2016_nhanes_seroprevalence,
         cdc_2015_2016_nhanes_estimate,
         cdc_2018_nhanes_estimate.to_rate(us_population_2018_18_to_49yo),
     ]
