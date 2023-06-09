@@ -99,8 +99,11 @@ acute_underreporting_factor = Scalar(
 
 ohio_counties_case_rates = {
     # source: https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_K9I401S01H7F40QBNJU3SO1F56-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8
-    # We ended up not using the total information listed here, as chronic
-    # incidence is hard to work with in out modelling.
+    # We ended up not using total cases, which could be used to arrive at
+    # chronic incidence by subtracting acute cases [total - acute]. This is
+    # because because we i) do not have an underreporting factor for chronic
+    # incidence, and ii) prevalence is a better measure for the chronic
+    # version of Hep C  prevalence
     "Franklin": {
         "2020": {"acute": 0.8, "total": 74.3},
         "2021": {"acute": 1.5, "total": 86.8},
@@ -169,8 +172,5 @@ def estimate_incidences():
 def estimate_prevalences() -> list[Prevalence]:
     estimates = [
         estimated_current_infection_us_2013_2016,
-        # Not using total incidence - acute incidence, even though this does
-        # represent chronic incidence, as chronic incidence is hard to work
-        # with in our modelling.
     ]
     return estimates
