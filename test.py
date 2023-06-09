@@ -102,7 +102,7 @@ class TestPathogens(unittest.TestCase):
                             )
                             if key in seen:
                                 self.fail(
-                                    f"Duplicate {label} estimate found for {pathogen_name}: {key}. Do you want to differentiate parallel estimates by primary/secondary?"
+                                    f"Duplicate {label} estimate found for {pathogen_name}: {key}. Drop duplicate estimates or flag as primary/secondary."
                                 )
                             seen.add(key)
 
