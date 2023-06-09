@@ -181,8 +181,8 @@ class Model(Generic[P]):
     def plot_posterior_histograms(self) -> matplotlib.figure.Figure:
         # TODO: Make sure this stays in sync with model.stan
         params = [
+            ("sigma", np.linspace(0, 4, 1000), gamma(1)),
             ("b_std", np.linspace(-4, 4, 1000), norm(scale=2)),
-            ("b", np.linspace(-4, 4, 1000), norm(scale=2)),
         ]
         per_draw_df = self.get_per_draw_statistics()
         fig, axes = plt.subplots(

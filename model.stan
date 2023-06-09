@@ -6,15 +6,16 @@ data {
 }
 transformed data {
   vector[J] mu = log(x) - mean(log(x));
-  real<lower=0> sigma = 0.5;
   real log_mean_y = log(mean(y));
   real log_mean_n = log(mean(n));
 }
 parameters {
+  real<lower=0> sigma;      // standard deviation of true predictors
   real b_std;               // P2RA coefficient (on standardized scale)
   vector[J] theta_std;      // standardized true predictor for each sample
 }
 model {
+  sigma ~ exponential(1);
   b_std ~ normal(0, 2);
   theta_std ~ normal(mu, sigma);
   y ~ binomial_logit(n, b_std + theta_std + log_mean_y - log_mean_n);
