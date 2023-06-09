@@ -23,6 +23,7 @@ cdc_2015_2016_nhanes_seroprevalence = Prevalence(
     start_date="2015",
     end_date="2016",
     active=Active.LATENT,
+    primary=Primary.SECONDARY,
     source="https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm#:~:text=3710-,LBXHE2%20%2D%20Herpes%20Simplex%20Virus%20Type%202,-Variable%20Name%3A,",
 )
 
@@ -46,6 +47,7 @@ cdc_2015_2016_nhanes_estimate = Prevalence(
     start_date="2015",
     end_date="2016",
     active=Active.LATENT,
+    primary=Primary.PRIMARY,
     source="https://www.cdc.gov/nchs/data/databriefs/db304_table.pdf?#page=3",
     methods="https://www.cdc.gov/nchs/products/databriefs/db304.htm#:~:text=Estimates%20were%20calculated,p%20%3C%200.05.",
 )

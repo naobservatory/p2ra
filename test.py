@@ -76,6 +76,36 @@ class TestPathogens(unittest.TestCase):
                                 pathogen.pathogen_chars.taxids, taxids
                             )
 
+    def test_duplicate_estimates(self):
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                for label, predictors in [
+                    (
+                        "prevalence",
+                        pathogen.estimate_prevalences(),
+                    ),
+                    (
+                        "incidence",
+                        pathogen.estimate_incidences(),
+                    ),
+                ]:
+                    seen = set()
+                    for taxids, estimates in by_taxids(
+                        pathogen.pathogen_chars, predictors
+                    ).items():
+                        for estimate in estimates:
+                            key = (
+                                estimate.get_dates(),
+                                estimate.summarize_location(),
+                                taxids,
+                                estimate.primary,
+                            )
+                            if key in seen:
+                                self.fail(
+                                    f"Duplicate {label} estimate found for {pathogen_name}: {key}. Do you want to differentiate parallel estimates by primary/secondary?"
+                                )
+                            seen.add(key)
+
 
 class TestMMWRWeek(unittest.TestCase):
     def test_mmwr_week(self):

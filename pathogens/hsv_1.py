@@ -20,6 +20,7 @@ cdc_2015_2016_nhanes_seroprevalence = Prevalence(
     end_date="2016",
     country="United States",
     active=Active.LATENT,
+    primary=Primary.SECONDARY,
     source="https://web.archive.org/web/20220707050306/https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm",
 )
 cdc_2015_2016_nhanes_estimate = Prevalence(
@@ -29,6 +30,7 @@ cdc_2015_2016_nhanes_estimate = Prevalence(
     start_date="2015",
     end_date="2016",
     active=Active.LATENT,
+    primary=Primary.PRIMARY,
     source="https://www.cdc.gov/nchs/data/databriefs/db304_table.pdf#page=1",
     methods="https://www.cdc.gov/nchs/products/databriefs/db304.htm#:~:text=Data%20for%20this,p%20%3C%200.05",
 )
