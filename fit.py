@@ -66,8 +66,9 @@ def start() -> None:
                     bioproject,
                     grouped_predictors,
                     taxids,
+                    random_seed=1,
                 )
-                model.fit_model(random_seed=1)
+                model.fit_model()
                 fig_hist = model.plot_posterior_histograms()
                 fig_hist.savefig(
                     figdir / f"{study}-{pathogen_name}-posthist.pdf"

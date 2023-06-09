@@ -531,6 +531,7 @@ class TestStats(unittest.TestCase):
                             bioproject,
                             predictors,
                             taxids,
+                            random_seed=1,
                         )
                         self.assertEqual(
                             len(model.data),

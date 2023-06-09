@@ -1,31 +1,46 @@
 data {
-  int<lower=1> J;
+  int<lower=1> J;           // number of samples
   array[J] int<lower=0> y;  // viral read counts
   array[J] int<lower=0> n;  // total read counts
   vector[J] x;              // estimated predictor (prevalence or incidence)
+  int<lower=1> L;           // number of sampling locations
+  array[J] int<lower=1, upper=L> ll;  // sampling locations
 }
 transformed data {
-  vector[J] mu = log(x) - mean(log(x));
+  vector[J] x_std = log(x) - mean(log(x));
   real log_mean_y = log(mean(y));
   real log_mean_n = log(mean(n));
 }
 parameters {
-  real<lower=0> sigma;      // standard deviation of true predictors
-  real b_std;               // P2RA coefficient (on standardized scale)
   vector[J] theta_std;      // standardized true predictor for each sample
+  real<lower=0> sigma;      // standard deviation of true predictors
+  real mu;                  // mean P2RA coefficient (on standardized scale)
+  real<lower=0> tau;        // std of P2RA coefficients pre location
+  vector[L] b_l;            // P2RA coefficient per location
 }
 model {
   sigma ~ exponential(1);
-  b_std ~ normal(0, 2);
-  theta_std ~ normal(mu, sigma);
-  y ~ binomial_logit(n, b_std + theta_std + log_mean_y - log_mean_n);
+  theta_std ~ normal(x_std, sigma);
+  mu ~ normal(0, 2);
+  tau ~ exponential(1);
+  b_l ~ normal(mu, tau);
+  for (j in 1:J){
+    y[j] ~ binomial_logit(n[j], b_l[ll[j]] + theta_std[j] + log_mean_y - log_mean_n);
+  }
 }
 generated quantities {
   // posterior predictive viral read counts
-  array[J] int<lower=0> y_tilde
-    = binomial_rng(n, inv_logit(b_std + theta_std + log_mean_y - log_mean_n));
+  array[J] int<lower=0> y_tilde;
+  for (j in 1:J){
+    y_tilde[j] =
+      binomial_rng(
+        n[j],
+        inv_logit(b_l[ll[j]] + theta_std[j] + log_mean_y - log_mean_n)
+      );
+  }
   // posterior true prevalence for each sample
   vector[J] theta = theta_std + mean(log(x));
   // posterior P2RA coefficient
-  real b = b_std - mean(log(x)) + log_mean_y - log_mean_n;
+  real b = mu - mean(log(x)) + log_mean_y - log_mean_n;
+  vector[L] b_loc = b_l - mean(log(x)) + log_mean_y - log_mean_n;
 }

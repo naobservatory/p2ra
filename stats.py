@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Generic, Optional, TypeVar
@@ -118,22 +118,35 @@ STANFILE = Path("model.stan")
 @dataclass
 class Model(Generic[P]):
     data: list[DataPoint[P]]
+    random_seed: int
+    model: stan.model.Model = field(init=False)
     fit: None | stan.fit.Fit = None
     dataframe: None | pd.DataFrame = None
 
-    def fit_model(
-        self, random_seed: int, num_chains: int = 4, num_samples: int = 1000
-    ) -> None:
+    def __post_init__(self) -> None:
         with open(STANFILE, "r") as stanfile:
             stan_code = stanfile.read()
+        fine_locations = list(set(dp.attrs.fine_location for dp in self.data))
         stan_data = {
             "J": len(self.data),
             "y": np.array([dp.viral_reads for dp in self.data]),
             "n": np.array([dp.attrs.reads for dp in self.data]),
             "x": np.array([dp.predictor.get_data() for dp in self.data]),
+            "L": len(fine_locations),
+            "ll": [
+                # Stan vectors are one-indexed
+                fine_locations.index(dp.attrs.fine_location) + 1
+                for dp in self.data
+            ],
         }
-        model = stan.build(stan_code, data=stan_data, random_seed=random_seed)
-        self.fit = model.sample(num_chains=num_chains, num_samples=num_samples)
+        self.model = stan.build(
+            stan_code, data=stan_data, random_seed=self.random_seed
+        )
+
+    def fit_model(self, num_chains: int = 4, num_samples: int = 1000) -> None:
+        self.fit = self.model.sample(
+            num_chains=num_chains, num_samples=num_samples
+        )
         self.dataframe = self._make_dataframe()
 
     def _make_dataframe(self) -> pd.DataFrame:
@@ -182,7 +195,7 @@ class Model(Generic[P]):
         # TODO: Make sure this stays in sync with model.stan
         params = [
             ("sigma", np.linspace(0, 4, 1000), gamma(1)),
-            ("b_std", np.linspace(-4, 4, 1000), norm(scale=2)),
+            ("mu", np.linspace(-4, 4, 1000), norm(scale=2)),
         ]
         per_draw_df = self.get_per_draw_statistics()
         fig, axes = plt.subplots(
@@ -239,6 +252,7 @@ def build_model(
     bioproject: BioProject,
     predictors: list[Predictor],
     taxids: frozenset[TaxID],
+    random_seed: int,
 ) -> Model:
     samples = mgs_data.sample_attributes(
         bioproject, enrichment=Enrichment.VIRAL
@@ -252,7 +266,7 @@ def build_model(
         )
         for s, attrs in samples.items()
     ]
-    return Model(data=data)
+    return Model(data=data, random_seed=random_seed)
 
 
 def posterior_hist(data, param: str, prior_x, prior, ax=None):
