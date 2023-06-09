@@ -563,12 +563,16 @@ class TestPathogensMatchStudies(unittest.TestCase):
                                 bioproject, enrichment=mgs.Enrichment.VIRAL
                             ).items():
                                 with self.subTest(sample=sample):
-                                    self.assertNotEqual(
-                                        stats.lookup_variables(
-                                            sample_attributes, predictors
-                                        ),
-                                        [],
+                                    chosen_predictors = stats.lookup_variables(
+                                        sample_attributes, predictors
                                     )
+                                    self.assertNotEqual(chosen_predictors, [])
+
+                                    for predictor in chosen_predictors:
+                                        with self.subTest(predictor=predictor):
+                                            self.assertGreater(
+                                                predictor.get_data(), 0
+                                            )
 
 
 if __name__ == "__main__":
