@@ -103,7 +103,7 @@ ohio_counties_case_rates = {
     # chronic incidence by subtracting acute cases [total - acute]. This is
     # because because we i) do not have an underreporting factor for chronic
     # incidence, and ii) prevalence is a better measure for the chronic
-    # version of Hep C  prevalence
+    # version of Hep C.
     "Franklin": {
         "2020": {"acute": 0.8, "total": 74.3},
         "2021": {"acute": 1.5, "total": 86.8},
