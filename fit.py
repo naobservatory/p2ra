@@ -7,7 +7,7 @@ import pandas as pd
 
 import pathogens
 import stats
-from mgs import BioProject, MGSData
+from mgs import MGSData, rna_bioprojects
 from pathogen_properties import Predictor, by_taxids
 
 
@@ -38,12 +38,6 @@ def print_summary(
     print(dedent(output))
 
 
-bioprojects = {
-    "crits_christoph": BioProject("PRJNA661613"),
-    "rothman": BioProject("PRJNA729801"),
-}
-
-
 def start() -> None:
     outdir = Path("fits")
     outdir.mkdir(exist_ok=True)
@@ -51,9 +45,9 @@ def start() -> None:
     figdir.mkdir(exist_ok=True)
     mgs_data = MGSData.from_repo()
     predictor = "incidence"
-    for pathogen_name in ["sars_cov_2", "norovirus"]:
+    for pathogen_name in ["sars_cov_2"]:
         pathogen = pathogens.pathogens[pathogen_name]
-        for study, bioproject in bioprojects.items():
+        for study, bioproject in rna_bioprojects.items():
             predictors: list[Predictor]
             if predictor == "incidence":
                 predictors = pathogen.estimate_incidences()
