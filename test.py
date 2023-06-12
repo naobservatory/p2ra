@@ -76,6 +76,34 @@ class TestPathogens(unittest.TestCase):
                                 pathogen.pathogen_chars.taxids, taxids
                             )
 
+    def test_duplicate_estimates(self):
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                for label, predictors in [
+                    (
+                        "prevalence",
+                        pathogen.estimate_prevalences(),
+                    ),
+                    (
+                        "incidence",
+                        pathogen.estimate_incidences(),
+                    ),
+                ]:
+                    for taxids, estimates in by_taxids(
+                        pathogen.pathogen_chars, predictors
+                    ).items():
+                        seen = set()
+                        for estimate in estimates:
+                            key = (
+                                estimate.get_dates(),
+                                estimate.summarize_location(),
+                            )
+                            if key in seen:
+                                self.fail(
+                                    f"Duplicate {label} estimate found for {pathogen_name}: {key}."
+                                )
+                            seen.add(key)
+
 
 class TestMMWRWeek(unittest.TestCase):
     def test_mmwr_week(self):
@@ -563,12 +591,16 @@ class TestPathogensMatchStudies(unittest.TestCase):
                                 bioproject, enrichment=mgs.Enrichment.VIRAL
                             ).items():
                                 with self.subTest(sample=sample):
-                                    self.assertNotEqual(
-                                        stats.lookup_variables(
-                                            sample_attributes, predictors
-                                        ),
-                                        [],
+                                    chosen_predictors = stats.lookup_variables(
+                                        sample_attributes, predictors
                                     )
+                                    self.assertNotEqual(chosen_predictors, [])
+
+                                    for predictor in chosen_predictors:
+                                        with self.subTest(predictor=predictor):
+                                            self.assertGreater(
+                                                predictor.get_data(), 0
+                                            )
 
 
 if __name__ == "__main__":
