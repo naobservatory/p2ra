@@ -91,7 +91,8 @@ estimated_chronic_us_2020 = PrevalenceAbsolute(
 def estimate_prevalences() -> list[Prevalence]:
     chronic_2020 = estimated_chronic_us_2020.to_rate(us_population(year=2020))
     # Hep B acute and chronic cases should be approximately constant, so we
-    # can use 2019 acute estimates for 2020 and 2021.
+    # can use chronic 2020 estimates for 2019 and 2021, and acute 2019
+    # estimates for 2020 and 2021.
     chronic_2019 = dataclasses.replace(
         chronic_2020, date_source=Variable(date="2019")
     )
