@@ -108,7 +108,8 @@ with open(prevalence_data_filename("ebv_6_19_nhanes_2003_2010.csv")) as inf:
     # stays latent after infection we treat the 18 to 19 year old cohort
     # prevalence as the prevalence of the overall adult US population.
 
-    # We furthermore rescale the prevalence among different ethnic groups in the US NHANES data by national shares of different ethnicities
+    # We furthermore rescale the prevalence among different ethnic groups in
+    # the US NHANES data by national shares of different ethnicities
 
     ethnicity_mapping = {
         "Mexican American": "latino_age_cohorts",
