@@ -8,7 +8,6 @@ import mgs
 import pathogens
 import populations
 import stats
-from mgs import MGSData, SampleAttributes
 from pathogen_properties import *
 from tree import Tree
 
@@ -18,7 +17,9 @@ class TestPathogens(unittest.TestCase):
         self.assertIn("hsv_1", pathogens.pathogens)
 
     def test_summarize_location(self):
-        us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
+        us_2019, us_2020, us_2021, la_2020 = pathogens.pathogens[
+            "hiv"
+        ].estimate_prevalences()
         self.assertEqual(us_2019.summarize_location(), "United States")
         self.assertEqual(
             la_2020.summarize_location(),
@@ -26,7 +27,9 @@ class TestPathogens(unittest.TestCase):
         )
 
     def test_dates(self):
-        us_2019, la_2020 = pathogens.pathogens["hiv"].estimate_prevalences()
+        us_2019, us_2020, us_2021, la_2020 = pathogens.pathogens[
+            "hiv"
+        ].estimate_prevalences()
         self.assertEqual(us_2019.parsed_start, datetime.date(2019, 1, 1))
         self.assertEqual(us_2019.parsed_end, datetime.date(2019, 12, 31))
 
@@ -54,6 +57,52 @@ class TestPathogens(unittest.TestCase):
             with self.subTest(pathogen=pathogen_name):
                 for estimate in pathogen.estimate_prevalences():
                     estimate.get_dates()
+
+    def test_by_taxids(self):
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                for taxids, estimates in by_taxids(
+                    pathogen.pathogen_chars, pathogen.estimate_prevalences()
+                ).items():
+                    self.assertNotEqual(len(taxids), 0)
+                    self.assertNotEqual(len(estimates), 0)
+                    for estimate in estimates:
+                        if estimate.taxid:
+                            self.assertEqual(
+                                frozenset([estimate.taxid]), taxids
+                            )
+                        else:
+                            self.assertEqual(
+                                pathogen.pathogen_chars.taxids, taxids
+                            )
+
+    def test_duplicate_estimates(self):
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                for label, predictors in [
+                    (
+                        "prevalence",
+                        pathogen.estimate_prevalences(),
+                    ),
+                    (
+                        "incidence",
+                        pathogen.estimate_incidences(),
+                    ),
+                ]:
+                    for taxids, estimates in by_taxids(
+                        pathogen.pathogen_chars, predictors
+                    ).items():
+                        seen = set()
+                        for estimate in estimates:
+                            key = (
+                                estimate.get_dates(),
+                                estimate.summarize_location(),
+                            )
+                            if key in seen:
+                                self.fail(
+                                    f"Duplicate {label} estimate found for {pathogen_name}: {key}."
+                                )
+                            seen.add(key)
 
 
 class TestMMWRWeek(unittest.TestCase):
@@ -198,8 +247,9 @@ class TestMGS(unittest.TestCase):
 
     def test_load_bioprojects(self):
         bps = mgs.load_bioprojects(self.repo)
-        # Rothman
-        self.assertIn(mgs.BioProject("PRJNA729801"), bps)
+        for study, bp in mgs.rna_bioprojects.items():
+            with self.subTest(study=study):
+                self.assertIn(bp, bps)
 
     def test_load_sample_attributes(self):
         samples = mgs.load_sample_attributes(self.repo)
@@ -264,13 +314,13 @@ class TestWeightedAverageByPopulation(unittest.TestCase):
 
 
 class TestMGSData(unittest.TestCase):
-    mgs_data = MGSData.from_repo()
-    bioproject = mgs.BioProject("PRJNA729801")  # Rothman
+    mgs_data = mgs.MGSData.from_repo()
+    bioproject = mgs.rna_bioprojects["rothman"]
     sample = mgs.Sample("SRR14530726")  # Random Rothman sample
     taxids = pathogens.pathogens["norovirus"].pathogen_chars.taxids
 
     def test_from_repo(self):
-        self.assertIsInstance(MGSData.from_repo(), MGSData)
+        self.assertIsInstance(mgs.MGSData.from_repo(), mgs.MGSData)
 
     def test_sample_attributes(self):
         samples = self.mgs_data.sample_attributes(self.bioproject)
@@ -412,7 +462,7 @@ class TestPopulations(unittest.TestCase):
 
 
 class TestStats(unittest.TestCase):
-    attrs = SampleAttributes(
+    attrs = mgs.SampleAttributes(
         country="United States",
         state="Pennsylvania",
         county="Allegheny County",
@@ -422,74 +472,135 @@ class TestStats(unittest.TestCase):
         enrichment=mgs.Enrichment.VIRAL,
     )
 
-    def test_is_match(self):
+    def test_match_quality(self):
         v1 = Variable(country="United States", date="2019")
-        self.assertTrue(stats.is_match(self.attrs, v1))
+        self.assertEqual(stats.match_quality(self.attrs, v1), 0)
         v2 = Variable(country="United States", date="2019-05-14")
-        self.assertTrue(stats.is_match(self.attrs, v2))
+        self.assertEqual(stats.match_quality(self.attrs, v2), 0)
         v3 = Variable(country="United States", date="2019-05-15")
-        self.assertFalse(stats.is_match(self.attrs, v3))
+        # One day off, so -1.
+        self.assertEqual(stats.match_quality(self.attrs, v3), -1)
         v4 = Variable(
             country="United States",
             start_date="2019-05-01",
             end_date="2019-06-02",
         )
-        self.assertTrue(stats.is_match(self.attrs, v4))
+        self.assertEqual(stats.match_quality(self.attrs, v4), 0)
         v5 = Variable(
             country="United States",
             state="Pennsylvania",
             county="Allegheny County",
             date="2019",
         )
-        self.assertTrue(stats.is_match(self.attrs, v5))
+        # Higher score for state and county match.
+        self.assertEqual(stats.match_quality(self.attrs, v5), 30)
         v6 = Variable(
             country="United States",
             state="Pennsylvania",
             county="Beaver County",
             date="2019",
         )
-        self.assertFalse(stats.is_match(self.attrs, v6))
+        self.assertIsNone(stats.match_quality(self.attrs, v6))
         v7 = Variable(
             country="United States",
             state="Ohio",
             county="Lake County",
             date="2019",
         )
-        self.assertFalse(stats.is_match(self.attrs, v7))
+        self.assertIsNone(stats.match_quality(self.attrs, v7))
 
     def test_lookup_variables(self):
         v1 = Variable(country="United States", date="2019")
         v2 = Variable(country="United States", date="2019-05-14")
         v3 = Variable(country="United States", date="2019-05-15")
+        v4 = Variable(country="United States", date="2019-05-16")
+        v5 = Variable(country="United States", date="2019-05-31")
+        v6 = Variable(
+            country="United States", state="Pennsylvania", date="2019"
+        )
+        v7 = Variable(
+            country="United States",
+            state="Pennsylvania",
+            county="Allegheny County",
+            date="2019",
+        )
+
         self.assertEqual(stats.lookup_variables(self.attrs, [v1, v3]), [v1])
+        # Prefer v2 to v3 because it's an exact match.
         self.assertEqual(stats.lookup_variables(self.attrs, [v2, v3]), [v2])
         self.assertEqual(stats.lookup_variables(self.attrs, [v3, v1]), [v1])
         self.assertEqual(
             stats.lookup_variables(self.attrs, [v1, v2]), [v1, v2]
         )
-        self.assertEqual(stats.lookup_variables(self.attrs, [v3]), [])
+        # Accept v3 because it's pretty close (one day off).
+        self.assertEqual(stats.lookup_variables(self.attrs, [v3]), [v3])
+        # Prefer v3 over v4 because it's closer.
+        self.assertEqual(stats.lookup_variables(self.attrs, [v3, v4]), [v3])
+        # Don't accept v5 because it's too far off.
+        self.assertEqual(stats.lookup_variables(self.attrs, [v5]), [])
+
+        # Prefer state match over general country
+        self.assertEqual(stats.lookup_variables(self.attrs, [v1, v6]), [v6])
+
+        # Prefer county match over state
+        self.assertEqual(stats.lookup_variables(self.attrs, [v6, v7]), [v7])
 
     def test_build_model(self):
-        bioprojects = {
-            "crits-christoph": mgs.BioProject("PRJNA661613"),
-            "rothman": mgs.BioProject("PRJNA729801"),
-        }
-        mgs_data = MGSData.from_repo()
-        predictor = "incidence"
+        mgs_data = mgs.MGSData.from_repo()
         for pathogen_name in ["sars_cov_2", "norovirus"]:
-            for study, bioproject in bioprojects.items():
+            pathogen = pathogens.pathogens[pathogen_name]
+            for study, bioproject in mgs.rna_bioprojects.items():
                 with self.subTest(study=study, pathogen=pathogen_name):
-                    model = stats.build_model(
-                        mgs_data, bioproject, pathogen_name, predictor
-                    )
-                    self.assertEqual(
-                        len(model.data),
-                        len(
-                            mgs_data.sample_attributes(
+                    for taxids, predictors in by_taxids(
+                        pathogen.pathogen_chars, pathogen.estimate_incidences()
+                    ).items():
+                        model = stats.build_model(
+                            mgs_data,
+                            bioproject,
+                            predictors,
+                            taxids,
+                        )
+                        self.assertEqual(
+                            len(model.data),
+                            len(
+                                mgs_data.sample_attributes(
+                                    bioproject, enrichment=mgs.Enrichment.VIRAL
+                                )
+                            ),
+                        )
+
+
+class TestPathogensMatchStudies(unittest.TestCase):
+    def test_pathogens_match_studies(self):
+        # Every RNA pathogen should have at least one estimate for every sample
+        # in the projects we're working with.
+        mgs_data = mgs.MGSData.from_repo()
+        for pathogen_name, pathogen in pathogens.rna_viruses.items():
+            with self.subTest(pathogen=pathogen_name):
+                for taxids, predictors in by_taxids(
+                    pathogen.pathogen_chars,
+                    pathogen.estimate_incidences()
+                    + pathogen.estimate_prevalences(),
+                ).items():
+                    for study, bioproject in mgs.rna_bioprojects.items():
+                        with self.subTest(study=study):
+                            for (
+                                sample,
+                                sample_attributes,
+                            ) in mgs_data.sample_attributes(
                                 bioproject, enrichment=mgs.Enrichment.VIRAL
-                            )
-                        ),
-                    )
+                            ).items():
+                                with self.subTest(sample=sample):
+                                    chosen_predictors = stats.lookup_variables(
+                                        sample_attributes, predictors
+                                    )
+                                    self.assertNotEqual(chosen_predictors, [])
+
+                                    for predictor in chosen_predictors:
+                                        with self.subTest(predictor=predictor):
+                                            self.assertGreater(
+                                                predictor.get_data(), 0
+                                            )
 
 
 if __name__ == "__main__":

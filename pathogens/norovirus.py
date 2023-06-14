@@ -91,7 +91,8 @@ def load_nors_outbreaks() -> (
     # Click "Download all NORS Dashboard data (Excel)."
     # Exported from Google Sheets as CSV.
     #
-    # Data runs through the end of 2021.
+    # Data entries start in 1971 and run through the end of 2021.
+    # We're only using data from HISTORY_START (2012) onward.
     with open(prevalence_data_filename("cdc-nors-outbreak-data.tsv")) as inf:
         cols = None
         for line in inf:
@@ -195,6 +196,14 @@ def estimate_incidences() -> list[IncidenceRate]:
     us_daily_outbreaks = to_daily_counts(us_outbreaks)
 
     for year in range(HISTORY_START, DATA_END):
+        us_total_I = 0.0
+        us_total_II = 0.0
+        for month in range(1, 13):
+            us_total_I += us_outbreaks_I[year, month]
+            us_total_II += us_outbreaks_II[year, month]
+        assert us_total_I
+        assert us_total_II
+
         for month in range(1, 13):
             adjustment = Scalar(
                 scalar=us_daily_outbreaks[year, month]
@@ -216,11 +225,14 @@ def estimate_incidences() -> list[IncidenceRate]:
             # all infections.
             us_I = us_outbreaks_I[year, month]
             us_II = us_outbreaks_II[year, month]
-            if us_I + us_II:
+            if us_I and us_II:
                 group_I_fraction = us_I / (us_I + us_II)
                 group_II_fraction = us_II / (us_I + us_II)
             else:
-                group_I_fraction = group_II_fraction = 0
+                # Not enough records for this month to compute a ratio between
+                # I and II.  Fall back to the annual ratio.
+                group_I_fraction = us_total_I / (us_total_I + us_total_II)
+                group_II_fraction = us_total_II / (us_total_I + us_total_II)
 
             incidences.append(
                 dataclasses.replace(

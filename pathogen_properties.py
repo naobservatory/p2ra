@@ -493,3 +493,32 @@ class IncidenceAbsolute(Taggable):
 
 def prevalence_data_filename(filename):
     return os.path.join(os.path.dirname(__file__), "prevalence-data", filename)
+
+
+def by_taxids(
+    pathogen_chars: PathogenChars, predictors: list[Predictor]
+) -> dict[frozenset[TaxID], list[Predictor]]:
+    out: dict[frozenset[TaxID], list[Predictor]] = {}
+
+    for predictor in predictors:
+        taxids = pathogen_chars.taxids
+        if predictor.taxid:
+            taxids = frozenset([predictor.taxid])
+        assert taxids
+
+        if taxids not in out:
+            out[taxids] = []
+
+        out[taxids].append(predictor)
+    return out
+
+
+# We don't want to predict zero of any pathogen, both because they almost never
+# go truely to zero and because modeling will be taking logs of our output.
+# Instead, consider our limit of detection to be a single event (an outbreak or
+# reported postive test), and when we have no recorded events figure there were
+# actually 0.1.
+#
+# It might be better to handle this in the modeling step, but by the time we
+# get to that point the granularity of the input data has been discarded.
+QUANTITY_WHEN_NONE_OBSERVED = 0.1
