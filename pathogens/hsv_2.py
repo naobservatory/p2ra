@@ -94,9 +94,13 @@ us_population_2018_18_to_49yo = Population(
 
 
 def estimate_prevalences() -> list[Prevalence]:
+    us_2018 = cdc_2018_nhanes_estimate.to_rate(us_population_2018_18_to_49yo)
+
+    # HSV_1 prevalence should be close to constant, so extrapolate from
+    # 2018 to 2020 and 2021.
     return [
-        cdc_2015_2016_nhanes_estimate,
-        cdc_2018_nhanes_estimate.to_rate(us_population_2018_18_to_49yo),
+        dataclasses.replace(us_2018, date_source=Variable(date="2020")),
+        dataclasses.replace(us_2018, date_source=Variable(date="2021")),
     ]
 
 

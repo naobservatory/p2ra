@@ -14,9 +14,3 @@ for pathogen_fname in os.listdir(os.path.dirname(__file__)):
     pathogens[pathogen_name] = importlib.import_module(
         "pathogens.%s" % pathogen_name
     )
-
-rna_viruses = {
-    name: mod
-    for name, mod in pathogens.items()
-    if mod.pathogen_chars.na_type == NAType.RNA
-}

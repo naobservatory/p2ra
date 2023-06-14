@@ -49,8 +49,30 @@ nhanes_based_2018_18_59_yo_incidence = IncidenceRate(
 
 
 def estimate_prevalences():
-    return [nhanes_2013_2016_18_59_yo_prevalence]
+    # HPV prevalence should be close to constant, so extrapolate from
+    # 2013-2016 to 2020 and 2021.
+    return [
+        dataclasses.replace(
+            nhanes_2013_2016_18_59_yo_prevalence,
+            date_source=Variable(date="2020"),
+        ),
+        dataclasses.replace(
+            nhanes_2013_2016_18_59_yo_prevalence,
+            date_source=Variable(date="2021"),
+        ),
+    ]
 
 
 def estimate_incidences():
-    return [nhanes_based_2018_18_59_yo_incidence]
+    # HPV prevalence should be close to constant, so extrapolate from
+    # 2013-2016 to 2020 and 2021.
+    return [
+        dataclasses.replace(
+            nhanes_based_2018_18_59_yo_incidence,
+            date_source=Variable(date="2020"),
+        ),
+        dataclasses.replace(
+            nhanes_based_2018_18_59_yo_incidence,
+            date_source=Variable(date="2021"),
+        ),
+    ]
