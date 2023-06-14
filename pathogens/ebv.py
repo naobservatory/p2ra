@@ -269,14 +269,14 @@ def estimate_prevalences():
         denmark_2023, date_source=Variable(date="2019")
     )
     # Seroprevalence should remain constant, so we can extrapolate from
-    # 2003-2010 data, applied to 2020 US population backwards to 2019 and
+    # 2003-2010 data, applied to 2020 US population backwards to
     # 2021.
-
     us_2020 = us_seroprevalence_2003_2010()
     us_2021 = dataclasses.replace(us_2020, date_source=Variable(date="2021"))
-    us_2019 = dataclasses.replace(us_2020, date_source=Variable(date="2019"))
 
     return [
+        us_2020,
+        us_2021,
         denmark_2023,
         uk_seroprevalence_0_to_25,
     ]
