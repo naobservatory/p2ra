@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-from typing import Generator
 from pathlib import Path
 from textwrap import dedent
 
 import numpy as np
 import pandas as pd
 
-import pathogens
 import stats
-from mgs import MGSData, rna_bioprojects, TaxID
-from pathogen_properties import Predictor, by_taxids
+from mgs import MGSData, TaxID, rna_bioprojects
+from pathogens import iter_pathogens
 
 
 def geom_mean(x: pd.DataFrame) -> float:
@@ -43,26 +41,6 @@ def print_summary(
     print(dedent(output))
 
 
-skip = ["hbv", "hcv"]
-
-
-def iter_pathogens() -> (
-    Generator[tuple[str, str, frozenset[TaxID], list[Predictor]], None, None]
-):
-    pathogen_name: str
-    predictor_type: str
-    for pathogen_name, pathogen in pathogens.pathogens.items():
-        for predictor_type, all_predictors in [
-            ("incidence", pathogen.estimate_incidences()),
-            ("prevalence", pathogen.estimate_prevalences()),
-        ]:
-            for taxids, grouped_predictors in by_taxids(
-                pathogen.pathogen_chars,
-                all_predictors,
-            ).items():
-                yield pathogen_name, predictor_type, taxids, grouped_predictors
-
-
 def start() -> None:
     outdir = Path("fits")
     outdir.mkdir(exist_ok=True)
@@ -70,8 +48,6 @@ def start() -> None:
     figdir.mkdir(exist_ok=True)
     mgs_data = MGSData.from_repo()
     for pathogen_name, predictor_type, taxids, predictors in iter_pathogens():
-        if pathogen_name in skip:
-            continue
         for study, bioproject in rna_bioprojects.items():
             model = stats.build_model(
                 mgs_data,
