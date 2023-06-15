@@ -76,6 +76,34 @@ class TestPathogens(unittest.TestCase):
                                 pathogen.pathogen_chars.taxids, taxids
                             )
 
+    def test_duplicate_estimates(self):
+        for pathogen_name, pathogen in pathogens.pathogens.items():
+            with self.subTest(pathogen=pathogen_name):
+                for label, predictors in [
+                    (
+                        "prevalence",
+                        pathogen.estimate_prevalences(),
+                    ),
+                    (
+                        "incidence",
+                        pathogen.estimate_incidences(),
+                    ),
+                ]:
+                    for taxids, estimates in by_taxids(
+                        pathogen.pathogen_chars, predictors
+                    ).items():
+                        seen = set()
+                        for estimate in estimates:
+                            key = (
+                                estimate.get_dates(),
+                                estimate.summarize_location(),
+                            )
+                            if key in seen:
+                                self.fail(
+                                    f"Duplicate {label} estimate found for {pathogen_name}: {key}."
+                                )
+                            seen.add(key)
+
 
 class TestMMWRWeek(unittest.TestCase):
     def test_mmwr_week(self):
@@ -548,7 +576,7 @@ class TestPathogensMatchStudies(unittest.TestCase):
         # Every RNA pathogen should have at least one estimate for every sample
         # in the projects we're working with.
         mgs_data = mgs.MGSData.from_repo()
-        for pathogen_name, pathogen in pathogens.rna_viruses.items():
+        for pathogen_name, pathogen in pathogens.pathogens.items():
             with self.subTest(pathogen=pathogen_name):
                 for taxids, predictors in by_taxids(
                     pathogen.pathogen_chars,

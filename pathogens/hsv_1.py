@@ -1,3 +1,5 @@
+import dataclasses
+
 from pathogen_properties import *
 
 background = """Herpes Simplex Virus 1 is a very common herpesvirus that causes oral herpes (CDC, https://www.
@@ -13,18 +15,11 @@ pathogen_chars = PathogenChars(
 )
 
 
-cdc_2015_2016_nhanes_seroprevalence = Prevalence(
-    infections_per_100k=0.496 * 100_000,
-    number_of_participants=3710,
-    start_date="2015",
-    end_date="2016",
-    country="United States",
-    active=Active.LATENT,
-    source="https://web.archive.org/web/20220707050306/https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm",
-)
 cdc_2015_2016_nhanes_estimate = Prevalence(
     infections_per_100k=0.478 * 100_000,
     confidence_interval=(0.4281 * 100_000, 0.5277 * 100_000),
+    # This CDC estimate is based on the following NHANES data:
+    # https://web.archive.org/web/20220707050306/https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/HSV_I.htm#:~:text=YEARS%20%2D%2049%20YEARS-,LBXHE1%20%2D%20Herpes%20Simplex%20Virus%20Type%201,-Variable%20Name%3A
     country="United States",
     start_date="2015",
     end_date="2016",
@@ -46,9 +41,14 @@ tear_and_saliva_prevalence = Prevalence(
 
 def estimate_prevalences() -> list[Prevalence]:
     return [
-        cdc_2015_2016_nhanes_seroprevalence,
-        cdc_2015_2016_nhanes_estimate,
-        tear_and_saliva_prevalence,
+        # HSV_1 prevalence should be close to constant, so extrapolate from
+        # 2015-2016 to 2020 and 2021.
+        dataclasses.replace(
+            cdc_2015_2016_nhanes_estimate, date_source=Variable(date="2020")
+        ),
+        dataclasses.replace(
+            cdc_2015_2016_nhanes_estimate, date_source=Variable(date="2021")
+        ),
     ]
 
 
