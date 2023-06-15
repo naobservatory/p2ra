@@ -170,7 +170,7 @@ class Model(Generic[P]):
             sep=".",
         ).reset_index()
         df_output["predictor"] = np.exp(df_output["theta"])
-        df_output["ra_per_predictor"] = np.exp(df_output["b"])
+        # df_output["ra_per_predictor"] = np.exp(df_output["b"])
         df_output["observation_type"] = "posterior"
         df_output.rename(columns={"y_tilde": "viral_reads"}, inplace=True)
 

@@ -21,7 +21,7 @@ for pathogen_fname in os.listdir(os.path.dirname(__file__)):
 skip = ["hbv", "hcv"]
 
 
-def iter_pathogens() -> (
+def predictors_by_taxid() -> (
     Generator[tuple[str, str, frozenset[TaxID], list[Predictor]], None, None]
 ):
     pathogen_name: str
@@ -33,8 +33,8 @@ def iter_pathogens() -> (
             ("incidence", pathogen.estimate_incidences()),
             ("prevalence", pathogen.estimate_prevalences()),
         ]:
-            for taxids, grouped_predictors in by_taxids(
+            for taxids, predictors in by_taxids(
                 pathogen.pathogen_chars,
                 all_predictors,
             ).items():
-                yield pathogen_name, predictor_type, taxids, grouped_predictors
+                yield pathogen_name, predictor_type, taxids, predictors

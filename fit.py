@@ -7,7 +7,7 @@ import pandas as pd
 
 import stats
 from mgs import MGSData, TaxID, rna_bioprojects
-from pathogens import iter_pathogens
+from pathogens import predictors_by_taxid
 
 
 def geom_mean(x: pd.DataFrame) -> float:
@@ -19,11 +19,11 @@ def print_summary(
     taxids: frozenset[TaxID],
     predictor: str,
     study: str,
-    ra_per_predictor: pd.DataFrame,
+    ra_at_1in1000: pd.DataFrame,
 ) -> None:
-    title = f"{pathogen} {list(taxids)} relative abundance per {predictor} in {study.title()}"
+    title = f"{pathogen} {list(taxids)} relative abundance at 1 in 1000 {predictor} in {study.title()}"
     percentiles = [5, 25, 50, 75, 95]
-    percentile_values = np.percentile(ra_per_predictor, percentiles)
+    percentile_values = np.percentile(ra_at_1in1000, percentiles)
     d = 1
     sep = " " * 4
     output = f"""
@@ -31,9 +31,9 @@ def print_summary(
     {title}
     {"-" * len(title)}
     Posterior arithmetic mean:
-    {np.mean(ra_per_predictor):.{d}e}
+    {np.mean(ra_at_1in1000):.{d}e}
     Posterior geometric mean:
-    {geom_mean(ra_per_predictor):.{d}e}
+    {geom_mean(ra_at_1in1000):.{d}e}
     Posterior quantiles:
     {sep.join(f"{p:>{d+5}}%" for p in percentiles)}
     {sep.join(f"{x:.{d}e}" for x in percentile_values)}
@@ -47,7 +47,12 @@ def start() -> None:
     figdir = Path("fig")
     figdir.mkdir(exist_ok=True)
     mgs_data = MGSData.from_repo()
-    for pathogen_name, predictor_type, taxids, predictors in iter_pathogens():
+    for (
+        pathogen_name,
+        predictor_type,
+        taxids,
+        predictors,
+    ) in predictors_by_taxid():
         for study, bioproject in rna_bioprojects.items():
             model = stats.build_model(
                 mgs_data,
@@ -59,11 +64,11 @@ def start() -> None:
             model.fit_model()
             df = model.dataframe
             assert df is not None
-            ra_per_predictor = pd.pivot_table(
-                df, index="draws", values=["ra_per_predictor"]
+            ra_at_1in1000 = pd.pivot_table(
+                df, index="draws", values=["ra_at_1in1000"]
             )
             print_summary(
-                pathogen_name, taxids, predictor_type, study, ra_per_predictor
+                pathogen_name, taxids, predictor_type, study, ra_at_1in1000
             )
             continue
             fig_hist = model.plot_posterior_histograms()

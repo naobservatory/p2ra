@@ -552,7 +552,7 @@ class TestStats(unittest.TestCase):
             predictor_type,
             taxids,
             predictors,
-        ) in pathogens.iter_pathogens():
+        ) in pathogens.predictors_by_taxid():
             for study, bioproject in mgs.rna_bioprojects.items():
                 with self.subTest(
                     pathogen=pathogen_name,
@@ -588,7 +588,7 @@ class TestPathogensMatchStudies(unittest.TestCase):
             predictor_type,
             taxids,
             predictors,
-        ) in pathogens.iter_pathogens():
+        ) in pathogens.predictors_by_taxid():
             for study, bioproject in mgs.rna_bioprojects.items():
                 with self.subTest(
                     pathogen=pathogen_name,
