@@ -70,9 +70,10 @@ def start() -> None:
             print_summary(
                 pathogen_name, taxids, predictor_type, study, ra_at_1in1000
             )
-            continue
+
+            prefix = f"{pathogen_name}-{list(taxids)}-{predictor_type}-{study}"
             fig_hist = model.plot_posterior_histograms()
-            fig_hist.savefig(figdir / f"{study}-{pathogen_name}-posthist.pdf")
+            fig_hist.savefig(figdir / f"{prefix}-posthist.pdf")
             xys = [
                 ("date", "viral_reads"),
                 ("date", "predictor"),
@@ -84,10 +85,10 @@ def start() -> None:
                 )
                 if y == "predictor":
                     g.set(yscale="log")
-                g.savefig(figdir / f"{study}-{pathogen_name}-{y}-vs-{x}.pdf")
+                g.savefig(figdir / f"{prefix}-{y}-vs-{x}.pdf")
 
             df.to_csv(
-                outdir / f"{study}-{pathogen_name}.tsv.gz",
+                outdir / f"{prefix}.tsv.gz",
                 sep="\t",
                 index=False,
                 compression="gzip",

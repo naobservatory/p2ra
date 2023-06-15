@@ -196,6 +196,7 @@ class Model(Generic[P]):
         params = [
             ("sigma", np.linspace(0, 4, 1000), gamma(1)),
             ("mu", np.linspace(-4, 4, 1000), norm(scale=2)),
+            ("tau", np.linspace(0, 4, 1000), gamma(1)),
         ]
         per_draw_df = self.get_per_draw_statistics()
         fig, axes = plt.subplots(

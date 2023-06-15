@@ -30,7 +30,7 @@ def predictors_by_taxid() -> (
         if pathogen_name in skip:
             continue
         for predictor_type, all_predictors in [
-            ("incidence", pathogen.estimate_incidences()),
+            ("weekly_incidence", pathogen.estimate_incidences()),
             ("prevalence", pathogen.estimate_prevalences()),
         ]:
             for taxids, predictors in by_taxids(
