@@ -1,4 +1,5 @@
 import csv
+import dataclasses
 from collections import Counter
 
 from pathogen_properties import *
@@ -157,7 +158,14 @@ denmark_seroprevalence = Prevalence.weightedAverageByPopulation(
 
 def estimate_prevalences():
     return [
-        us_seroprevalence_2003_2010,
+        # EBV should be close to constant, so extrapolate from 2003-2010 to
+        # 2020 and 2021.
+        dataclasses.replace(
+            us_seroprevalence_2003_2010, date_source=Variable(date="2020")
+        ),
+        dataclasses.replace(
+            us_seroprevalence_2003_2010, date_source=Variable(date="2021")
+        ),
         denmark_seroprevalence,
         uk_seroprevalence_0_to_25,
     ]
