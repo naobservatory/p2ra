@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from typing import Generator
 from pathlib import Path
 from textwrap import dedent
 
@@ -7,7 +8,7 @@ import pandas as pd
 
 import pathogens
 import stats
-from mgs import MGSData, rna_bioprojects
+from mgs import MGSData, rna_bioprojects, TaxID
 from pathogen_properties import Predictor, by_taxids
 
 
@@ -16,9 +17,13 @@ def geom_mean(x: pd.DataFrame) -> float:
 
 
 def print_summary(
-    study: str, pathogen: str, predictor: str, ra_per_predictor: pd.DataFrame
+    pathogen: str,
+    taxids: frozenset[TaxID],
+    predictor: str,
+    study: str,
+    ra_per_predictor: pd.DataFrame,
 ) -> None:
-    title = f"{study.title()}: {pathogen} relative abundance per {predictor}"
+    title = f"{pathogen} {list(taxids)} relative abundance per {predictor} in {study.title()}"
     percentiles = [5, 25, 50, 75, 95]
     percentile_values = np.percentile(ra_per_predictor, percentiles)
     d = 1
@@ -38,70 +43,74 @@ def print_summary(
     print(dedent(output))
 
 
+skip = ["hbv", "hcv"]
+
+
+def iter_pathogens() -> (
+    Generator[tuple[str, str, frozenset[TaxID], list[Predictor]], None, None]
+):
+    pathogen_name: str
+    predictor_type: str
+    for pathogen_name, pathogen in pathogens.pathogens.items():
+        for predictor_type, all_predictors in [
+            ("incidence", pathogen.estimate_incidences()),
+            ("prevalence", pathogen.estimate_prevalences()),
+        ]:
+            for taxids, grouped_predictors in by_taxids(
+                pathogen.pathogen_chars,
+                all_predictors,
+            ).items():
+                yield pathogen_name, predictor_type, taxids, grouped_predictors
+
+
 def start() -> None:
     outdir = Path("fits")
     outdir.mkdir(exist_ok=True)
     figdir = Path("fig")
     figdir.mkdir(exist_ok=True)
     mgs_data = MGSData.from_repo()
-    predictor = "incidence"
-    for pathogen_name in ["sars_cov_2"]:
-        pathogen = pathogens.pathogens[pathogen_name]
+    for pathogen_name, predictor_type, taxids, predictors in iter_pathogens():
+        if pathogen_name in skip:
+            continue
         for study, bioproject in rna_bioprojects.items():
-            predictors: list[Predictor]
-            if predictor == "incidence":
-                predictors = pathogen.estimate_incidences()
-            elif predictor == "prevalence":
-                predictors = pathogen.estimate_prevalences()
-            else:
-                raise ValueError(
-                    f"{predictor} must be one of 'incidence' or 'prevalence'"
+            model = stats.build_model(
+                mgs_data,
+                bioproject,
+                predictors,
+                taxids,
+                random_seed=1,
+            )
+            model.fit_model()
+            df = model.dataframe
+            assert df is not None
+            ra_per_predictor = pd.pivot_table(
+                df, index="draws", values=["ra_per_predictor"]
+            )
+            print_summary(
+                pathogen_name, taxids, predictor_type, study, ra_per_predictor
+            )
+            continue
+            fig_hist = model.plot_posterior_histograms()
+            fig_hist.savefig(figdir / f"{study}-{pathogen_name}-posthist.pdf")
+            xys = [
+                ("date", "viral_reads"),
+                ("date", "predictor"),
+                ("predictor", "viral_reads"),
+            ]
+            for x, y in xys:
+                g = model.plot_posterior_samples(
+                    x, y, style="county", hue="fine_location"
                 )
+                if y == "predictor":
+                    g.set(yscale="log")
+                g.savefig(figdir / f"{study}-{pathogen_name}-{y}-vs-{x}.pdf")
 
-            for taxids, grouped_predictors in by_taxids(
-                pathogen.pathogen_chars, predictors
-            ).items():
-                model = stats.build_model(
-                    mgs_data,
-                    bioproject,
-                    grouped_predictors,
-                    taxids,
-                    random_seed=1,
-                )
-                model.fit_model()
-                fig_hist = model.plot_posterior_histograms()
-                fig_hist.savefig(
-                    figdir / f"{study}-{pathogen_name}-posthist.pdf"
-                )
-                xys = [
-                    ("date", "viral_reads"),
-                    ("date", "predictor"),
-                    ("predictor", "viral_reads"),
-                ]
-                for x, y in xys:
-                    g = model.plot_posterior_samples(
-                        x, y, style="county", hue="fine_location"
-                    )
-                    if y == "predictor":
-                        g.set(yscale="log")
-                    g.savefig(
-                        figdir / f"{study}-{pathogen_name}-{y}-vs-{x}.pdf"
-                    )
-
-                df = model.dataframe
-                assert df is not None
-                df.to_csv(
-                    outdir / f"{study}-{pathogen_name}.tsv.gz",
-                    sep="\t",
-                    index=False,
-                    compression="gzip",
-                )
-                ra_per_predictor = pd.pivot_table(
-                    df, index="draws", values=["ra_per_predictor"]
-                )
-                print_summary(
-                    study, pathogen_name, predictor, ra_per_predictor
-                )
+            df.to_csv(
+                outdir / f"{study}-{pathogen_name}.tsv.gz",
+                sep="\t",
+                index=False,
+                compression="gzip",
+            )
 
 
 if __name__ == "__main__":
