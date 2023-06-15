@@ -8,7 +8,9 @@ data {
 }
 transformed data {
   vector[J] x_std = log(x) - mean(log(x));
-  real log_mean_y = log(mean(y));
+  real log_mean_y = 0;
+  if (sum(y) > 0)           // can't normalize by this if there are no viral reads
+    log_mean_y = log(mean(y));
   real log_mean_n = log(mean(n));
 }
 parameters {
