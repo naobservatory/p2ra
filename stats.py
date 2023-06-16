@@ -127,8 +127,9 @@ class Model(Generic[P]):
     def __post_init__(self) -> None:
         with open(STANFILE, "r") as stanfile:
             stan_code = stanfile.read()
-        self.fine_locations = list(
-            set(dp.attrs.fine_location for dp in self.data)
+        # TODO: Make it more automatic to associate fine locations with coeffs
+        self.fine_locations = sorted(
+            list(set(dp.attrs.fine_location for dp in self.data)), key=str
         )
         stan_data = {
             "J": len(self.data),
@@ -213,15 +214,14 @@ class Model(Generic[P]):
 
     def plot_violin(self) -> matplotlib.figure.Figure:
         per_draw_df = self.get_per_draw_statistics()
+        df = pd.DataFrame()
+        # TODO: this probably goes elsewhere
+        for i, loc in enumerate(self.fine_locations):
+            df[loc] = per_draw_df[f"b_l.{i+1}"]
+        df["Overall"] = per_draw_df["mu"]
         fig, ax = plt.subplots(1, 1)
-        sns.violinplot(
-            data=per_draw_df[
-                [f"b_l.{i+1}" for i, _ in enumerate(self.fine_locations)]
-                + ["mu"]
-            ],
-            ax=ax,
-        )
-        ax.set_xticklabels(self.fine_locations + ["Overall"])
+        sns.violinplot(data=df, ax=ax)
+        # ax.set_xticklabels(self.fine_locations + ["Overall"])
         ax.set_ylabel("Standardized coefficient")
         ax.set_xlabel("Sampling location")
         return fig
