@@ -67,6 +67,7 @@ estimated_chronic_us_2013_2016 = Prevalence(
     active=Active.LATENT,
 )
 
+
 cdc_estimated_acute_2019 = IncidenceAbsolute(
     annual_infections=57_500,
     # During 2019, a total of 4,136 acute hepatitis C cases were reported to
@@ -179,7 +180,15 @@ def estimate_incidences():
 
 
 def estimate_prevalences() -> list[Prevalence]:
-    # This estimate being from 2016, I (Simon) do not want to transfer it to
-    # 2019-202 without first doing further research.
-    estimates = [estimated_chronic_us_2013_2016]
+    # Estimated acute cases have increased slighly since 2016 (https://www.cdc.gov/hepatitis/statistics/2020surveillance/hepatitis-c/figure-3.1.htm), but
+    # not to a level that would change the chronic rate by much. We thus
+    # extrapolate the 2016 rate to 2020 and 2021.
+    chronic_2020 = dataclasses.replace(
+        estimated_chronic_us_2013_2016, date_source=Variable(date="2021")
+    )
+
+    chronic_2021 = dataclasses.replace(
+        estimated_chronic_us_2013_2016, date_source=Variable(date="2021")
+    )
+    estimates = [estimated_chronic_us_2013_2016, chronic_2020, chronic_2021]
     return estimates

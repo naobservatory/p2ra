@@ -90,24 +90,23 @@ estimated_chronic_us_2020 = PrevalenceAbsolute(
 
 def estimate_prevalences() -> list[Prevalence]:
     chronic_2020 = estimated_chronic_us_2020.to_rate(us_population(year=2020))
-    # Hep B acute and chronic cases should be approximately constant, so we
-    # can use chronic 2020 estimates for 2019 and 2021, and acute 2019
-    # estimates for 2020 and 2021.
-    chronic_2019 = dataclasses.replace(
-        chronic_2020, date_source=Variable(date="2019")
-    )
+    # Hep B chronic cases should be approximately constant, so we
+    # can use chronic 2020 estimates for 2021.
     chronic_2021 = dataclasses.replace(
         chronic_2020, date_source=Variable(date="2021")
     )
 
     return [
-        chronic_2019,
         chronic_2020,
         chronic_2021,
     ]
 
 
 def estimate_incidences() -> list[IncidenceRate]:
+    # Before the COVID-19 pandemic, acute HBV incidence has stayed
+    # approximately cosntant: (https://www.cdc.gov/hepatitis/statistics/
+    # 2019surveillance/Figure2.1.htm). We can, therefore, can estimate 2020
+    # and 2021 incidence from 2019 incidence.
     acute_2019 = estimated_acute_2019.to_rate(us_population_2019)
 
     acute_2020 = dataclasses.replace(
