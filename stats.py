@@ -120,22 +120,25 @@ class Model(Generic[P]):
     data: list[DataPoint[P]]
     random_seed: int
     model: stan.model.Model = field(init=False)
+    fine_locations: list[str | None] = field(init=False)
     fit: None | stan.fit.Fit = None
     dataframe: None | pd.DataFrame = None
 
     def __post_init__(self) -> None:
         with open(STANFILE, "r") as stanfile:
             stan_code = stanfile.read()
-        fine_locations = list(set(dp.attrs.fine_location for dp in self.data))
+        self.fine_locations = list(
+            set(dp.attrs.fine_location for dp in self.data)
+        )
         stan_data = {
             "J": len(self.data),
             "y": np.array([dp.viral_reads for dp in self.data]),
             "n": np.array([dp.attrs.reads for dp in self.data]),
             "x": np.array([dp.predictor.get_data() for dp in self.data]),
-            "L": len(fine_locations),
+            "L": len(self.fine_locations),
             "ll": [
                 # Stan vectors are one-indexed
-                fine_locations.index(dp.attrs.fine_location) + 1
+                self.fine_locations.index(dp.attrs.fine_location) + 1
                 for dp in self.data
             ],
         }
@@ -206,6 +209,21 @@ class Model(Generic[P]):
             posterior_hist(
                 data=per_draw_df, param=param, prior_x=x, prior=prior, ax=ax
             )
+        return fig
+
+    def plot_violin(self) -> matplotlib.figure.Figure:
+        per_draw_df = self.get_per_draw_statistics()
+        fig, ax = plt.subplots(1, 1)
+        sns.violinplot(
+            data=per_draw_df[
+                [f"b_l.{i+1}" for i, _ in enumerate(self.fine_locations)]
+                + ["mu"]
+            ],
+            ax=ax,
+        )
+        ax.set_xticklabels(self.fine_locations + ["Overall"])
+        ax.set_ylabel("Standardized coefficient")
+        ax.set_xlabel("Sampling location")
         return fig
 
     def plot_posterior_samples(

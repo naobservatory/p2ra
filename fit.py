@@ -74,6 +74,8 @@ def start() -> None:
             prefix = f"{pathogen_name}-{list(taxids)}-{predictor_type}-{study}"
             fig_hist = model.plot_posterior_histograms()
             fig_hist.savefig(figdir / f"{prefix}-posthist.pdf")
+            fig_viol = model.plot_violin()
+            fig_viol.savefig(figdir / f"{prefix}-violin.pdf")
             xys = [
                 ("date", "viral_reads"),
                 ("date", "predictor"),
@@ -81,7 +83,11 @@ def start() -> None:
             ]
             for x, y in xys:
                 g = model.plot_posterior_samples(
-                    x, y, style="county", hue="fine_location"
+                    x,
+                    y,
+                    style="county",
+                    hue="fine_location",
+                    hue_order=model.fine_locations,
                 )
                 if y == "predictor":
                     g.set(yscale="log")
