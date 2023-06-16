@@ -104,9 +104,12 @@ def estimate_prevalences() -> list[Prevalence]:
 
 def estimate_incidences() -> list[IncidenceRate]:
     # Before the COVID-19 pandemic, acute HBV incidence has stayed
-    # approximately cosntant: (https://www.cdc.gov/hepatitis/statistics/
-    # 2019surveillance/Figure2.1.htm). We can, therefore, can estimate 2020
-    # and 2021 incidence from 2019 incidence.
+    # approximately constant: (https://www.cdc.gov/hepatitis/statistics/
+    # 2019surveillance/Figure2.1.htm). We can, therefore, estimate 2020
+    # and 2021 incidence from 2019 incidence. We don't expect Hep B to be
+    # affected by COVID-19 itself as strongly, given that it is transmitted
+    # through sexual contact and injection drug use, which are less affected
+    # by social distancing.
     acute_2019 = estimated_acute_2019.to_rate(us_population_2019)
 
     acute_2020 = dataclasses.replace(
