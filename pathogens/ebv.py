@@ -1,4 +1,5 @@
 import csv
+import dataclasses
 from collections import Counter
 
 import numpy as np
@@ -276,7 +277,11 @@ def estimate_prevalences():
     return [
         us_2020,
         us_2021,
+        denmark_2019
+        denmark_2020,
+        denmark_2021
         denmark_2023,
+        
         uk_seroprevalence_0_to_25,
     ]
 
