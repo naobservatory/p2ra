@@ -184,7 +184,7 @@ def estimate_prevalences() -> list[Prevalence]:
     # not to a level that would change the chronic rate by much. We thus
     # extrapolate the 2016 rate to 2020 and 2021.
     chronic_2020 = dataclasses.replace(
-        estimated_chronic_us_2013_2016, date_source=Variable(date="2021")
+        estimated_chronic_us_2013_2016, date_source=Variable(date="2020")
     )
 
     chronic_2021 = dataclasses.replace(
