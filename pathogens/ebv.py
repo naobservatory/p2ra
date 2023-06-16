@@ -62,8 +62,9 @@ digit_extractor = re.compile("\d+")
 
 for race, cohort_dict in race_cohorts.items():
     with open(prevalence_data_filename(f"{race}.csv")) as inf:
-        # Data is downloaded from this results page: "https://data.census.gov/table?q=Annual+Estimates+of+the+Resident+Population+by+Single+Year".
-        # Age tables were renamed to [black/white/latino]_age_cohorts.csv.
+        # Data is downloaded from this results page: "hhttps://data.census.gov/table?q=Annual+Estimates+of+the+Resident+Population+by+Single+Year&g=010XX00US&tid=DECENNIALDHC2020.PCT12A".
+        # Specifically, we used PCT12A, PCT12H, and PCT12B, renaming the
+        # files to [white/latino/black]_age_cohorts.csv respectively.
         reader = csv.reader(inf)
 
         # Skip first two non-age lines
@@ -244,26 +245,20 @@ def denmark_seroprevalence_2023() -> Prevalence:
 
     denmark_populations = load_denmark_populations_by_age()
 
-    seroprevalence_population_per_cohort = [
-        (denmark_seroprevalences[age], denmark_populations[age])
-        for age in denmark_populations.keys()
-    ]
-
     return Prevalence.weightedAverageByPopulation(
-        *seroprevalence_population_per_cohort
+        *[
+            (denmark_seroprevalences[age], denmark_populations[age])
+            for age in denmark_populations.keys()
+        ]
     )
 
 
 def estimate_prevalences():
     denmark_2023 = denmark_seroprevalence_2023()
     # Seroprevalence should remain constant, so we can extrapolate from 1983
-    # data, applied to the 2023 Denmark population backwards to 2021-2019.
-    # With this, we also assume that the infection rates per age cohort
-    # remained constant over time.
-
-    denmark_2019 = dataclasses.replace(
-        denmark_2023, date_source=Variable(date="2019")
-    )
+    # data, applied to the 2023 Denmark population backwards to 2021-2020.
+    # This assumes that the population breakdown by age remained constant
+    # between 2023 and 2021/2020.
 
     denmark_2020 = dataclasses.replace(
         denmark_2023, date_source=Variable(date="2020")
@@ -280,7 +275,6 @@ def estimate_prevalences():
     return [
         us_2020,
         us_2021,
-        denmark_2019,
         denmark_2020,
         denmark_2021,
         denmark_2023,
