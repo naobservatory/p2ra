@@ -436,7 +436,10 @@ class IncidenceRate(Predictor):
     annual_infections_per_100k: float
 
     def get_data(self) -> float:
-        return self.annual_infections_per_100k
+        return self.get_weekly_infections_per_100k()
+
+    def get_weekly_infections_per_100k(self) -> float:
+        return self.annual_infections_per_100k / 52
 
     def __mul__(self, scalar: Scalar) -> "IncidenceRate":
         return IncidenceRate(

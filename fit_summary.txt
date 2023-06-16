@@ -1,0 +1,468 @@
+Building...
+
+----------------------------------------------------------------------------------------
+sars_cov_2 [2697049] relative abundance at 1 in 1000 incidence in Crits_Christoph
+----------------------------------------------------------------------------------------
+Posterior arithmetic mean:
+5.2e-08
+Posterior geometric mean:
+3.3e-08
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+6.3e-09    1.9e-08    3.5e-08    6.0e-08    1.5e-07
+
+Building...
+
+--------------------------------------------------------------------------------
+sars_cov_2 [2697049] relative abundance at 1 in 1000 incidence in Rothman
+--------------------------------------------------------------------------------
+Posterior arithmetic mean:
+1.3e-08
+Posterior geometric mean:
+9.8e-09
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+3.2e-09    6.3e-09    9.7e-09    1.5e-08    3.1e-08
+
+Building...
+
+---------------------------------------------------------------------------------
+sars_cov_2 [2697049] relative abundance at 1 in 1000 incidence in Spurbeck
+---------------------------------------------------------------------------------
+Posterior arithmetic mean:
+3.5e-11
+Posterior geometric mean:
+2.5e-11
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+5.9e-12    1.7e-11    1.9e-11    4.7e-11    9.5e-11
+
+Building...
+
+-------------------------------------------------------------------------
+hiv [11676] relative abundance at 1 in 1000 prevalence in Crits_Christoph
+-------------------------------------------------------------------------
+Posterior arithmetic mean:
+2.9e-09
+Posterior geometric mean:
+1.6e-09
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+2.4e-10    8.1e-10    1.8e-09    3.6e-09    8.8e-09
+
+Building...
+
+-----------------------------------------------------------------
+hiv [11676] relative abundance at 1 in 1000 prevalence in Rothman
+-----------------------------------------------------------------
+Posterior arithmetic mean:
+4.5e-10
+Posterior geometric mean:
+2.6e-10
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+3.7e-11    1.4e-10    2.6e-10    6.0e-10    1.5e-09
+
+Building...
+
+------------------------------------------------------------------
+hiv [11676] relative abundance at 1 in 1000 prevalence in Spurbeck
+------------------------------------------------------------------
+Posterior arithmetic mean:
+3.6e-10
+Posterior geometric mean:
+2.3e-10
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+3.3e-11    1.1e-10    2.7e-10    5.1e-10    1.0e-09
+
+Building...
+
+---------------------------------------------------------------------------
+hsv_2 [10310] relative abundance at 1 in 1000 prevalence in Crits_Christoph
+---------------------------------------------------------------------------
+Posterior arithmetic mean:
+1.9e-11
+Posterior geometric mean:
+9.4e-12
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+1.0e-12    4.3e-12    1.0e-11    2.3e-11    6.1e-11
+
+Building...
+
+-------------------------------------------------------------------
+hsv_2 [10310] relative abundance at 1 in 1000 prevalence in Rothman
+-------------------------------------------------------------------
+Posterior arithmetic mean:
+1.2e-11
+Posterior geometric mean:
+8.4e-12
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+1.4e-12    4.8e-12    9.2e-12    1.6e-11    3.5e-11
+
+Building...
+
+--------------------------------------------------------------------
+hsv_2 [10310] relative abundance at 1 in 1000 prevalence in Spurbeck
+--------------------------------------------------------------------
+Posterior arithmetic mean:
+3.8e-12
+Posterior geometric mean:
+2.7e-12
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+4.7e-13    1.6e-12    3.1e-12    4.6e-12    1.0e-11
+
+Building...
+
+-------------------------------------------------------------------------
+cmv [10359] relative abundance at 1 in 1000 prevalence in Crits_Christoph
+-------------------------------------------------------------------------
+Posterior arithmetic mean:
+5.0e-12
+Posterior geometric mean:
+2.5e-12
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+3.2e-13    1.2e-12    2.7e-12    5.7e-12    1.6e-11
+
+Building...
+
+-----------------------------------------------------------------
+cmv [10359] relative abundance at 1 in 1000 prevalence in Rothman
+-----------------------------------------------------------------
+Posterior arithmetic mean:
+3.1e-12
+Posterior geometric mean:
+2.1e-12
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+4.6e-13    1.2e-12    1.7e-12    4.4e-12    8.4e-12
+
+Building...
+
+------------------------------------------------------------------
+cmv [10359] relative abundance at 1 in 1000 prevalence in Spurbeck
+------------------------------------------------------------------
+Posterior arithmetic mean:
+1.6e-12
+Posterior geometric mean:
+1.0e-12
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+1.5e-13    5.3e-13    1.1e-12    2.1e-12    4.4e-12
+
+Building...
+
+---------------------------------------------------------------------------
+hsv_1 [10298] relative abundance at 1 in 1000 prevalence in Crits_Christoph
+---------------------------------------------------------------------------
+Posterior arithmetic mean:
+5.6e-12
+Posterior geometric mean:
+2.8e-12
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+3.3e-13    1.3e-12    3.1e-12    6.6e-12    1.6e-11
+
+Building...
+
+-------------------------------------------------------------------
+hsv_1 [10298] relative abundance at 1 in 1000 prevalence in Rothman
+-------------------------------------------------------------------
+Posterior arithmetic mean:
+4.3e-11
+Posterior geometric mean:
+3.8e-11
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+1.6e-11    2.8e-11    4.0e-11    5.5e-11    8.2e-11
+
+Building...
+
+--------------------------------------------------------------------
+hsv_1 [10298] relative abundance at 1 in 1000 prevalence in Spurbeck
+--------------------------------------------------------------------
+Posterior arithmetic mean:
+8.1e-13
+Posterior geometric mean:
+5.0e-13
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+8.5e-14    2.5e-13    5.3e-13    1.0e-12    2.6e-12
+
+Building...
+
+-------------------------------------------------------------------------------------
+influenza [11320] relative abundance at 1 in 1000 incidence in Crits_Christoph
+-------------------------------------------------------------------------------------
+Posterior arithmetic mean:
+7.1e-06
+Posterior geometric mean:
+3.6e-06
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+4.1e-07    1.6e-06    3.9e-06    8.4e-06    2.0e-05
+
+Building...
+
+-----------------------------------------------------------------------------
+influenza [11320] relative abundance at 1 in 1000 incidence in Rothman
+-----------------------------------------------------------------------------
+Posterior arithmetic mean:
+2.7e-07
+Posterior geometric mean:
+1.7e-07
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+2.8e-08    8.8e-08    1.8e-07    3.6e-07    7.9e-07
+
+Building...
+
+------------------------------------------------------------------------------
+influenza [11320] relative abundance at 1 in 1000 incidence in Spurbeck
+------------------------------------------------------------------------------
+Posterior arithmetic mean:
+2.1e-10
+Posterior geometric mean:
+1.3e-10
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+2.1e-11    7.1e-11    1.5e-10    2.8e-10    6.3e-10
+
+Building...
+
+-------------------------------------------------------------------------------------
+influenza [11520] relative abundance at 1 in 1000 incidence in Crits_Christoph
+-------------------------------------------------------------------------------------
+Posterior arithmetic mean:
+7.1e-06
+Posterior geometric mean:
+3.6e-06
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+4.1e-07    1.6e-06    3.9e-06    8.4e-06    2.0e-05
+
+Building...
+
+-----------------------------------------------------------------------------
+influenza [11520] relative abundance at 1 in 1000 incidence in Rothman
+-----------------------------------------------------------------------------
+Posterior arithmetic mean:
+4.6e-07
+Posterior geometric mean:
+3.2e-07
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+7.0e-08    1.9e-07    3.4e-07    5.6e-07    1.2e-06
+
+Building...
+
+------------------------------------------------------------------------------
+influenza [11520] relative abundance at 1 in 1000 incidence in Spurbeck
+------------------------------------------------------------------------------
+Posterior arithmetic mean:
+8.9e-09
+Posterior geometric mean:
+6.2e-09
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+1.1e-09    4.9e-09    5.9e-09    1.0e-08    2.6e-08
+
+Building...
+
+--------------------------------------------------------------------------------------
+norovirus [142786] relative abundance at 1 in 1000 incidence in Crits_Christoph
+--------------------------------------------------------------------------------------
+Posterior arithmetic mean:
+4.4e-07
+Posterior geometric mean:
+3.3e-07
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+7.8e-08    2.2e-07    3.7e-07    5.6e-07    1.1e-06
+
+Building...
+
+------------------------------------------------------------------------------
+norovirus [142786] relative abundance at 1 in 1000 incidence in Rothman
+------------------------------------------------------------------------------
+Posterior arithmetic mean:
+2.4e-05
+Posterior geometric mean:
+2.0e-05
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+7.4e-06    1.3e-05    2.0e-05    2.8e-05    5.3e-05
+
+Building...
+
+-------------------------------------------------------------------------------
+norovirus [142786] relative abundance at 1 in 1000 incidence in Spurbeck
+-------------------------------------------------------------------------------
+Posterior arithmetic mean:
+7.4e-09
+Posterior geometric mean:
+5.0e-09
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+1.1e-09    2.8e-09    5.3e-09    9.3e-09    2.0e-08
+
+Building...
+
+--------------------------------------------------------------------------------------
+norovirus [122928] relative abundance at 1 in 1000 incidence in Crits_Christoph
+--------------------------------------------------------------------------------------
+Posterior arithmetic mean:
+9.4e-07
+Posterior geometric mean:
+5.0e-07
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+6.4e-08    2.5e-07    5.2e-07    1.1e-06    2.8e-06
+
+Building...
+
+------------------------------------------------------------------------------
+norovirus [122928] relative abundance at 1 in 1000 incidence in Rothman
+------------------------------------------------------------------------------
+Posterior arithmetic mean:
+2.8e-05
+Posterior geometric mean:
+2.6e-05
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+1.4e-05    2.1e-05    2.6e-05    3.2e-05    4.6e-05
+
+Building...
+
+-------------------------------------------------------------------------------
+norovirus [122928] relative abundance at 1 in 1000 incidence in Spurbeck
+-------------------------------------------------------------------------------
+Posterior arithmetic mean:
+6.3e-09
+Posterior geometric mean:
+4.4e-09
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+8.4e-10    2.6e-09    4.8e-09    8.4e-09    1.7e-08
+
+Building...
+
+--------------------------------------------------------------------------------------
+norovirus [122929] relative abundance at 1 in 1000 incidence in Crits_Christoph
+--------------------------------------------------------------------------------------
+Posterior arithmetic mean:
+2.9e-07
+Posterior geometric mean:
+1.8e-07
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+3.4e-08    9.9e-08    1.9e-07    3.5e-07    8.1e-07
+
+Building...
+
+------------------------------------------------------------------------------
+norovirus [122929] relative abundance at 1 in 1000 incidence in Rothman
+------------------------------------------------------------------------------
+Posterior arithmetic mean:
+2.0e-05
+Posterior geometric mean:
+1.6e-05
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+5.9e-06    1.1e-05    1.6e-05    2.4e-05    4.6e-05
+
+Building...
+
+-------------------------------------------------------------------------------
+norovirus [122929] relative abundance at 1 in 1000 incidence in Spurbeck
+-------------------------------------------------------------------------------
+Posterior arithmetic mean:
+8.6e-09
+Posterior geometric mean:
+5.6e-09
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+1.3e-09    3.2e-09    5.8e-09    1.0e-08    2.2e-08
+
+Building...
+
+-------------------------------------------------------------------------------
+hpv [10566] relative abundance at 1 in 1000 incidence in Crits_Christoph
+-------------------------------------------------------------------------------
+Posterior arithmetic mean:
+1.1e-09
+Posterior geometric mean:
+5.7e-10
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+6.6e-11    2.6e-10    6.3e-10    1.4e-09    3.2e-09
+
+Building...
+
+-----------------------------------------------------------------------
+hpv [10566] relative abundance at 1 in 1000 incidence in Rothman
+-----------------------------------------------------------------------
+Posterior arithmetic mean:
+6.0e-10
+Posterior geometric mean:
+3.7e-10
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+6.0e-11    2.0e-10    4.1e-10    7.5e-10    1.6e-09
+
+Building...
+
+------------------------------------------------------------------------
+hpv [10566] relative abundance at 1 in 1000 incidence in Spurbeck
+------------------------------------------------------------------------
+Posterior arithmetic mean:
+1.8e-10
+Posterior geometric mean:
+1.1e-10
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+2.1e-11    5.9e-11    1.2e-10    2.4e-10    5.5e-10
+
+Building...
+
+-------------------------------------------------------------------------
+ebv [10376] relative abundance at 1 in 1000 prevalence in Crits_Christoph
+-------------------------------------------------------------------------
+Posterior arithmetic mean:
+3.2e-12
+Posterior geometric mean:
+1.6e-12
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+1.9e-13    7.3e-13    1.8e-12    3.8e-12    8.8e-12
+
+Building...
+
+-----------------------------------------------------------------
+ebv [10376] relative abundance at 1 in 1000 prevalence in Rothman
+-----------------------------------------------------------------
+Posterior arithmetic mean:
+1.1e-12
+Posterior geometric mean:
+6.4e-13
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+9.6e-14    2.9e-13    8.8e-13    1.4e-12    2.9e-12
+
+Building...
+
+------------------------------------------------------------------
+ebv [10376] relative abundance at 1 in 1000 prevalence in Spurbeck
+------------------------------------------------------------------
+Posterior arithmetic mean:
+4.1e-13
+Posterior geometric mean:
+2.1e-13
+Posterior quantiles:
+     5%        25%        50%        75%        95%
+2.3e-14    9.3e-14    2.2e-13    5.3e-13    1.4e-12
+
