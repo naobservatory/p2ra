@@ -1,6 +1,6 @@
 from pathogen_properties import *
 
-background = """JC virus is a polyomavirus that is ubiquitous in the human population, staying latent in the body after infection. It is the causative agent of a rare but often fatal demyelinating disease of the central nervous system. it most likely spreads through the oral-fecal route"""
+background = """JC virus is a polyomavirus that is ubiquitous in the human population, staying latent in the body after infection. It is the causative agent of a rare but often fatal demyelinating disease of the central nervous system. It most likely spreads through feces or urine."""
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
