@@ -1,3 +1,5 @@
+import dataclasses
+
 from pathogen_properties import *
 
 background = """Herpes Simplex Virus 1 is a very common herpesvirus that causes oral herpes (CDC, https://www.
@@ -39,8 +41,14 @@ tear_and_saliva_prevalence = Prevalence(
 
 def estimate_prevalences() -> list[Prevalence]:
     return [
-        cdc_2015_2016_nhanes_estimate,
-        tear_and_saliva_prevalence,
+        # HSV_1 prevalence should be close to constant, so extrapolate from
+        # 2015-2016 to 2020 and 2021.
+        dataclasses.replace(
+            cdc_2015_2016_nhanes_estimate, date_source=Variable(date="2020")
+        ),
+        dataclasses.replace(
+            cdc_2015_2016_nhanes_estimate, date_source=Variable(date="2021")
+        ),
     ]
 
 

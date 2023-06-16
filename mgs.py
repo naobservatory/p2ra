@@ -73,6 +73,7 @@ class SampleAttributes(BaseModel):
     date: date | str
     reads: int
     enrichment: Optional[Enrichment]
+    method: Optional[str] = None
 
 
 def load_sample_attributes(repo: GitHubRepo) -> dict[Sample, SampleAttributes]:

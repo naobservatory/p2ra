@@ -253,15 +253,18 @@ class TestMGS(unittest.TestCase):
 
     def test_load_sample_attributes(self):
         samples = mgs.load_sample_attributes(self.repo)
-        # Randomly picked Rothman sample
-        s = mgs.Sample("SRR14530726")
-        self.assertIn(s, samples)
-        attrs = samples[s]
+        s1 = mgs.Sample("SRR14530726")  # Randomly picked Rothman sample
+        s2 = mgs.Sample("SRR23083716")  # Randomly picked Spurbeck sample
+        self.assertIn(s1, samples)
+        self.assertIn(s2, samples)
+        attrs = samples[s1]
         self.assertEqual(attrs.country, "United States")
         self.assertEqual(attrs.state, "California")
         self.assertEqual(attrs.county, "San Diego County")
         self.assertEqual(attrs.date, datetime.date(2020, 8, 27))
         self.assertEqual(attrs.enrichment, mgs.Enrichment.VIRAL)
+        self.assertIsNone(attrs.method)
+        self.assertEqual(samples[s2].method, "IJ")
 
     def test_load_sample_counts(self):
         sample_counts = mgs.load_sample_counts(self.repo)
@@ -547,27 +550,35 @@ class TestStats(unittest.TestCase):
 
     def test_build_model(self):
         mgs_data = mgs.MGSData.from_repo()
-        for pathogen_name in ["sars_cov_2", "norovirus"]:
-            pathogen = pathogens.pathogens[pathogen_name]
+        for (
+            pathogen_name,
+            predictor_type,
+            taxids,
+            predictors,
+        ) in pathogens.predictors_by_taxid():
             for study, bioproject in mgs.rna_bioprojects.items():
-                with self.subTest(study=study, pathogen=pathogen_name):
-                    for taxids, predictors in by_taxids(
-                        pathogen.pathogen_chars, pathogen.estimate_incidences()
-                    ).items():
-                        model = stats.build_model(
-                            mgs_data,
-                            bioproject,
-                            predictors,
-                            taxids,
-                        )
-                        self.assertEqual(
-                            len(model.data),
-                            len(
-                                mgs_data.sample_attributes(
-                                    bioproject, enrichment=mgs.Enrichment.VIRAL
-                                )
-                            ),
-                        )
+                with self.subTest(
+                    pathogen=pathogen_name,
+                    taxids=taxids,
+                    predictor=predictor_type,
+                    study=study,
+                ):
+                    model = stats.build_model(
+                        mgs_data,
+                        bioproject,
+                        predictors,
+                        taxids,
+                        random_seed=1,
+                    )
+                    self.assertEqual(
+                        len(model.data),
+                        len(
+                            mgs_data.sample_attributes(
+                                bioproject,
+                                enrichment=mgs.Enrichment.VIRAL,
+                            )
+                        ),
+                    )
 
 
 class TestPathogensMatchStudies(unittest.TestCase):
@@ -575,32 +586,34 @@ class TestPathogensMatchStudies(unittest.TestCase):
         # Every RNA pathogen should have at least one estimate for every sample
         # in the projects we're working with.
         mgs_data = mgs.MGSData.from_repo()
-        for pathogen_name, pathogen in pathogens.rna_viruses.items():
-            with self.subTest(pathogen=pathogen_name):
-                for taxids, predictors in by_taxids(
-                    pathogen.pathogen_chars,
-                    pathogen.estimate_incidences()
-                    + pathogen.estimate_prevalences(),
-                ).items():
-                    for study, bioproject in mgs.rna_bioprojects.items():
-                        with self.subTest(study=study):
-                            for (
-                                sample,
-                                sample_attributes,
-                            ) in mgs_data.sample_attributes(
-                                bioproject, enrichment=mgs.Enrichment.VIRAL
-                            ).items():
-                                with self.subTest(sample=sample):
-                                    chosen_predictors = stats.lookup_variables(
-                                        sample_attributes, predictors
-                                    )
-                                    self.assertNotEqual(chosen_predictors, [])
+        for (
+            pathogen_name,
+            predictor_type,
+            taxids,
+            predictors,
+        ) in pathogens.predictors_by_taxid():
+            for study, bioproject in mgs.rna_bioprojects.items():
+                with self.subTest(
+                    pathogen=pathogen_name,
+                    taxids=taxids,
+                    predictor=predictor_type,
+                    study=study,
+                ):
+                    for (
+                        sample,
+                        sample_attributes,
+                    ) in mgs_data.sample_attributes(
+                        bioproject, enrichment=mgs.Enrichment.VIRAL
+                    ).items():
+                        with self.subTest(sample=sample):
+                            chosen_predictors = stats.lookup_variables(
+                                sample_attributes, predictors
+                            )
+                            self.assertNotEqual(chosen_predictors, [])
 
-                                    for predictor in chosen_predictors:
-                                        with self.subTest(predictor=predictor):
-                                            self.assertGreater(
-                                                predictor.get_data(), 0
-                                            )
+                            for predictor in chosen_predictors:
+                                with self.subTest(predictor=predictor):
+                                    self.assertGreater(predictor.get_data(), 0)
 
 
 if __name__ == "__main__":
