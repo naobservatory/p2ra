@@ -49,8 +49,24 @@ nhanes_based_2018_18_59_yo_incidence = IncidenceRate(
 
 
 def estimate_prevalences():
-    return [nhanes_2013_2016_18_59_yo_prevalence]
+    # HPV prevalence is probably decreasing from 2013-2016 to the present, as
+    # vaccination is increasing and they're covering more subtypes.
+    # Extrapolating to 2020 and 2021 without adjusting for this might not be
+    # very good.
+    # TODO(#157): look into whether we can get estimates for 2020 and 2021.
+    return []
 
 
 def estimate_incidences():
-    return [nhanes_based_2018_18_59_yo_incidence]
+    # HPV prevalence should be close to constant, so extrapolate from
+    # 2018 to 2020 and 2021.
+    return [
+        dataclasses.replace(
+            nhanes_based_2018_18_59_yo_incidence,
+            date_source=Variable(date="2020"),
+        ),
+        dataclasses.replace(
+            nhanes_based_2018_18_59_yo_incidence,
+            date_source=Variable(date="2021"),
+        ),
+    ]
