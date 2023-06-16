@@ -18,6 +18,10 @@ for pathogen_fname in os.listdir(os.path.dirname(__file__)):
     )
 
 
+# Skip pathogens that don't have complete data yet.
+# For Hepatitis B and C, we're waiting on extrapolating older estimates 
+# to the study period:
+# https://github.com/naobservatory/p2ra/pull/154
 skip = ["hbv", "hcv"]
 
 
@@ -30,7 +34,7 @@ def predictors_by_taxid() -> (
         if pathogen_name in skip:
             continue
         for predictor_type, all_predictors in [
-            ("weekly_incidence", pathogen.estimate_incidences()),
+            ("incidence", pathogen.estimate_incidences()),
             ("prevalence", pathogen.estimate_prevalences()),
         ]:
             for taxids, predictors in by_taxids(

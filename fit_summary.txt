@@ -1,7 +1,7 @@
 Building...
 
 ----------------------------------------------------------------------------------------
-sars_cov_2 [2697049] relative abundance at 1 in 1000 weekly_incidence in Crits_Christoph
+sars_cov_2 [2697049] relative abundance at 1 in 1000 incidence in Crits_Christoph
 ----------------------------------------------------------------------------------------
 Posterior arithmetic mean:
 5.2e-08
@@ -14,7 +14,7 @@ Posterior quantiles:
 Building...
 
 --------------------------------------------------------------------------------
-sars_cov_2 [2697049] relative abundance at 1 in 1000 weekly_incidence in Rothman
+sars_cov_2 [2697049] relative abundance at 1 in 1000 incidence in Rothman
 --------------------------------------------------------------------------------
 Posterior arithmetic mean:
 1.3e-08
@@ -27,7 +27,7 @@ Posterior quantiles:
 Building...
 
 ---------------------------------------------------------------------------------
-sars_cov_2 [2697049] relative abundance at 1 in 1000 weekly_incidence in Spurbeck
+sars_cov_2 [2697049] relative abundance at 1 in 1000 incidence in Spurbeck
 ---------------------------------------------------------------------------------
 Posterior arithmetic mean:
 3.5e-11
@@ -196,7 +196,7 @@ Posterior quantiles:
 Building...
 
 -------------------------------------------------------------------------------------
-influenza [11320] relative abundance at 1 in 1000 weekly_incidence in Crits_Christoph
+influenza [11320] relative abundance at 1 in 1000 incidence in Crits_Christoph
 -------------------------------------------------------------------------------------
 Posterior arithmetic mean:
 7.1e-06
@@ -209,7 +209,7 @@ Posterior quantiles:
 Building...
 
 -----------------------------------------------------------------------------
-influenza [11320] relative abundance at 1 in 1000 weekly_incidence in Rothman
+influenza [11320] relative abundance at 1 in 1000 incidence in Rothman
 -----------------------------------------------------------------------------
 Posterior arithmetic mean:
 2.7e-07
@@ -222,7 +222,7 @@ Posterior quantiles:
 Building...
 
 ------------------------------------------------------------------------------
-influenza [11320] relative abundance at 1 in 1000 weekly_incidence in Spurbeck
+influenza [11320] relative abundance at 1 in 1000 incidence in Spurbeck
 ------------------------------------------------------------------------------
 Posterior arithmetic mean:
 2.1e-10
@@ -235,7 +235,7 @@ Posterior quantiles:
 Building...
 
 -------------------------------------------------------------------------------------
-influenza [11520] relative abundance at 1 in 1000 weekly_incidence in Crits_Christoph
+influenza [11520] relative abundance at 1 in 1000 incidence in Crits_Christoph
 -------------------------------------------------------------------------------------
 Posterior arithmetic mean:
 7.1e-06
@@ -248,7 +248,7 @@ Posterior quantiles:
 Building...
 
 -----------------------------------------------------------------------------
-influenza [11520] relative abundance at 1 in 1000 weekly_incidence in Rothman
+influenza [11520] relative abundance at 1 in 1000 incidence in Rothman
 -----------------------------------------------------------------------------
 Posterior arithmetic mean:
 4.6e-07
@@ -261,7 +261,7 @@ Posterior quantiles:
 Building...
 
 ------------------------------------------------------------------------------
-influenza [11520] relative abundance at 1 in 1000 weekly_incidence in Spurbeck
+influenza [11520] relative abundance at 1 in 1000 incidence in Spurbeck
 ------------------------------------------------------------------------------
 Posterior arithmetic mean:
 8.9e-09
@@ -274,7 +274,7 @@ Posterior quantiles:
 Building...
 
 --------------------------------------------------------------------------------------
-norovirus [142786] relative abundance at 1 in 1000 weekly_incidence in Crits_Christoph
+norovirus [142786] relative abundance at 1 in 1000 incidence in Crits_Christoph
 --------------------------------------------------------------------------------------
 Posterior arithmetic mean:
 4.4e-07
@@ -287,7 +287,7 @@ Posterior quantiles:
 Building...
 
 ------------------------------------------------------------------------------
-norovirus [142786] relative abundance at 1 in 1000 weekly_incidence in Rothman
+norovirus [142786] relative abundance at 1 in 1000 incidence in Rothman
 ------------------------------------------------------------------------------
 Posterior arithmetic mean:
 2.4e-05
@@ -300,7 +300,7 @@ Posterior quantiles:
 Building...
 
 -------------------------------------------------------------------------------
-norovirus [142786] relative abundance at 1 in 1000 weekly_incidence in Spurbeck
+norovirus [142786] relative abundance at 1 in 1000 incidence in Spurbeck
 -------------------------------------------------------------------------------
 Posterior arithmetic mean:
 7.4e-09
@@ -313,7 +313,7 @@ Posterior quantiles:
 Building...
 
 --------------------------------------------------------------------------------------
-norovirus [122928] relative abundance at 1 in 1000 weekly_incidence in Crits_Christoph
+norovirus [122928] relative abundance at 1 in 1000 incidence in Crits_Christoph
 --------------------------------------------------------------------------------------
 Posterior arithmetic mean:
 9.4e-07
@@ -326,7 +326,7 @@ Posterior quantiles:
 Building...
 
 ------------------------------------------------------------------------------
-norovirus [122928] relative abundance at 1 in 1000 weekly_incidence in Rothman
+norovirus [122928] relative abundance at 1 in 1000 incidence in Rothman
 ------------------------------------------------------------------------------
 Posterior arithmetic mean:
 2.8e-05
@@ -339,7 +339,7 @@ Posterior quantiles:
 Building...
 
 -------------------------------------------------------------------------------
-norovirus [122928] relative abundance at 1 in 1000 weekly_incidence in Spurbeck
+norovirus [122928] relative abundance at 1 in 1000 incidence in Spurbeck
 -------------------------------------------------------------------------------
 Posterior arithmetic mean:
 6.3e-09
@@ -352,7 +352,7 @@ Posterior quantiles:
 Building...
 
 --------------------------------------------------------------------------------------
-norovirus [122929] relative abundance at 1 in 1000 weekly_incidence in Crits_Christoph
+norovirus [122929] relative abundance at 1 in 1000 incidence in Crits_Christoph
 --------------------------------------------------------------------------------------
 Posterior arithmetic mean:
 2.9e-07
@@ -365,7 +365,7 @@ Posterior quantiles:
 Building...
 
 ------------------------------------------------------------------------------
-norovirus [122929] relative abundance at 1 in 1000 weekly_incidence in Rothman
+norovirus [122929] relative abundance at 1 in 1000 incidence in Rothman
 ------------------------------------------------------------------------------
 Posterior arithmetic mean:
 2.0e-05
@@ -378,7 +378,7 @@ Posterior quantiles:
 Building...
 
 -------------------------------------------------------------------------------
-norovirus [122929] relative abundance at 1 in 1000 weekly_incidence in Spurbeck
+norovirus [122929] relative abundance at 1 in 1000 incidence in Spurbeck
 -------------------------------------------------------------------------------
 Posterior arithmetic mean:
 8.6e-09
@@ -391,7 +391,7 @@ Posterior quantiles:
 Building...
 
 -------------------------------------------------------------------------------
-hpv [10566] relative abundance at 1 in 1000 weekly_incidence in Crits_Christoph
+hpv [10566] relative abundance at 1 in 1000 incidence in Crits_Christoph
 -------------------------------------------------------------------------------
 Posterior arithmetic mean:
 1.1e-09
@@ -404,7 +404,7 @@ Posterior quantiles:
 Building...
 
 -----------------------------------------------------------------------
-hpv [10566] relative abundance at 1 in 1000 weekly_incidence in Rothman
+hpv [10566] relative abundance at 1 in 1000 incidence in Rothman
 -----------------------------------------------------------------------
 Posterior arithmetic mean:
 6.0e-10
@@ -417,7 +417,7 @@ Posterior quantiles:
 Building...
 
 ------------------------------------------------------------------------
-hpv [10566] relative abundance at 1 in 1000 weekly_incidence in Spurbeck
+hpv [10566] relative abundance at 1 in 1000 incidence in Spurbeck
 ------------------------------------------------------------------------
 Posterior arithmetic mean:
 1.8e-10
