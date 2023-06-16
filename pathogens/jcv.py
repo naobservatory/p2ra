@@ -1,12 +1,15 @@
+
 from pathogen_properties import *
 
 background = """JC virus is a polyomavirus that is ubiquitous in the human population, staying latent in the body after infection. It is the causative agent of a rare but often fatal demyelinating disease of the central nervous system. it most likely spreads through the oral-fecal route"""
+
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.NON_ENVELOPED,
     taxid=TaxID(10632),
 )
+
 
 ch_2009_seroprevalence = Prevalence(
     infections_per_100k=0.58 * 100_000,
@@ -79,5 +82,5 @@ def estimate_prevalences() -> list[Prevalence]:
     ]
 
 
-def estimate_incidences() -> list[IncidenceRate]:
+def estimate_incidences():
     return []

@@ -1,3 +1,5 @@
+import dataclasses
+
 from pathogen_properties import *
 
 background = """Cytomegalovirus (CMV) is a common virus belonging to the 
@@ -73,7 +75,14 @@ nhanes_6_to_49_US_urine_shedding = Prevalence(
 
 def estimate_prevalences():
     return [
-        nhanes_6_to_49_US_seroprevalence,
+        # CMV should be close to constant, so extrapolate from 2003-2010 to
+        # 2020 and 2021.
+        dataclasses.replace(
+            nhanes_6_to_49_US_seroprevalence, date_source=Variable(date="2020")
+        ),
+        dataclasses.replace(
+            nhanes_6_to_49_US_seroprevalence, date_source=Variable(date="2021")
+        ),
         de_adult_seroprevalence_estimate,
         adult_seroprevalence_raleigh_durham_US,
     ]
