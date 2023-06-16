@@ -19,7 +19,7 @@ for pathogen_fname in os.listdir(os.path.dirname(__file__)):
 
 
 # Skip pathogens that don't have complete data yet.
-# For Hepatitis B and C, we're waiting on extrapolating older estimates 
+# For Hepatitis B and C, we're waiting on extrapolating older estimates
 # to the study period:
 # https://github.com/naobservatory/p2ra/pull/154
 skip = ["hbv", "hcv"]
