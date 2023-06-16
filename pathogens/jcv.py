@@ -1,6 +1,6 @@
 from pathogen_properties import *
 
-background = """JC polyomavirus is a polyomavirus that is ubiquitous in the human population, infecting 70-90% of people worldwide and staying latent in the body thereafter. It is the causative agent of progressive multifocal leukoencephalopathy (PML), a rare but often fatal demyelinating disease of the central nervous system."""
+background = """JC virus is a polyomavirus that is ubiquitous in the human population, staying latent in the body after infection. It is the causative agent of a rare but often fatal demyelinating disease of the central nervous system. it most likely spreads through the oral-fecal route"""
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
