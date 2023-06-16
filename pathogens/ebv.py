@@ -102,7 +102,7 @@ for race, cohort_dict in race_cohorts.items():
 EBV_US_2003_2010_SEROPREVALENCE = "https://academic.oup.com/jid/article/208/8/1286/2192838#:~:text=Table%201.Demographic%20Factors%20Associated%20With%20Epstein%E2%80%93Barr%20Virus%20(EBV)%20Antibody%20(Ab)%20Prevalence%2C%20by%20Race/Ethnicity%E2%80%94National%20Health%20and%20Nutrition%20Examination%20Survey%20Cycles%202003%E2%80%932004%2C%202005%E2%80%932006%2C%202007%E2%80%932008%2C%20and%202009%E2%80%932010"
 
 
-def us_seroprevalence_2020():
+def us_seroprevalence_2020() -> Prevalence:
     with open(
         prevalence_data_filename("ebv_6_19_nhanes_2003_2010.csv")
     ) as inf:
@@ -260,14 +260,17 @@ def estimate_prevalences():
     # data, applied to the 2023 Denmark population backwards to 2021-2019.
     # With this, we also assume that the infection rates per age cohort
     # remained constant over time.
-    denmark_2021 = dataclasses.replace(
-        denmark_2023, date_source=Variable(date="2021")
+
+    denmark_2019 = dataclasses.replace(
+        denmark_2023, date_source=Variable(date="2019")
     )
+
     denmark_2020 = dataclasses.replace(
         denmark_2023, date_source=Variable(date="2020")
     )
-    denmark_2019 = dataclasses.replace(
-        denmark_2023, date_source=Variable(date="2019")
+
+    denmark_2021 = dataclasses.replace(
+        denmark_2023, date_source=Variable(date="2021")
     )
     # Similar to Denmark, seroprevalence should remain constant, so we can
     # extrapolate from 2003-2010 data, applied to 2020 US population to 2021.
@@ -277,11 +280,10 @@ def estimate_prevalences():
     return [
         us_2020,
         us_2021,
-        denmark_2019
+        denmark_2019,
         denmark_2020,
-        denmark_2021
+        denmark_2021,
         denmark_2023,
-        
         uk_seroprevalence_0_to_25,
     ]
 
