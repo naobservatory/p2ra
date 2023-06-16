@@ -50,7 +50,7 @@ uk_1991_seroprevalence = Prevalence(
 us_2007_seroprevalence = Prevalence(
     infections_per_100k=0.82 * 100_000,
     # "We found the seroprevalence (+/− 1%) in healthy adult blood donors
-    # (1501) was [...] BCV (82)[...]"
+    # (1501) was [...] BCV (82%)[...]"
     number_of_participants=1501,
     # Plasma samples from healthy adult blood donors were obtained (May and June, 2007) from Bonfils Blood Center (Denver), and pediatric plasma samples were obtained from The Children's Hospital (Denver)
     country="United States",
@@ -63,7 +63,7 @@ us_2007_seroprevalence = Prevalence(
 
 
 def estimate_prevalences() -> list[Prevalence]:
-    # BK Virus has no clinical relevance for most individuals, and is thus not
+    # BK Virus has no clinical relevance for most individuals, and is not
     # targeted by treatments or vaccines. We can thus extrapolate 2007 data to
     # 2019-2021.
 
