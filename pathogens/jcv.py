@@ -58,7 +58,7 @@ us_2007_seroprevalence = Prevalence(
 )
 
 
-def estimate_prevalences() -> list(Prevalence):
+def estimate_prevalences() -> list[Prevalence]:
     # JC Virus has no clinical relevance for most individuals, and is thus not
     # targeted by treatments or vaccines. We can thus extrapolate 2007 data to
     # 2019-2021.
@@ -77,3 +77,7 @@ def estimate_prevalences() -> list(Prevalence):
         us_2020,
         us_2021,
     ]
+
+
+def estimate_incidences() -> list[IncidenceRate]:
+    return []
