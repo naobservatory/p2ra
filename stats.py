@@ -226,6 +226,23 @@ class Model(Generic[P]):
         ax.set_xlabel("Sampling location")
         return fig
 
+    def plot_sigma_tau_density(self) -> matplotlib.figure.Figure:
+        per_draw_df = self.get_per_draw_statistics()
+        fig, ax = plt.subplots(1, 1)
+        sns.kdeplot(
+            data=per_draw_df,
+            ax=ax,
+            x="sigma",
+            y="tau",
+            fill=True,
+            levels=100,
+            cmap="mako",
+            cbar=True,
+        )
+        ax.set_xlabel("Std. of true predictors")
+        ax.set_ylabel("Std. of location coefficients")
+        return fig
+
     def plot_posterior_samples(
         self, x: str, y: str, **kwargs
     ) -> sns.FacetGrid:

@@ -76,6 +76,8 @@ def start() -> None:
             fig_hist.savefig(figdir / f"{prefix}-posthist.pdf")
             fig_viol = model.plot_violin()
             fig_viol.savefig(figdir / f"{prefix}-violin.pdf")
+            fig_sigma_tau = model.plot_sigma_tau_density()
+            fig_sigma_tau.savefig(figdir / f"{prefix}-sigma-tau.pdf")
             xys = [
                 ("date", "viral_reads"),
                 ("date", "predictor"),
