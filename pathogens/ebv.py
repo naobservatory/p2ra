@@ -62,9 +62,10 @@ digit_extractor = re.compile("\d+")
 
 for race, cohort_dict in race_cohorts.items():
     with open(prevalence_data_filename(f"{race}.csv")) as inf:
-        # Data is downloaded from this results page: "hhttps://data.census.gov/table?q=Annual+Estimates+of+the+Resident+Population+by+Single+Year&g=010XX00US&tid=DECENNIALDHC2020.PCT12A".
-        # Specifically, we used PCT12I, PCT12H, and PCT12B, renaming the
-        # files to [white/latino/black]_age_cohorts.csv respectively.
+        # Data is downloaded from this results page: "https://data.census.gov/table?q=Annual+Estimates+of+the+Resident+Population+by+Single+Year&g=010XX00US&tid=DECENNIALDHC2020.PCT12A".
+        # Specifically, we used PCT12I (White alone, not Hispanic or Latino),
+        # PCT12H (Hispanic or Latino), and PCT12B (Black or African American
+        # Alone), saved as [white, latino, black]_age_cohorts.csv.
         reader = csv.reader(inf)
 
         # Skip first two non-age lines
