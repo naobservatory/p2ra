@@ -51,6 +51,8 @@ us_2007_seroprevalence = Prevalence(
     infections_per_100k=0.82 * 100_000,
     # "We found the seroprevalence (+/− 1%) in healthy adult blood donors
     # (1501) was [...] BCV (82%)[...]"
+    # Note that these were blood donors, and thus aren't representative of the
+    # general population.
     number_of_participants=1501,
     # Plasma samples from healthy adult blood donors were obtained (May and June, 2007) from Bonfils Blood Center (Denver), and pediatric plasma samples were obtained from The Children's Hospital (Denver)
     country="United States",
