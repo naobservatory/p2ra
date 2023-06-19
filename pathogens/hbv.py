@@ -41,7 +41,19 @@ cdc_acute_underreporting_factor_2020 = Scalar(
 )
 
 
-cdc_estimated_acute_2019 = IncidenceAbsolute(
+ohio_reported_acute_2021 = IncidenceRate(
+    # This source reports both acute and total (acute+chronic) reported incidence.
+    # We only report acute incidence here, as chronic prevalence is covered by
+    # the national estimate.
+    annual_infections_per_100k=0.9,
+    country="United States",
+    state="Ohio",
+    date="2021",
+    # Note that this source has yearly data for 2017-2021 if it's ever needed
+    source="https://odh.ohio.gov/know-our-programs/viral-hepatitis/data-statistics/hbv_5yr_report",
+)
+
+estimated_acute_2019 = IncidenceAbsolute(
     annual_infections=20_700,
     # During 2019, a total of 3,192 acute hepatitis B cases were reported to
     # CDC, resulting in 20,700 estimated infections (95% CI: 11,800–50,800)
@@ -57,8 +69,7 @@ cdc_estimated_acute_2019 = IncidenceAbsolute(
     methods="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=To%20account%20for,CI%3A%2011.0%E2%80%9347.4).",
 )
 
-
-estimated_chronic_prevalence_us_2020 = PrevalenceAbsolute(
+estimated_chronic_us_2020 = PrevalenceAbsolute(
     infections=1_721_027,
     # This is their mid estimate in table 4, second to last row. The estimate
     # listed in their paper and on the last line of the table doesn't add up.
@@ -77,28 +88,39 @@ estimated_chronic_prevalence_us_2020 = PrevalenceAbsolute(
 )
 
 
-ohio_reported_acute_incidence_2021 = IncidenceRate(
-    # This source reports both acute and total (acute+chronic) reported incidence.
-    # We only report acute incidence here, as chronic prevalence is covered by
-    # the national estimate.
-    annual_infections_per_100k=0.9,
-    country="United States",
-    state="Ohio",
-    date="2021",
-    # Note that this source has yearly data for 2017-2021 if it's ever needed
-    source="https://odh.ohio.gov/know-our-programs/viral-hepatitis/data-statistics/hbv_5yr_report",
-)
-
-
 def estimate_prevalences() -> list[Prevalence]:
+    chronic_2020 = estimated_chronic_us_2020.to_rate(us_population(year=2020))
+    # Hep B chronic cases should be approximately constant, so we
+    # can use chronic 2020 estimates for 2021.
+    chronic_2021 = dataclasses.replace(
+        chronic_2020, date_source=Variable(date="2021")
+    )
+
     return [
-        estimated_chronic_prevalence_us_2020.to_rate(us_population(year=2020))
+        chronic_2020,
+        chronic_2021,
     ]
 
 
 def estimate_incidences() -> list[IncidenceRate]:
+    # Before the COVID-19 pandemic, acute HBV incidence has stayed
+    # approximately constant: (https://www.cdc.gov/hepatitis/statistics/
+    # 2019surveillance/Figure2.1.htm). We can, therefore, estimate 2020
+    # and 2021 incidence from 2019 incidence. We don't expect Hep B to be
+    # affected by COVID-19 itself as strongly, given that it is transmitted
+    # through sexual contact and injection drug use, which are less affected
+    # by social distancing.
+    acute_2019 = estimated_acute_2019.to_rate(us_population_2019)
+
+    acute_2020 = dataclasses.replace(
+        acute_2019, date_source=Variable(date="2020")
+    )
+    acute_2021 = dataclasses.replace(
+        acute_2019, date_source=Variable(date="2021")
+    )
     return [
-        cdc_estimated_acute_2019.to_rate(us_population_2019),
-        ohio_reported_acute_incidence_2021
-        * cdc_acute_underreporting_factor_2020,
+        acute_2019,
+        acute_2020,
+        acute_2021,
+        ohio_reported_acute_2021 * cdc_acute_underreporting_factor_2020,
     ]
