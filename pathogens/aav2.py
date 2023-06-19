@@ -47,12 +47,13 @@ def estimate_prevalences() -> list[Prevalence]:
         date_source=Variable(date="2020"),
         location_source=Variable(country="United States"),
     )
+    us_2021 = dataclasses.replace(
+        us_2020,
+        date_source=Variable(date="2021"),
+    )
     return [
         us_2020,
-        dataclasses.replace(
-            us_2020,
-            date_source=Variable(date="2021"),
-        ),
+        us_2021,
     ]
 
 
