@@ -4,6 +4,7 @@ from textwrap import dedent
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 import stats
 from mgs import MGSData, TaxID, rna_bioprojects
@@ -66,7 +67,6 @@ def start() -> None:
             data_scatter.savefig(
                 figdir / f"{prefix}-datascatter.pdf", bbox_inches="tight"
             )
-            continue
             model.fit_model()
             df = model.dataframe
             assert df is not None
@@ -80,6 +80,10 @@ def start() -> None:
             fig_hist.savefig(figdir / f"{prefix}-posthist.pdf")
             fig_viol = model.plot_violin()
             fig_viol.savefig(figdir / f"{prefix}-violin.pdf")
+            fig_mu_sigma = model.plot_mu_sigma_density()
+            fig_mu_sigma.savefig(figdir / f"{prefix}-mu-sigma.pdf")
+            fig_mu_tau = model.plot_mu_tau_density()
+            fig_mu_tau.savefig(figdir / f"{prefix}-mu-tau.pdf")
             fig_sigma_tau = model.plot_sigma_tau_density()
             fig_sigma_tau.savefig(figdir / f"{prefix}-sigma-tau.pdf")
             xys = [
@@ -105,6 +109,8 @@ def start() -> None:
                 index=False,
                 compression="gzip",
             )
+
+            plt.close("all")
 
 
 if __name__ == "__main__":

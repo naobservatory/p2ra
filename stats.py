@@ -224,9 +224,9 @@ class Model(Generic[P]):
     def plot_posterior_histograms(self) -> matplotlib.figure.Figure:
         # TODO: Make sure this stays in sync with model.stan
         params = [
-            ("sigma", np.linspace(0, 4, 1000), gamma(1)),
-            ("mu", np.linspace(-4, 4, 1000), norm(scale=2)),
-            ("tau", np.linspace(0, 4, 1000), gamma(1)),
+            ("sigma", np.linspace(0, 6, 1000), gamma(2)),
+            ("mu", np.linspace(-8, 4, 1000), norm(scale=4)),
+            ("tau", np.linspace(0, 6, 1000), gamma(2)),
         ]
         per_draw_df = self.get_per_draw_statistics()
         fig, axes = plt.subplots(
@@ -266,6 +266,42 @@ class Model(Generic[P]):
             cbar=True,
         )
         ax.set_xlabel("Std. of true predictors")
+        ax.set_ylabel("Std. of location coefficients")
+        return fig
+
+    def plot_mu_sigma_density(self) -> matplotlib.figure.Figure:
+        # TODO: combine this and the last one
+        per_draw_df = self.get_per_draw_statistics()
+        fig, ax = plt.subplots(1, 1)
+        sns.kdeplot(
+            data=per_draw_df,
+            ax=ax,
+            x="mu",
+            y="sigma",
+            fill=True,
+            levels=100,
+            cmap="mako",
+            cbar=True,
+        )
+        ax.set_xlabel("Mean log P2RA coefficient")
+        ax.set_ylabel("Std. of true predictors")
+        return fig
+
+    def plot_mu_tau_density(self) -> matplotlib.figure.Figure:
+        # TODO: combine this and the last one
+        per_draw_df = self.get_per_draw_statistics()
+        fig, ax = plt.subplots(1, 1)
+        sns.kdeplot(
+            data=per_draw_df,
+            ax=ax,
+            x="mu",
+            y="tau",
+            fill=True,
+            levels=100,
+            cmap="mako",
+            cbar=True,
+        )
+        ax.set_xlabel("Mean log P2RA coefficient")
         ax.set_ylabel("Std. of location coefficients")
         return fig
 
