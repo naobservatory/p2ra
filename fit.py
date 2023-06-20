@@ -2,9 +2,9 @@
 from pathlib import Path
 from textwrap import dedent
 
+import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 import stats
 from mgs import MGSData, TaxID, rna_bioprojects
