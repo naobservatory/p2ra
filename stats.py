@@ -174,7 +174,6 @@ class Model(Generic[P]):
             sep=".",
         ).reset_index()
         df_output["predictor"] = np.exp(df_output["theta"])
-        # df_output["ra_per_predictor"] = np.exp(df_output["b"])
         df_output["observation_type"] = "posterior"
         df_output.rename(columns={"y_tilde": "viral_reads"}, inplace=True)
 
@@ -194,6 +193,33 @@ class Model(Generic[P]):
         if self.fit is None:
             raise ValueError("Model not fit yet")
         return self.fit.to_frame()
+
+    def plot_data_scatter(self) -> matplotlib.figure.Figure:
+        df = pd.DataFrame(
+            {
+                "county": [dp.attrs.county for dp in self.data],
+                "fine_location": [dp.attrs.fine_location for dp in self.data],
+                "relative_abundance": np.array(
+                    [dp.viral_reads for dp in self.data]
+                )
+                / np.array([dp.attrs.reads for dp in self.data]),
+                "predictor": np.array(
+                    [dp.predictor.get_data() for dp in self.data]
+                ),
+            }
+        )
+        fig, ax = plt.subplots(1, 1)
+        sns.scatterplot(
+            data=df,
+            x="predictor",
+            y="relative_abundance",
+            ax=ax,
+            style="county",
+            hue="fine_location",
+            hue_order=self.fine_locations,
+        )
+        sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
+        return fig
 
     def plot_posterior_histograms(self) -> matplotlib.figure.Figure:
         # TODO: Make sure this stays in sync with model.stan

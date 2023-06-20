@@ -54,6 +54,7 @@ def start() -> None:
         predictors,
     ) in predictors_by_taxid():
         for study, bioproject in rna_bioprojects.items():
+            prefix = f"{pathogen_name}-{list(taxids)}-{predictor_type}-{study}"
             model = stats.build_model(
                 mgs_data,
                 bioproject,
@@ -61,6 +62,11 @@ def start() -> None:
                 taxids,
                 random_seed=1,
             )
+            data_scatter = model.plot_data_scatter()
+            data_scatter.savefig(
+                figdir / f"{prefix}-datascatter.pdf", bbox_inches="tight"
+            )
+            continue
             model.fit_model()
             df = model.dataframe
             assert df is not None
@@ -70,8 +76,6 @@ def start() -> None:
             print_summary(
                 pathogen_name, taxids, predictor_type, study, ra_at_1in1000
             )
-
-            prefix = f"{pathogen_name}-{list(taxids)}-{predictor_type}-{study}"
             fig_hist = model.plot_posterior_histograms()
             fig_hist.savefig(figdir / f"{prefix}-posthist.pdf")
             fig_viol = model.plot_violin()
