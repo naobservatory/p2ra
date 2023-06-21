@@ -137,7 +137,6 @@ class Model(Generic[P]):
     def __post_init__(self) -> None:
         with open(STANFILE, "r") as stanfile:
             stan_code = Template(stanfile.read()).substitute(**HYPERPARAMS)
-        print(stan_code)
         # TODO: Make it more automatic to associate fine locations with coeffs
         self.fine_locations = sorted(
             list(set(dp.attrs.fine_location for dp in self.data)), key=str
