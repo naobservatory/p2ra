@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
+from string import Template
 from typing import Generic, Optional, TypeVar
 
 import matplotlib  # type: ignore
@@ -114,6 +115,15 @@ class DataPoint(Generic[P]):
 
 STANFILE = Path("model.stan")
 
+# TODO: Make this configurable
+HYPERPARAMS = {
+    "mu_sigma": 4,
+    "sigma_alpha": 2,
+    "sigma_beta": 1,
+    "tau_alpha": 2,
+    "tau_beta": 1,
+}
+
 
 @dataclass
 class Model(Generic[P]):
@@ -126,7 +136,8 @@ class Model(Generic[P]):
 
     def __post_init__(self) -> None:
         with open(STANFILE, "r") as stanfile:
-            stan_code = stanfile.read()
+            stan_code = Template(stanfile.read()).substitute(**HYPERPARAMS)
+        print(stan_code)
         # TODO: Make it more automatic to associate fine locations with coeffs
         self.fine_locations = sorted(
             list(set(dp.attrs.fine_location for dp in self.data)), key=str
@@ -224,9 +235,27 @@ class Model(Generic[P]):
     def plot_posterior_histograms(self) -> matplotlib.figure.Figure:
         # TODO: Make sure this stays in sync with model.stan
         params = [
-            ("sigma", np.linspace(0, 6, 1000), gamma(2)),
-            ("mu", np.linspace(-8, 4, 1000), norm(scale=4)),
-            ("tau", np.linspace(0, 6, 1000), gamma(2)),
+            (
+                "sigma",
+                np.linspace(0, 6, 1000),
+                gamma(
+                    HYPERPARAMS["sigma_alpha"],
+                    scale=1 / HYPERPARAMS["sigma_beta"],
+                ),
+            ),
+            (
+                "mu",
+                np.linspace(-8, 4, 1000),
+                norm(scale=HYPERPARAMS["mu_sigma"]),
+            ),
+            (
+                "tau",
+                np.linspace(0, 6, 1000),
+                gamma(
+                    HYPERPARAMS["tau_alpha"],
+                    scale=1 / HYPERPARAMS["tau_beta"],
+                ),
+            ),
         ]
         per_draw_df = self.get_per_draw_statistics()
         fig, axes = plt.subplots(
