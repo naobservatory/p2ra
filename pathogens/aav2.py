@@ -3,7 +3,10 @@ import dataclasses
 from pathogen_properties import *
 
 background = """Adeno-associated virus 2 is a small replication-defective
-virus. It belongs to the Dependoparvovirus, a genus of viruses that is commonly used to construct viral vectors. AAV-2 has no clinical significance in humans, and seroprevalence studies are focused on patient groups that might receive a vector-based therapy. """
+virus. It belongs to the Dependoparvoviridae, a genus of viruses that is 
+commonly used to construct viral vectors. AAV-2 has no clinical significance 
+in humans, and seroprevalence studies are focused on patient groups that might 
+receive a vector-based therapy. """
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
@@ -12,11 +15,8 @@ pathogen_chars = PathogenChars(
 )
 
 seroprevalence_hemophilia_global_2021 = Prevalence(
-    infections_per_100k=0.585 * 100_000,
-    # "Factoring in the prevalence of HA in the countries being assayed, the
-    # global weighted average of AAV5 seroprevalence in people with HA was 29.
-    # 7%. For other AAV serotypes, global seroprevalence was 58.5% for AAV2,
-    # [...]"
+    infections_per_100k=0.568 * 100_000,
+    # " Global HA weighted average was 56.8% for AAV2"
     number_of_participants=513,
     # Though these participants are not representative of the general
     # population, hemophilia is not caused by AAV-2. Prevalence would thus be
