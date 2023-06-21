@@ -41,7 +41,7 @@ def estimate_prevalences() -> list[Prevalence]:
     # the same study (n=71, prevalence(AAV-2)=53.5%. Source:
     # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/
     # :~:text=by%20country%20for-,(C)%20AAV2,-%2C%20(D)
-    #  We also assume that seroprevalence remains constant over time, given
+    # We also assume that seroprevalence remains constant over time, given
     # that AAV-2 is not known to cause disease, and thus isn't being treated
     # or vaccinated against.
     us_2020 = dataclasses.replace(

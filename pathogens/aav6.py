@@ -12,7 +12,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.NON_ENVELOPED,
     taxid=TaxID(68558),
-
+)
 
 
 seroprevalence_hemophilia_global_2021 = Prevalence(
@@ -38,7 +38,7 @@ seroprevalence_hemophilia_global_2021 = Prevalence(
 
 def estimate_prevalences() -> list[Prevalence]:
     # We assume that global seroprevalence will be similar to seroprevalence
-    # in the US. This is approximately confirmed by US-American participants 
+    # in the US. This is approximately confirmed by US-American participants
     # in the same study (n=71, prevalence(AAV6)=38.0%) . Source:
     # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=AAV5%2C%20(E)-,AAV6,-%2C%20(F)
     # We also assume that seroprevalence remains constant over time, given
