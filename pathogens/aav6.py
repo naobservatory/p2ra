@@ -2,21 +2,24 @@ import dataclasses
 
 from pathogen_properties import *
 
-background = """Adeno-associated virus 2 is a small replication-defective
-virus. It belongs to the Dependoparvoviridae, a genus of viruses that is commonly used to construct viral vectors. AAV-2 has no clinical significance in humans, and seroprevalence studies are focused on patient groups that might receive a vector-based therapy. """
+background = """Adeno-associated virus 5 is a small replication-defective
+virus. It belongs to the Dependoparvoviridae, a genus of viruses that is commonly used to construct viral vectors (though AAV-2 is the most popular serotype for AAV-based research) AAV-5 has no clinical significance in humans, and seroprevalence studies are focused on patient groups that might receive a vector-based therapy. """
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=TaxID(10804),
+    taxid=TaxID(82300),
 )
 
+https://onlinelibrary.wiley.com/doi/full/10.1002/rth2.12705
+
+
 seroprevalence_hemophilia_global_2021 = Prevalence(
-    infections_per_100k=0.568 * 100_000,
-    # " Global HA weighted average was 56.8% for AAV2"
+    infections_per_100k=0.446 * 100_000,
+    # "Global HA weighted average was [...] 44.6% for AAV6 [...]."
     number_of_participants=513,
     # Though these participants are not representative of the general
-    # population, hemophilia is not caused by AAV-2. Prevalence would thus be
+    # population, hemophilia is not caused by AAV-6. Prevalence would thus be
     # at most affected by, e.g., lower socioeconomic status due to a higher
     # disease burden.
     country="Global",
