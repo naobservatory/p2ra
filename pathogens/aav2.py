@@ -37,8 +37,10 @@ seroprevalence_hemophilia_global_2021 = Prevalence(
 
 def estimate_prevalences() -> list[Prevalence]:
     # We assume that global seroprevalence will be similar to seroprevalence
-    # in the US. This is also what we find in the US-American participants of # the same study (n=71, prevalence(AAV-2)=53.5%. Source:
-    # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=by%20country%20for-,(C)%20AAV2,-%2C%20(D)
+    # in the US. This is also what we find in the US-American participants of
+    # the same study (n=71, prevalence(AAV-2)=53.5%. Source:
+    # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/
+    # :~:text=by%20country%20for-,(C)%20AAV2,-%2C%20(D)
     #  We also assume that seroprevalence remains constant over time, given
     # that AAV-2 is not known to cause disease, and thus isn't being treated
     # or vaccinated against.
