@@ -46,4 +46,5 @@ generated quantities {
   vector[L] b_loc = b_l - mean(log(x)) + log_mean_y - log_mean_n;
   // posterior P2RA coefficient
   real ra_at_1in1000 = inv_logit(b + log(100));
+  vector[L] ra_at_1in1000_loc = inv_logit(b_loc + log(100));
 }

@@ -2,11 +2,12 @@ from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from string import Template
-from typing import Generic, Optional, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
 import matplotlib  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 import seaborn as sns  # type: ignore
 import stan  # type: ignore
@@ -123,6 +124,8 @@ HYPERPARAMS = {
     "tau_alpha": 2,
     "tau_beta": 1,
 }
+
+PERCENTILES = [5, 25, 50, 75, 95]
 
 
 @dataclass
@@ -266,15 +269,23 @@ class Model(Generic[P]):
             )
         return fig
 
-    def plot_violin(self) -> matplotlib.figure.Figure:
+    def get_per_location_coeffs(self, raw: bool = False) -> pd.DataFrame:
+        if raw:
+            overall = "mu"
+            per_loc = "b_l"
+        else:
+            overall = "ra_at_1in1000"
+            per_loc = "ra_at_1in1000_loc"
         per_draw_df = self.get_per_draw_statistics()
-        df = pd.DataFrame()
-        # TODO: this probably goes elsewhere
+        coeffs = pd.DataFrame()
         for i, loc in enumerate(self.fine_locations):
-            df[loc] = per_draw_df[f"b_l.{i+1}"]
-        df["Overall"] = per_draw_df["mu"]
+            coeffs[loc] = per_draw_df[f"{per_loc}.{i+1}"]
+        coeffs["Overall"] = per_draw_df[overall]
+        return coeffs
+
+    def plot_violin(self) -> matplotlib.figure.Figure:
         fig, ax = plt.subplots(1, 1)
-        sns.violinplot(data=df, ax=ax)
+        sns.violinplot(data=self.get_per_location_coeffs(raw=True), ax=ax)
         ax.set_ylabel("Standardized coefficient")
         ax.set_xlabel("Sampling location")
         return fig
@@ -358,6 +369,23 @@ class Model(Generic[P]):
             g.savefig(path / f"{prefix}-{y}_vs_{x}.pdf")
         plt.close("all")
 
+    @staticmethod
+    def summary_header() -> list[str]:
+        return ["location", "arith_mean", "geom_mean"] + [
+            f"{p}%" for p in PERCENTILES
+        ]
+
+    def summary(self) -> list[list[Any]]:
+        coeffs = self.get_per_location_coeffs()
+        output = []
+        for location in self.fine_locations + ["Overall"]:
+            c = coeffs[location]
+            output.append(
+                [location, np.mean(c), geom_mean(c)]
+                + list(np.percentile(c, PERCENTILES))
+            )
+        return output
+
 
 def choose_predictor(predictors: list[Predictor]) -> Predictor:
     assert len(predictors) == 1
@@ -392,3 +420,7 @@ def posterior_hist(data, param: str, prior_x, prior, ax=None):
     )
     sns.histplot(data=data, x=param, stat="density", bins=40, ax=ax)
     return ax
+
+
+def geom_mean(x: npt.ArrayLike) -> float:
+    return np.exp(np.mean(np.log(x)))
