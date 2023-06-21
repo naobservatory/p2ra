@@ -8,6 +8,14 @@ pathogen_chars = PathogenChars(
     taxid=TaxID(11103),
 )
 
+us_population_2019 = Population(
+    people=328.2 * 1e6,
+    country="United States",
+    date="2019",
+    source="https://data.census.gov/table?q=us+population+2019&tid=ACSDP1Y2019.DP05",
+)
+
+
 # Data below is from the Ohio Department of Health. They give case rates,
 # which are "shown per 100,000 persons and were calculated using census
 # estimates for that year, except 2021 is using 2020 census."
@@ -34,27 +42,7 @@ reported_acute_ohio_2021 = IncidenceRate(
 )
 
 
-cdc_estimated_acute_44_us_states_2020 = IncidenceRate(
-    annual_infections_per_100k=1.5,
-    # The CDC gives a CI for its 66,700 estimated infections (95% CI:
-    # 52_700–227_400), but not its rate (1.5 cases per 100k). I adopted their
-    # absolute count CI to also get a CI for the rate.
-    confidence_interval=(
-        (52_700 / 66_700) * 1.5,
-        (227_400 / 66_700) * 1.5,
-    ),  # 95% CI
-    coverage_probability=0.95,
-    date="2020",
-    country="United States",
-    # Specifically, this estimate is for 44 US states, as six states and the
-    # District of Columbia did not report data, see here for a list of
-    # non-reporters:
-    # "https://www.cdc.gov/hepatitis/statistics/2020surveillance/introduction/technical-notes.htm#:~:text=Chronic%20hepatitis%20B-,Acute%20hepatitis%20C,-Chronic%20hepatitis%20C"
-    source="https://www.cdc.gov/hepatitis/statistics/2020surveillance/introduction/national-profile.htm#:~:text=During%202020%2C%20a%20total%20of%204%2C798%20acute%20hepatitis%20C%20cases%20were%20reported%20to%20CDC%20from%2044%20states%2C%20corresponding%20to%2066%2C700%20estimated%20infections%20(95%25%20CI%3A%2052%2C700%E2%80%93227%2C400)",
-)
-
-
-estimated_current_infection_us_2013_2016 = Prevalence(
+estimated_chronic_us_2013_2016 = Prevalence(
     # [...] we analyzed 2013-2016 data from the National Health
     # and Nutrition Examination Survey (NHANES) to estimate the prevalence of
     # HCV in the noninstitutionalized civilian population and used a
@@ -79,12 +67,21 @@ estimated_current_infection_us_2013_2016 = Prevalence(
     active=Active.LATENT,
 )
 
-us_adult_population_2016 = Population(
-    people=249_448_772,
-    source="https://data.census.gov/table?q=2016+population+us&tid=ACSDP1Y2016.DP05",
-    date="2016",
+
+cdc_estimated_acute_2019 = IncidenceAbsolute(
+    annual_infections=57_500,
+    # During 2019, a total of 4,136 acute hepatitis C cases were reported to
+    # CDC, corresponding to 57,500 estimated infections (95% CI: 45,500–196,
+    # 000).
+    # We do not use 2020 estimated incidence, as the underascertainment factor
+    # with which the CDC gets from reported to estimated cases wasn't changed
+    # in 2020, even though the pandemic should have influenced case reporting
+    # significantly.
+    confidence_interval=(45_500, 196_000),  # 95% CI
+    coverage_probability=0.95,
+    date="2019",
     country="United States",
-    tag="us-2013-2016",
+    source="https://www.cdc.gov/hepatitis/statistics/2019surveillance/Introduction.htm#Technical:~:text=During%202019%2C%20a%20total%20of%204%2C136%20acute%20hepatitis%20C%20cases%20were%20reported%20to%20CDC%2C%20corresponding%20to%2057%2C500%20estimated%20infections%20(95%25%20CI%3A%2045%2C500%E2%80%93196%2C000))",
 )
 
 acute_underreporting_factor = Scalar(
@@ -146,10 +143,23 @@ OHIO_COUNTY_ESTIMATES_SOURCE = "https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec2
 
 
 def estimate_incidences():
+    # Hep C acute cases should be approximately constant, so we
+    # can use 2019 acute estimates for 2020 and 2021.
+
+    acute_2019 = cdc_estimated_acute_2019.to_rate(us_population_2019)
+    acute_2020 = dataclasses.replace(
+        acute_2019, date_source=Variable(date="2020")
+    )
+    acute_2021 = dataclasses.replace(
+        acute_2019, date_source=Variable(date="2021")
+    )
+
     estimates = [
+        acute_2019,
+        acute_2020,
+        acute_2021,
         reported_acute_ohio_2020 * (acute_underreporting_factor),
         reported_acute_ohio_2021 * (acute_underreporting_factor),
-        cdc_estimated_acute_44_us_states_2020,
     ]
     for county in ohio_counties_case_rates:
         for year in ohio_counties_case_rates[county]:
@@ -170,7 +180,15 @@ def estimate_incidences():
 
 
 def estimate_prevalences() -> list[Prevalence]:
-    estimates = [
-        estimated_current_infection_us_2013_2016,
-    ]
+    # Estimated acute cases have increased slighly since 2016 (https://www.cdc.gov/hepatitis/statistics/2020surveillance/hepatitis-c/figure-3.1.htm), but
+    # not to a level that would change the chronic rate by much. We thus
+    # extrapolate the 2016 rate to 2020 and 2021.
+    chronic_2020 = dataclasses.replace(
+        estimated_chronic_us_2013_2016, date_source=Variable(date="2020")
+    )
+
+    chronic_2021 = dataclasses.replace(
+        estimated_chronic_us_2013_2016, date_source=Variable(date="2021")
+    )
+    estimates = [estimated_chronic_us_2013_2016, chronic_2020, chronic_2021]
     return estimates
