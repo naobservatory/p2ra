@@ -247,62 +247,23 @@ class Model(Generic[P]):
         df["Overall"] = per_draw_df["mu"]
         fig, ax = plt.subplots(1, 1)
         sns.violinplot(data=df, ax=ax)
-        # ax.set_xticklabels(self.fine_locations + ["Overall"])
         ax.set_ylabel("Standardized coefficient")
         ax.set_xlabel("Sampling location")
         return fig
 
-    def plot_sigma_tau_density(self) -> matplotlib.figure.Figure:
+    def plot_joint_posterior(self, x: str, y: str) -> matplotlib.figure.Figure:
         per_draw_df = self.get_per_draw_statistics()
         fig, ax = plt.subplots(1, 1)
         sns.kdeplot(
             data=per_draw_df,
             ax=ax,
-            x="sigma",
-            y="tau",
+            x=x,
+            y=y,
             fill=True,
             levels=100,
             cmap="mako",
             cbar=True,
         )
-        ax.set_xlabel("Std. of true predictors")
-        ax.set_ylabel("Std. of location coefficients")
-        return fig
-
-    def plot_mu_sigma_density(self) -> matplotlib.figure.Figure:
-        # TODO: combine this and the last one
-        per_draw_df = self.get_per_draw_statistics()
-        fig, ax = plt.subplots(1, 1)
-        sns.kdeplot(
-            data=per_draw_df,
-            ax=ax,
-            x="mu",
-            y="sigma",
-            fill=True,
-            levels=100,
-            cmap="mako",
-            cbar=True,
-        )
-        ax.set_xlabel("Mean log P2RA coefficient")
-        ax.set_ylabel("Std. of true predictors")
-        return fig
-
-    def plot_mu_tau_density(self) -> matplotlib.figure.Figure:
-        # TODO: combine this and the last one
-        per_draw_df = self.get_per_draw_statistics()
-        fig, ax = plt.subplots(1, 1)
-        sns.kdeplot(
-            data=per_draw_df,
-            ax=ax,
-            x="mu",
-            y="tau",
-            fill=True,
-            levels=100,
-            cmap="mako",
-            cbar=True,
-        )
-        ax.set_xlabel("Mean log P2RA coefficient")
-        ax.set_ylabel("Std. of location coefficients")
         return fig
 
     def plot_posterior_samples(
@@ -338,6 +299,36 @@ class Model(Generic[P]):
         )
         ax.set_title("Observed", fontdict={"size": 10})
         return g
+
+    def plot_figures(self, path: Path, prefix: str) -> None:
+        assert self.fit is not None
+        data_scatter = self.plot_data_scatter()
+        data_scatter.savefig(
+            path / f"{prefix}-datascatter.pdf", bbox_inches="tight"
+        )
+        fig_hist = self.plot_posterior_histograms()
+        fig_hist.savefig(path / f"{prefix}-posthist.pdf")
+        fig_viol = self.plot_violin()
+        fig_viol.savefig(path / f"{prefix}-violin.pdf")
+        for x, y in [("mu", "sigma"), ("mu", "tau"), ("sigma", "tau")]:
+            fig = self.plot_joint_posterior(x, y)
+            fig.savefig(path / f"{prefix}-{y}_vs_{x}.pdf")
+        for x, y in [
+            ("date", "viral_reads"),
+            ("date", "predictor"),
+            ("predictor", "viral_reads"),
+        ]:
+            g = self.plot_posterior_samples(
+                x,
+                y,
+                style="county",
+                hue="fine_location",
+                hue_order=self.fine_locations,
+            )
+            if y == "predictor":
+                g.set(yscale="log")
+            g.savefig(path / f"{prefix}-{y}_vs_{x}.pdf")
+        plt.close("all")
 
 
 def choose_predictor(predictors: list[Predictor]) -> Predictor:

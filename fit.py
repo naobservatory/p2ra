@@ -63,54 +63,23 @@ def start() -> None:
                 taxids,
                 random_seed=1,
             )
-            data_scatter = model.plot_data_scatter()
-            data_scatter.savefig(
-                figdir / f"{prefix}-datascatter.pdf", bbox_inches="tight"
-            )
             model.fit_model()
             df = model.dataframe
             assert df is not None
+            # FIXME: Refactor
             ra_at_1in1000 = pd.pivot_table(
                 df, index="draws", values=["ra_at_1in1000"]
             )
             print_summary(
                 pathogen_name, taxids, predictor_type, study, ra_at_1in1000
             )
-            fig_hist = model.plot_posterior_histograms()
-            fig_hist.savefig(figdir / f"{prefix}-posthist.pdf")
-            fig_viol = model.plot_violin()
-            fig_viol.savefig(figdir / f"{prefix}-violin.pdf")
-            fig_mu_sigma = model.plot_mu_sigma_density()
-            fig_mu_sigma.savefig(figdir / f"{prefix}-mu-sigma.pdf")
-            fig_mu_tau = model.plot_mu_tau_density()
-            fig_mu_tau.savefig(figdir / f"{prefix}-mu-tau.pdf")
-            fig_sigma_tau = model.plot_sigma_tau_density()
-            fig_sigma_tau.savefig(figdir / f"{prefix}-sigma-tau.pdf")
-            xys = [
-                ("date", "viral_reads"),
-                ("date", "predictor"),
-                ("predictor", "viral_reads"),
-            ]
-            for x, y in xys:
-                g = model.plot_posterior_samples(
-                    x,
-                    y,
-                    style="county",
-                    hue="fine_location",
-                    hue_order=model.fine_locations,
-                )
-                if y == "predictor":
-                    g.set(yscale="log")
-                g.savefig(figdir / f"{prefix}-{y}-vs-{x}.pdf")
-
+            model.plot_figures(figdir, prefix)
             df.to_csv(
                 outdir / f"{prefix}.tsv.gz",
                 sep="\t",
                 index=False,
                 compression="gzip",
             )
-
-            plt.close("all")
 
 
 if __name__ == "__main__":
