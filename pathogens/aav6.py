@@ -2,16 +2,17 @@ import dataclasses
 
 from pathogen_properties import *
 
-background = """Adeno-associated virus 5 is a small replication-defective
-virus. It belongs to the Dependoparvoviridae, a genus of viruses that is commonly used to construct viral vectors (though AAV-2 is the most popular serotype for AAV-based research) AAV-5 has no clinical significance in humans, and seroprevalence studies are focused on patient groups that might receive a vector-based therapy. """
+background = """Adeno-associated virus 6 is a small replication-defective
+virus. It belongs to the Dependoparvoviridae, a genus of viruses that is 
+commonly used to construct viral vectors. AAV-6 has no known clinical 
+significance in humans, and seroprevalence studies are focused on patient 
+groups that might receive a vector-based therapy. """
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=TaxID(82300),
-)
+    taxid=TaxID(68558),
 
-https://onlinelibrary.wiley.com/doi/full/10.1002/rth2.12705
 
 
 seroprevalence_hemophilia_global_2021 = Prevalence(
