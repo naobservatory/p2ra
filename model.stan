@@ -42,9 +42,14 @@ generated quantities {
   }
   // posterior true prevalence for each sample
   vector[J] theta = theta_std + mean(log(x));
-  real b = mu - mean(log(x)) + log_mean_y - log_mean_n;
-  vector[L] b_loc = b_l - mean(log(x)) + log_mean_y - log_mean_n;
-  // posterior P2RA coefficient
-  real ra_at_1in1000 = inv_logit(b + log(100));
-  vector[L] ra_at_1in1000_loc = inv_logit(b_loc + log(100));
+  // for convenience, a single vector with the location coefficients and
+  // overall coefficient in the final position
+  vector[L + 1] b;
+  b[:L] = b_l;
+  b[L + 1] = mu;
+  // location-specific expected relative abundance
+  // last element is the overall coefficient
+  vector[L + 1] ra_at_1in1000 = inv_logit(
+    b - mean(log(x)) + log_mean_y - log_mean_n + log(100)
+  );
 }

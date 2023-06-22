@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from string import Template
-from typing import Any, Generic, Optional, TypeVar
+from typing import Generic, Optional, TypeVar
 
 import matplotlib  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
@@ -125,15 +125,13 @@ HYPERPARAMS = {
     "tau_beta": 1,
 }
 
-PERCENTILES = [5, 25, 50, 75, 95]
-
 
 @dataclass
 class Model(Generic[P]):
     data: list[DataPoint[P]]
     random_seed: int
     model: stan.model.Model = field(init=False)
-    fine_locations: list[str | None] = field(init=False)
+    locations: list[str | None] = field(init=False)
     fit: None | stan.fit.Fit = None
     dataframe: None | pd.DataFrame = None
 
@@ -141,18 +139,19 @@ class Model(Generic[P]):
         with open(STANFILE, "r") as stanfile:
             stan_code = Template(stanfile.read()).substitute(**HYPERPARAMS)
         # TODO: Make it more automatic to associate fine locations with coeffs
-        self.fine_locations = sorted(
+        self.locations = sorted(
             list(set(dp.attrs.fine_location for dp in self.data)), key=str
-        )
+        ) + ["Overall"]
         stan_data = {
             "J": len(self.data),
             "y": np.array([dp.viral_reads for dp in self.data]),
             "n": np.array([dp.attrs.reads for dp in self.data]),
             "x": np.array([dp.predictor.get_data() for dp in self.data]),
-            "L": len(self.fine_locations),
+            # Overall is not a location
+            "L": len(self.locations) - 1,
             "ll": [
                 # Stan vectors are one-indexed
-                self.fine_locations.index(dp.attrs.fine_location) + 1
+                self.locations.index(dp.attrs.fine_location) + 1
                 for dp in self.data
             ],
         }
@@ -166,6 +165,7 @@ class Model(Generic[P]):
         )
         self.dataframe = self._make_dataframe()
 
+    # TODO: Deprecate/rename?
     def _make_dataframe(self) -> pd.DataFrame:
         if self.fit is None:
             raise ValueError("Model not fit yet")
@@ -207,6 +207,20 @@ class Model(Generic[P]):
             raise ValueError("Model not fit yet")
         return self.fit.to_frame()
 
+    def get_coefficients(self) -> pd.DataFrame:
+        cols = ["b", "ra_at_1in1000"]
+        coeffs = pd.wide_to_long(
+            self.get_per_draw_statistics().reset_index(),
+            stubnames=cols,
+            i="draws",
+            j="location_index",
+            sep=".",
+        ).reset_index()
+        coeffs["location"] = np.array(self.locations)[
+            coeffs["location_index"] - 1
+        ]
+        return coeffs[["location"] + cols]
+
     def plot_data_scatter(self) -> matplotlib.figure.Figure:
         df = pd.DataFrame(
             {
@@ -229,7 +243,7 @@ class Model(Generic[P]):
             ax=ax,
             style="county",
             hue="fine_location",
-            hue_order=self.fine_locations,
+            hue_order=self.locations,
         )
         sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
         return fig
@@ -269,23 +283,11 @@ class Model(Generic[P]):
             )
         return fig
 
-    def get_per_location_coeffs(self, raw: bool = False) -> pd.DataFrame:
-        if raw:
-            overall = "mu"
-            per_loc = "b_l"
-        else:
-            overall = "ra_at_1in1000"
-            per_loc = "ra_at_1in1000_loc"
-        per_draw_df = self.get_per_draw_statistics()
-        coeffs = pd.DataFrame()
-        for i, loc in enumerate(self.fine_locations):
-            coeffs[loc] = per_draw_df[f"{per_loc}.{i+1}"]
-        coeffs["Overall"] = per_draw_df[overall]
-        return coeffs
-
     def plot_violin(self) -> matplotlib.figure.Figure:
         fig, ax = plt.subplots(1, 1)
-        sns.violinplot(data=self.get_per_location_coeffs(raw=True), ax=ax)
+        sns.violinplot(
+            data=self.get_coefficients(), x="location", y="b", ax=ax
+        )
         ax.set_ylabel("Standardized coefficient")
         ax.set_xlabel("Sampling location")
         return fig
@@ -362,29 +364,12 @@ class Model(Generic[P]):
                 y,
                 style="county",
                 hue="fine_location",
-                hue_order=self.fine_locations,
+                hue_order=self.locations,
             )
             if y == "predictor":
                 g.set(yscale="log")
             g.savefig(path / f"{prefix}-{y}_vs_{x}.pdf")
         plt.close("all")
-
-    @staticmethod
-    def summary_header() -> list[str]:
-        return ["location", "arith_mean", "geom_mean"] + [
-            f"{p}%" for p in PERCENTILES
-        ]
-
-    def summary(self) -> list[list[Any]]:
-        coeffs = self.get_per_location_coeffs()
-        output = []
-        for location in self.fine_locations + ["Overall"]:
-            c = coeffs[location]
-            output.append(
-                [location, np.mean(c), geom_mean(c)]
-                + list(np.percentile(c, PERCENTILES))
-            )
-        return output
 
 
 def choose_predictor(predictors: list[Predictor]) -> Predictor:
@@ -420,7 +405,3 @@ def posterior_hist(data, param: str, prior_x, prior, ax=None):
     )
     sns.histplot(data=data, x=param, stat="density", bins=40, ax=ax)
     return ax
-
-
-def geom_mean(x: npt.ArrayLike) -> float:
-    return np.exp(np.mean(np.log(x)))
