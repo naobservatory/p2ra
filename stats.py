@@ -7,7 +7,6 @@ from typing import Generic, Optional, TypeVar
 import matplotlib  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
-import numpy.typing as npt
 import pandas as pd
 import seaborn as sns  # type: ignore
 import stan  # type: ignore
