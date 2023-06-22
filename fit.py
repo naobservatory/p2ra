@@ -2,35 +2,22 @@
 from pathlib import Path
 
 import pandas as pd
-import numpy as np
-import numpy.typing as npt
 
 import stats
 from mgs import MGSData, rna_bioprojects
 from pathogens import predictors_by_taxid
 
-PERCENTILES = [5, 25, 50, 75, 95]
 
-
-def geom_mean(x: npt.ArrayLike) -> float:
-    return np.exp(np.mean(np.log(x)))
-
-
-# TODO: Deprecate
 def summarize_output(coeffs: pd.DataFrame) -> pd.DataFrame:
-    # for location in self.fine_locations + ["Overall"]:
-    #     c = coeffs[location]
-    #     output.append(
-    #         [location, np.mean(c), geom_mean(c)]
-    #         + list(np.percentile(c, PERCENTILES))
-    #     )
-    summary = pd.DataFrame()
-    return summary
+    return coeffs.groupby(
+        ["pathogen", "taxids", "predictor_type", "study", "location"]
+    ).ra_at_1in1000.describe(percentiles=[0.05, 0.25, 0.5, 0.75, 0.95])
 
 
-def start() -> None:
+def start(num_samples: int, plot: bool) -> None:
     figdir = Path("fig")
-    figdir.mkdir(exist_ok=True)
+    if plot:
+        figdir.mkdir(exist_ok=True)
     mgs_data = MGSData.from_repo()
     output_data = []
     for (
@@ -39,31 +26,34 @@ def start() -> None:
         taxids,
         predictors,
     ) in predictors_by_taxid():
+        taxids_str = "_".join(str(t) for t in taxids)
         for study, bioproject in rna_bioprojects.items():
             model = stats.build_model(
                 mgs_data,
                 bioproject,
                 predictors,
                 taxids,
-                random_seed=1,
+                random_seed=sum(taxids),
             )
-            model.fit_model()
-            model.plot_figures(
-                path=figdir,
-                prefix=f"{pathogen_name}-{list(taxids)}-{predictor_type}-{study}",
+            model.fit_model(num_samples=num_samples)
+            if plot:
+                model.plot_figures(
+                    path=figdir,
+                    prefix=f"{pathogen_name}-{taxids_str}-{predictor_type}-{study}",
+                )
+            out = model.get_coefficients().assign(
+                pathogen=pathogen_name,
+                taxids=taxids_str,
+                predictor_type=predictor_type,
+                study=study,
             )
-            out = model.get_coefficients()
-            out["pathogen"] = pathogen_name
-            out["taxids"] = ",".join(str(t) for t in taxids)
-            out["predictor_type"] = predictor_type
-            out["study"] = study
             output_data.append(out)
     coeffs = pd.concat(output_data)
     coeffs.to_csv("fits.tsv", sep="\t", index=False)
-    # TODO: summarize into a separate csv?
     summary = summarize_output(coeffs)
-    summary.to_csv("fits_summary.tsv", sep="\t", index=False)
+    summary.to_csv("fits_summary.tsv", sep="\t")
 
 
 if __name__ == "__main__":
-    start()
+    # TODO: Command line arguments
+    start(num_samples=1000, plot=True)
