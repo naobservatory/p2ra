@@ -46,10 +46,10 @@ def start() -> None:
     df = pd.read_csv(datafile, sep="\t")
     df["path_tax"] = df.pathogen + "-" + df.taxids.astype("string")
     fig_overall = plot_overall(df)
-    fig_overall.savefig(figdir / "overall-violin.pdf", bbox_inches="tight")
+    fig_overall.savefig(figdir / "overall-boxen.pdf", bbox_inches="tight")
     fig_by_location = plot_by_location(df)
     fig_by_location.savefig(
-        figdir / "by_location-violin.pdf", bbox_inches="tight"
+        figdir / "by_location-boxen.pdf", bbox_inches="tight"
     )
 
 
