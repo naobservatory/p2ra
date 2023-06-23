@@ -130,7 +130,7 @@ class Model(Generic[P]):
     data: list[DataPoint[P]]
     random_seed: int
     model: stan.model.Model = field(init=False)
-    fine_locations: list[str | None] = field(init=False)
+    locations: list[str | None] = field(init=False)
     fit: None | stan.fit.Fit = None
     dataframe: None | pd.DataFrame = None
 
@@ -138,18 +138,19 @@ class Model(Generic[P]):
         with open(STANFILE, "r") as stanfile:
             stan_code = Template(stanfile.read()).substitute(**HYPERPARAMS)
         # TODO: Make it more automatic to associate fine locations with coeffs
-        self.fine_locations = sorted(
+        self.locations = sorted(
             list(set(dp.attrs.fine_location for dp in self.data)), key=str
-        )
+        ) + ["Overall"]
         stan_data = {
             "J": len(self.data),
             "y": np.array([dp.viral_reads for dp in self.data]),
             "n": np.array([dp.attrs.reads for dp in self.data]),
             "x": np.array([dp.predictor.get_data() for dp in self.data]),
-            "L": len(self.fine_locations),
+            # Overall is not a location
+            "L": len(self.locations) - 1,
             "ll": [
                 # Stan vectors are one-indexed
-                self.fine_locations.index(dp.attrs.fine_location) + 1
+                self.locations.index(dp.attrs.fine_location) + 1
                 for dp in self.data
             ],
         }
@@ -163,6 +164,7 @@ class Model(Generic[P]):
         )
         self.dataframe = self._make_dataframe()
 
+    # TODO: Deprecate/rename?
     def _make_dataframe(self) -> pd.DataFrame:
         if self.fit is None:
             raise ValueError("Model not fit yet")
@@ -204,6 +206,20 @@ class Model(Generic[P]):
             raise ValueError("Model not fit yet")
         return self.fit.to_frame()
 
+    def get_coefficients(self) -> pd.DataFrame:
+        cols = ["b", "ra_at_1in1000"]
+        coeffs = pd.wide_to_long(
+            self.get_per_draw_statistics().reset_index(),
+            stubnames=cols,
+            i="draws",
+            j="location_index",
+            sep=".",
+        ).reset_index()
+        coeffs["location"] = np.array(self.locations)[
+            coeffs["location_index"] - 1
+        ]
+        return coeffs[["location"] + cols]
+
     def plot_data_scatter(self) -> matplotlib.figure.Figure:
         df = pd.DataFrame(
             {
@@ -226,7 +242,7 @@ class Model(Generic[P]):
             ax=ax,
             style="county",
             hue="fine_location",
-            hue_order=self.fine_locations,
+            hue_order=self.locations,
         )
         sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
         return fig
@@ -267,14 +283,10 @@ class Model(Generic[P]):
         return fig
 
     def plot_violin(self) -> matplotlib.figure.Figure:
-        per_draw_df = self.get_per_draw_statistics()
-        df = pd.DataFrame()
-        # TODO: this probably goes elsewhere
-        for i, loc in enumerate(self.fine_locations):
-            df[loc] = per_draw_df[f"b_l.{i+1}"]
-        df["Overall"] = per_draw_df["mu"]
         fig, ax = plt.subplots(1, 1)
-        sns.violinplot(data=df, ax=ax)
+        sns.violinplot(
+            data=self.get_coefficients(), x="location", y="b", ax=ax
+        )
         ax.set_ylabel("Standardized coefficient")
         ax.set_xlabel("Sampling location")
         return fig
@@ -351,7 +363,7 @@ class Model(Generic[P]):
                 y,
                 style="county",
                 hue="fine_location",
-                hue_order=self.fine_locations,
+                hue_order=self.locations,
             )
             if y == "predictor":
                 g.set(yscale="log")

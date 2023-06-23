@@ -143,5 +143,5 @@ settings.json
 .DS_Store
 
 # Model output
-fits/*
+fits.tsv
 fig/*
