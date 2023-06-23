@@ -47,9 +47,13 @@ def start() -> None:
     df["path_tax"] = df.pathogen + "-" + df.taxids.astype("string")
     fig_overall = plot_overall(df)
     fig_overall.savefig(figdir / "overall-boxen.pdf", bbox_inches="tight")
+    fig_overall.savefig(figdir / "overall-boxen.png", bbox_inches="tight")
     fig_by_location = plot_by_location(df)
     fig_by_location.savefig(
         figdir / "by_location-boxen.pdf", bbox_inches="tight"
+    )
+    fig_by_location.savefig(
+        figdir / "by_location-boxen.png", bbox_inches="tight"
     )
 
 
