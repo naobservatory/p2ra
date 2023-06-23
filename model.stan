@@ -21,10 +21,10 @@ parameters {
   vector[L] b_l;            // P2RA coefficient per location
 }
 model {
-  sigma ~ exponential(1);
+  sigma ~ gamma($sigma_alpha, $sigma_beta);
   theta_std ~ normal(x_std, sigma);
-  mu ~ normal(0, 2);
-  tau ~ exponential(1);
+  mu ~ normal(0, $mu_sigma);
+  tau ~ gamma($tau_alpha, $tau_beta);
   b_l ~ normal(mu, tau);
   for (j in 1:J){
     y[j] ~ binomial_logit(n[j], b_l[ll[j]] + theta_std[j] + log_mean_y - log_mean_n);

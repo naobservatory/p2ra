@@ -2,6 +2,7 @@
 from pathlib import Path
 from textwrap import dedent
 
+import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 import pandas as pd
 
@@ -54,6 +55,7 @@ def start() -> None:
         predictors,
     ) in predictors_by_taxid():
         for study, bioproject in rna_bioprojects.items():
+            prefix = f"{pathogen_name}-{list(taxids)}-{predictor_type}-{study}"
             model = stats.build_model(
                 mgs_data,
                 bioproject,
@@ -64,29 +66,14 @@ def start() -> None:
             model.fit_model()
             df = model.dataframe
             assert df is not None
+            # FIXME: Refactor
             ra_at_1in1000 = pd.pivot_table(
                 df, index="draws", values=["ra_at_1in1000"]
             )
             print_summary(
                 pathogen_name, taxids, predictor_type, study, ra_at_1in1000
             )
-
-            prefix = f"{pathogen_name}-{list(taxids)}-{predictor_type}-{study}"
-            fig_hist = model.plot_posterior_histograms()
-            fig_hist.savefig(figdir / f"{prefix}-posthist.pdf")
-            xys = [
-                ("date", "viral_reads"),
-                ("date", "predictor"),
-                ("predictor", "viral_reads"),
-            ]
-            for x, y in xys:
-                g = model.plot_posterior_samples(
-                    x, y, style="county", hue="fine_location"
-                )
-                if y == "predictor":
-                    g.set(yscale="log")
-                g.savefig(figdir / f"{prefix}-{y}-vs-{x}.pdf")
-
+            model.plot_figures(figdir, prefix)
             df.to_csv(
                 outdir / f"{prefix}.tsv.gz",
                 sep="\t",

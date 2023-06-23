@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
+from string import Template
 from typing import Generic, Optional, TypeVar
 
 import matplotlib  # type: ignore
@@ -114,28 +115,41 @@ class DataPoint(Generic[P]):
 
 STANFILE = Path("model.stan")
 
+# TODO: Make this configurable
+HYPERPARAMS = {
+    "mu_sigma": 4,
+    "sigma_alpha": 2,
+    "sigma_beta": 1,
+    "tau_alpha": 2,
+    "tau_beta": 1,
+}
+
 
 @dataclass
 class Model(Generic[P]):
     data: list[DataPoint[P]]
     random_seed: int
     model: stan.model.Model = field(init=False)
+    fine_locations: list[str | None] = field(init=False)
     fit: None | stan.fit.Fit = None
     dataframe: None | pd.DataFrame = None
 
     def __post_init__(self) -> None:
         with open(STANFILE, "r") as stanfile:
-            stan_code = stanfile.read()
-        fine_locations = list(set(dp.attrs.fine_location for dp in self.data))
+            stan_code = Template(stanfile.read()).substitute(**HYPERPARAMS)
+        # TODO: Make it more automatic to associate fine locations with coeffs
+        self.fine_locations = sorted(
+            list(set(dp.attrs.fine_location for dp in self.data)), key=str
+        )
         stan_data = {
             "J": len(self.data),
             "y": np.array([dp.viral_reads for dp in self.data]),
             "n": np.array([dp.attrs.reads for dp in self.data]),
             "x": np.array([dp.predictor.get_data() for dp in self.data]),
-            "L": len(fine_locations),
+            "L": len(self.fine_locations),
             "ll": [
                 # Stan vectors are one-indexed
-                fine_locations.index(dp.attrs.fine_location) + 1
+                self.fine_locations.index(dp.attrs.fine_location) + 1
                 for dp in self.data
             ],
         }
@@ -170,7 +184,6 @@ class Model(Generic[P]):
             sep=".",
         ).reset_index()
         df_output["predictor"] = np.exp(df_output["theta"])
-        # df_output["ra_per_predictor"] = np.exp(df_output["b"])
         df_output["observation_type"] = "posterior"
         df_output.rename(columns={"y_tilde": "viral_reads"}, inplace=True)
 
@@ -191,12 +204,57 @@ class Model(Generic[P]):
             raise ValueError("Model not fit yet")
         return self.fit.to_frame()
 
+    def plot_data_scatter(self) -> matplotlib.figure.Figure:
+        df = pd.DataFrame(
+            {
+                "county": [dp.attrs.county for dp in self.data],
+                "fine_location": [dp.attrs.fine_location for dp in self.data],
+                "relative_abundance": np.array(
+                    [dp.viral_reads for dp in self.data]
+                )
+                / np.array([dp.attrs.reads for dp in self.data]),
+                "predictor": np.array(
+                    [dp.predictor.get_data() for dp in self.data]
+                ),
+            }
+        )
+        fig, ax = plt.subplots(1, 1)
+        sns.scatterplot(
+            data=df,
+            x="predictor",
+            y="relative_abundance",
+            ax=ax,
+            style="county",
+            hue="fine_location",
+            hue_order=self.fine_locations,
+        )
+        sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
+        return fig
+
     def plot_posterior_histograms(self) -> matplotlib.figure.Figure:
         # TODO: Make sure this stays in sync with model.stan
         params = [
-            ("sigma", np.linspace(0, 4, 1000), gamma(1)),
-            ("mu", np.linspace(-4, 4, 1000), norm(scale=2)),
-            ("tau", np.linspace(0, 4, 1000), gamma(1)),
+            (
+                "sigma",
+                np.linspace(0, 6, 1000),
+                gamma(
+                    HYPERPARAMS["sigma_alpha"],
+                    scale=1 / HYPERPARAMS["sigma_beta"],
+                ),
+            ),
+            (
+                "mu",
+                np.linspace(-8, 4, 1000),
+                norm(scale=HYPERPARAMS["mu_sigma"]),
+            ),
+            (
+                "tau",
+                np.linspace(0, 6, 1000),
+                gamma(
+                    HYPERPARAMS["tau_alpha"],
+                    scale=1 / HYPERPARAMS["tau_beta"],
+                ),
+            ),
         ]
         per_draw_df = self.get_per_draw_statistics()
         fig, axes = plt.subplots(
@@ -206,6 +264,34 @@ class Model(Generic[P]):
             posterior_hist(
                 data=per_draw_df, param=param, prior_x=x, prior=prior, ax=ax
             )
+        return fig
+
+    def plot_violin(self) -> matplotlib.figure.Figure:
+        per_draw_df = self.get_per_draw_statistics()
+        df = pd.DataFrame()
+        # TODO: this probably goes elsewhere
+        for i, loc in enumerate(self.fine_locations):
+            df[loc] = per_draw_df[f"b_l.{i+1}"]
+        df["Overall"] = per_draw_df["mu"]
+        fig, ax = plt.subplots(1, 1)
+        sns.violinplot(data=df, ax=ax)
+        ax.set_ylabel("Standardized coefficient")
+        ax.set_xlabel("Sampling location")
+        return fig
+
+    def plot_joint_posterior(self, x: str, y: str) -> matplotlib.figure.Figure:
+        per_draw_df = self.get_per_draw_statistics()
+        fig, ax = plt.subplots(1, 1)
+        sns.kdeplot(
+            data=per_draw_df,
+            ax=ax,
+            x=x,
+            y=y,
+            fill=True,
+            levels=100,
+            cmap="mako",
+            cbar=True,
+        )
         return fig
 
     def plot_posterior_samples(
@@ -241,6 +327,36 @@ class Model(Generic[P]):
         )
         ax.set_title("Observed", fontdict={"size": 10})
         return g
+
+    def plot_figures(self, path: Path, prefix: str) -> None:
+        assert self.fit is not None
+        data_scatter = self.plot_data_scatter()
+        data_scatter.savefig(
+            path / f"{prefix}-datascatter.pdf", bbox_inches="tight"
+        )
+        fig_hist = self.plot_posterior_histograms()
+        fig_hist.savefig(path / f"{prefix}-posthist.pdf")
+        fig_viol = self.plot_violin()
+        fig_viol.savefig(path / f"{prefix}-violin.pdf")
+        for x, y in [("mu", "sigma"), ("mu", "tau"), ("sigma", "tau")]:
+            fig = self.plot_joint_posterior(x, y)
+            fig.savefig(path / f"{prefix}-{y}_vs_{x}.pdf")
+        for x, y in [
+            ("date", "viral_reads"),
+            ("date", "predictor"),
+            ("predictor", "viral_reads"),
+        ]:
+            g = self.plot_posterior_samples(
+                x,
+                y,
+                style="county",
+                hue="fine_location",
+                hue_order=self.fine_locations,
+            )
+            if y == "predictor":
+                g.set(yscale="log")
+            g.savefig(path / f"{prefix}-{y}_vs_{x}.pdf")
+        plt.close("all")
 
 
 def choose_predictor(predictors: list[Predictor]) -> Predictor:
