@@ -145,3 +145,5 @@ settings.json
 # Model output
 fits.tsv
 fig/*
+
+figures/*.png
