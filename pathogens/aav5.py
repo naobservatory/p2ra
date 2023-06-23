@@ -16,7 +16,7 @@ pathogen_chars = PathogenChars(
 
 seroprevalence_hemophilia_global_2021 = Prevalence(
     infections_per_100k=0.348 * 100_000,
-    # Taking seropositivity from Figure 1A (un-weighted)
+    # Taking seropositivity from Figure 1A (un-weighted global seroprevalence)
     number_of_participants=513,
     # Though these participants are not representative of the general
     # population, hemophilia is not caused by AAV-5. Prevalence would thus be
@@ -28,7 +28,7 @@ seroprevalence_hemophilia_global_2021 = Prevalence(
     # (93K%2C%20docx)-,Supplemental%20data%3A,-Click%20here%20to
     date="2021",
     active=Active.LATENT,
-    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=Factoring%20in%20the,44.7%25%20for%20AAVrh10.",
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=Seropositivity%20for%20(A)%20the%20global%20population",
 )
 
 
