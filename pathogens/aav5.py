@@ -15,10 +15,8 @@ pathogen_chars = PathogenChars(
 )
 
 seroprevalence_hemophilia_global_2021 = Prevalence(
-    infections_per_100k=0.297 * 100_000,
-    # "Factoring in the prevalence of HA in the countries being assayed, the
-    # global weighted average of AAV5 seroprevalence in people with HA was 29.
-    # 7%."
+    infections_per_100k=0.348 * 100_000,
+    # Taking seropositivity from Figure 1A (un-weighted)
     number_of_participants=513,
     # Though these participants are not representative of the general
     # population, hemophilia is not caused by AAV-5. Prevalence would thus be
