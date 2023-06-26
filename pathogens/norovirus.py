@@ -8,17 +8,14 @@ from pathogen_properties import *
 background = """Norovirus is a GI infection, mostly spread through personal
 contact."""
 
-NOROVIRUS = TaxID(142786)
 NOROVIRUS_GROUP_I = TaxID(122928)
 NOROVIRUS_GROUP_II = TaxID(122929)
 
 pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=TaxID(NOROVIRUS),
-    subtaxids=frozenset((NOROVIRUS_GROUP_I, NOROVIRUS_GROUP_II)),
+    taxids=frozenset((NOROVIRUS_GROUP_I, NOROVIRUS_GROUP_II)),
     names_by_taxid={
-        NOROVIRUS: "Norovirus (all)",
         NOROVIRUS_GROUP_I: "Norovirus (GI)",
         NOROVIRUS_GROUP_II: "Norovirus (GII)",
     },
@@ -221,8 +218,6 @@ def estimate_incidences() -> list[IncidenceRate]:
                 pre_covid_national_incidence * adjustment,
                 date_source=adjustment,
             )
-
-            incidences.append(adjusted_national_incidence)
 
             # Assume that all Norovirus infections are either Group I or II,
             # which is very close (see assertion above).  Also assume the
