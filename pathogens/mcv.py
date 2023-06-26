@@ -20,7 +20,7 @@ seroprevalence_women_us_2009 = Prevalence(
     # Though this seroprevalence number is only for women, it tracks 2011 data
     # from Italy, showing a seroprevalence of around 70% in a control
     # population of 945 individuals. Table 1, plotted in Figure 4:
-    # # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3187023/#:~:text=MCPyV%2C%20JCPyV%2C%20and%20BKPyV%20age%2Dspecific%20seroprevalencea
+    # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3187023/#:~:text=MCPyV%2C%20JCPyV%2C%20and%20BKPyV%20age%2Dspecific%20seroprevalencea
 )
 
 
