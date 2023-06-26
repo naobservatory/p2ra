@@ -19,6 +19,7 @@ def start(num_samples: int, plot: bool) -> None:
     if plot:
         figdir.mkdir(exist_ok=True)
     mgs_data = MGSData.from_repo()
+    input_data = []
     output_data = []
     for (
         pathogen_name,
@@ -41,13 +42,16 @@ def start(num_samples: int, plot: bool) -> None:
                     path=figdir,
                     prefix=f"{pathogen_name}-{taxids_str}-{predictor_type}-{study}",
                 )
-            out = model.get_coefficients().assign(
+            metadata = dict(
                 pathogen=pathogen_name,
                 taxids=taxids_str,
                 predictor_type=predictor_type,
                 study=study,
             )
-            output_data.append(out)
+            input_data.append(model.input_df.assign(**metadata))
+            output_data.append(model.get_coefficients().assign(**metadata))
+    input = pd.concat(input_data)
+    input.to_csv("input.tsv", sep="\t", index=False)
     coeffs = pd.concat(output_data)
     coeffs.to_csv("fits.tsv", sep="\t", index=False)
     summary = summarize_output(coeffs)
