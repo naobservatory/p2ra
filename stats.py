@@ -131,27 +131,40 @@ class Model(Generic[P]):
     random_seed: int
     model: stan.model.Model = field(init=False)
     locations: list[str | None] = field(init=False)
+    input_df: pd.DataFrame = field(init=False)
     fit: None | stan.fit.Fit = None
     dataframe: None | pd.DataFrame = None
 
     def __post_init__(self) -> None:
         with open(STANFILE, "r") as stanfile:
             stan_code = Template(stanfile.read()).substitute(**HYPERPARAMS)
+        self.input_df = pd.DataFrame(
+            {
+                # Stan vectors are 1-indexed
+                "sample": [i + 1 for i, _ in enumerate(self.data)],
+                "viral_reads": [dp.viral_reads for dp in self.data],
+                "total_reads": [dp.attrs.reads for dp in self.data],
+                "predictor": [dp.predictor.get_data() for dp in self.data],
+                "location": [dp.attrs.fine_location for dp in self.data],
+                "date": [dp.attrs.date for dp in self.data],
+                "county": [dp.attrs.county for dp in self.data],
+            }
+        )
         # TODO: Make it more automatic to associate fine locations with coeffs
         self.locations = sorted(
             list(set(dp.attrs.fine_location for dp in self.data)), key=str
         ) + ["Overall"]
         stan_data = {
             "J": len(self.data),
-            "y": np.array([dp.viral_reads for dp in self.data]),
-            "n": np.array([dp.attrs.reads for dp in self.data]),
-            "x": np.array([dp.predictor.get_data() for dp in self.data]),
+            "y": self.input_df.viral_reads.to_numpy(),
+            "n": self.input_df.total_reads.to_numpy(),
+            "x": self.input_df.predictor.to_numpy(),
             # Overall is not a location
             "L": len(self.locations) - 1,
             "ll": [
                 # Stan vectors are one-indexed
-                self.locations.index(dp.attrs.fine_location) + 1
-                for dp in self.data
+                self.locations.index(loc) + 1
+                for loc in self.input_df.location
             ],
         }
         self.model = stan.build(
