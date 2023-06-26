@@ -8,7 +8,10 @@ import seaborn as sns  # type: ignore
 from mgs import rna_bioprojects
 
 
-def plot_overall(data: pd.DataFrame) -> plt.Figure:
+def plot_overall(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
+    viral_reads = count_viral_reads(input_data)
+    print(len(viral_reads))
+    print(sorted(viral_reads))
     fig = plt.figure(figsize=(6, 10))
     ax = fig.add_subplot()
     sns.boxenplot(
@@ -16,9 +19,12 @@ def plot_overall(data: pd.DataFrame) -> plt.Figure:
         data=data[data.location == "Overall"],
         x="ra_at_1in1000",
         y="path_tax",
+        order=sorted(data.path_tax.unique()),
         hue="study",
         showfliers=False,
     )
+    for num_reads, artist_list in zip(viral_reads, ax.collections):
+        artist_list.set_alpha(min(num_reads / 10, 1.0))
     ax.set_xscale("log")
     return fig
 
@@ -39,22 +45,36 @@ def plot_by_location(data: pd.DataFrame) -> plt.Figure:
     return fig
 
 
+def count_viral_reads(
+    df: pd.DataFrame, by_location: bool = False
+) -> pd.Series:
+    groups = ["pathogen", "taxids", "predictor_type", "study"]
+    if by_location:
+        groups.append("fine_location")
+    return df.groupby(groups).viral_reads.sum()
+
+
+def save_plot(fig, figdir: Path, name: str) -> None:
+    for ext in ["pdf", "png"]:
+        fig.savefig(figdir / f"{name}.{ext}", bbox_inches="tight")
+
+
 def start() -> None:
     figdir = Path("fig")
     figdir.mkdir(exist_ok=True)
-    datafile = "fits.tsv"
-    df = pd.read_csv(datafile, sep="\t")
-    df["path_tax"] = df.pathogen + "-" + df.taxids.astype("string")
-    fig_overall = plot_overall(df)
-    fig_overall.savefig(figdir / "overall-boxen.pdf", bbox_inches="tight")
-    fig_overall.savefig(figdir / "overall-boxen.png", bbox_inches="tight")
-    fig_by_location = plot_by_location(df)
-    fig_by_location.savefig(
-        figdir / "by_location-boxen.pdf", bbox_inches="tight"
+    fits_df = pd.read_csv("fits.tsv", sep="\t")
+    input_df = pd.read_csv("input.tsv", sep="\t")
+    print(count_viral_reads(input_df))
+    fits_df["path_tax"] = (
+        fits_df.pathogen + "-" + fits_df.taxids.astype("string")
     )
-    fig_by_location.savefig(
-        figdir / "by_location-boxen.png", bbox_inches="tight"
+    input_df["path_tax"] = (
+        input_df.pathogen + "-" + input_df.taxids.astype("string")
     )
+    fig_overall = plot_overall(fits_df, input_df)
+    save_plot(fig_overall, figdir, "overall-boxen")
+    fig_by_location = plot_by_location(fits_df)
+    save_plot(fig_by_location, figdir, "by_location-boxen")
 
 
 if __name__ == "__main__":
