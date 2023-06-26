@@ -17,6 +17,11 @@ pathogen_chars = PathogenChars(
     enveloped=Enveloped.NON_ENVELOPED,
     taxid=TaxID(NOROVIRUS),
     subtaxids=frozenset((NOROVIRUS_GROUP_I, NOROVIRUS_GROUP_II)),
+    names_by_taxid={
+        NOROVIRUS: "Norovirus (all)",
+        NOROVIRUS_GROUP_I: "Norovirus (GI)",
+        NOROVIRUS_GROUP_II: "Norovirus (GII)",
+    },
 )
 
 # We're using Scallan 2011

@@ -56,6 +56,7 @@ class PathogenChars:
     # If we produce any estimates more specific than the overall taxid,
     # subtaxids will contain all the secondary taxonomic ids we can generate.
     subtaxids: frozenset[TaxID] = frozenset()
+    names_by_taxid: Optional[dict[TaxID, str]] = None
 
     def __post_init__(self, taxid: Optional[TaxID]):
         assert bool(taxid) ^ bool(self.taxids)  # Exactly one should be set.

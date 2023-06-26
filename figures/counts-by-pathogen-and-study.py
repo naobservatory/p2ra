@@ -25,19 +25,6 @@ def start():
     ) in pathogens.predictors_by_taxid():
         pathogen_taxids_by_name[pathogen_name].append(taxids)
 
-    def tidy_name(pathogen_name, taxids):
-        if len(pathogen_taxids_by_name[pathogen_name]) == 1:
-            return pathogen_name.replace("_", "-").upper()
-
-        (taxid,) = taxids
-        return {
-            142786: "Norovirus (all)",
-            122928: "Norovirus (GI)",
-            122929: "Norovirus (GII)",
-            11320: "Influenza A",
-            11520: "Influenza B",
-        }[taxid]
-
     row_names = []
     row_scores = []
     col_names = [

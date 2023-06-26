@@ -40,7 +40,7 @@ def start(num_samples: int, plot: bool) -> None:
             if plot:
                 model.plot_figures(
                     path=figdir,
-                    prefix=f"{pathogen_name}-{taxids_str}-{predictor_type}-{study}",
+                    prefix=f"{pathogen_name}-{predictor_type}-{study}",
                 )
             metadata = dict(
                 pathogen=pathogen_name,
