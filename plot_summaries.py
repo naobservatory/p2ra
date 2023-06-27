@@ -7,7 +7,9 @@ import seaborn as sns  # type: ignore
 
 from mgs import rna_bioprojects
 
-study_order = ["crits_christoph", "rothman", "spurbeck"]
+study_order = ["Crits-Christoph", "Rothman", "Spurbeck"]
+
+FIGSIZE = (6, 8)
 
 
 def plot_overall(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
@@ -15,7 +17,7 @@ def plot_overall(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
     plotting_order = viral_reads.sort_values(
         ["reads_by_pathogen", "pathogen"]
     ).reset_index()
-    fig = plt.figure(figsize=(6, 10))
+    fig = plt.figure(figsize=FIGSIZE)
     ax = fig.add_subplot(1, 1, 1)
     sns.boxenplot(
         ax=ax,
@@ -32,7 +34,9 @@ def plot_overall(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
     ):
         artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
     ax.set_xscale("log")
+    ax.set_xlabel(r"RA$_{1:1000}$")
     ax.set_ylabel("")
+    ax.legend(title="MGS study")
     return fig
 
 
@@ -61,7 +65,37 @@ def plot_by_location(
         ):
             artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
         ax.set_xscale("log")
+        ax.set_xlabel(r"$RA_{1:1000}$")
         ax.set_ylabel("")
+    return fig
+
+
+def plot_virus(
+    data: pd.DataFrame, input_data: pd.DataFrame, pathogen: str
+) -> plt.Figure:
+    viral_reads = count_viral_reads(
+        input_data[input_data.pathogen == pathogen], by_location=True
+    )
+    fig = plt.figure(figsize=FIGSIZE)
+    ax = fig.add_subplot()
+    sns.boxenplot(
+        ax=ax,
+        data=data[(data.location != "Overall") & (data.pathogen == pathogen)],
+        x="ra_at_1in1000",
+        y="location",
+        hue="study",
+        showfliers=False,
+    )
+    for num_reads, artist_list in zip(
+        viral_reads.viral_reads,
+        ax.collections,
+    ):
+        artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
+    ax.set_xscale("log")
+    ax.set_xlabel(r"$RA_{1:1000}$")
+    ax.set_ylabel("")
+    ax.set_title(pathogen)
+    ax.legend(title="MGS study")
     return fig
 
 
@@ -87,11 +121,15 @@ def start() -> None:
     figdir = Path("fig")
     figdir.mkdir(exist_ok=True)
     fits_df = pd.read_csv("fits.tsv", sep="\t")
+    fits_df["study"] = [x.replace("_", "-").title() for x in fits_df["study"]]
     input_df = pd.read_csv("input.tsv", sep="\t")
     fig_overall = plot_overall(fits_df, input_df)
     save_plot(fig_overall, figdir, "overall-boxen")
-    fig_by_location = plot_by_location(fits_df, input_df)
-    save_plot(fig_by_location, figdir, "by_location-boxen")
+    # fig_by_location = plot_by_location(fits_df, input_df)
+    # save_plot(fig_by_location, figdir, "by_location-boxen")
+    for pathogen in input_df.pathogen.unique():
+        fig_virus = plot_virus(fits_df, input_df, pathogen)
+        save_plot(fig_virus, figdir, f"{pathogen.replace(' ', '_')}-boxen")
 
 
 if __name__ == "__main__":
