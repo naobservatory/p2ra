@@ -69,15 +69,14 @@ def estimate_prevalences():
 
 
 def estimate_incidences():
-    # HPV prevalence should be close to constant, so extrapolate from
-    # 2018 to 2020 and 2021.
+    # Dropping Incidence for now.
     return [
-        dataclasses.replace(
-            nhanes_based_2018_18_59_yo_incidence,
-            date_source=Variable(date="2020"),
-        ),
-        dataclasses.replace(
-            nhanes_based_2018_18_59_yo_incidence,
-            date_source=Variable(date="2021"),
-        ),
+        # dataclasses.replace(
+        #     nhanes_based_2018_18_59_yo_incidence,
+        #     date_source=Variable(date="2020"),
+        # ),
+        # dataclasses.replace(
+        #     nhanes_based_2018_18_59_yo_incidence,
+        #     date_source=Variable(date="2021"),
+        # ),
     ]

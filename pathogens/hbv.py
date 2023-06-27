@@ -119,8 +119,9 @@ def estimate_incidences() -> list[IncidenceRate]:
         acute_2019, date_source=Variable(date="2021")
     )
     return [
-        acute_2019,
-        acute_2020,
-        acute_2021,
-        ohio_reported_acute_2021 * cdc_acute_underreporting_factor_2020,
+        # For now we are dropping incidences.
+        # acute_2019,
+        # acute_2020,
+        # acute_2021,
+        # ohio_reported_acute_2021 * cdc_acute_underreporting_factor_2020,
     ]
