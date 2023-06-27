@@ -11,7 +11,7 @@ import numpy as np
 
 import mgs
 import pathogens
-
+import pathogen_properties
 
 def start():
     mgs_data = mgs.MGSData.from_repo()
@@ -40,7 +40,7 @@ def start():
 
     row_names = []
     row_scores = []
-    col_names = [
+    col_names = ["Nucleic Acid", "Predictor", "Selection"] + [
         "-".join(word.capitalize() for word in author.split("_"))
         for author in sorted(mgs.rna_bioprojects)
     ]
@@ -61,9 +61,15 @@ def start():
         name = tidy_name(pathogen_name, taxids)
         row_names.append(name)
 
-        table_row_text = []
-        table_row_colors = []
-
+        white_rgb = 1, 1, 1
+        
+        table_row_text = [
+            pathogens.pathogens[pathogen_name].pathogen_chars.na_type.value,
+            predictor_type.capitalize(),
+            pathogens.pathogens[pathogen_name].pathogen_chars.selection.value,
+        ]
+        table_row_colors = [white_rgb, white_rgb, white_rgb]
+        
         row_score = 0
 
         for study, bioproject in sorted(mgs.rna_bioprojects.items()):
@@ -84,7 +90,7 @@ def start():
 
             ratio = n_samples_with_match / n_samples
             if n_samples_with_match == 0:
-                color = (1, 1, 1)
+                color = white_rgb
             elif n_samples_with_match == 1:
                 color = colors[1]
             elif ratio < 1 / 55:

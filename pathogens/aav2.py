@@ -9,6 +9,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.NON_ENVELOPED,
     taxid=TaxID(10804),
+    selection=SelectionRound.ROUND_2,
 )
 
 seroprevalence_hemophilia_global_2021 = Prevalence(

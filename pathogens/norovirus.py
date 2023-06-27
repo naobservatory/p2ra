@@ -15,6 +15,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
     taxids=frozenset((NOROVIRUS_GROUP_I, NOROVIRUS_GROUP_II)),
+    selection=SelectionRound.ROUND_1,
 )
 
 # We're using Scallan 2011

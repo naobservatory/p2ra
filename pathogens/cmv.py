@@ -17,6 +17,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.ENVELOPED,
     taxid=TaxID(10359),
+    selection=SelectionRound.ROUND_1,
 )
 
 de_adult_seroprevalence_estimate = Prevalence(
