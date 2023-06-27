@@ -10,8 +10,9 @@ import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 
 import mgs
-import pathogens
 import pathogen_properties
+import pathogens
+
 
 def start():
     mgs_data = mgs.MGSData.from_repo()
@@ -62,14 +63,14 @@ def start():
         row_names.append(name)
 
         white_rgb = 1, 1, 1
-        
+
         table_row_text = [
             pathogens.pathogens[pathogen_name].pathogen_chars.na_type.value,
             predictor_type.capitalize(),
             pathogens.pathogens[pathogen_name].pathogen_chars.selection.value,
         ]
         table_row_colors = [white_rgb, white_rgb, white_rgb]
-        
+
         row_score = 0
 
         for study, bioproject in sorted(mgs.rna_bioprojects.items()):

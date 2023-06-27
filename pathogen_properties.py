@@ -22,10 +22,12 @@ class NAType(Enum):
     DNA = "DNA"
     RNA = "RNA"
 
+
 class SelectionRound(Enum):
     ROUND_1 = "Round 1"  # Public health only
     ROUND_2 = "Round 2"  # Considering sequencing results
- 
+
+
 class Enveloped(Enum):
     ENVELOPED = "enveloped"
     NON_ENVELOPED = "non_enveloped"
