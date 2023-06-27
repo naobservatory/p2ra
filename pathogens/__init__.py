@@ -1,6 +1,6 @@
 import importlib
 import os
-from typing import Generator
+from typing import Generator, List
 
 from mgs import TaxID
 from pathogen_properties import Predictor, by_taxids
@@ -22,7 +22,7 @@ for pathogen_fname in os.listdir(os.path.dirname(__file__)):
 # For Hepatitis B and C, we're waiting on extrapolating older estimates
 # to the study period:
 # https://github.com/naobservatory/p2ra/pull/154
-skip = []
+skip: List[str]
 
 
 def predictors_by_taxid() -> (
