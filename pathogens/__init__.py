@@ -22,7 +22,7 @@ for pathogen_fname in os.listdir(os.path.dirname(__file__)):
 # For Hepatitis B and C, we're waiting on extrapolating older estimates
 # to the study period:
 # https://github.com/naobservatory/p2ra/pull/154
-skip: List[str]
+skip: List[str] = []
 
 
 def predictors_by_taxid() -> (
