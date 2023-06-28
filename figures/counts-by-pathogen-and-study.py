@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 
 import mgs
+import pathogen_properties
 import pathogens
 
 
@@ -27,7 +28,7 @@ def start():
 
     row_names = []
     row_scores = []
-    col_names = [
+    col_names = ["Nucleic Acid", "Predictor", "Selection"] + [
         "-".join(word.capitalize() for word in author.split("_"))
         for author in sorted(mgs.rna_bioprojects)
     ]
@@ -48,8 +49,14 @@ def start():
         name = tidy_name(pathogen_name, taxids)
         row_names.append(name)
 
-        table_row_text = []
-        table_row_colors = []
+        white_rgb = 1, 1, 1
+
+        table_row_text = [
+            pathogens.pathogens[pathogen_name].pathogen_chars.na_type.value,
+            predictor_type.capitalize(),
+            pathogens.pathogens[pathogen_name].pathogen_chars.selection.value,
+        ]
+        table_row_colors = [white_rgb, white_rgb, white_rgb]
 
         row_score = 0
 
@@ -71,7 +78,7 @@ def start():
 
             ratio = n_samples_with_match / n_samples
             if n_samples_with_match == 0:
-                color = (1, 1, 1)
+                color = white_rgb
             elif n_samples_with_match == 1:
                 color = colors[1]
             elif ratio < 1 / 55:
@@ -106,7 +113,7 @@ def start():
     table_text = [x for _, x in sorted(zip(row_scores, table_text))]
     table_colors = [x for _, x in sorted(zip(row_scores, table_colors))]
 
-    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 3))
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
     ax.set_axis_off()
 
     table = ax.table(

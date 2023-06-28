@@ -6,6 +6,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.ENVELOPED,
     taxid=TaxID(11103),
+    selection=SelectionRound.ROUND_1,
 )
 
 us_population_2019 = Population(

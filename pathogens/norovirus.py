@@ -19,6 +19,7 @@ pathogen_chars = PathogenChars(
         NOROVIRUS_GROUP_I: "Norovirus (GI)",
         NOROVIRUS_GROUP_II: "Norovirus (GII)",
     },
+    selection=SelectionRound.ROUND_1,
 )
 
 # We're using Scallan 2011

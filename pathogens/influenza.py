@@ -21,6 +21,7 @@ pathogen_chars = PathogenChars(
         FLU_A: "Influenza A",
         FLU_B: "Influenza B",
     },
+    selection=SelectionRound.ROUND_1,
 )
 
 
