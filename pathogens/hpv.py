@@ -69,6 +69,4 @@ def estimate_prevalences():
 
 
 def estimate_incidences():
-    return [
-        # For now we are dropping incidences.
-    ]
+    return []

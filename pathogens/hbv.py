@@ -118,6 +118,4 @@ def estimate_incidences() -> list[IncidenceRate]:
     acute_2021 = dataclasses.replace(
         acute_2019, date_source=Variable(date="2021")
     )
-    return [
-        # For now we are dropping incidences.
-    ]
+    return []

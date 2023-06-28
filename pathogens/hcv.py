@@ -154,9 +154,7 @@ def estimate_incidences():
         acute_2019, date_source=Variable(date="2021")
     )
 
-    estimates = [
-        # For now we are dropping incidences.
-    ]
+    estimates = []
 
     return estimates
 
