@@ -42,9 +42,9 @@ cdc_acute_underreporting_factor_2020 = Scalar(
 
 
 ohio_reported_acute_2021 = IncidenceRate(
-    # This source reports both acute and total (acute+chronic) reported incidence.
-    # We only report acute incidence here, as chronic prevalence is covered by
-    # the national estimate.
+    # This source reports both acute and total (acute+chronic) reported
+    # incidence. We only report acute incidence here, as chronic prevalence is
+    # covered by the national estimate.
     annual_infections_per_100k=0.9,
     country="United States",
     state="Ohio",
