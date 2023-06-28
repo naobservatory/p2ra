@@ -49,6 +49,7 @@ nhanes_based_2018_18_59_yo_incidence = IncidenceRate(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10037549/#:~:text=Any%20HPV-,1222%20(969%2C%201436),-1223%20(983%2C%201332",
 )
 
+
 def estimate_prevalences():
     # HPV prevalence (any subtype) was extrapolated in the study from
     # 2013-2016 to 2018. We extrapolate forward to 2020 and 2021. Though there
