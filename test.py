@@ -580,6 +580,31 @@ class TestStats(unittest.TestCase):
                         ),
                     )
 
+    def test_fit_model(self):
+        mgs_data = mgs.MGSData.from_repo()
+        pathogen = pathogens.pathogens["sars_cov_2"]
+        bioproject = mgs.rna_bioprojects["rothman"]
+        taxids, predictors = next(
+            iter(
+                by_taxids(
+                    pathogen.pathogen_chars,
+                    pathogen.estimate_incidences(),
+                ).items()
+            )
+        )
+        model = stats.build_model(
+            mgs_data,
+            bioproject,
+            predictors,
+            taxids,
+            random_seed=1,
+        )
+        self.assertIsNone(model.fit)
+        self.assertIsNone(model.dataframe)
+        model.fit_model(num_chains=1, num_samples=1)
+        self.assertIsNotNone(model.fit)
+        self.assertIsNotNone(model.dataframe)
+
 
 class TestPathogensMatchStudies(unittest.TestCase):
     def test_pathogens_match_studies(self):
