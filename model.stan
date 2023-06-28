@@ -21,10 +21,10 @@ parameters {
   vector[L] b_l;            // P2RA coefficient per location
 }
 model {
-  sigma ~ exponential(1);
+  sigma ~ gamma($sigma_alpha, $sigma_beta);
   theta_std ~ normal(x_std, sigma);
-  mu ~ normal(0, 2);
-  tau ~ exponential(1);
+  mu ~ normal(0, $mu_sigma);
+  tau ~ gamma($tau_alpha, $tau_beta);
   b_l ~ normal(mu, tau);
   for (j in 1:J){
     y[j] ~ binomial_logit(n[j], b_l[ll[j]] + theta_std[j] + log_mean_y - log_mean_n);
@@ -42,8 +42,14 @@ generated quantities {
   }
   // posterior true prevalence for each sample
   vector[J] theta = theta_std + mean(log(x));
-  real b = mu - mean(log(x)) + log_mean_y - log_mean_n;
-  vector[L] b_loc = b_l - mean(log(x)) + log_mean_y - log_mean_n;
-  // posterior P2RA coefficient
-  real ra_at_1in1000 = inv_logit(b + log(100));
+  // for convenience, a single vector with the location coefficients and
+  // overall coefficient in the final position
+  vector[L + 1] b;
+  b[:L] = b_l;
+  b[L + 1] = mu;
+  // location-specific expected relative abundance
+  // last element is the overall coefficient
+  vector[L + 1] ra_at_1in1000 = inv_logit(
+    b - mean(log(x)) + log_mean_y - log_mean_n + log(100)
+  );
 }
