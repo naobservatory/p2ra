@@ -181,7 +181,6 @@ class Model(Generic[P]):
         )
         self.output_df = self.fit.to_frame()
 
-    # TODO: Deprecate/rename?
     def get_output_by_sample(self) -> pd.DataFrame:
         if self.output_df is None:
             raise ValueError("Model not fit yet")

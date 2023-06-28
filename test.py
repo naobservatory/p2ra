@@ -600,10 +600,16 @@ class TestStats(unittest.TestCase):
             random_seed=1,
         )
         self.assertIsNone(model.fit)
-        self.assertIsNone(model.dataframe)
+        self.assertIsNone(model.output_df)
+        with self.assertRaises(ValueError):
+            model.get_output_by_sample()
+        with self.assertRaises(ValueError):
+            model.get_coefficients()
         model.fit_model(num_chains=1, num_samples=1)
         self.assertIsNotNone(model.fit)
-        self.assertIsNotNone(model.dataframe)
+        self.assertIsNotNone(model.output_df)
+        model.get_output_by_sample()
+        model.get_coefficients()
 
 
 class TestPathogensMatchStudies(unittest.TestCase):
