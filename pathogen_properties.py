@@ -23,6 +23,11 @@ class NAType(Enum):
     RNA = "RNA"
 
 
+class SelectionRound(Enum):
+    ROUND_1 = "Round 1"  # Public health only
+    ROUND_2 = "Round 2"  # Considering sequencing results
+
+
 class Enveloped(Enum):
     ENVELOPED = "enveloped"
     NON_ENVELOPED = "non_enveloped"
@@ -46,6 +51,7 @@ TaxID = NewType("TaxID", int)
 class PathogenChars:
     na_type: NAType
     enveloped: Enveloped
+    selection: SelectionRound
     # Set exactly one of taxid or taxids; read taxids.
     #
     # Normally you only should set taxid.  Set taxids in cases like the flu

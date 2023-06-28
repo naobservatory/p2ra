@@ -9,6 +9,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.NON_ENVELOPED,
     taxid=TaxID(1891762),
+    selection=SelectionRound.ROUND_2,
 )
 
 ch_2009_seroprevalence = Prevalence(
