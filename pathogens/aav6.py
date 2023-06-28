@@ -12,6 +12,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.NON_ENVELOPED,
     taxid=TaxID(68558),
+    selection=SelectionRound.ROUND_2,
 )
 
 
