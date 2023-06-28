@@ -9,7 +9,38 @@ from mgs import rna_bioprojects
 
 study_order = ["Crits-Christoph", "Rothman", "Spurbeck"]
 
-FIGSIZE = (6, 8)
+FIGSIZE = (4, 6)
+
+
+def separate_viruses(ax) -> None:
+    yticks = ax.get_yticks()
+    ax.hlines(
+        [(y1 + y2) / 2 for y1, y2 in zip(yticks[:-1], yticks[1:])],
+        *ax.get_xlim(),
+        linestyle="dashed",
+        color="0.5",
+        linewidth=0.5,
+    )
+
+
+def adjust_axes(ax) -> None:
+    yticks = ax.get_yticks()
+    # Y-axis is reflected
+    ax.set_ylim([max(yticks) + 0.5, min(yticks - 0.5)])
+    ax.tick_params(left=False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.set_xscale("log")
+    ax.set_xlabel(r"RA$_{1:1000}$")
+    ax.set_ylabel("")
+    ax.legend(
+        title="MGS study",
+        bbox_to_anchor=(1.02, 1),
+        loc="upper left",
+        borderaxespad=0,
+        frameon=False,
+    )
 
 
 def plot_overall(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
@@ -33,40 +64,8 @@ def plot_overall(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
         plotting_order.viral_reads, ax.collections
     ):
         artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
-    ax.set_xscale("log")
-    ax.set_xlabel(r"RA$_{1:1000}$")
-    ax.set_ylabel("")
-    ax.legend(title="MGS study")
-    return fig
-
-
-def plot_by_location(
-    data: pd.DataFrame, input_data: pd.DataFrame
-) -> plt.Figure:
-    viral_reads = count_viral_reads(input_data, by_location=True)
-    plotting_order = viral_reads.sort_values(
-        ["reads_by_pathogen", "pathogen"]
-    ).reset_index()
-    fig = plt.figure(figsize=(30, 15))
-    for i, study in enumerate(rna_bioprojects):
-        ax = fig.add_subplot(1, 3, i + 1)
-        sns.boxenplot(
-            ax=ax,
-            data=data[data.study == study],
-            x="ra_at_1in1000",
-            y="pathogen",
-            order=plotting_order.pathogen.unique(),
-            hue="location",
-            showfliers=False,
-        )
-        for num_reads, artist_list in zip(
-            plotting_order[plotting_order.study == study].viral_reads,
-            ax.collections,
-        ):
-            artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
-        ax.set_xscale("log")
-        ax.set_xlabel(r"$RA_{1:1000}$")
-        ax.set_ylabel("")
+    separate_viruses(ax)
+    adjust_axes(ax)
     return fig
 
 
@@ -91,11 +90,8 @@ def plot_virus(
         ax.collections,
     ):
         artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
-    ax.set_xscale("log")
-    ax.set_xlabel(r"$RA_{1:1000}$")
-    ax.set_ylabel("")
+    adjust_axes(ax)
     ax.set_title(pathogen)
-    ax.legend(title="MGS study")
     return fig
 
 
@@ -125,8 +121,6 @@ def start() -> None:
     input_df = pd.read_csv("input.tsv", sep="\t")
     fig_overall = plot_overall(fits_df, input_df)
     save_plot(fig_overall, figdir, "overall-boxen")
-    # fig_by_location = plot_by_location(fits_df, input_df)
-    # save_plot(fig_by_location, figdir, "by_location-boxen")
     for pathogen in input_df.pathogen.unique():
         fig_virus = plot_virus(fits_df, input_df, pathogen)
         save_plot(fig_virus, figdir, f"{pathogen.replace(' ', '_')}-boxen")
