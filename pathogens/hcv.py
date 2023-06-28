@@ -17,11 +17,6 @@ us_population_2019 = Population(
 )
 
 
-# Data below is from the Ohio Department of Health. They give case rates,
-# which are "shown per 100,000 persons and were calculated using census
-# estimates for that year, except 2021 is using 2020 census."
-
-
 reported_acute_ohio_2020 = IncidenceRate(
     annual_infections_per_100k=2.0,
     # "Most commonly, acute hepatitis C virus (HCV) infection is defined as
@@ -182,8 +177,9 @@ def estimate_incidences():
 
 def estimate_prevalences() -> list[Prevalence]:
     # Estimated acute cases have increased slighly since 2016 (https://www.cdc.gov/hepatitis/statistics/2020surveillance/hepatitis-c/figure-3.1.htm), but
-    # not to a level that would change the chronic rate by much. We thus
-    # extrapolate the 2016 rate to 2020 and 2021.
+    # not to a level that would change the chronic rate by much, given that
+    # it lies in the 2-3 million range. We thus extrapolate the 2016 rate to
+    # 2020 and 2021.
     chronic_2020 = dataclasses.replace(
         estimated_chronic_us_2013_2016, date_source=Variable(date="2020")
     )

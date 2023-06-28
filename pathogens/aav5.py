@@ -2,25 +2,24 @@ import dataclasses
 
 from pathogen_properties import *
 
-background = """Adeno-associated virus 2 is a small replication-defective
+background = """Adeno-associated virus 5 is a small replication-defective
 virus. It belongs to the Dependoparvoviridae, a genus of viruses that is 
-commonly used to construct viral vectors. AAV-2 has no clinical significance 
-in humans, and seroprevalence studies are focused on patient groups that might 
-receive a vector-based therapy. """
+commonly used to construct viral vectors. AAV-5 has no known clinical 
+significance in humans, and seroprevalence studies are focused on patient 
+groups that might receive a vector-based therapy. """
 
 pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.NON_ENVELOPED,
-    taxid=TaxID(10804),
-    selection=SelectionRound.ROUND_2,
+    taxid=TaxID(82300),
 )
 
 seroprevalence_hemophilia_global_2021 = Prevalence(
-    infections_per_100k=0.585 * 100_000,
+    infections_per_100k=0.348 * 100_000,
     # Taking seropositivity from Figure 1A (un-weighted global seroprevalence)
     number_of_participants=513,
     # Though these participants are not representative of the general
-    # population, hemophilia is not caused by AAV-2. Prevalence would thus be
+    # population, hemophilia is not caused by AAV-5. Prevalence would thus be
     # at most affected by, e.g., lower socioeconomic status due to a higher
     # disease burden.
     country="Global",
@@ -29,21 +28,17 @@ seroprevalence_hemophilia_global_2021 = Prevalence(
     # (93K%2C%20docx)-,Supplemental%20data%3A,-Click%20here%20to
     date="2021",
     active=Active.LATENT,
-    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=Seropositivity%20for%20(A)%20the%20global%20population"
-    # This number matches AAV-2 seroprevalence in a study of 101 males with
-    # Duchenne Muscular Dystrophy, showing a seroprevalence of 56%:
-    # "https://pubmed.ncbi.nlm.nih.gov/36324212/#:~:text=We%20prospectively%20enrolled,and%20AAV8%20(47%25)."
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=Seropositivity%20for%20(A)%20the%20global%20population",
 )
 
 
 def estimate_prevalences() -> list[Prevalence]:
     # We assume that global seroprevalence will be similar to seroprevalence
     # in the US. This is also what we find in the US-American participants of
-    # the same study (n=71, prevalence(AAV-2)=53.5%, found in Figure 1C.
-    # Source:
-    # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=for%20(C)-,AAV2,-%2C%20(D)
+    # the same study (n=71, prevalence(AAV-5)=38.0%. Source:
+    # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=AAV2%2C%20(D)-,AAV5,-%2C%20(E)
     #  We also assume that seroprevalence remains constant over time, given
-    # that AAV-2 is not known to cause disease, and thus isn't being treated
+    # that AAV-5 is not known to cause disease, and thus isn't being treated
     # or vaccinated against.
     us_2020 = dataclasses.replace(
         seroprevalence_hemophilia_global_2021,
