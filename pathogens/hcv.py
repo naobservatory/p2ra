@@ -149,28 +149,8 @@ def estimate_incidences():
         acute_2019, date_source=Variable(date="2021")
     )
 
-    estimates = [
-        acute_2019,
-        acute_2020,
-        acute_2021,
-        reported_acute_ohio_2020 * (acute_underreporting_factor),
-        reported_acute_ohio_2021 * (acute_underreporting_factor),
-    ]
-    for county in ohio_counties_case_rates:
-        for year in ohio_counties_case_rates[county]:
-            estimates.append(
-                IncidenceRate(
-                    annual_infections_per_100k=ohio_counties_case_rates[
-                        county
-                    ][year]["acute"],
-                    date=year,
-                    country="United States",
-                    state="Ohio",
-                    county=county,
-                    source=OHIO_COUNTY_ESTIMATES_SOURCE,
-                )
-                * acute_underreporting_factor
-            )
+    estimates = []
+
     return estimates
 
 

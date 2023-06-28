@@ -22,7 +22,9 @@ pathogen_chars = PathogenChars(
 
 nhanes_2013_2016_18_59_yo_prevalence = Prevalence(
     # Among 15–59-year-olds, 2013–2016 prevalence of any HPV infection was 40%
-    # overall, 41.8% among males, and 38.4% among females.
+    # overall, 41.8% among males, and 38.4% among females. These prevalences
+    # correspond to 77.3 million persons overall, or 40.5 million males and
+    # 37.0 million females, with a prevalent HPV infection in 2018.
     infections_per_100k=0.400 * 100_000,
     # We assume that measurements for 18 to 59 year olds roughly correspond to
     # the true all-age population prevalence.
@@ -49,24 +51,22 @@ nhanes_based_2018_18_59_yo_incidence = IncidenceRate(
 
 
 def estimate_prevalences():
-    # HPV prevalence is probably decreasing from 2013-2016 to the present, as
-    # vaccination is increasing and they're covering more subtypes.
-    # Extrapolating to 2020 and 2021 without adjusting for this might not be
-    # very good.
-    # TODO(#157): look into whether we can get estimates for 2020 and 2021.
-    return []
-
-
-def estimate_incidences():
-    # HPV prevalence should be close to constant, so extrapolate from
-    # 2018 to 2020 and 2021.
+    # HPV prevalence (any subtype) was extrapolated in the study from
+    # 2013-2016 to 2018. We extrapolate forward to 2020 and 2021. Though there
+    # is a 9-valent vaccine that got rolled out in 2016, this should not have
+    # a very large effect on prevalence, as only young individuals are
+    # vaccinated.
     return [
         dataclasses.replace(
-            nhanes_based_2018_18_59_yo_incidence,
+            nhanes_2013_2016_18_59_yo_prevalence,
             date_source=Variable(date="2020"),
         ),
         dataclasses.replace(
-            nhanes_based_2018_18_59_yo_incidence,
+            nhanes_2013_2016_18_59_yo_prevalence,
             date_source=Variable(date="2021"),
         ),
     ]
+
+
+def estimate_incidences():
+    return []

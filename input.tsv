@@ -953,6 +953,165 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 53	0	22583173	50400.0	J	2021-12-12	Montgomery County	0.0	CMV	10359	prevalence	spurbeck
 54	0	27717586	50400.0	J	2021-12-05	Montgomery County	0.0	CMV	10359	prevalence	spurbeck
 55	0	26039331	50400.0	A	2022-01-02	Summit County	0.0	CMV	10359	prevalence	spurbeck
+1	0	45434265	34800.0	Oakland	2020-06-30	Alameda County	0.0	AAV5	82300	prevalence	crits_christoph
+2	0	41207484	34800.0	Marin	2020-07-01	Marin County	0.0	AAV5	82300	prevalence	crits_christoph
+3	0	38572859	34800.0	Marin	2020-07-01	Marin County	0.0	AAV5	82300	prevalence	crits_christoph
+4	0	47832942	34800.0	SF	2020-06-30	San Francisco County	0.0	AAV5	82300	prevalence	crits_christoph
+5	0	48462833	34800.0	Oakland	2020-06-30	Alameda County	0.0	AAV5	82300	prevalence	crits_christoph
+6	0	39759745	34800.0	Oakland	2020-06-30	Alameda County	0.0	AAV5	82300	prevalence	crits_christoph
+7	0	36420649	34800.0	Berkeley	2020-06-30	Alameda County	0.0	AAV5	82300	prevalence	crits_christoph
+1	0	2737872	34800.0	SB	2020-09-10	San Diego County	0.0	AAV5	82300	prevalence	rothman
+2	0	6515759	34800.0	SB	2020-09-24	San Diego County	0.0	AAV5	82300	prevalence	rothman
+3	0	3204232	34800.0	SB	2020-08-27	San Diego County	0.0	AAV5	82300	prevalence	rothman
+4	0	2782200	34800.0	SB	2020-08-13	San Diego County	0.0	AAV5	82300	prevalence	rothman
+5	0	3429177	34800.0	SB	2020-10-22	San Diego County	0.0	AAV5	82300	prevalence	rothman
+6	0	3842559	34800.0	PL	2020-09-24	San Diego County	0.0	AAV5	82300	prevalence	rothman
+7	0	4419124	34800.0	PL	2020-09-10	San Diego County	0.0	AAV5	82300	prevalence	rothman
+8	0	3402804	34800.0	PL	2020-08-27	San Diego County	0.0	AAV5	82300	prevalence	rothman
+9	0	3786318	34800.0	PL	2020-08-13	San Diego County	0.0	AAV5	82300	prevalence	rothman
+10	0	3857662	34800.0	PL	2020-10-22	San Diego County	0.0	AAV5	82300	prevalence	rothman
+11	0	3588085	34800.0	OC	2020-09-30	Orange County	0.0	AAV5	82300	prevalence	rothman
+12	0	4520022	34800.0	OC	2020-09-23	Orange County	0.0	AAV5	82300	prevalence	rothman
+13	0	1327075	34800.0	OC	2020-09-16	Orange County	0.0	AAV5	82300	prevalence	rothman
+14	0	4874211	34800.0	OC	2020-09-03	Orange County	0.0	AAV5	82300	prevalence	rothman
+15	0	3689634	34800.0	OC	2020-09-02	Orange County	0.0	AAV5	82300	prevalence	rothman
+16	0	3283166	34800.0	OC	2020-08-26	Orange County	0.0	AAV5	82300	prevalence	rothman
+17	0	3182825	34800.0	OC	2020-08-19	Orange County	0.0	AAV5	82300	prevalence	rothman
+18	0	1292650	34800.0	OC	2020-08-12	Orange County	0.0	AAV5	82300	prevalence	rothman
+19	0	3890259	34800.0	OC	2020-10-07	Orange County	0.0	AAV5	82300	prevalence	rothman
+20	0	2901986	34800.0	NC	2020-09-11	San Diego County	0.0	AAV5	82300	prevalence	rothman
+21	0	3467617	34800.0	NC	2020-08-28	San Diego County	0.0	AAV5	82300	prevalence	rothman
+22	0	4099096	34800.0	NC	2020-08-14	San Diego County	0.0	AAV5	82300	prevalence	rothman
+23	0	4124544	34800.0	NC	2020-10-23	San Diego County	0.0	AAV5	82300	prevalence	rothman
+24	0	4902017	34800.0	NC	2020-10-09	San Diego County	0.0	AAV5	82300	prevalence	rothman
+25	0	4514886	34800.0	JWPCP	2020-09-22	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+26	0	4234727	34800.0	JWPCP	2020-09-15	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+27	0	4018438	34800.0	JWPCP	2020-09-08	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+28	0	3630148	34800.0	JWPCP	2020-09-01	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+29	0	3183234	34800.0	JWPCP	2020-08-25	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+30	0	4059288	34800.0	JWPCP	2020-08-18	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+31	0	2102736	34800.0	JWPCP	2020-08-11	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+32	0	4221630	34800.0	JWPCP	2020-10-13	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+33	0	4832507	34800.0	JWPCP	2020-10-06	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+34	0	2374918	34800.0	JWPCP	2020-10-27	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+35	0	4362852	34800.0	JWPCP	2020-10-20	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+36	0	3579700	34800.0	HTP	2020-09-15	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+37	0	3551002	34800.0	HTP	2020-09-08	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+38	0	3604679	34800.0	HTP	2020-09-01	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+39	0	3486258	34800.0	HTP	2020-08-25	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+40	0	2800039	34800.0	HTP	2020-08-18	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+41	0	3318348	34800.0	HTP	2020-08-11	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+42	0	4215471	34800.0	HTP	2020-10-27	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+43	0	4350744	34800.0	HTP	2020-10-20	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+44	0	2179170	34800.0	HTP	2020-10-13	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+45	0	4595209	34800.0	HTP	2020-10-02	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+46	0	10246075	34800.0	SJ	2020-09-23	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+47	0	10232266	34800.0	SJ	2020-11-04	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+48	0	13154158	34800.0	SJ	2020-11-18	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+49	0	11601202	34800.0	SJ	2020-11-11	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+50	0	11389423	34800.0	SB	2020-11-05	San Diego County	0.0	AAV5	82300	prevalence	rothman
+51	0	11257694	34800.0	SB	2020-10-08	San Diego County	0.0	AAV5	82300	prevalence	rothman
+52	0	8833468	34800.0	PL	2020-12-28	San Diego County	0.0	AAV5	82300	prevalence	rothman
+53	0	9334593	34800.0	PL	2020-12-22	San Diego County	0.0	AAV5	82300	prevalence	rothman
+54	0	10305132	34800.0	PL	2020-12-14	San Diego County	0.0	AAV5	82300	prevalence	rothman
+55	0	8153083	34800.0	PL	2020-11-05	San Diego County	0.0	AAV5	82300	prevalence	rothman
+56	0	10775374	34800.0	PL	2020-11-30	San Diego County	0.0	AAV5	82300	prevalence	rothman
+57	0	10112554	34800.0	PL	2020-11-29	San Diego County	0.0	AAV5	82300	prevalence	rothman
+58	0	10182955	34800.0	PL	2021-01-04	San Diego County	0.0	AAV5	82300	prevalence	rothman
+59	0	10140886	34800.0	PL	2021-01-03	San Diego County	0.0	AAV5	82300	prevalence	rothman
+60	0	9826830	34800.0	OC	2020-12-21	Orange County	0.0	AAV5	82300	prevalence	rothman
+61	0	9840771	34800.0	OC	2020-12-14	Orange County	0.0	AAV5	82300	prevalence	rothman
+62	0	10616714	34800.0	OC	2020-11-09	Orange County	0.0	AAV5	82300	prevalence	rothman
+63	0	8583928	34800.0	OC	2020-11-04	Orange County	0.0	AAV5	82300	prevalence	rothman
+64	0	9408142	34800.0	OC	2020-11-25	Orange County	0.0	AAV5	82300	prevalence	rothman
+65	0	10523877	34800.0	OC	2020-11-18	Orange County	0.0	AAV5	82300	prevalence	rothman
+66	0	11667235	34800.0	OC	2020-11-11	Orange County	0.0	AAV5	82300	prevalence	rothman
+67	0	9670784	34800.0	NC	2020-09-25	San Diego County	0.0	AAV5	82300	prevalence	rothman
+68	0	12434072	34800.0	NC	2020-11-06	San Diego County	0.0	AAV5	82300	prevalence	rothman
+69	0	10164300	34800.0	JWPCP	2020-09-29	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+70	0	11233097	34800.0	JWPCP	2020-11-03	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+71	0	12720283	34800.0	JWPCP	2020-11-17	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+72	0	9675052	34800.0	JWPCP	2020-11-10	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+73	0	13626688	34800.0	HTP	2020-09-29	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+74	0	12904150	34800.0	HTP	2020-09-22	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+75	0	11504066	34800.0	HTP	2020-12-29	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+76	0	8861526	34800.0	HTP	2020-12-22	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+77	0	11960233	34800.0	HTP	2020-12-15	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+78	0	10874604	34800.0	HTP	2020-12-04	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+79	0	11912829	34800.0	HTP	2020-12-01	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+80	0	11534523	34800.0	HTP	2020-11-03	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+81	0	11045877	34800.0	HTP	2020-11-24	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+82	0	16394657	34800.0	HTP	2020-11-17	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+83	0	9626457	34800.0	HTP	2021-01-03	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+84	0	2810576	34800.0	SJ	2020-09-30	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+85	0	3829748	34800.0	SJ	2020-09-16	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+86	0	3184286	34800.0	SJ	2020-09-09	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+87	0	3041921	34800.0	SJ	2020-09-02	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+88	0	3108434	34800.0	SJ	2020-08-26	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+89	0	3011011	34800.0	SJ	2020-08-19	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+90	0	3241686	34800.0	SJ	2020-08-12	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+91	0	4604124	34800.0	SJ	2020-10-28	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+92	0	4192507	34800.0	SJ	2020-10-21	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+93	0	5260005	34800.0	SJ	2020-10-14	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+94	0	4632349	34800.0	SJ	2020-10-07	Los Angeles County	0.0	AAV5	82300	prevalence	rothman
+95	0	2413516	34800.0	OC	2020-10-21	Orange County	0.0	AAV5	82300	prevalence	rothman
+96	0	16101528	34800.0	ESC	2020-07-27	San Diego County	0.0	AAV5	82300	prevalence	rothman
+97	0	23482928	34800.0	ESC	2020-07-20	San Diego County	0.0	AAV5	82300	prevalence	rothman
+1	0	34152465	34800.0	I	2022-01-09	Greene County	0.0	AAV5	82300	prevalence	spurbeck
+2	0	15536236	34800.0	I	2022-01-02	Greene County	0.0	AAV5	82300	prevalence	spurbeck
+3	0	24496461	34800.0	H	2021-12-26	Franklin County	0.0	AAV5	82300	prevalence	spurbeck
+4	0	19873663	34800.0	H	2021-12-19	Franklin County	0.0	AAV5	82300	prevalence	spurbeck
+5	0	65391438	34800.0	H	2021-12-05	Franklin County	0.0	AAV5	82300	prevalence	spurbeck
+6	0	7683321	34800.0	H	2022-01-09	Franklin County	0.0	AAV5	82300	prevalence	spurbeck
+7	0	106734757	34800.0	H	2022-01-02	Franklin County	0.0	AAV5	82300	prevalence	spurbeck
+8	0	27498895	34800.0	G	2021-12-26	Licking County	0.0	AAV5	82300	prevalence	spurbeck
+9	0	21866784	34800.0	G	2021-12-19	Licking County	0.0	AAV5	82300	prevalence	spurbeck
+10	0	25615577	34800.0	A	2021-12-12	Summit County	0.0	AAV5	82300	prevalence	spurbeck
+11	0	49701182	34800.0	G	2021-12-12	Licking County	0.0	AAV5	82300	prevalence	spurbeck
+12	0	50541071	34800.0	G	2021-12-05	Licking County	0.0	AAV5	82300	prevalence	spurbeck
+13	0	26758722	34800.0	G	2022-01-09	Licking County	0.0	AAV5	82300	prevalence	spurbeck
+14	0	30488030	34800.0	G	2022-01-02	Licking County	0.0	AAV5	82300	prevalence	spurbeck
+15	0	21587487	34800.0	F	2021-12-26	Franklin County	0.0	AAV5	82300	prevalence	spurbeck
+16	0	21693115	34800.0	F	2021-12-19	Franklin County	0.0	AAV5	82300	prevalence	spurbeck
+17	0	24611947	34800.0	F	2021-12-12	Franklin County	0.0	AAV5	82300	prevalence	spurbeck
+18	0	10324347	34800.0	F	2021-12-05	Franklin County	0.0	AAV5	82300	prevalence	spurbeck
+19	0	4526832	34800.0	F	2022-01-09	Franklin County	0.0	AAV5	82300	prevalence	spurbeck
+20	0	26761777	34800.0	F	2022-01-02	Franklin County	0.0	AAV5	82300	prevalence	spurbeck
+21	0	93165126	34800.0	A	2021-12-05	Summit County	0.0	AAV5	82300	prevalence	spurbeck
+22	0	8675446	34800.0	E	2021-12-26	Sandusky County	0.0	AAV5	82300	prevalence	spurbeck
+23	0	22756198	34800.0	E	2021-12-19	Sandusky County	0.0	AAV5	82300	prevalence	spurbeck
+24	0	53418977	34800.0	E	2021-12-12	Sandusky County	0.0	AAV5	82300	prevalence	spurbeck
+25	0	27489114	34800.0	E	2021-12-05	Sandusky County	0.0	AAV5	82300	prevalence	spurbeck
+26	0	62643623	34800.0	E	2022-01-09	Sandusky County	0.0	AAV5	82300	prevalence	spurbeck
+27	0	9885903	34800.0	E	2022-01-02	Sandusky County	0.0	AAV5	82300	prevalence	spurbeck
+28	0	25194552	34800.0	D	2021-12-19	Lawrence County	0.0	AAV5	82300	prevalence	spurbeck
+29	0	27576698	34800.0	D	2021-12-12	Lawrence County	0.0	AAV5	82300	prevalence	spurbeck
+30	0	64262607	34800.0	D	2021-12-05	Lawrence County	0.0	AAV5	82300	prevalence	spurbeck
+31	0	28567806	34800.0	J	2022-01-09	Montgomery County	0.0	AAV5	82300	prevalence	spurbeck
+32	0	6390165	34800.0	J	2022-01-02	Montgomery County	0.0	AAV5	82300	prevalence	spurbeck
+33	0	26423592	34800.0	I	2021-12-26	Greene County	0.0	AAV5	82300	prevalence	spurbeck
+34	0	18922081	34800.0	I	2021-12-19	Greene County	0.0	AAV5	82300	prevalence	spurbeck
+35	0	21319668	34800.0	I	2021-12-12	Greene County	0.0	AAV5	82300	prevalence	spurbeck
+36	0	72582176	34800.0	A	2021-12-19	Summit County	0.0	AAV5	82300	prevalence	spurbeck
+37	0	23726564	34800.0	I	2021-12-05	Greene County	0.0	AAV5	82300	prevalence	spurbeck
+38	0	28732700	34800.0	D	2022-01-09	Lawrence County	0.0	AAV5	82300	prevalence	spurbeck
+39	0	40626978	34800.0	A	2022-01-09	Summit County	0.0	AAV5	82300	prevalence	spurbeck
+40	0	15260483	34800.0	C	2021-12-19	Lucas County	0.0	AAV5	82300	prevalence	spurbeck
+41	0	93084891	34800.0	C	2021-12-05	Lucas County	0.0	AAV5	82300	prevalence	spurbeck
+42	0	20057162	34800.0	C	2022-01-09	Lucas County	0.0	AAV5	82300	prevalence	spurbeck
+43	0	35169394	34800.0	C	2022-01-02	Lucas County	0.0	AAV5	82300	prevalence	spurbeck
+44	0	22987581	34800.0	B	2021-12-26	Trumbull County	0.0	AAV5	82300	prevalence	spurbeck
+45	0	50531562	34800.0	B	2021-12-19	Trumbull County	0.0	AAV5	82300	prevalence	spurbeck
+46	0	19233869	34800.0	B	2021-12-12	Trumbull County	0.0	AAV5	82300	prevalence	spurbeck
+47	0	55741383	34800.0	B	2021-12-05	Trumbull County	0.0	AAV5	82300	prevalence	spurbeck
+48	0	12644434	34800.0	B	2022-01-09	Trumbull County	0.0	AAV5	82300	prevalence	spurbeck
+49	0	40871463	34800.0	B	2022-01-02	Trumbull County	0.0	AAV5	82300	prevalence	spurbeck
+50	0	25003302	34800.0	A	2021-12-26	Summit County	0.0	AAV5	82300	prevalence	spurbeck
+51	0	32262151	34800.0	J	2021-12-26	Montgomery County	0.0	AAV5	82300	prevalence	spurbeck
+52	0	60208872	34800.0	J	2021-12-19	Montgomery County	0.0	AAV5	82300	prevalence	spurbeck
+53	0	22583173	34800.0	J	2021-12-12	Montgomery County	0.0	AAV5	82300	prevalence	spurbeck
+54	0	27717586	34800.0	J	2021-12-05	Montgomery County	0.0	AAV5	82300	prevalence	spurbeck
+55	0	26039331	34800.0	A	2022-01-02	Summit County	0.0	AAV5	82300	prevalence	spurbeck
 1	0	45434265	82000.0	Oakland	2020-06-30	Alameda County	0.0	BKV	1891762	prevalence	crits_christoph
 2	0	41207484	82000.0	Marin	2020-07-01	Marin County	0.0	BKV	1891762	prevalence	crits_christoph
 3	0	38572859	82000.0	Marin	2020-07-01	Marin County	0.0	BKV	1891762	prevalence	crits_christoph
@@ -1271,6 +1430,165 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 53	0	22583173	47800.0	J	2021-12-12	Montgomery County	0.0	HSV-1	10298	prevalence	spurbeck
 54	0	27717586	47800.0	J	2021-12-05	Montgomery County	0.0	HSV-1	10298	prevalence	spurbeck
 55	0	26039331	47800.0	A	2022-01-02	Summit County	0.0	HSV-1	10298	prevalence	spurbeck
+1	0	45434265	48700.0	Oakland	2020-06-30	Alameda County	0.0	AAV6	68558	prevalence	crits_christoph
+2	0	41207484	48700.0	Marin	2020-07-01	Marin County	0.0	AAV6	68558	prevalence	crits_christoph
+3	0	38572859	48700.0	Marin	2020-07-01	Marin County	0.0	AAV6	68558	prevalence	crits_christoph
+4	0	47832942	48700.0	SF	2020-06-30	San Francisco County	0.0	AAV6	68558	prevalence	crits_christoph
+5	0	48462833	48700.0	Oakland	2020-06-30	Alameda County	0.0	AAV6	68558	prevalence	crits_christoph
+6	0	39759745	48700.0	Oakland	2020-06-30	Alameda County	0.0	AAV6	68558	prevalence	crits_christoph
+7	0	36420649	48700.0	Berkeley	2020-06-30	Alameda County	0.0	AAV6	68558	prevalence	crits_christoph
+1	0	2737872	48700.0	SB	2020-09-10	San Diego County	0.0	AAV6	68558	prevalence	rothman
+2	0	6515759	48700.0	SB	2020-09-24	San Diego County	0.0	AAV6	68558	prevalence	rothman
+3	0	3204232	48700.0	SB	2020-08-27	San Diego County	0.0	AAV6	68558	prevalence	rothman
+4	0	2782200	48700.0	SB	2020-08-13	San Diego County	0.0	AAV6	68558	prevalence	rothman
+5	0	3429177	48700.0	SB	2020-10-22	San Diego County	0.0	AAV6	68558	prevalence	rothman
+6	0	3842559	48700.0	PL	2020-09-24	San Diego County	0.0	AAV6	68558	prevalence	rothman
+7	0	4419124	48700.0	PL	2020-09-10	San Diego County	0.0	AAV6	68558	prevalence	rothman
+8	0	3402804	48700.0	PL	2020-08-27	San Diego County	0.0	AAV6	68558	prevalence	rothman
+9	0	3786318	48700.0	PL	2020-08-13	San Diego County	0.0	AAV6	68558	prevalence	rothman
+10	0	3857662	48700.0	PL	2020-10-22	San Diego County	0.0	AAV6	68558	prevalence	rothman
+11	0	3588085	48700.0	OC	2020-09-30	Orange County	0.0	AAV6	68558	prevalence	rothman
+12	0	4520022	48700.0	OC	2020-09-23	Orange County	0.0	AAV6	68558	prevalence	rothman
+13	0	1327075	48700.0	OC	2020-09-16	Orange County	0.0	AAV6	68558	prevalence	rothman
+14	0	4874211	48700.0	OC	2020-09-03	Orange County	0.0	AAV6	68558	prevalence	rothman
+15	0	3689634	48700.0	OC	2020-09-02	Orange County	0.0	AAV6	68558	prevalence	rothman
+16	0	3283166	48700.0	OC	2020-08-26	Orange County	0.0	AAV6	68558	prevalence	rothman
+17	0	3182825	48700.0	OC	2020-08-19	Orange County	0.0	AAV6	68558	prevalence	rothman
+18	0	1292650	48700.0	OC	2020-08-12	Orange County	0.0	AAV6	68558	prevalence	rothman
+19	0	3890259	48700.0	OC	2020-10-07	Orange County	0.0	AAV6	68558	prevalence	rothman
+20	0	2901986	48700.0	NC	2020-09-11	San Diego County	0.0	AAV6	68558	prevalence	rothman
+21	0	3467617	48700.0	NC	2020-08-28	San Diego County	0.0	AAV6	68558	prevalence	rothman
+22	0	4099096	48700.0	NC	2020-08-14	San Diego County	0.0	AAV6	68558	prevalence	rothman
+23	0	4124544	48700.0	NC	2020-10-23	San Diego County	0.0	AAV6	68558	prevalence	rothman
+24	0	4902017	48700.0	NC	2020-10-09	San Diego County	0.0	AAV6	68558	prevalence	rothman
+25	0	4514886	48700.0	JWPCP	2020-09-22	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+26	0	4234727	48700.0	JWPCP	2020-09-15	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+27	0	4018438	48700.0	JWPCP	2020-09-08	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+28	0	3630148	48700.0	JWPCP	2020-09-01	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+29	0	3183234	48700.0	JWPCP	2020-08-25	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+30	0	4059288	48700.0	JWPCP	2020-08-18	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+31	0	2102736	48700.0	JWPCP	2020-08-11	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+32	0	4221630	48700.0	JWPCP	2020-10-13	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+33	0	4832507	48700.0	JWPCP	2020-10-06	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+34	0	2374918	48700.0	JWPCP	2020-10-27	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+35	0	4362852	48700.0	JWPCP	2020-10-20	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+36	0	3579700	48700.0	HTP	2020-09-15	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+37	0	3551002	48700.0	HTP	2020-09-08	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+38	0	3604679	48700.0	HTP	2020-09-01	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+39	0	3486258	48700.0	HTP	2020-08-25	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+40	0	2800039	48700.0	HTP	2020-08-18	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+41	0	3318348	48700.0	HTP	2020-08-11	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+42	0	4215471	48700.0	HTP	2020-10-27	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+43	0	4350744	48700.0	HTP	2020-10-20	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+44	0	2179170	48700.0	HTP	2020-10-13	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+45	0	4595209	48700.0	HTP	2020-10-02	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+46	0	10246075	48700.0	SJ	2020-09-23	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+47	0	10232266	48700.0	SJ	2020-11-04	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+48	0	13154158	48700.0	SJ	2020-11-18	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+49	0	11601202	48700.0	SJ	2020-11-11	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+50	0	11389423	48700.0	SB	2020-11-05	San Diego County	0.0	AAV6	68558	prevalence	rothman
+51	0	11257694	48700.0	SB	2020-10-08	San Diego County	0.0	AAV6	68558	prevalence	rothman
+52	0	8833468	48700.0	PL	2020-12-28	San Diego County	0.0	AAV6	68558	prevalence	rothman
+53	0	9334593	48700.0	PL	2020-12-22	San Diego County	0.0	AAV6	68558	prevalence	rothman
+54	0	10305132	48700.0	PL	2020-12-14	San Diego County	0.0	AAV6	68558	prevalence	rothman
+55	0	8153083	48700.0	PL	2020-11-05	San Diego County	0.0	AAV6	68558	prevalence	rothman
+56	0	10775374	48700.0	PL	2020-11-30	San Diego County	0.0	AAV6	68558	prevalence	rothman
+57	0	10112554	48700.0	PL	2020-11-29	San Diego County	0.0	AAV6	68558	prevalence	rothman
+58	0	10182955	48700.0	PL	2021-01-04	San Diego County	0.0	AAV6	68558	prevalence	rothman
+59	0	10140886	48700.0	PL	2021-01-03	San Diego County	0.0	AAV6	68558	prevalence	rothman
+60	0	9826830	48700.0	OC	2020-12-21	Orange County	0.0	AAV6	68558	prevalence	rothman
+61	0	9840771	48700.0	OC	2020-12-14	Orange County	0.0	AAV6	68558	prevalence	rothman
+62	0	10616714	48700.0	OC	2020-11-09	Orange County	0.0	AAV6	68558	prevalence	rothman
+63	0	8583928	48700.0	OC	2020-11-04	Orange County	0.0	AAV6	68558	prevalence	rothman
+64	0	9408142	48700.0	OC	2020-11-25	Orange County	0.0	AAV6	68558	prevalence	rothman
+65	0	10523877	48700.0	OC	2020-11-18	Orange County	0.0	AAV6	68558	prevalence	rothman
+66	0	11667235	48700.0	OC	2020-11-11	Orange County	0.0	AAV6	68558	prevalence	rothman
+67	0	9670784	48700.0	NC	2020-09-25	San Diego County	0.0	AAV6	68558	prevalence	rothman
+68	0	12434072	48700.0	NC	2020-11-06	San Diego County	0.0	AAV6	68558	prevalence	rothman
+69	0	10164300	48700.0	JWPCP	2020-09-29	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+70	0	11233097	48700.0	JWPCP	2020-11-03	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+71	0	12720283	48700.0	JWPCP	2020-11-17	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+72	0	9675052	48700.0	JWPCP	2020-11-10	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+73	0	13626688	48700.0	HTP	2020-09-29	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+74	0	12904150	48700.0	HTP	2020-09-22	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+75	0	11504066	48700.0	HTP	2020-12-29	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+76	0	8861526	48700.0	HTP	2020-12-22	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+77	0	11960233	48700.0	HTP	2020-12-15	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+78	0	10874604	48700.0	HTP	2020-12-04	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+79	0	11912829	48700.0	HTP	2020-12-01	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+80	0	11534523	48700.0	HTP	2020-11-03	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+81	0	11045877	48700.0	HTP	2020-11-24	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+82	0	16394657	48700.0	HTP	2020-11-17	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+83	0	9626457	48700.0	HTP	2021-01-03	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+84	0	2810576	48700.0	SJ	2020-09-30	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+85	0	3829748	48700.0	SJ	2020-09-16	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+86	0	3184286	48700.0	SJ	2020-09-09	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+87	0	3041921	48700.0	SJ	2020-09-02	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+88	0	3108434	48700.0	SJ	2020-08-26	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+89	0	3011011	48700.0	SJ	2020-08-19	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+90	0	3241686	48700.0	SJ	2020-08-12	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+91	0	4604124	48700.0	SJ	2020-10-28	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+92	0	4192507	48700.0	SJ	2020-10-21	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+93	0	5260005	48700.0	SJ	2020-10-14	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+94	0	4632349	48700.0	SJ	2020-10-07	Los Angeles County	0.0	AAV6	68558	prevalence	rothman
+95	0	2413516	48700.0	OC	2020-10-21	Orange County	0.0	AAV6	68558	prevalence	rothman
+96	0	16101528	48700.0	ESC	2020-07-27	San Diego County	0.0	AAV6	68558	prevalence	rothman
+97	0	23482928	48700.0	ESC	2020-07-20	San Diego County	0.0	AAV6	68558	prevalence	rothman
+1	0	34152465	48700.0	I	2022-01-09	Greene County	0.0	AAV6	68558	prevalence	spurbeck
+2	0	15536236	48700.0	I	2022-01-02	Greene County	0.0	AAV6	68558	prevalence	spurbeck
+3	0	24496461	48700.0	H	2021-12-26	Franklin County	0.0	AAV6	68558	prevalence	spurbeck
+4	0	19873663	48700.0	H	2021-12-19	Franklin County	0.0	AAV6	68558	prevalence	spurbeck
+5	0	65391438	48700.0	H	2021-12-05	Franklin County	0.0	AAV6	68558	prevalence	spurbeck
+6	0	7683321	48700.0	H	2022-01-09	Franklin County	0.0	AAV6	68558	prevalence	spurbeck
+7	0	106734757	48700.0	H	2022-01-02	Franklin County	0.0	AAV6	68558	prevalence	spurbeck
+8	0	27498895	48700.0	G	2021-12-26	Licking County	0.0	AAV6	68558	prevalence	spurbeck
+9	0	21866784	48700.0	G	2021-12-19	Licking County	0.0	AAV6	68558	prevalence	spurbeck
+10	0	25615577	48700.0	A	2021-12-12	Summit County	0.0	AAV6	68558	prevalence	spurbeck
+11	0	49701182	48700.0	G	2021-12-12	Licking County	0.0	AAV6	68558	prevalence	spurbeck
+12	0	50541071	48700.0	G	2021-12-05	Licking County	0.0	AAV6	68558	prevalence	spurbeck
+13	0	26758722	48700.0	G	2022-01-09	Licking County	0.0	AAV6	68558	prevalence	spurbeck
+14	0	30488030	48700.0	G	2022-01-02	Licking County	0.0	AAV6	68558	prevalence	spurbeck
+15	0	21587487	48700.0	F	2021-12-26	Franklin County	0.0	AAV6	68558	prevalence	spurbeck
+16	0	21693115	48700.0	F	2021-12-19	Franklin County	0.0	AAV6	68558	prevalence	spurbeck
+17	0	24611947	48700.0	F	2021-12-12	Franklin County	0.0	AAV6	68558	prevalence	spurbeck
+18	0	10324347	48700.0	F	2021-12-05	Franklin County	0.0	AAV6	68558	prevalence	spurbeck
+19	0	4526832	48700.0	F	2022-01-09	Franklin County	0.0	AAV6	68558	prevalence	spurbeck
+20	0	26761777	48700.0	F	2022-01-02	Franklin County	0.0	AAV6	68558	prevalence	spurbeck
+21	0	93165126	48700.0	A	2021-12-05	Summit County	0.0	AAV6	68558	prevalence	spurbeck
+22	0	8675446	48700.0	E	2021-12-26	Sandusky County	0.0	AAV6	68558	prevalence	spurbeck
+23	0	22756198	48700.0	E	2021-12-19	Sandusky County	0.0	AAV6	68558	prevalence	spurbeck
+24	0	53418977	48700.0	E	2021-12-12	Sandusky County	0.0	AAV6	68558	prevalence	spurbeck
+25	0	27489114	48700.0	E	2021-12-05	Sandusky County	0.0	AAV6	68558	prevalence	spurbeck
+26	0	62643623	48700.0	E	2022-01-09	Sandusky County	0.0	AAV6	68558	prevalence	spurbeck
+27	0	9885903	48700.0	E	2022-01-02	Sandusky County	0.0	AAV6	68558	prevalence	spurbeck
+28	0	25194552	48700.0	D	2021-12-19	Lawrence County	0.0	AAV6	68558	prevalence	spurbeck
+29	0	27576698	48700.0	D	2021-12-12	Lawrence County	0.0	AAV6	68558	prevalence	spurbeck
+30	0	64262607	48700.0	D	2021-12-05	Lawrence County	0.0	AAV6	68558	prevalence	spurbeck
+31	0	28567806	48700.0	J	2022-01-09	Montgomery County	0.0	AAV6	68558	prevalence	spurbeck
+32	0	6390165	48700.0	J	2022-01-02	Montgomery County	0.0	AAV6	68558	prevalence	spurbeck
+33	0	26423592	48700.0	I	2021-12-26	Greene County	0.0	AAV6	68558	prevalence	spurbeck
+34	0	18922081	48700.0	I	2021-12-19	Greene County	0.0	AAV6	68558	prevalence	spurbeck
+35	0	21319668	48700.0	I	2021-12-12	Greene County	0.0	AAV6	68558	prevalence	spurbeck
+36	0	72582176	48700.0	A	2021-12-19	Summit County	0.0	AAV6	68558	prevalence	spurbeck
+37	0	23726564	48700.0	I	2021-12-05	Greene County	0.0	AAV6	68558	prevalence	spurbeck
+38	0	28732700	48700.0	D	2022-01-09	Lawrence County	0.0	AAV6	68558	prevalence	spurbeck
+39	0	40626978	48700.0	A	2022-01-09	Summit County	0.0	AAV6	68558	prevalence	spurbeck
+40	0	15260483	48700.0	C	2021-12-19	Lucas County	0.0	AAV6	68558	prevalence	spurbeck
+41	0	93084891	48700.0	C	2021-12-05	Lucas County	0.0	AAV6	68558	prevalence	spurbeck
+42	0	20057162	48700.0	C	2022-01-09	Lucas County	0.0	AAV6	68558	prevalence	spurbeck
+43	0	35169394	48700.0	C	2022-01-02	Lucas County	0.0	AAV6	68558	prevalence	spurbeck
+44	0	22987581	48700.0	B	2021-12-26	Trumbull County	0.0	AAV6	68558	prevalence	spurbeck
+45	0	50531562	48700.0	B	2021-12-19	Trumbull County	0.0	AAV6	68558	prevalence	spurbeck
+46	0	19233869	48700.0	B	2021-12-12	Trumbull County	0.0	AAV6	68558	prevalence	spurbeck
+47	0	55741383	48700.0	B	2021-12-05	Trumbull County	0.0	AAV6	68558	prevalence	spurbeck
+48	0	12644434	48700.0	B	2022-01-09	Trumbull County	0.0	AAV6	68558	prevalence	spurbeck
+49	0	40871463	48700.0	B	2022-01-02	Trumbull County	0.0	AAV6	68558	prevalence	spurbeck
+50	0	25003302	48700.0	A	2021-12-26	Summit County	0.0	AAV6	68558	prevalence	spurbeck
+51	0	32262151	48700.0	J	2021-12-26	Montgomery County	0.0	AAV6	68558	prevalence	spurbeck
+52	0	60208872	48700.0	J	2021-12-19	Montgomery County	0.0	AAV6	68558	prevalence	spurbeck
+53	0	22583173	48700.0	J	2021-12-12	Montgomery County	0.0	AAV6	68558	prevalence	spurbeck
+54	0	27717586	48700.0	J	2021-12-05	Montgomery County	0.0	AAV6	68558	prevalence	spurbeck
+55	0	26039331	48700.0	A	2022-01-02	Summit County	0.0	AAV6	68558	prevalence	spurbeck
 1	0	45434265	0.0378335831047036	Oakland	2020-06-30	Alameda County	0.0	Influenza A	11320	incidence	crits_christoph
 2	0	41207484	0.0378335831047036	Marin	2020-07-01	Marin County	0.0	Influenza A	11320	incidence	crits_christoph
 3	0	38572859	0.0378335831047036	Marin	2020-07-01	Marin County	0.0	Influenza A	11320	incidence	crits_christoph
@@ -2066,165 +2384,165 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 53	0	22583173	58500.0	J	2021-12-12	Montgomery County	0.0	AAV2	10804	prevalence	spurbeck
 54	0	27717586	58500.0	J	2021-12-05	Montgomery County	0.0	AAV2	10804	prevalence	spurbeck
 55	0	26039331	58500.0	A	2022-01-02	Summit County	0.0	AAV2	10804	prevalence	spurbeck
-1	0	45434265	235.0	Oakland	2020-06-30	Alameda County	0.0	HPV	10566	incidence	crits_christoph
-2	0	41207484	235.0	Marin	2020-07-01	Marin County	0.0	HPV	10566	incidence	crits_christoph
-3	0	38572859	235.0	Marin	2020-07-01	Marin County	0.0	HPV	10566	incidence	crits_christoph
-4	0	47832942	235.0	SF	2020-06-30	San Francisco County	0.0	HPV	10566	incidence	crits_christoph
-5	0	48462833	235.0	Oakland	2020-06-30	Alameda County	0.0	HPV	10566	incidence	crits_christoph
-6	0	39759745	235.0	Oakland	2020-06-30	Alameda County	0.0	HPV	10566	incidence	crits_christoph
-7	0	36420649	235.0	Berkeley	2020-06-30	Alameda County	0.0	HPV	10566	incidence	crits_christoph
-1	0	2737872	235.0	SB	2020-09-10	San Diego County	0.0	HPV	10566	incidence	rothman
-2	0	6515759	235.0	SB	2020-09-24	San Diego County	0.0	HPV	10566	incidence	rothman
-3	0	3204232	235.0	SB	2020-08-27	San Diego County	0.0	HPV	10566	incidence	rothman
-4	0	2782200	235.0	SB	2020-08-13	San Diego County	0.0	HPV	10566	incidence	rothman
-5	0	3429177	235.0	SB	2020-10-22	San Diego County	0.0	HPV	10566	incidence	rothman
-6	0	3842559	235.0	PL	2020-09-24	San Diego County	0.0	HPV	10566	incidence	rothman
-7	0	4419124	235.0	PL	2020-09-10	San Diego County	0.0	HPV	10566	incidence	rothman
-8	0	3402804	235.0	PL	2020-08-27	San Diego County	0.0	HPV	10566	incidence	rothman
-9	0	3786318	235.0	PL	2020-08-13	San Diego County	0.0	HPV	10566	incidence	rothman
-10	0	3857662	235.0	PL	2020-10-22	San Diego County	0.0	HPV	10566	incidence	rothman
-11	0	3588085	235.0	OC	2020-09-30	Orange County	0.0	HPV	10566	incidence	rothman
-12	0	4520022	235.0	OC	2020-09-23	Orange County	0.0	HPV	10566	incidence	rothman
-13	0	1327075	235.0	OC	2020-09-16	Orange County	0.0	HPV	10566	incidence	rothman
-14	0	4874211	235.0	OC	2020-09-03	Orange County	0.0	HPV	10566	incidence	rothman
-15	0	3689634	235.0	OC	2020-09-02	Orange County	0.0	HPV	10566	incidence	rothman
-16	0	3283166	235.0	OC	2020-08-26	Orange County	0.0	HPV	10566	incidence	rothman
-17	0	3182825	235.0	OC	2020-08-19	Orange County	0.0	HPV	10566	incidence	rothman
-18	0	1292650	235.0	OC	2020-08-12	Orange County	0.0	HPV	10566	incidence	rothman
-19	0	3890259	235.0	OC	2020-10-07	Orange County	0.0	HPV	10566	incidence	rothman
-20	0	2901986	235.0	NC	2020-09-11	San Diego County	0.0	HPV	10566	incidence	rothman
-21	0	3467617	235.0	NC	2020-08-28	San Diego County	0.0	HPV	10566	incidence	rothman
-22	0	4099096	235.0	NC	2020-08-14	San Diego County	0.0	HPV	10566	incidence	rothman
-23	0	4124544	235.0	NC	2020-10-23	San Diego County	0.0	HPV	10566	incidence	rothman
-24	0	4902017	235.0	NC	2020-10-09	San Diego County	0.0	HPV	10566	incidence	rothman
-25	0	4514886	235.0	JWPCP	2020-09-22	Los Angeles County	0.0	HPV	10566	incidence	rothman
-26	0	4234727	235.0	JWPCP	2020-09-15	Los Angeles County	0.0	HPV	10566	incidence	rothman
-27	0	4018438	235.0	JWPCP	2020-09-08	Los Angeles County	0.0	HPV	10566	incidence	rothman
-28	0	3630148	235.0	JWPCP	2020-09-01	Los Angeles County	0.0	HPV	10566	incidence	rothman
-29	0	3183234	235.0	JWPCP	2020-08-25	Los Angeles County	0.0	HPV	10566	incidence	rothman
-30	0	4059288	235.0	JWPCP	2020-08-18	Los Angeles County	0.0	HPV	10566	incidence	rothman
-31	0	2102736	235.0	JWPCP	2020-08-11	Los Angeles County	0.0	HPV	10566	incidence	rothman
-32	0	4221630	235.0	JWPCP	2020-10-13	Los Angeles County	0.0	HPV	10566	incidence	rothman
-33	0	4832507	235.0	JWPCP	2020-10-06	Los Angeles County	0.0	HPV	10566	incidence	rothman
-34	0	2374918	235.0	JWPCP	2020-10-27	Los Angeles County	0.0	HPV	10566	incidence	rothman
-35	0	4362852	235.0	JWPCP	2020-10-20	Los Angeles County	0.0	HPV	10566	incidence	rothman
-36	0	3579700	235.0	HTP	2020-09-15	Los Angeles County	0.0	HPV	10566	incidence	rothman
-37	0	3551002	235.0	HTP	2020-09-08	Los Angeles County	0.0	HPV	10566	incidence	rothman
-38	0	3604679	235.0	HTP	2020-09-01	Los Angeles County	0.0	HPV	10566	incidence	rothman
-39	0	3486258	235.0	HTP	2020-08-25	Los Angeles County	0.0	HPV	10566	incidence	rothman
-40	0	2800039	235.0	HTP	2020-08-18	Los Angeles County	0.0	HPV	10566	incidence	rothman
-41	0	3318348	235.0	HTP	2020-08-11	Los Angeles County	0.0	HPV	10566	incidence	rothman
-42	0	4215471	235.0	HTP	2020-10-27	Los Angeles County	0.0	HPV	10566	incidence	rothman
-43	0	4350744	235.0	HTP	2020-10-20	Los Angeles County	0.0	HPV	10566	incidence	rothman
-44	0	2179170	235.0	HTP	2020-10-13	Los Angeles County	0.0	HPV	10566	incidence	rothman
-45	0	4595209	235.0	HTP	2020-10-02	Los Angeles County	0.0	HPV	10566	incidence	rothman
-46	0	10246075	235.0	SJ	2020-09-23	Los Angeles County	0.0	HPV	10566	incidence	rothman
-47	0	10232266	235.0	SJ	2020-11-04	Los Angeles County	0.0	HPV	10566	incidence	rothman
-48	0	13154158	235.0	SJ	2020-11-18	Los Angeles County	0.0	HPV	10566	incidence	rothman
-49	0	11601202	235.0	SJ	2020-11-11	Los Angeles County	0.0	HPV	10566	incidence	rothman
-50	0	11389423	235.0	SB	2020-11-05	San Diego County	0.0	HPV	10566	incidence	rothman
-51	0	11257694	235.0	SB	2020-10-08	San Diego County	0.0	HPV	10566	incidence	rothman
-52	0	8833468	235.0	PL	2020-12-28	San Diego County	0.0	HPV	10566	incidence	rothman
-53	0	9334593	235.0	PL	2020-12-22	San Diego County	0.0	HPV	10566	incidence	rothman
-54	0	10305132	235.0	PL	2020-12-14	San Diego County	0.0	HPV	10566	incidence	rothman
-55	0	8153083	235.0	PL	2020-11-05	San Diego County	0.0	HPV	10566	incidence	rothman
-56	0	10775374	235.0	PL	2020-11-30	San Diego County	0.0	HPV	10566	incidence	rothman
-57	0	10112554	235.0	PL	2020-11-29	San Diego County	0.0	HPV	10566	incidence	rothman
-58	0	10182955	235.0	PL	2021-01-04	San Diego County	0.0	HPV	10566	incidence	rothman
-59	0	10140886	235.0	PL	2021-01-03	San Diego County	0.0	HPV	10566	incidence	rothman
-60	0	9826830	235.0	OC	2020-12-21	Orange County	0.0	HPV	10566	incidence	rothman
-61	0	9840771	235.0	OC	2020-12-14	Orange County	0.0	HPV	10566	incidence	rothman
-62	0	10616714	235.0	OC	2020-11-09	Orange County	0.0	HPV	10566	incidence	rothman
-63	0	8583928	235.0	OC	2020-11-04	Orange County	0.0	HPV	10566	incidence	rothman
-64	0	9408142	235.0	OC	2020-11-25	Orange County	0.0	HPV	10566	incidence	rothman
-65	0	10523877	235.0	OC	2020-11-18	Orange County	0.0	HPV	10566	incidence	rothman
-66	0	11667235	235.0	OC	2020-11-11	Orange County	0.0	HPV	10566	incidence	rothman
-67	0	9670784	235.0	NC	2020-09-25	San Diego County	0.0	HPV	10566	incidence	rothman
-68	0	12434072	235.0	NC	2020-11-06	San Diego County	0.0	HPV	10566	incidence	rothman
-69	0	10164300	235.0	JWPCP	2020-09-29	Los Angeles County	0.0	HPV	10566	incidence	rothman
-70	0	11233097	235.0	JWPCP	2020-11-03	Los Angeles County	0.0	HPV	10566	incidence	rothman
-71	0	12720283	235.0	JWPCP	2020-11-17	Los Angeles County	0.0	HPV	10566	incidence	rothman
-72	0	9675052	235.0	JWPCP	2020-11-10	Los Angeles County	0.0	HPV	10566	incidence	rothman
-73	0	13626688	235.0	HTP	2020-09-29	Los Angeles County	0.0	HPV	10566	incidence	rothman
-74	0	12904150	235.0	HTP	2020-09-22	Los Angeles County	0.0	HPV	10566	incidence	rothman
-75	0	11504066	235.0	HTP	2020-12-29	Los Angeles County	0.0	HPV	10566	incidence	rothman
-76	0	8861526	235.0	HTP	2020-12-22	Los Angeles County	0.0	HPV	10566	incidence	rothman
-77	0	11960233	235.0	HTP	2020-12-15	Los Angeles County	0.0	HPV	10566	incidence	rothman
-78	0	10874604	235.0	HTP	2020-12-04	Los Angeles County	0.0	HPV	10566	incidence	rothman
-79	0	11912829	235.0	HTP	2020-12-01	Los Angeles County	0.0	HPV	10566	incidence	rothman
-80	0	11534523	235.0	HTP	2020-11-03	Los Angeles County	0.0	HPV	10566	incidence	rothman
-81	0	11045877	235.0	HTP	2020-11-24	Los Angeles County	0.0	HPV	10566	incidence	rothman
-82	0	16394657	235.0	HTP	2020-11-17	Los Angeles County	0.0	HPV	10566	incidence	rothman
-83	0	9626457	235.0	HTP	2021-01-03	Los Angeles County	0.0	HPV	10566	incidence	rothman
-84	0	2810576	235.0	SJ	2020-09-30	Los Angeles County	0.0	HPV	10566	incidence	rothman
-85	0	3829748	235.0	SJ	2020-09-16	Los Angeles County	0.0	HPV	10566	incidence	rothman
-86	0	3184286	235.0	SJ	2020-09-09	Los Angeles County	0.0	HPV	10566	incidence	rothman
-87	0	3041921	235.0	SJ	2020-09-02	Los Angeles County	0.0	HPV	10566	incidence	rothman
-88	0	3108434	235.0	SJ	2020-08-26	Los Angeles County	0.0	HPV	10566	incidence	rothman
-89	0	3011011	235.0	SJ	2020-08-19	Los Angeles County	0.0	HPV	10566	incidence	rothman
-90	0	3241686	235.0	SJ	2020-08-12	Los Angeles County	0.0	HPV	10566	incidence	rothman
-91	0	4604124	235.0	SJ	2020-10-28	Los Angeles County	0.0	HPV	10566	incidence	rothman
-92	0	4192507	235.0	SJ	2020-10-21	Los Angeles County	0.0	HPV	10566	incidence	rothman
-93	0	5260005	235.0	SJ	2020-10-14	Los Angeles County	0.0	HPV	10566	incidence	rothman
-94	0	4632349	235.0	SJ	2020-10-07	Los Angeles County	0.0	HPV	10566	incidence	rothman
-95	0	2413516	235.0	OC	2020-10-21	Orange County	0.0	HPV	10566	incidence	rothman
-96	0	16101528	235.0	ESC	2020-07-27	San Diego County	0.0	HPV	10566	incidence	rothman
-97	0	23482928	235.0	ESC	2020-07-20	San Diego County	0.0	HPV	10566	incidence	rothman
-1	0	34152465	235.0	I	2022-01-09	Greene County	0.0	HPV	10566	incidence	spurbeck
-2	0	15536236	235.0	I	2022-01-02	Greene County	0.0	HPV	10566	incidence	spurbeck
-3	0	24496461	235.0	H	2021-12-26	Franklin County	0.0	HPV	10566	incidence	spurbeck
-4	0	19873663	235.0	H	2021-12-19	Franklin County	0.0	HPV	10566	incidence	spurbeck
-5	0	65391438	235.0	H	2021-12-05	Franklin County	0.0	HPV	10566	incidence	spurbeck
-6	0	7683321	235.0	H	2022-01-09	Franklin County	0.0	HPV	10566	incidence	spurbeck
-7	0	106734757	235.0	H	2022-01-02	Franklin County	0.0	HPV	10566	incidence	spurbeck
-8	0	27498895	235.0	G	2021-12-26	Licking County	0.0	HPV	10566	incidence	spurbeck
-9	0	21866784	235.0	G	2021-12-19	Licking County	0.0	HPV	10566	incidence	spurbeck
-10	0	25615577	235.0	A	2021-12-12	Summit County	0.0	HPV	10566	incidence	spurbeck
-11	0	49701182	235.0	G	2021-12-12	Licking County	0.0	HPV	10566	incidence	spurbeck
-12	0	50541071	235.0	G	2021-12-05	Licking County	0.0	HPV	10566	incidence	spurbeck
-13	0	26758722	235.0	G	2022-01-09	Licking County	0.0	HPV	10566	incidence	spurbeck
-14	0	30488030	235.0	G	2022-01-02	Licking County	0.0	HPV	10566	incidence	spurbeck
-15	0	21587487	235.0	F	2021-12-26	Franklin County	0.0	HPV	10566	incidence	spurbeck
-16	0	21693115	235.0	F	2021-12-19	Franklin County	0.0	HPV	10566	incidence	spurbeck
-17	0	24611947	235.0	F	2021-12-12	Franklin County	0.0	HPV	10566	incidence	spurbeck
-18	0	10324347	235.0	F	2021-12-05	Franklin County	0.0	HPV	10566	incidence	spurbeck
-19	0	4526832	235.0	F	2022-01-09	Franklin County	0.0	HPV	10566	incidence	spurbeck
-20	0	26761777	235.0	F	2022-01-02	Franklin County	0.0	HPV	10566	incidence	spurbeck
-21	0	93165126	235.0	A	2021-12-05	Summit County	0.0	HPV	10566	incidence	spurbeck
-22	0	8675446	235.0	E	2021-12-26	Sandusky County	0.0	HPV	10566	incidence	spurbeck
-23	0	22756198	235.0	E	2021-12-19	Sandusky County	0.0	HPV	10566	incidence	spurbeck
-24	0	53418977	235.0	E	2021-12-12	Sandusky County	0.0	HPV	10566	incidence	spurbeck
-25	0	27489114	235.0	E	2021-12-05	Sandusky County	0.0	HPV	10566	incidence	spurbeck
-26	0	62643623	235.0	E	2022-01-09	Sandusky County	0.0	HPV	10566	incidence	spurbeck
-27	0	9885903	235.0	E	2022-01-02	Sandusky County	0.0	HPV	10566	incidence	spurbeck
-28	0	25194552	235.0	D	2021-12-19	Lawrence County	0.0	HPV	10566	incidence	spurbeck
-29	0	27576698	235.0	D	2021-12-12	Lawrence County	0.0	HPV	10566	incidence	spurbeck
-30	0	64262607	235.0	D	2021-12-05	Lawrence County	0.0	HPV	10566	incidence	spurbeck
-31	0	28567806	235.0	J	2022-01-09	Montgomery County	0.0	HPV	10566	incidence	spurbeck
-32	0	6390165	235.0	J	2022-01-02	Montgomery County	0.0	HPV	10566	incidence	spurbeck
-33	0	26423592	235.0	I	2021-12-26	Greene County	0.0	HPV	10566	incidence	spurbeck
-34	0	18922081	235.0	I	2021-12-19	Greene County	0.0	HPV	10566	incidence	spurbeck
-35	0	21319668	235.0	I	2021-12-12	Greene County	0.0	HPV	10566	incidence	spurbeck
-36	0	72582176	235.0	A	2021-12-19	Summit County	0.0	HPV	10566	incidence	spurbeck
-37	0	23726564	235.0	I	2021-12-05	Greene County	0.0	HPV	10566	incidence	spurbeck
-38	0	28732700	235.0	D	2022-01-09	Lawrence County	0.0	HPV	10566	incidence	spurbeck
-39	0	40626978	235.0	A	2022-01-09	Summit County	0.0	HPV	10566	incidence	spurbeck
-40	0	15260483	235.0	C	2021-12-19	Lucas County	0.0	HPV	10566	incidence	spurbeck
-41	0	93084891	235.0	C	2021-12-05	Lucas County	0.0	HPV	10566	incidence	spurbeck
-42	0	20057162	235.0	C	2022-01-09	Lucas County	0.0	HPV	10566	incidence	spurbeck
-43	0	35169394	235.0	C	2022-01-02	Lucas County	0.0	HPV	10566	incidence	spurbeck
-44	0	22987581	235.0	B	2021-12-26	Trumbull County	0.0	HPV	10566	incidence	spurbeck
-45	0	50531562	235.0	B	2021-12-19	Trumbull County	0.0	HPV	10566	incidence	spurbeck
-46	0	19233869	235.0	B	2021-12-12	Trumbull County	0.0	HPV	10566	incidence	spurbeck
-47	0	55741383	235.0	B	2021-12-05	Trumbull County	0.0	HPV	10566	incidence	spurbeck
-48	0	12644434	235.0	B	2022-01-09	Trumbull County	0.0	HPV	10566	incidence	spurbeck
-49	0	40871463	235.0	B	2022-01-02	Trumbull County	0.0	HPV	10566	incidence	spurbeck
-50	0	25003302	235.0	A	2021-12-26	Summit County	0.0	HPV	10566	incidence	spurbeck
-51	0	32262151	235.0	J	2021-12-26	Montgomery County	0.0	HPV	10566	incidence	spurbeck
-52	0	60208872	235.0	J	2021-12-19	Montgomery County	0.0	HPV	10566	incidence	spurbeck
-53	0	22583173	235.0	J	2021-12-12	Montgomery County	0.0	HPV	10566	incidence	spurbeck
-54	0	27717586	235.0	J	2021-12-05	Montgomery County	0.0	HPV	10566	incidence	spurbeck
-55	0	26039331	235.0	A	2022-01-02	Summit County	0.0	HPV	10566	incidence	spurbeck
+1	0	45434265	40000.0	Oakland	2020-06-30	Alameda County	0.0	HPV	10566	prevalence	crits_christoph
+2	0	41207484	40000.0	Marin	2020-07-01	Marin County	0.0	HPV	10566	prevalence	crits_christoph
+3	0	38572859	40000.0	Marin	2020-07-01	Marin County	0.0	HPV	10566	prevalence	crits_christoph
+4	0	47832942	40000.0	SF	2020-06-30	San Francisco County	0.0	HPV	10566	prevalence	crits_christoph
+5	0	48462833	40000.0	Oakland	2020-06-30	Alameda County	0.0	HPV	10566	prevalence	crits_christoph
+6	0	39759745	40000.0	Oakland	2020-06-30	Alameda County	0.0	HPV	10566	prevalence	crits_christoph
+7	0	36420649	40000.0	Berkeley	2020-06-30	Alameda County	0.0	HPV	10566	prevalence	crits_christoph
+1	0	2737872	40000.0	SB	2020-09-10	San Diego County	0.0	HPV	10566	prevalence	rothman
+2	0	6515759	40000.0	SB	2020-09-24	San Diego County	0.0	HPV	10566	prevalence	rothman
+3	0	3204232	40000.0	SB	2020-08-27	San Diego County	0.0	HPV	10566	prevalence	rothman
+4	0	2782200	40000.0	SB	2020-08-13	San Diego County	0.0	HPV	10566	prevalence	rothman
+5	0	3429177	40000.0	SB	2020-10-22	San Diego County	0.0	HPV	10566	prevalence	rothman
+6	0	3842559	40000.0	PL	2020-09-24	San Diego County	0.0	HPV	10566	prevalence	rothman
+7	0	4419124	40000.0	PL	2020-09-10	San Diego County	0.0	HPV	10566	prevalence	rothman
+8	0	3402804	40000.0	PL	2020-08-27	San Diego County	0.0	HPV	10566	prevalence	rothman
+9	0	3786318	40000.0	PL	2020-08-13	San Diego County	0.0	HPV	10566	prevalence	rothman
+10	0	3857662	40000.0	PL	2020-10-22	San Diego County	0.0	HPV	10566	prevalence	rothman
+11	0	3588085	40000.0	OC	2020-09-30	Orange County	0.0	HPV	10566	prevalence	rothman
+12	0	4520022	40000.0	OC	2020-09-23	Orange County	0.0	HPV	10566	prevalence	rothman
+13	0	1327075	40000.0	OC	2020-09-16	Orange County	0.0	HPV	10566	prevalence	rothman
+14	0	4874211	40000.0	OC	2020-09-03	Orange County	0.0	HPV	10566	prevalence	rothman
+15	0	3689634	40000.0	OC	2020-09-02	Orange County	0.0	HPV	10566	prevalence	rothman
+16	0	3283166	40000.0	OC	2020-08-26	Orange County	0.0	HPV	10566	prevalence	rothman
+17	0	3182825	40000.0	OC	2020-08-19	Orange County	0.0	HPV	10566	prevalence	rothman
+18	0	1292650	40000.0	OC	2020-08-12	Orange County	0.0	HPV	10566	prevalence	rothman
+19	0	3890259	40000.0	OC	2020-10-07	Orange County	0.0	HPV	10566	prevalence	rothman
+20	0	2901986	40000.0	NC	2020-09-11	San Diego County	0.0	HPV	10566	prevalence	rothman
+21	0	3467617	40000.0	NC	2020-08-28	San Diego County	0.0	HPV	10566	prevalence	rothman
+22	0	4099096	40000.0	NC	2020-08-14	San Diego County	0.0	HPV	10566	prevalence	rothman
+23	0	4124544	40000.0	NC	2020-10-23	San Diego County	0.0	HPV	10566	prevalence	rothman
+24	0	4902017	40000.0	NC	2020-10-09	San Diego County	0.0	HPV	10566	prevalence	rothman
+25	0	4514886	40000.0	JWPCP	2020-09-22	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+26	0	4234727	40000.0	JWPCP	2020-09-15	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+27	0	4018438	40000.0	JWPCP	2020-09-08	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+28	0	3630148	40000.0	JWPCP	2020-09-01	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+29	0	3183234	40000.0	JWPCP	2020-08-25	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+30	0	4059288	40000.0	JWPCP	2020-08-18	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+31	0	2102736	40000.0	JWPCP	2020-08-11	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+32	0	4221630	40000.0	JWPCP	2020-10-13	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+33	0	4832507	40000.0	JWPCP	2020-10-06	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+34	0	2374918	40000.0	JWPCP	2020-10-27	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+35	0	4362852	40000.0	JWPCP	2020-10-20	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+36	0	3579700	40000.0	HTP	2020-09-15	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+37	0	3551002	40000.0	HTP	2020-09-08	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+38	0	3604679	40000.0	HTP	2020-09-01	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+39	0	3486258	40000.0	HTP	2020-08-25	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+40	0	2800039	40000.0	HTP	2020-08-18	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+41	0	3318348	40000.0	HTP	2020-08-11	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+42	0	4215471	40000.0	HTP	2020-10-27	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+43	0	4350744	40000.0	HTP	2020-10-20	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+44	0	2179170	40000.0	HTP	2020-10-13	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+45	0	4595209	40000.0	HTP	2020-10-02	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+46	0	10246075	40000.0	SJ	2020-09-23	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+47	0	10232266	40000.0	SJ	2020-11-04	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+48	0	13154158	40000.0	SJ	2020-11-18	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+49	0	11601202	40000.0	SJ	2020-11-11	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+50	0	11389423	40000.0	SB	2020-11-05	San Diego County	0.0	HPV	10566	prevalence	rothman
+51	0	11257694	40000.0	SB	2020-10-08	San Diego County	0.0	HPV	10566	prevalence	rothman
+52	0	8833468	40000.0	PL	2020-12-28	San Diego County	0.0	HPV	10566	prevalence	rothman
+53	0	9334593	40000.0	PL	2020-12-22	San Diego County	0.0	HPV	10566	prevalence	rothman
+54	0	10305132	40000.0	PL	2020-12-14	San Diego County	0.0	HPV	10566	prevalence	rothman
+55	0	8153083	40000.0	PL	2020-11-05	San Diego County	0.0	HPV	10566	prevalence	rothman
+56	0	10775374	40000.0	PL	2020-11-30	San Diego County	0.0	HPV	10566	prevalence	rothman
+57	0	10112554	40000.0	PL	2020-11-29	San Diego County	0.0	HPV	10566	prevalence	rothman
+58	0	10182955	40000.0	PL	2021-01-04	San Diego County	0.0	HPV	10566	prevalence	rothman
+59	0	10140886	40000.0	PL	2021-01-03	San Diego County	0.0	HPV	10566	prevalence	rothman
+60	0	9826830	40000.0	OC	2020-12-21	Orange County	0.0	HPV	10566	prevalence	rothman
+61	0	9840771	40000.0	OC	2020-12-14	Orange County	0.0	HPV	10566	prevalence	rothman
+62	0	10616714	40000.0	OC	2020-11-09	Orange County	0.0	HPV	10566	prevalence	rothman
+63	0	8583928	40000.0	OC	2020-11-04	Orange County	0.0	HPV	10566	prevalence	rothman
+64	0	9408142	40000.0	OC	2020-11-25	Orange County	0.0	HPV	10566	prevalence	rothman
+65	0	10523877	40000.0	OC	2020-11-18	Orange County	0.0	HPV	10566	prevalence	rothman
+66	0	11667235	40000.0	OC	2020-11-11	Orange County	0.0	HPV	10566	prevalence	rothman
+67	0	9670784	40000.0	NC	2020-09-25	San Diego County	0.0	HPV	10566	prevalence	rothman
+68	0	12434072	40000.0	NC	2020-11-06	San Diego County	0.0	HPV	10566	prevalence	rothman
+69	0	10164300	40000.0	JWPCP	2020-09-29	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+70	0	11233097	40000.0	JWPCP	2020-11-03	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+71	0	12720283	40000.0	JWPCP	2020-11-17	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+72	0	9675052	40000.0	JWPCP	2020-11-10	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+73	0	13626688	40000.0	HTP	2020-09-29	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+74	0	12904150	40000.0	HTP	2020-09-22	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+75	0	11504066	40000.0	HTP	2020-12-29	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+76	0	8861526	40000.0	HTP	2020-12-22	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+77	0	11960233	40000.0	HTP	2020-12-15	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+78	0	10874604	40000.0	HTP	2020-12-04	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+79	0	11912829	40000.0	HTP	2020-12-01	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+80	0	11534523	40000.0	HTP	2020-11-03	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+81	0	11045877	40000.0	HTP	2020-11-24	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+82	0	16394657	40000.0	HTP	2020-11-17	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+83	0	9626457	40000.0	HTP	2021-01-03	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+84	0	2810576	40000.0	SJ	2020-09-30	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+85	0	3829748	40000.0	SJ	2020-09-16	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+86	0	3184286	40000.0	SJ	2020-09-09	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+87	0	3041921	40000.0	SJ	2020-09-02	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+88	0	3108434	40000.0	SJ	2020-08-26	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+89	0	3011011	40000.0	SJ	2020-08-19	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+90	0	3241686	40000.0	SJ	2020-08-12	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+91	0	4604124	40000.0	SJ	2020-10-28	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+92	0	4192507	40000.0	SJ	2020-10-21	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+93	0	5260005	40000.0	SJ	2020-10-14	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+94	0	4632349	40000.0	SJ	2020-10-07	Los Angeles County	0.0	HPV	10566	prevalence	rothman
+95	0	2413516	40000.0	OC	2020-10-21	Orange County	0.0	HPV	10566	prevalence	rothman
+96	0	16101528	40000.0	ESC	2020-07-27	San Diego County	0.0	HPV	10566	prevalence	rothman
+97	0	23482928	40000.0	ESC	2020-07-20	San Diego County	0.0	HPV	10566	prevalence	rothman
+1	0	34152465	40000.0	I	2022-01-09	Greene County	0.0	HPV	10566	prevalence	spurbeck
+2	0	15536236	40000.0	I	2022-01-02	Greene County	0.0	HPV	10566	prevalence	spurbeck
+3	0	24496461	40000.0	H	2021-12-26	Franklin County	0.0	HPV	10566	prevalence	spurbeck
+4	0	19873663	40000.0	H	2021-12-19	Franklin County	0.0	HPV	10566	prevalence	spurbeck
+5	0	65391438	40000.0	H	2021-12-05	Franklin County	0.0	HPV	10566	prevalence	spurbeck
+6	0	7683321	40000.0	H	2022-01-09	Franklin County	0.0	HPV	10566	prevalence	spurbeck
+7	0	106734757	40000.0	H	2022-01-02	Franklin County	0.0	HPV	10566	prevalence	spurbeck
+8	0	27498895	40000.0	G	2021-12-26	Licking County	0.0	HPV	10566	prevalence	spurbeck
+9	0	21866784	40000.0	G	2021-12-19	Licking County	0.0	HPV	10566	prevalence	spurbeck
+10	0	25615577	40000.0	A	2021-12-12	Summit County	0.0	HPV	10566	prevalence	spurbeck
+11	0	49701182	40000.0	G	2021-12-12	Licking County	0.0	HPV	10566	prevalence	spurbeck
+12	0	50541071	40000.0	G	2021-12-05	Licking County	0.0	HPV	10566	prevalence	spurbeck
+13	0	26758722	40000.0	G	2022-01-09	Licking County	0.0	HPV	10566	prevalence	spurbeck
+14	0	30488030	40000.0	G	2022-01-02	Licking County	0.0	HPV	10566	prevalence	spurbeck
+15	0	21587487	40000.0	F	2021-12-26	Franklin County	0.0	HPV	10566	prevalence	spurbeck
+16	0	21693115	40000.0	F	2021-12-19	Franklin County	0.0	HPV	10566	prevalence	spurbeck
+17	0	24611947	40000.0	F	2021-12-12	Franklin County	0.0	HPV	10566	prevalence	spurbeck
+18	0	10324347	40000.0	F	2021-12-05	Franklin County	0.0	HPV	10566	prevalence	spurbeck
+19	0	4526832	40000.0	F	2022-01-09	Franklin County	0.0	HPV	10566	prevalence	spurbeck
+20	0	26761777	40000.0	F	2022-01-02	Franklin County	0.0	HPV	10566	prevalence	spurbeck
+21	0	93165126	40000.0	A	2021-12-05	Summit County	0.0	HPV	10566	prevalence	spurbeck
+22	0	8675446	40000.0	E	2021-12-26	Sandusky County	0.0	HPV	10566	prevalence	spurbeck
+23	0	22756198	40000.0	E	2021-12-19	Sandusky County	0.0	HPV	10566	prevalence	spurbeck
+24	0	53418977	40000.0	E	2021-12-12	Sandusky County	0.0	HPV	10566	prevalence	spurbeck
+25	0	27489114	40000.0	E	2021-12-05	Sandusky County	0.0	HPV	10566	prevalence	spurbeck
+26	0	62643623	40000.0	E	2022-01-09	Sandusky County	0.0	HPV	10566	prevalence	spurbeck
+27	0	9885903	40000.0	E	2022-01-02	Sandusky County	0.0	HPV	10566	prevalence	spurbeck
+28	0	25194552	40000.0	D	2021-12-19	Lawrence County	0.0	HPV	10566	prevalence	spurbeck
+29	0	27576698	40000.0	D	2021-12-12	Lawrence County	0.0	HPV	10566	prevalence	spurbeck
+30	0	64262607	40000.0	D	2021-12-05	Lawrence County	0.0	HPV	10566	prevalence	spurbeck
+31	0	28567806	40000.0	J	2022-01-09	Montgomery County	0.0	HPV	10566	prevalence	spurbeck
+32	0	6390165	40000.0	J	2022-01-02	Montgomery County	0.0	HPV	10566	prevalence	spurbeck
+33	0	26423592	40000.0	I	2021-12-26	Greene County	0.0	HPV	10566	prevalence	spurbeck
+34	0	18922081	40000.0	I	2021-12-19	Greene County	0.0	HPV	10566	prevalence	spurbeck
+35	0	21319668	40000.0	I	2021-12-12	Greene County	0.0	HPV	10566	prevalence	spurbeck
+36	0	72582176	40000.0	A	2021-12-19	Summit County	0.0	HPV	10566	prevalence	spurbeck
+37	0	23726564	40000.0	I	2021-12-05	Greene County	0.0	HPV	10566	prevalence	spurbeck
+38	0	28732700	40000.0	D	2022-01-09	Lawrence County	0.0	HPV	10566	prevalence	spurbeck
+39	0	40626978	40000.0	A	2022-01-09	Summit County	0.0	HPV	10566	prevalence	spurbeck
+40	0	15260483	40000.0	C	2021-12-19	Lucas County	0.0	HPV	10566	prevalence	spurbeck
+41	0	93084891	40000.0	C	2021-12-05	Lucas County	0.0	HPV	10566	prevalence	spurbeck
+42	0	20057162	40000.0	C	2022-01-09	Lucas County	0.0	HPV	10566	prevalence	spurbeck
+43	0	35169394	40000.0	C	2022-01-02	Lucas County	0.0	HPV	10566	prevalence	spurbeck
+44	0	22987581	40000.0	B	2021-12-26	Trumbull County	0.0	HPV	10566	prevalence	spurbeck
+45	0	50531562	40000.0	B	2021-12-19	Trumbull County	0.0	HPV	10566	prevalence	spurbeck
+46	0	19233869	40000.0	B	2021-12-12	Trumbull County	0.0	HPV	10566	prevalence	spurbeck
+47	0	55741383	40000.0	B	2021-12-05	Trumbull County	0.0	HPV	10566	prevalence	spurbeck
+48	0	12644434	40000.0	B	2022-01-09	Trumbull County	0.0	HPV	10566	prevalence	spurbeck
+49	0	40871463	40000.0	B	2022-01-02	Trumbull County	0.0	HPV	10566	prevalence	spurbeck
+50	0	25003302	40000.0	A	2021-12-26	Summit County	0.0	HPV	10566	prevalence	spurbeck
+51	0	32262151	40000.0	J	2021-12-26	Montgomery County	0.0	HPV	10566	prevalence	spurbeck
+52	0	60208872	40000.0	J	2021-12-19	Montgomery County	0.0	HPV	10566	prevalence	spurbeck
+53	0	22583173	40000.0	J	2021-12-12	Montgomery County	0.0	HPV	10566	prevalence	spurbeck
+54	0	27717586	40000.0	J	2021-12-05	Montgomery County	0.0	HPV	10566	prevalence	spurbeck
+55	0	26039331	40000.0	A	2022-01-02	Summit County	0.0	HPV	10566	prevalence	spurbeck
 1	0	45434265	67442.41888780482	Oakland	2020-06-30	Alameda County	0.0	EBV	10376	prevalence	crits_christoph
 2	0	41207484	67442.41888780482	Marin	2020-07-01	Marin County	0.0	EBV	10376	prevalence	crits_christoph
 3	0	38572859	67442.41888780482	Marin	2020-07-01	Marin County	0.0	EBV	10376	prevalence	crits_christoph
@@ -2384,3 +2702,321 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 53	0	22583173	67442.41888780482	J	2021-12-12	Montgomery County	0.0	EBV	10376	prevalence	spurbeck
 54	0	27717586	67442.41888780482	J	2021-12-05	Montgomery County	0.0	EBV	10376	prevalence	spurbeck
 55	0	26039331	67442.41888780482	A	2022-01-02	Summit County	0.0	EBV	10376	prevalence	spurbeck
+1	0	45434265	519.1454708818679	Oakland	2020-06-30	Alameda County	0.0	HBV	10407	prevalence	crits_christoph
+2	0	41207484	519.1454708818679	Marin	2020-07-01	Marin County	0.0	HBV	10407	prevalence	crits_christoph
+3	0	38572859	519.1454708818679	Marin	2020-07-01	Marin County	0.0	HBV	10407	prevalence	crits_christoph
+4	0	47832942	519.1454708818679	SF	2020-06-30	San Francisco County	0.0	HBV	10407	prevalence	crits_christoph
+5	0	48462833	519.1454708818679	Oakland	2020-06-30	Alameda County	0.0	HBV	10407	prevalence	crits_christoph
+6	0	39759745	519.1454708818679	Oakland	2020-06-30	Alameda County	0.0	HBV	10407	prevalence	crits_christoph
+7	0	36420649	519.1454708818679	Berkeley	2020-06-30	Alameda County	0.0	HBV	10407	prevalence	crits_christoph
+1	0	2737872	519.1454708818679	SB	2020-09-10	San Diego County	0.0	HBV	10407	prevalence	rothman
+2	0	6515759	519.1454708818679	SB	2020-09-24	San Diego County	0.0	HBV	10407	prevalence	rothman
+3	0	3204232	519.1454708818679	SB	2020-08-27	San Diego County	0.0	HBV	10407	prevalence	rothman
+4	0	2782200	519.1454708818679	SB	2020-08-13	San Diego County	0.0	HBV	10407	prevalence	rothman
+5	0	3429177	519.1454708818679	SB	2020-10-22	San Diego County	0.0	HBV	10407	prevalence	rothman
+6	0	3842559	519.1454708818679	PL	2020-09-24	San Diego County	0.0	HBV	10407	prevalence	rothman
+7	0	4419124	519.1454708818679	PL	2020-09-10	San Diego County	0.0	HBV	10407	prevalence	rothman
+8	0	3402804	519.1454708818679	PL	2020-08-27	San Diego County	0.0	HBV	10407	prevalence	rothman
+9	0	3786318	519.1454708818679	PL	2020-08-13	San Diego County	0.0	HBV	10407	prevalence	rothman
+10	0	3857662	519.1454708818679	PL	2020-10-22	San Diego County	0.0	HBV	10407	prevalence	rothman
+11	0	3588085	519.1454708818679	OC	2020-09-30	Orange County	0.0	HBV	10407	prevalence	rothman
+12	0	4520022	519.1454708818679	OC	2020-09-23	Orange County	0.0	HBV	10407	prevalence	rothman
+13	0	1327075	519.1454708818679	OC	2020-09-16	Orange County	0.0	HBV	10407	prevalence	rothman
+14	0	4874211	519.1454708818679	OC	2020-09-03	Orange County	0.0	HBV	10407	prevalence	rothman
+15	0	3689634	519.1454708818679	OC	2020-09-02	Orange County	0.0	HBV	10407	prevalence	rothman
+16	0	3283166	519.1454708818679	OC	2020-08-26	Orange County	0.0	HBV	10407	prevalence	rothman
+17	0	3182825	519.1454708818679	OC	2020-08-19	Orange County	0.0	HBV	10407	prevalence	rothman
+18	0	1292650	519.1454708818679	OC	2020-08-12	Orange County	0.0	HBV	10407	prevalence	rothman
+19	0	3890259	519.1454708818679	OC	2020-10-07	Orange County	0.0	HBV	10407	prevalence	rothman
+20	0	2901986	519.1454708818679	NC	2020-09-11	San Diego County	0.0	HBV	10407	prevalence	rothman
+21	0	3467617	519.1454708818679	NC	2020-08-28	San Diego County	0.0	HBV	10407	prevalence	rothman
+22	0	4099096	519.1454708818679	NC	2020-08-14	San Diego County	0.0	HBV	10407	prevalence	rothman
+23	0	4124544	519.1454708818679	NC	2020-10-23	San Diego County	0.0	HBV	10407	prevalence	rothman
+24	0	4902017	519.1454708818679	NC	2020-10-09	San Diego County	0.0	HBV	10407	prevalence	rothman
+25	0	4514886	519.1454708818679	JWPCP	2020-09-22	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+26	0	4234727	519.1454708818679	JWPCP	2020-09-15	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+27	0	4018438	519.1454708818679	JWPCP	2020-09-08	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+28	0	3630148	519.1454708818679	JWPCP	2020-09-01	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+29	0	3183234	519.1454708818679	JWPCP	2020-08-25	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+30	0	4059288	519.1454708818679	JWPCP	2020-08-18	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+31	0	2102736	519.1454708818679	JWPCP	2020-08-11	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+32	0	4221630	519.1454708818679	JWPCP	2020-10-13	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+33	0	4832507	519.1454708818679	JWPCP	2020-10-06	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+34	0	2374918	519.1454708818679	JWPCP	2020-10-27	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+35	0	4362852	519.1454708818679	JWPCP	2020-10-20	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+36	0	3579700	519.1454708818679	HTP	2020-09-15	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+37	0	3551002	519.1454708818679	HTP	2020-09-08	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+38	0	3604679	519.1454708818679	HTP	2020-09-01	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+39	0	3486258	519.1454708818679	HTP	2020-08-25	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+40	0	2800039	519.1454708818679	HTP	2020-08-18	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+41	0	3318348	519.1454708818679	HTP	2020-08-11	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+42	0	4215471	519.1454708818679	HTP	2020-10-27	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+43	0	4350744	519.1454708818679	HTP	2020-10-20	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+44	0	2179170	519.1454708818679	HTP	2020-10-13	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+45	0	4595209	519.1454708818679	HTP	2020-10-02	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+46	0	10246075	519.1454708818679	SJ	2020-09-23	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+47	0	10232266	519.1454708818679	SJ	2020-11-04	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+48	0	13154158	519.1454708818679	SJ	2020-11-18	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+49	0	11601202	519.1454708818679	SJ	2020-11-11	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+50	0	11389423	519.1454708818679	SB	2020-11-05	San Diego County	0.0	HBV	10407	prevalence	rothman
+51	0	11257694	519.1454708818679	SB	2020-10-08	San Diego County	0.0	HBV	10407	prevalence	rothman
+52	0	8833468	519.1454708818679	PL	2020-12-28	San Diego County	0.0	HBV	10407	prevalence	rothman
+53	0	9334593	519.1454708818679	PL	2020-12-22	San Diego County	0.0	HBV	10407	prevalence	rothman
+54	0	10305132	519.1454708818679	PL	2020-12-14	San Diego County	0.0	HBV	10407	prevalence	rothman
+55	0	8153083	519.1454708818679	PL	2020-11-05	San Diego County	0.0	HBV	10407	prevalence	rothman
+56	0	10775374	519.1454708818679	PL	2020-11-30	San Diego County	0.0	HBV	10407	prevalence	rothman
+57	0	10112554	519.1454708818679	PL	2020-11-29	San Diego County	0.0	HBV	10407	prevalence	rothman
+58	0	10182955	519.1454708818679	PL	2021-01-04	San Diego County	0.0	HBV	10407	prevalence	rothman
+59	0	10140886	519.1454708818679	PL	2021-01-03	San Diego County	0.0	HBV	10407	prevalence	rothman
+60	0	9826830	519.1454708818679	OC	2020-12-21	Orange County	0.0	HBV	10407	prevalence	rothman
+61	0	9840771	519.1454708818679	OC	2020-12-14	Orange County	0.0	HBV	10407	prevalence	rothman
+62	0	10616714	519.1454708818679	OC	2020-11-09	Orange County	0.0	HBV	10407	prevalence	rothman
+63	0	8583928	519.1454708818679	OC	2020-11-04	Orange County	0.0	HBV	10407	prevalence	rothman
+64	0	9408142	519.1454708818679	OC	2020-11-25	Orange County	0.0	HBV	10407	prevalence	rothman
+65	0	10523877	519.1454708818679	OC	2020-11-18	Orange County	0.0	HBV	10407	prevalence	rothman
+66	0	11667235	519.1454708818679	OC	2020-11-11	Orange County	0.0	HBV	10407	prevalence	rothman
+67	0	9670784	519.1454708818679	NC	2020-09-25	San Diego County	0.0	HBV	10407	prevalence	rothman
+68	0	12434072	519.1454708818679	NC	2020-11-06	San Diego County	0.0	HBV	10407	prevalence	rothman
+69	0	10164300	519.1454708818679	JWPCP	2020-09-29	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+70	0	11233097	519.1454708818679	JWPCP	2020-11-03	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+71	0	12720283	519.1454708818679	JWPCP	2020-11-17	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+72	0	9675052	519.1454708818679	JWPCP	2020-11-10	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+73	0	13626688	519.1454708818679	HTP	2020-09-29	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+74	0	12904150	519.1454708818679	HTP	2020-09-22	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+75	0	11504066	519.1454708818679	HTP	2020-12-29	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+76	0	8861526	519.1454708818679	HTP	2020-12-22	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+77	0	11960233	519.1454708818679	HTP	2020-12-15	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+78	0	10874604	519.1454708818679	HTP	2020-12-04	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+79	0	11912829	519.1454708818679	HTP	2020-12-01	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+80	0	11534523	519.1454708818679	HTP	2020-11-03	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+81	0	11045877	519.1454708818679	HTP	2020-11-24	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+82	0	16394657	519.1454708818679	HTP	2020-11-17	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+83	0	9626457	519.1454708818679	HTP	2021-01-03	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+84	0	2810576	519.1454708818679	SJ	2020-09-30	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+85	0	3829748	519.1454708818679	SJ	2020-09-16	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+86	0	3184286	519.1454708818679	SJ	2020-09-09	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+87	0	3041921	519.1454708818679	SJ	2020-09-02	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+88	0	3108434	519.1454708818679	SJ	2020-08-26	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+89	0	3011011	519.1454708818679	SJ	2020-08-19	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+90	0	3241686	519.1454708818679	SJ	2020-08-12	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+91	0	4604124	519.1454708818679	SJ	2020-10-28	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+92	0	4192507	519.1454708818679	SJ	2020-10-21	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+93	0	5260005	519.1454708818679	SJ	2020-10-14	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+94	0	4632349	519.1454708818679	SJ	2020-10-07	Los Angeles County	0.0	HBV	10407	prevalence	rothman
+95	0	2413516	519.1454708818679	OC	2020-10-21	Orange County	0.0	HBV	10407	prevalence	rothman
+96	0	16101528	519.1454708818679	ESC	2020-07-27	San Diego County	0.0	HBV	10407	prevalence	rothman
+97	0	23482928	519.1454708818679	ESC	2020-07-20	San Diego County	0.0	HBV	10407	prevalence	rothman
+1	0	34152465	519.1454708818679	I	2022-01-09	Greene County	0.0	HBV	10407	prevalence	spurbeck
+2	0	15536236	519.1454708818679	I	2022-01-02	Greene County	0.0	HBV	10407	prevalence	spurbeck
+3	0	24496461	519.1454708818679	H	2021-12-26	Franklin County	0.0	HBV	10407	prevalence	spurbeck
+4	0	19873663	519.1454708818679	H	2021-12-19	Franklin County	0.0	HBV	10407	prevalence	spurbeck
+5	0	65391438	519.1454708818679	H	2021-12-05	Franklin County	0.0	HBV	10407	prevalence	spurbeck
+6	0	7683321	519.1454708818679	H	2022-01-09	Franklin County	0.0	HBV	10407	prevalence	spurbeck
+7	0	106734757	519.1454708818679	H	2022-01-02	Franklin County	0.0	HBV	10407	prevalence	spurbeck
+8	0	27498895	519.1454708818679	G	2021-12-26	Licking County	0.0	HBV	10407	prevalence	spurbeck
+9	0	21866784	519.1454708818679	G	2021-12-19	Licking County	0.0	HBV	10407	prevalence	spurbeck
+10	0	25615577	519.1454708818679	A	2021-12-12	Summit County	0.0	HBV	10407	prevalence	spurbeck
+11	0	49701182	519.1454708818679	G	2021-12-12	Licking County	0.0	HBV	10407	prevalence	spurbeck
+12	0	50541071	519.1454708818679	G	2021-12-05	Licking County	0.0	HBV	10407	prevalence	spurbeck
+13	0	26758722	519.1454708818679	G	2022-01-09	Licking County	0.0	HBV	10407	prevalence	spurbeck
+14	0	30488030	519.1454708818679	G	2022-01-02	Licking County	0.0	HBV	10407	prevalence	spurbeck
+15	0	21587487	519.1454708818679	F	2021-12-26	Franklin County	0.0	HBV	10407	prevalence	spurbeck
+16	0	21693115	519.1454708818679	F	2021-12-19	Franklin County	0.0	HBV	10407	prevalence	spurbeck
+17	0	24611947	519.1454708818679	F	2021-12-12	Franklin County	0.0	HBV	10407	prevalence	spurbeck
+18	0	10324347	519.1454708818679	F	2021-12-05	Franklin County	0.0	HBV	10407	prevalence	spurbeck
+19	0	4526832	519.1454708818679	F	2022-01-09	Franklin County	0.0	HBV	10407	prevalence	spurbeck
+20	0	26761777	519.1454708818679	F	2022-01-02	Franklin County	0.0	HBV	10407	prevalence	spurbeck
+21	0	93165126	519.1454708818679	A	2021-12-05	Summit County	0.0	HBV	10407	prevalence	spurbeck
+22	0	8675446	519.1454708818679	E	2021-12-26	Sandusky County	0.0	HBV	10407	prevalence	spurbeck
+23	0	22756198	519.1454708818679	E	2021-12-19	Sandusky County	0.0	HBV	10407	prevalence	spurbeck
+24	0	53418977	519.1454708818679	E	2021-12-12	Sandusky County	0.0	HBV	10407	prevalence	spurbeck
+25	0	27489114	519.1454708818679	E	2021-12-05	Sandusky County	0.0	HBV	10407	prevalence	spurbeck
+26	0	62643623	519.1454708818679	E	2022-01-09	Sandusky County	0.0	HBV	10407	prevalence	spurbeck
+27	0	9885903	519.1454708818679	E	2022-01-02	Sandusky County	0.0	HBV	10407	prevalence	spurbeck
+28	0	25194552	519.1454708818679	D	2021-12-19	Lawrence County	0.0	HBV	10407	prevalence	spurbeck
+29	0	27576698	519.1454708818679	D	2021-12-12	Lawrence County	0.0	HBV	10407	prevalence	spurbeck
+30	0	64262607	519.1454708818679	D	2021-12-05	Lawrence County	0.0	HBV	10407	prevalence	spurbeck
+31	0	28567806	519.1454708818679	J	2022-01-09	Montgomery County	0.0	HBV	10407	prevalence	spurbeck
+32	0	6390165	519.1454708818679	J	2022-01-02	Montgomery County	0.0	HBV	10407	prevalence	spurbeck
+33	0	26423592	519.1454708818679	I	2021-12-26	Greene County	0.0	HBV	10407	prevalence	spurbeck
+34	0	18922081	519.1454708818679	I	2021-12-19	Greene County	0.0	HBV	10407	prevalence	spurbeck
+35	0	21319668	519.1454708818679	I	2021-12-12	Greene County	0.0	HBV	10407	prevalence	spurbeck
+36	0	72582176	519.1454708818679	A	2021-12-19	Summit County	0.0	HBV	10407	prevalence	spurbeck
+37	0	23726564	519.1454708818679	I	2021-12-05	Greene County	0.0	HBV	10407	prevalence	spurbeck
+38	0	28732700	519.1454708818679	D	2022-01-09	Lawrence County	0.0	HBV	10407	prevalence	spurbeck
+39	0	40626978	519.1454708818679	A	2022-01-09	Summit County	0.0	HBV	10407	prevalence	spurbeck
+40	0	15260483	519.1454708818679	C	2021-12-19	Lucas County	0.0	HBV	10407	prevalence	spurbeck
+41	0	93084891	519.1454708818679	C	2021-12-05	Lucas County	0.0	HBV	10407	prevalence	spurbeck
+42	0	20057162	519.1454708818679	C	2022-01-09	Lucas County	0.0	HBV	10407	prevalence	spurbeck
+43	0	35169394	519.1454708818679	C	2022-01-02	Lucas County	0.0	HBV	10407	prevalence	spurbeck
+44	0	22987581	519.1454708818679	B	2021-12-26	Trumbull County	0.0	HBV	10407	prevalence	spurbeck
+45	0	50531562	519.1454708818679	B	2021-12-19	Trumbull County	0.0	HBV	10407	prevalence	spurbeck
+46	0	19233869	519.1454708818679	B	2021-12-12	Trumbull County	0.0	HBV	10407	prevalence	spurbeck
+47	0	55741383	519.1454708818679	B	2021-12-05	Trumbull County	0.0	HBV	10407	prevalence	spurbeck
+48	0	12644434	519.1454708818679	B	2022-01-09	Trumbull County	0.0	HBV	10407	prevalence	spurbeck
+49	0	40871463	519.1454708818679	B	2022-01-02	Trumbull County	0.0	HBV	10407	prevalence	spurbeck
+50	0	25003302	519.1454708818679	A	2021-12-26	Summit County	0.0	HBV	10407	prevalence	spurbeck
+51	0	32262151	519.1454708818679	J	2021-12-26	Montgomery County	0.0	HBV	10407	prevalence	spurbeck
+52	0	60208872	519.1454708818679	J	2021-12-19	Montgomery County	0.0	HBV	10407	prevalence	spurbeck
+53	0	22583173	519.1454708818679	J	2021-12-12	Montgomery County	0.0	HBV	10407	prevalence	spurbeck
+54	0	27717586	519.1454708818679	J	2021-12-05	Montgomery County	0.0	HBV	10407	prevalence	spurbeck
+55	0	26039331	519.1454708818679	A	2022-01-02	Summit County	0.0	HBV	10407	prevalence	spurbeck
+1	0	45434265	1000.0	Oakland	2020-06-30	Alameda County	0.0	HCV	11103	prevalence	crits_christoph
+2	0	41207484	1000.0	Marin	2020-07-01	Marin County	0.0	HCV	11103	prevalence	crits_christoph
+3	0	38572859	1000.0	Marin	2020-07-01	Marin County	0.0	HCV	11103	prevalence	crits_christoph
+4	0	47832942	1000.0	SF	2020-06-30	San Francisco County	0.0	HCV	11103	prevalence	crits_christoph
+5	0	48462833	1000.0	Oakland	2020-06-30	Alameda County	0.0	HCV	11103	prevalence	crits_christoph
+6	0	39759745	1000.0	Oakland	2020-06-30	Alameda County	0.0	HCV	11103	prevalence	crits_christoph
+7	0	36420649	1000.0	Berkeley	2020-06-30	Alameda County	0.0	HCV	11103	prevalence	crits_christoph
+1	0	2737872	1000.0	SB	2020-09-10	San Diego County	0.0	HCV	11103	prevalence	rothman
+2	0	6515759	1000.0	SB	2020-09-24	San Diego County	0.0	HCV	11103	prevalence	rothman
+3	0	3204232	1000.0	SB	2020-08-27	San Diego County	0.0	HCV	11103	prevalence	rothman
+4	0	2782200	1000.0	SB	2020-08-13	San Diego County	0.0	HCV	11103	prevalence	rothman
+5	0	3429177	1000.0	SB	2020-10-22	San Diego County	0.0	HCV	11103	prevalence	rothman
+6	0	3842559	1000.0	PL	2020-09-24	San Diego County	0.0	HCV	11103	prevalence	rothman
+7	0	4419124	1000.0	PL	2020-09-10	San Diego County	0.0	HCV	11103	prevalence	rothman
+8	0	3402804	1000.0	PL	2020-08-27	San Diego County	0.0	HCV	11103	prevalence	rothman
+9	0	3786318	1000.0	PL	2020-08-13	San Diego County	0.0	HCV	11103	prevalence	rothman
+10	0	3857662	1000.0	PL	2020-10-22	San Diego County	0.0	HCV	11103	prevalence	rothman
+11	0	3588085	1000.0	OC	2020-09-30	Orange County	0.0	HCV	11103	prevalence	rothman
+12	0	4520022	1000.0	OC	2020-09-23	Orange County	0.0	HCV	11103	prevalence	rothman
+13	0	1327075	1000.0	OC	2020-09-16	Orange County	0.0	HCV	11103	prevalence	rothman
+14	0	4874211	1000.0	OC	2020-09-03	Orange County	0.0	HCV	11103	prevalence	rothman
+15	0	3689634	1000.0	OC	2020-09-02	Orange County	0.0	HCV	11103	prevalence	rothman
+16	0	3283166	1000.0	OC	2020-08-26	Orange County	0.0	HCV	11103	prevalence	rothman
+17	0	3182825	1000.0	OC	2020-08-19	Orange County	0.0	HCV	11103	prevalence	rothman
+18	0	1292650	1000.0	OC	2020-08-12	Orange County	0.0	HCV	11103	prevalence	rothman
+19	0	3890259	1000.0	OC	2020-10-07	Orange County	0.0	HCV	11103	prevalence	rothman
+20	0	2901986	1000.0	NC	2020-09-11	San Diego County	0.0	HCV	11103	prevalence	rothman
+21	0	3467617	1000.0	NC	2020-08-28	San Diego County	0.0	HCV	11103	prevalence	rothman
+22	0	4099096	1000.0	NC	2020-08-14	San Diego County	0.0	HCV	11103	prevalence	rothman
+23	0	4124544	1000.0	NC	2020-10-23	San Diego County	0.0	HCV	11103	prevalence	rothman
+24	0	4902017	1000.0	NC	2020-10-09	San Diego County	0.0	HCV	11103	prevalence	rothman
+25	0	4514886	1000.0	JWPCP	2020-09-22	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+26	0	4234727	1000.0	JWPCP	2020-09-15	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+27	0	4018438	1000.0	JWPCP	2020-09-08	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+28	0	3630148	1000.0	JWPCP	2020-09-01	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+29	0	3183234	1000.0	JWPCP	2020-08-25	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+30	0	4059288	1000.0	JWPCP	2020-08-18	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+31	0	2102736	1000.0	JWPCP	2020-08-11	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+32	0	4221630	1000.0	JWPCP	2020-10-13	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+33	0	4832507	1000.0	JWPCP	2020-10-06	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+34	0	2374918	1000.0	JWPCP	2020-10-27	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+35	0	4362852	1000.0	JWPCP	2020-10-20	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+36	0	3579700	1000.0	HTP	2020-09-15	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+37	0	3551002	1000.0	HTP	2020-09-08	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+38	0	3604679	1000.0	HTP	2020-09-01	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+39	0	3486258	1000.0	HTP	2020-08-25	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+40	0	2800039	1000.0	HTP	2020-08-18	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+41	0	3318348	1000.0	HTP	2020-08-11	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+42	0	4215471	1000.0	HTP	2020-10-27	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+43	0	4350744	1000.0	HTP	2020-10-20	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+44	0	2179170	1000.0	HTP	2020-10-13	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+45	0	4595209	1000.0	HTP	2020-10-02	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+46	0	10246075	1000.0	SJ	2020-09-23	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+47	0	10232266	1000.0	SJ	2020-11-04	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+48	0	13154158	1000.0	SJ	2020-11-18	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+49	0	11601202	1000.0	SJ	2020-11-11	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+50	0	11389423	1000.0	SB	2020-11-05	San Diego County	0.0	HCV	11103	prevalence	rothman
+51	0	11257694	1000.0	SB	2020-10-08	San Diego County	0.0	HCV	11103	prevalence	rothman
+52	0	8833468	1000.0	PL	2020-12-28	San Diego County	0.0	HCV	11103	prevalence	rothman
+53	0	9334593	1000.0	PL	2020-12-22	San Diego County	0.0	HCV	11103	prevalence	rothman
+54	0	10305132	1000.0	PL	2020-12-14	San Diego County	0.0	HCV	11103	prevalence	rothman
+55	0	8153083	1000.0	PL	2020-11-05	San Diego County	0.0	HCV	11103	prevalence	rothman
+56	0	10775374	1000.0	PL	2020-11-30	San Diego County	0.0	HCV	11103	prevalence	rothman
+57	0	10112554	1000.0	PL	2020-11-29	San Diego County	0.0	HCV	11103	prevalence	rothman
+58	0	10182955	1000.0	PL	2021-01-04	San Diego County	0.0	HCV	11103	prevalence	rothman
+59	0	10140886	1000.0	PL	2021-01-03	San Diego County	0.0	HCV	11103	prevalence	rothman
+60	0	9826830	1000.0	OC	2020-12-21	Orange County	0.0	HCV	11103	prevalence	rothman
+61	0	9840771	1000.0	OC	2020-12-14	Orange County	0.0	HCV	11103	prevalence	rothman
+62	0	10616714	1000.0	OC	2020-11-09	Orange County	0.0	HCV	11103	prevalence	rothman
+63	0	8583928	1000.0	OC	2020-11-04	Orange County	0.0	HCV	11103	prevalence	rothman
+64	0	9408142	1000.0	OC	2020-11-25	Orange County	0.0	HCV	11103	prevalence	rothman
+65	0	10523877	1000.0	OC	2020-11-18	Orange County	0.0	HCV	11103	prevalence	rothman
+66	0	11667235	1000.0	OC	2020-11-11	Orange County	0.0	HCV	11103	prevalence	rothman
+67	0	9670784	1000.0	NC	2020-09-25	San Diego County	0.0	HCV	11103	prevalence	rothman
+68	0	12434072	1000.0	NC	2020-11-06	San Diego County	0.0	HCV	11103	prevalence	rothman
+69	0	10164300	1000.0	JWPCP	2020-09-29	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+70	0	11233097	1000.0	JWPCP	2020-11-03	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+71	0	12720283	1000.0	JWPCP	2020-11-17	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+72	0	9675052	1000.0	JWPCP	2020-11-10	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+73	0	13626688	1000.0	HTP	2020-09-29	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+74	0	12904150	1000.0	HTP	2020-09-22	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+75	0	11504066	1000.0	HTP	2020-12-29	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+76	0	8861526	1000.0	HTP	2020-12-22	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+77	0	11960233	1000.0	HTP	2020-12-15	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+78	0	10874604	1000.0	HTP	2020-12-04	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+79	0	11912829	1000.0	HTP	2020-12-01	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+80	0	11534523	1000.0	HTP	2020-11-03	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+81	0	11045877	1000.0	HTP	2020-11-24	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+82	0	16394657	1000.0	HTP	2020-11-17	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+83	0	9626457	1000.0	HTP	2021-01-03	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+84	0	2810576	1000.0	SJ	2020-09-30	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+85	0	3829748	1000.0	SJ	2020-09-16	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+86	0	3184286	1000.0	SJ	2020-09-09	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+87	0	3041921	1000.0	SJ	2020-09-02	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+88	0	3108434	1000.0	SJ	2020-08-26	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+89	0	3011011	1000.0	SJ	2020-08-19	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+90	0	3241686	1000.0	SJ	2020-08-12	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+91	0	4604124	1000.0	SJ	2020-10-28	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+92	0	4192507	1000.0	SJ	2020-10-21	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+93	0	5260005	1000.0	SJ	2020-10-14	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+94	0	4632349	1000.0	SJ	2020-10-07	Los Angeles County	0.0	HCV	11103	prevalence	rothman
+95	0	2413516	1000.0	OC	2020-10-21	Orange County	0.0	HCV	11103	prevalence	rothman
+96	0	16101528	1000.0	ESC	2020-07-27	San Diego County	0.0	HCV	11103	prevalence	rothman
+97	0	23482928	1000.0	ESC	2020-07-20	San Diego County	0.0	HCV	11103	prevalence	rothman
+1	0	34152465	1000.0	I	2022-01-09	Greene County	0.0	HCV	11103	prevalence	spurbeck
+2	0	15536236	1000.0	I	2022-01-02	Greene County	0.0	HCV	11103	prevalence	spurbeck
+3	0	24496461	1000.0	H	2021-12-26	Franklin County	0.0	HCV	11103	prevalence	spurbeck
+4	0	19873663	1000.0	H	2021-12-19	Franklin County	0.0	HCV	11103	prevalence	spurbeck
+5	0	65391438	1000.0	H	2021-12-05	Franklin County	0.0	HCV	11103	prevalence	spurbeck
+6	0	7683321	1000.0	H	2022-01-09	Franklin County	0.0	HCV	11103	prevalence	spurbeck
+7	0	106734757	1000.0	H	2022-01-02	Franklin County	0.0	HCV	11103	prevalence	spurbeck
+8	0	27498895	1000.0	G	2021-12-26	Licking County	0.0	HCV	11103	prevalence	spurbeck
+9	0	21866784	1000.0	G	2021-12-19	Licking County	0.0	HCV	11103	prevalence	spurbeck
+10	0	25615577	1000.0	A	2021-12-12	Summit County	0.0	HCV	11103	prevalence	spurbeck
+11	0	49701182	1000.0	G	2021-12-12	Licking County	0.0	HCV	11103	prevalence	spurbeck
+12	0	50541071	1000.0	G	2021-12-05	Licking County	0.0	HCV	11103	prevalence	spurbeck
+13	0	26758722	1000.0	G	2022-01-09	Licking County	0.0	HCV	11103	prevalence	spurbeck
+14	0	30488030	1000.0	G	2022-01-02	Licking County	0.0	HCV	11103	prevalence	spurbeck
+15	0	21587487	1000.0	F	2021-12-26	Franklin County	0.0	HCV	11103	prevalence	spurbeck
+16	0	21693115	1000.0	F	2021-12-19	Franklin County	0.0	HCV	11103	prevalence	spurbeck
+17	0	24611947	1000.0	F	2021-12-12	Franklin County	0.0	HCV	11103	prevalence	spurbeck
+18	0	10324347	1000.0	F	2021-12-05	Franklin County	0.0	HCV	11103	prevalence	spurbeck
+19	0	4526832	1000.0	F	2022-01-09	Franklin County	0.0	HCV	11103	prevalence	spurbeck
+20	0	26761777	1000.0	F	2022-01-02	Franklin County	0.0	HCV	11103	prevalence	spurbeck
+21	0	93165126	1000.0	A	2021-12-05	Summit County	0.0	HCV	11103	prevalence	spurbeck
+22	0	8675446	1000.0	E	2021-12-26	Sandusky County	0.0	HCV	11103	prevalence	spurbeck
+23	0	22756198	1000.0	E	2021-12-19	Sandusky County	0.0	HCV	11103	prevalence	spurbeck
+24	0	53418977	1000.0	E	2021-12-12	Sandusky County	0.0	HCV	11103	prevalence	spurbeck
+25	0	27489114	1000.0	E	2021-12-05	Sandusky County	0.0	HCV	11103	prevalence	spurbeck
+26	0	62643623	1000.0	E	2022-01-09	Sandusky County	0.0	HCV	11103	prevalence	spurbeck
+27	0	9885903	1000.0	E	2022-01-02	Sandusky County	0.0	HCV	11103	prevalence	spurbeck
+28	0	25194552	1000.0	D	2021-12-19	Lawrence County	0.0	HCV	11103	prevalence	spurbeck
+29	0	27576698	1000.0	D	2021-12-12	Lawrence County	0.0	HCV	11103	prevalence	spurbeck
+30	0	64262607	1000.0	D	2021-12-05	Lawrence County	0.0	HCV	11103	prevalence	spurbeck
+31	0	28567806	1000.0	J	2022-01-09	Montgomery County	0.0	HCV	11103	prevalence	spurbeck
+32	0	6390165	1000.0	J	2022-01-02	Montgomery County	0.0	HCV	11103	prevalence	spurbeck
+33	0	26423592	1000.0	I	2021-12-26	Greene County	0.0	HCV	11103	prevalence	spurbeck
+34	0	18922081	1000.0	I	2021-12-19	Greene County	0.0	HCV	11103	prevalence	spurbeck
+35	0	21319668	1000.0	I	2021-12-12	Greene County	0.0	HCV	11103	prevalence	spurbeck
+36	0	72582176	1000.0	A	2021-12-19	Summit County	0.0	HCV	11103	prevalence	spurbeck
+37	0	23726564	1000.0	I	2021-12-05	Greene County	0.0	HCV	11103	prevalence	spurbeck
+38	0	28732700	1000.0	D	2022-01-09	Lawrence County	0.0	HCV	11103	prevalence	spurbeck
+39	0	40626978	1000.0	A	2022-01-09	Summit County	0.0	HCV	11103	prevalence	spurbeck
+40	0	15260483	1000.0	C	2021-12-19	Lucas County	0.0	HCV	11103	prevalence	spurbeck
+41	0	93084891	1000.0	C	2021-12-05	Lucas County	0.0	HCV	11103	prevalence	spurbeck
+42	0	20057162	1000.0	C	2022-01-09	Lucas County	0.0	HCV	11103	prevalence	spurbeck
+43	0	35169394	1000.0	C	2022-01-02	Lucas County	0.0	HCV	11103	prevalence	spurbeck
+44	0	22987581	1000.0	B	2021-12-26	Trumbull County	0.0	HCV	11103	prevalence	spurbeck
+45	0	50531562	1000.0	B	2021-12-19	Trumbull County	0.0	HCV	11103	prevalence	spurbeck
+46	0	19233869	1000.0	B	2021-12-12	Trumbull County	0.0	HCV	11103	prevalence	spurbeck
+47	0	55741383	1000.0	B	2021-12-05	Trumbull County	0.0	HCV	11103	prevalence	spurbeck
+48	0	12644434	1000.0	B	2022-01-09	Trumbull County	0.0	HCV	11103	prevalence	spurbeck
+49	0	40871463	1000.0	B	2022-01-02	Trumbull County	0.0	HCV	11103	prevalence	spurbeck
+50	0	25003302	1000.0	A	2021-12-26	Summit County	0.0	HCV	11103	prevalence	spurbeck
+51	0	32262151	1000.0	J	2021-12-26	Montgomery County	0.0	HCV	11103	prevalence	spurbeck
+52	0	60208872	1000.0	J	2021-12-19	Montgomery County	0.0	HCV	11103	prevalence	spurbeck
+53	0	22583173	1000.0	J	2021-12-12	Montgomery County	0.0	HCV	11103	prevalence	spurbeck
+54	0	27717586	1000.0	J	2021-12-05	Montgomery County	0.0	HCV	11103	prevalence	spurbeck
+55	0	26039331	1000.0	A	2022-01-02	Summit County	0.0	HCV	11103	prevalence	spurbeck
