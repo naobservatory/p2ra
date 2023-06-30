@@ -48,6 +48,7 @@ german_seroprevalence_2008_2011 = Prevalence(
 
 def estimate_prevalences() -> list[Prevalence]:
     # HSV_1 prevalence should be close to constant, so extrapolate from
+    # 2015-2016 to 2020 and 2021.
     us_2020 = dataclasses.replace(
         cdc_2015_2016_nhanes_estimate, date_source=Variable(date="2020")
     )
@@ -59,7 +60,7 @@ def estimate_prevalences() -> list[Prevalence]:
     # enough to extrapolate German seroprevalence data to Denmark.
     # We furthermore assume that HSV-1 prevalence remains constant over time,
     # extrapolating measurements to 2015-2018.
-    # 2015-2016 to 2020 and 2021.
+
     dk_2015 = dataclasses.replace(
         german_seroprevalence_2008_2011,
         date_source=Variable(date="2015"),
