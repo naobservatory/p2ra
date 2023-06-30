@@ -37,14 +37,14 @@ seroprevalence_hemophilia_global_2021 = Prevalence(
 
 
 def denmark_extrapolated_seroprevalence() -> Prevalence:
-    # Taking weighted average of Northern European AAV-2 seropositivity
-    # numbers from Figure 1C, combined with participant numbers taken from the supplement.
     seroprevalence_by_country = {
-        "France": {87: 0.605},
+        "France": {
+            87: 0.605,
+        },
         "Germany": {90: 0.483},
         "United Kingdom": {17: 0.647},
     }
-    pairs: list[tuple[Prevalence, Population]] = []
+    pairs: dict[tuple[Population, Prevalence]] = []
     for country, vals in seroprevalence_by_country.items():
         for n_participants, seroprevalence in vals.items():
             pairs.append(
@@ -88,32 +88,11 @@ def estimate_prevalences() -> list[Prevalence]:
     us_2021 = dataclasses.replace(
         us_2020,
         date_source=Variable(date="2021"),
-    )
-
-    # Extrapolating Denmark estimate backward in time to 2015-2018:
-    dk_2015 = dataclasses.replace(
-        denmark_extrapolated_seroprevalence(),
-        date_source=Variable(date="2015"),
-    )
-    dk_2016 = dataclasses.replace(
-        denmark_extrapolated_seroprevalence(),
-        date_source=Variable(date="2016"),
-    )
-    dk_2017 = dataclasses.replace(
-        denmark_extrapolated_seroprevalence(),
-        date_source=Variable(date="2017"),
-    )
-    dk_2018 = dataclasses.replace(
-        denmark_extrapolated_seroprevalence(),
-        date_source=Variable(date="2018"),
+        # We also assume that Denmark seroprevalence will be similar to the global estimate, given that global seroprevalence (58.8 %) broadly matches numbers for France (54.7%), Germany (48.3%) and Italy (45.5%)
     )
     return [
         us_2020,
         us_2021,
-        dk_2015,
-        dk_2016,
-        dk_2017,
-        dk_2018,
         denmark_extrapolated_seroprevalence(),
     ]
 
