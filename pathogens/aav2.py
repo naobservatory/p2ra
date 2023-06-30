@@ -27,48 +27,13 @@ seroprevalence_hemophilia_global_2021 = Prevalence(
     # Demographic composition:
     # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=
     # (93K%2C%20docx)-,Supplemental%20data%3A,-Click%20here%20to
-    date="2022",
+    date="2021",
     active=Active.LATENT,
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=Seropositivity%20for%20(A)%20the%20global%20population"
     # This number matches AAV-2 seroprevalence in a study of 101 males with
     # Duchenne Muscular Dystrophy, showing a seroprevalence of 56%:
     # "https://pubmed.ncbi.nlm.nih.gov/36324212/#:~:text=We%20prospectively%20enrolled,and%20AAV8%20(47%25)."
 )
-
-
-def denmark_extrapolated_seroprevalence() -> Prevalence:
-    seroprevalence_by_country = {
-        "France": {
-            87: 0.605,
-        },
-        "Germany": {90: 0.483},
-        "United Kingdom": {17: 0.647},
-    }
-    pairs: dict[tuple[Population, Prevalence]] = []
-    for country, vals in seroprevalence_by_country.items():
-        for n_participants, seroprevalence in vals.items():
-            pairs.append(
-                (
-                    Prevalence(
-                        infections_per_100k=seroprevalence * 100_000,
-                        number_of_participants=n_participants,
-                        country=country,
-                        date="2022",
-                        active=Active.LATENT,
-                        source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=Seropositivity%20for%20(A)%20the%20global%20population",
-                    ),
-                    Population(
-                        people=n_participants,
-                        date="2022",
-                        country=country,
-                        source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=(93K%2C%20docx)-,Supplemental%20data%3A,-Click%20here%20to",
-                    ),
-                )
-            )
-    return dataclasses.replace(
-        Prevalence.weightedAverageByPopulation(*pairs),
-        location_source=Variable(country="Denmark"),
-    )
 
 
 def estimate_prevalences() -> list[Prevalence]:
@@ -88,12 +53,10 @@ def estimate_prevalences() -> list[Prevalence]:
     us_2021 = dataclasses.replace(
         us_2020,
         date_source=Variable(date="2021"),
-        # We also assume that Denmark seroprevalence will be similar to the global estimate, given that global seroprevalence (58.8 %) broadly matches numbers for France (54.7%), Germany (48.3%) and Italy (45.5%)
     )
     return [
         us_2020,
         us_2021,
-        denmark_extrapolated_seroprevalence(),
     ]
 
 
