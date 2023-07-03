@@ -32,7 +32,7 @@ dk_male_conscripts_seroprevalence_2016 = Prevalence(
     # The study participants were 18 to 65 years of age; 69.0% were younger
     # than 21 years (mean, 23 years) and 14.5% were 30 years or older."
     country="Denmark",
-    date="2015",
+    date="2016",
     active=Active.LATENT,
     source="https://journals.lww.com/stdjournal/Fulltext/2015/08000/Human_Papillomavirus_Infection_Among_2460_Men_in.12.aspx#:~:text=With%20the%20PCR%20test%2C%20the%20HPV%20prevalence%20was%2041.8%25%3B%20730%20(30.0%25)%20men%20had%20HR%20types%20and%20279%20(11.5%25)%20had%20LR%20types.%20In%20183%20PCR%2Dpositive%20men%20(7.5%25)%2C%20the%20HPV%20type%20could%20not%20be%20identified%20and%20they%20were%20classified%20as%20HPVX%20positive%20(Table%202).",
 )
@@ -86,22 +86,22 @@ def estimate_prevalences():
     # NHANES HPV measurements of men (41.8%) and women (38.4%) are similar,
     # we can thus extrapolate male Danish prevalence to the whole population.
     dk_2015 = dataclasses.replace(
-        dk_conscripts_seroprevalence_2016,
+        dk_male_conscripts_seroprevalence_2016,
         date_source=Variable(date="2015"),
     )
     dk_2017 = dataclasses.replace(
-        dk_conscripts_seroprevalence_2016,
+        dk_male_conscripts_seroprevalence_2016,
         date_source=Variable(date="2017"),
     )
     dk_2018 = dataclasses.replace(
-        dk_conscripts_seroprevalence_2016,
+        dk_male_conscripts_seroprevalence_2016,
         date_source=Variable(date="2018"),
     )
     return [
         us_2020,
         us_2021,
         dk_2015,
-        dk_conscripts_seroprevalence_2016,
+        dk_male_conscripts_seroprevalence_2016,
         dk_2017,
         dk_2018,
     ]
