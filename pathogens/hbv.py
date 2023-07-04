@@ -26,6 +26,19 @@ pathogen_chars = PathogenChars(
     selection=SelectionRound.ROUND_1,
 )
 
+denmark_estimated_chronic_2007 = Prevalence(
+    infections_per_100k=0.0024 * 100_000,
+    # "the total national estimate was 10,668 (95% CI: 10,224–16,164),
+    # corresponding to a prevalence of 0.24% (95% CI: 0.23–0.37%) in the
+    # Danish population older than 15 years."
+    confidence_interval=(0.0023 * 100_000, 0.0037 * 100_000),  # 95% CI
+    coverage_probability=0.95,
+    active=Active.LATENT,
+    country="Denmark",
+    date="2007",
+    source="https://www.eurosurveillance.org/content/10.2807/1560-7917.ES2013.18.47.20637#:~:text=the%20total%20national%20estimate%20was%2010%2C668%20(95%25%20CI%3A%2010%2C224%E2%80%9316%2C164)%2C%20corresponding%20to%20a%20prevalence%20of%200.24%25%20(95%25%20CI%3A%200.23%E2%80%930.37%25)%20in%20the%20Danish%20population%20older%20than%2015%20years.",
+)
+
 us_population_2019 = Population(
     people=328.2 * 1e6,
     country="United States",
@@ -96,8 +109,25 @@ def estimate_prevalences() -> list[Prevalence]:
     chronic_2021 = dataclasses.replace(
         chronic_2020, date_source=Variable(date="2021")
     )
+    dk_2015 = dataclasses.replace(
+        denmark_estimated_chronic_2007, date_source=Variable(date="2015")
+    )
+    dk_2016 = dataclasses.replace(
+        denmark_estimated_chronic_2007, date_source=Variable(date="2016")
+    )
+    dk_2017 = dataclasses.replace(
+        denmark_estimated_chronic_2007, date_source=Variable(date="2017")
+    )
+    dk_2018 = dataclasses.replace(
+        denmark_estimated_chronic_2007, date_source=Variable(date="2018")
+    )
 
     return [
+        denmark_estimated_chronic_2007,
+        dk_2015,
+        dk_2016,
+        dk_2017,
+        dk_2018,
         chronic_2020,
         chronic_2021,
     ]
