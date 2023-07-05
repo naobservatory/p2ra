@@ -37,39 +37,39 @@ seroprevalence_hemophilia_global_2021 = Prevalence(
 )
 
 
-def denmark_extrapolated_seroprevalence() -> Prevalence:
+def northern_european_average_seroprevalence() -> Prevalence:
     # Taking weighted average of Northern European AAV-6 seropositivity
     # numbers from Figure 1E, combined with participant numbers taken from the supplement.
     seroprevalence_by_country = {
-        "France": {87: 0.547},
-        "Germany": {90: 0.438},
-        "United Kingdom": {17: 0.412},
+        "France": (87, 0.547),
+        "Germany": (90, 0.438),
+        "United Kingdom": (17, 0.412),
     }
-    pairs: list[tuple[Prevalence, Population]] = []
-    for country, vals in seroprevalence_by_country.items():
-        for n_participants, seroprevalence in vals.items():
-            pairs.append(
-                (
-                    Prevalence(
-                        infections_per_100k=seroprevalence * 100_000,
-                        number_of_participants=n_participants,
-                        country=country,
-                        date="2022",
-                        active=Active.LATENT,
-                        source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=Seropositivity%20for%20(A)%20the%20global%20population",
-                    ),
-                    Population(
-                        people=n_participants,
-                        date="2022",
-                        country=country,
-                        source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=(93K%2C%20docx)-,Supplemental%20data%3A,-Click%20here%20to",
-                    ),
-                )
-            )
-    return dataclasses.replace(
-        Prevalence.weightedAverageByPopulation(*pairs),
-        location_source=Variable(country="Denmark"),
-    )
+    prevalence_population_pairs: list[tuple[Prevalence, Population]] = []
+    prevalence_population_pairs = [
+        (
+            Prevalence(
+                infections_per_100k=seroprevalence * 100_000,
+                number_of_participants=n_participants,
+                country=country,
+                date="2022",
+                active=Active.LATENT,
+                source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=Seropositivity%20for%20(A)%20the%20global%20population",
+            ),
+            Population(
+                people=n_participants,
+                date="2022",
+                country=country,
+                source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=(93K%2C%20docx)-,Supplemental%20data%3A,-Click%20here%20to",
+            ),
+        )
+        for country, (
+            n_participants,
+            seroprevalence,
+        ) in seroprevalence_by_country.items()
+    ]
+
+    return Prevalence.weightedAverageByPopulation(*prevalence_population_pairs)
 
 
 def estimate_prevalences() -> list[Prevalence]:
@@ -91,22 +91,28 @@ def estimate_prevalences() -> list[Prevalence]:
     )
 
     # Extrapolating Denmark estimate backward in time to 2015-2018:
+    northern_europe_2022 = northern_european_average_seroprevalence()
     dk_2015 = dataclasses.replace(
-        denmark_extrapolated_seroprevalence(),
+        northern_europe_2022,
         date_source=Variable(date="2015"),
+        location_source=Variable(country="Denmark"),
     )
     dk_2016 = dataclasses.replace(
-        denmark_extrapolated_seroprevalence(),
+        northern_europe_2022,
         date_source=Variable(date="2016"),
+        location_source=Variable(country="Denmark"),
     )
     dk_2017 = dataclasses.replace(
-        denmark_extrapolated_seroprevalence(),
+        northern_europe_2022,
         date_source=Variable(date="2017"),
+        location_source=Variable(country="Denmark"),
     )
     dk_2018 = dataclasses.replace(
-        denmark_extrapolated_seroprevalence(),
+        northern_europe_2022,
         date_source=Variable(date="2018"),
+        location_source=Variable(country="Denmark"),
     )
+
     return [
         us_2020,
         us_2021,
