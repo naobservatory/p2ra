@@ -67,6 +67,10 @@ def northern_european_average_seroprevalence() -> Prevalence:
             seroprevalence,
         ) in seroprevalence_by_country.items()
     ]
+    # Assuming that the difference in seroprevalences between countries is
+    # largely driven by the small sample sizes, not by in-between-country
+    # differences, we weigh country prevalences by the respective number of
+    # participants.
 
     return Prevalence.weightedAverageByPopulation(*prevalence_population_pairs)
 
