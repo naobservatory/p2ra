@@ -1,6 +1,6 @@
 pystan~=3.6
 numpy
-pydantic
+pydantic~=1.10
 pandas
 matplotlib
 seaborn
