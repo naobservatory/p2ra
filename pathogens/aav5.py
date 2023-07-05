@@ -86,7 +86,8 @@ def estimate_prevalences() -> list[Prevalence]:
         date_source=Variable(date="2021"),
     )
 
-    # Extrapolating Denmark estimate backward in time to 2015-2018:
+    # Extrapolating Northern European 2022 estimate to Denmark, backward in
+    # time to 2015-2018:
     northern_europe_2022 = northern_european_average_seroprevalence()
     dk_2015 = dataclasses.replace(
         northern_europe_2022,
