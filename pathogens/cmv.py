@@ -38,12 +38,13 @@ dutch_seroprevalence_2006 = Prevalence(
     infections_per_100k=0.456 * 100_000,
     confidence_interval=(0.419 * 100_000, 0.493 * 100_000),  # 95% CI
     active=Active.LATENT,
-    number_of_participants=6249,
+    number_of_participants=6382,
     # "This study used information from the PIENTER2 project, a crosssectional
     # population-based serum bank established in 2006–2007.[...]
     # A total of 19,781 individuals, including 2558 non-Western migrants, were
     # invited to complete a questionnaire and donate a blood sample. Serum
-    # samples were obtained from 6386 individuals (32%)."
+    # samples were obtained from 6386 individuals (32%). Sufficient serum to
+    # test for CMV antibodies was available from 6382 participants.
     source="https://doi.org/10.1016/j.jcv.2014.11.033",  # Page 4, heading 4.2
     country="Netherlands",
     date="2006",
