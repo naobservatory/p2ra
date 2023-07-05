@@ -31,7 +31,7 @@ denmark_estimated_chronic_2007 = Prevalence(
     # "the total national estimate was 10,668 (95% CI: 10,224–16,164),
     # corresponding to a prevalence of 0.24% (95% CI: 0.23–0.37%) in the
     # Danish population older than 15 years."
-    confidence_interval=(0.0023 * 100_000, 0.0037 * 100_000),  # 95% CI
+    confidence_interval=(0.0023 * 100_000, 0.0037 * 100_000),
     coverage_probability=0.95,
     active=Active.LATENT,
     country="Denmark",
