@@ -96,6 +96,7 @@ us_population_2018_18_to_49yo = Population(
 german_seroprevalence_2008_2011 = Prevalence(
     infections_per_100k=0.094 * 100_000,
     confidence_interval=(0.083 * 100_000, 0.105 * 100_000),  # 95% CI
+    coverage_probability=0.95,
     # "Weighted seroprevalence of HSV2:
     # The overall seroprevalence of HSV2 in the DEGS was 9.4% (95%CI 8.3–10.5)."
     number_of_participants=5013,

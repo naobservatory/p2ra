@@ -32,6 +32,7 @@ cdc_2015_2016_nhanes_estimate = Prevalence(
 german_seroprevalence_2008_2011 = Prevalence(
     infections_per_100k=0.787 * 100_000,
     confidence_interval=(0.772 * 100_000, 0.801 * 100_000),  # 95% CI
+    coverage_probability=0.95,
     # "Weighted seroprevalence of HSV1:
     # The overall seroprevalence of HSV1 in the DEGS was 78.7% (95%CI 77.2–80.
     # 1).""
