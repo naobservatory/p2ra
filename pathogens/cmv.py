@@ -32,7 +32,7 @@ de_adult_seroprevalence_1998 = Prevalence(
     source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6059406/#:~:text=Overall%20CMV%20seroprevalence,Germany%20in%20women",
 )
 
-dutch_seroprevalence_2006 = Prevalence(
+nl_seroprevalence_2006 = Prevalence(
     # "The CMV seroprevalence in the general population (6 months–79 years)
     # was 45.6%.""
     infections_per_100k=0.456 * 100_000,
@@ -105,20 +105,20 @@ def estimate_prevalences():
     # Note the limitation noted in Issue #198: https://github.com/
     # naobservatory/p2ra/issues/198
     dk_2015 = dataclasses.replace(
-        dutch_seroprevalence_2006,
+        nl_seroprevalence_2006,
         date_source=Variable(date="2015"),
         location_source=Variable(country="Denmark"),
     )
     dk_2016 = dataclasses.replace(
-        dk_2015,
+        nl_seroprevalence_2006,
         date_source=Variable(date="2016"),
     )
     dk_2017 = dataclasses.replace(
-        dk_2015,
+        nl_seroprevalence_2006,
         date_source=Variable(date="2017"),
     )
     dk_2018 = dataclasses.replace(
-        dk_2015,
+        nl_seroprevalence_2006,
         date_source=Variable(date="2018"),
     )
     # CMV should be close to constant, so extrapolate from 2003-2010 to
@@ -141,7 +141,7 @@ def estimate_prevalences():
         us_2020,
         us_2021,
         nhanes_6_to_49_US_seroprevalence_1999_2004,
-        dutch_seroprevalence_2006,
+        nl_seroprevalence_2006,
         de_adult_seroprevalence_1998,
         adult_seroprevalence_raleigh_durham_US_2020,
     ]
