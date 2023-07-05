@@ -20,6 +20,7 @@ pathogen_chars = PathogenChars(
     selection=SelectionRound.ROUND_1,
 )
 
+<<<<<<< HEAD
 dk_male_conscripts_seroprevalence_2016 = Prevalence(
     infections_per_100k=0.418 * 100_000,
     confidence_interval=(0.399 * 100_000, 0.438 * 100_000),  # 95% CI
@@ -36,6 +37,8 @@ dk_male_conscripts_seroprevalence_2016 = Prevalence(
     active=Active.LATENT,
     source="https://journals.lww.com/stdjournal/Fulltext/2015/08000/Human_Papillomavirus_Infection_Among_2460_Men_in.12.aspx#:~:text=With%20the%20PCR%20test%2C%20the%20HPV%20prevalence%20was%2041.8%25%3B%20730%20(30.0%25)%20men%20had%20HR%20types%20and%20279%20(11.5%25)%20had%20LR%20types.%20In%20183%20PCR%2Dpositive%20men%20(7.5%25)%2C%20the%20HPV%20type%20could%20not%20be%20identified%20and%20they%20were%20classified%20as%20HPVX%20positive%20(Table%202).",
 )
+=======
+>>>>>>> parent of fea174d (Added Denmark 2016 conscript study, extrapolated to entire population 2015-2018.)
 
 nhanes_2013_2016_18_59_yo_prevalence = Prevalence(
     # Among 15–59-year-olds, 2013–2016 prevalence of any HPV infection was 40%
@@ -73,6 +76,7 @@ def estimate_prevalences():
     # is a 9-valent vaccine that got rolled out in 2016, this should not have
     # a very large effect on prevalence, as only young individuals are
     # vaccinated.
+<<<<<<< HEAD
     us_2020 = dataclasses.replace(
         nhanes_2013_2016_18_59_yo_prevalence,
         date_source=Variable(date="2020"),
@@ -104,6 +108,17 @@ def estimate_prevalences():
         dk_male_conscripts_seroprevalence_2016,
         dk_2017,
         dk_2018,
+=======
+    return [
+        dataclasses.replace(
+            nhanes_2013_2016_18_59_yo_prevalence,
+            date_source=Variable(date="2020"),
+        ),
+        dataclasses.replace(
+            nhanes_2013_2016_18_59_yo_prevalence,
+            date_source=Variable(date="2021"),
+        ),
+>>>>>>> parent of fea174d (Added Denmark 2016 conscript study, extrapolated to entire population 2015-2018.)
     ]
 
 
