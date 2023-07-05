@@ -37,6 +37,7 @@ dutch_seroprevalence_2006 = Prevalence(
     # was 45.6%.""
     infections_per_100k=0.456 * 100_000,
     confidence_interval=(0.419 * 100_000, 0.493 * 100_000),  # 95% CI
+    coverage_probability=0.95,
     active=Active.LATENT,
     number_of_participants=6382,
     # "This study used information from the PIENTER2 project, a crosssectional
