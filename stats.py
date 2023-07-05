@@ -378,22 +378,28 @@ def choose_predictor(predictors: list[Predictor]) -> Predictor:
 
 def build_model(
     mgs_data: MGSData,
-    bioproject: BioProject,
+    bioprojects: list[BioProject],
     predictors: list[Predictor],
     taxids: frozenset[TaxID],
     random_seed: int,
+    enrichment: Optional[Enrichment],
 ) -> Model:
-    samples = mgs_data.sample_attributes(
-        bioproject, enrichment=Enrichment.VIRAL
-    )
+    all_sample_attributes = {}  # sample -> attributes
+    study_viral_reads = {}  # sample -> viral_reads
+    for bioproject in bioprojects:
+        sample_attributes = mgs_data.sample_attributes(
+            bioproject, enrichment=enrichment
+        )
+        all_sample_attributes.update(sample_attributes)
+        study_viral_reads.update(mgs_data.viral_reads(bioproject, taxids))
     data = [
         DataPoint(
-            sample=s,
+            sample=sample,
             attrs=attrs,
-            viral_reads=mgs_data.viral_reads(bioproject, taxids)[s],
+            viral_reads=study_viral_reads[sample],
             predictor=choose_predictor(lookup_variables(attrs, predictors)),
         )
-        for s, attrs in samples.items()
+        for sample, attrs in all_sample_attributes.items()
     ]
     return Model(data=data, random_seed=random_seed)
 
