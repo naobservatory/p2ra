@@ -73,7 +73,7 @@ class SampleAttributes(BaseModel):
     # Fixme: Not all the dates are real dates
     date: date | str
     reads: int
-    enrichment: Optional[Enrichment]
+    enrichment: Optional[Enrichment] = None
     method: Optional[str] = None
 
 
