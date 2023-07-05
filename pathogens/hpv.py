@@ -23,6 +23,11 @@ pathogen_chars = PathogenChars(
 dk_male_conscripts_seroprevalence_2016 = Prevalence(
     infections_per_100k=0.418 * 100_000,
     confidence_interval=(0.399 * 100_000, 0.438 * 100_000),  # 95% CI
+    # The study used both the "hybrid capture 2" (HC2) method and PCR for
+    # detection. We use PCR numbers here, as it is more sensitive:
+    # "Most (97.0%) of the 1417 PCR-negative men were also HC2 negative,
+    # whereas 50.9% of the 1019 PCR-positive men were HC2 negative."
+    #
     # "The overall HPV prevalence was [...] 41.8% (95% CI, 39.9–43.8) with
     # PCR. "
     number_of_participants=2436,
