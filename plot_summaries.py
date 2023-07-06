@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt  # type: ignore
 import pandas as pd
 import seaborn as sns  # type: ignore
 
-from mgs import rna_bioprojects
-
 study_order = ["Crits-Christoph", "Rothman", "Spurbeck"]
 
 plt.rcParams["font.size"] = 8

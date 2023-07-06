@@ -30,7 +30,7 @@ def start():
     row_scores = []
     col_names = ["Nucleic Acid", "Predictor", "Selection"] + [
         "-".join(word.capitalize() for word in author.split("_"))
-        for author in sorted(mgs.rna_bioprojects)
+        for author in sorted(mgs.target_bioprojects)
     ]
     # columns: studies
     # rows: pathogens
@@ -61,21 +61,26 @@ def start():
 
         row_score = 0
 
-        for study, bioproject in sorted(mgs.rna_bioprojects.items()):
-            matching_reads = mgs_data.viral_reads(bioproject, taxids)
-            viral_samples = mgs_data.sample_attributes(
-                bioproject,
-                enrichment=mgs.Enrichment.VIRAL,
-            )
-
-            n_samples = len(viral_samples)
-            counts = [
-                count
-                for sample, count in matching_reads.items()
-                if sample in viral_samples and count
-            ]
-            n_samples_with_match = len(counts)
-            n_matches = sum(counts)
+        for study, bioprojects in sorted(mgs.target_bioprojects.items()):
+            n_samples = 0
+            n_samples_with_match = 0
+            n_matches = 0
+            for bioproject in bioprojects:
+                matching_reads = mgs_data.viral_reads(bioproject, taxids)
+                viral_samples = mgs_data.sample_attributes(
+                    bioproject,
+                    enrichment=None
+                    if study == "brinch"
+                    else mgs.Enrichment.VIRAL,
+                )
+                n_samples += len(viral_samples)
+                counts = [
+                    count
+                    for sample, count in matching_reads.items()
+                    if sample in viral_samples and count
+                ]
+                n_samples_with_match += len(counts)
+                n_matches += sum(counts)
 
             ratio = n_samples_with_match / n_samples
             if n_samples_with_match == 0:

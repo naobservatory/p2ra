@@ -247,9 +247,10 @@ class TestMGS(unittest.TestCase):
 
     def test_load_bioprojects(self):
         bps = mgs.load_bioprojects(self.repo)
-        for study, bp in mgs.rna_bioprojects.items():
+        for study, study_bps in mgs.target_bioprojects.items():
             with self.subTest(study=study):
-                self.assertIn(bp, bps)
+                for bp in study_bps:
+                    self.assertIn(bp, bps)
 
     def test_load_sample_attributes(self):
         samples = mgs.load_sample_attributes(self.repo)
@@ -318,7 +319,7 @@ class TestWeightedAverageByPopulation(unittest.TestCase):
 
 class TestMGSData(unittest.TestCase):
     mgs_data = mgs.MGSData.from_repo()
-    bioproject = mgs.rna_bioprojects["rothman"]
+    (bioproject,) = mgs.target_bioprojects["rothman"]
     sample = mgs.Sample("SRR14530726")  # Random Rothman sample
     taxids = pathogens.pathogens["norovirus"].pathogen_chars.taxids
 
@@ -557,34 +558,44 @@ class TestStats(unittest.TestCase):
             taxids,
             predictors,
         ) in pathogens.predictors_by_taxid():
-            for study, bioproject in mgs.rna_bioprojects.items():
+            for study, bioprojects in mgs.target_bioprojects.items():
                 with self.subTest(
                     pathogen=pathogen_name,
                     taxids=taxids,
                     predictor=predictor_type,
                     study=study,
                 ):
+                    if study == "brinch":
+                        # TODO: can't include Brinch here until we extend our
+                        # public health estimates to cover Denmark.
+                        continue
+                    enrichment = (
+                        None if study == "brinch" else mgs.Enrichment.VIRAL
+                    )
                     model = stats.build_model(
                         mgs_data,
-                        bioproject,
+                        bioprojects,
                         predictors,
                         taxids,
                         random_seed=1,
+                        enrichment=enrichment,
                     )
-                    self.assertEqual(
-                        len(model.data),
-                        len(
+                    all_sample_attributes = {}
+                    for bioproject in bioprojects:
+                        all_sample_attributes.update(
                             mgs_data.sample_attributes(
                                 bioproject,
-                                enrichment=mgs.Enrichment.VIRAL,
+                                enrichment=enrichment,
                             )
-                        ),
+                        )
+                    self.assertEqual(
+                        len(model.data), len(all_sample_attributes)
                     )
 
     def test_fit_model(self):
         mgs_data = mgs.MGSData.from_repo()
         pathogen = pathogens.pathogens["sars_cov_2"]
-        bioproject = mgs.rna_bioprojects["rothman"]
+        bioprojects = mgs.target_bioprojects["rothman"]
         taxids, predictors = next(
             iter(
                 by_taxids(
@@ -595,10 +606,11 @@ class TestStats(unittest.TestCase):
         )
         model = stats.build_model(
             mgs_data,
-            bioproject,
+            bioprojects,
             predictors,
             taxids,
             random_seed=1,
+            enrichment=mgs.Enrichment.VIRAL,
         )
         self.assertIsNone(model.fit)
         self.assertIsNone(model.output_df)
@@ -625,28 +637,32 @@ class TestPathogensMatchStudies(unittest.TestCase):
             taxids,
             predictors,
         ) in pathogens.predictors_by_taxid():
-            for study, bioproject in mgs.rna_bioprojects.items():
-                with self.subTest(
-                    pathogen=pathogen_name,
-                    taxids=taxids,
-                    predictor=predictor_type,
-                    study=study,
-                ):
-                    for (
-                        sample,
-                        sample_attributes,
-                    ) in mgs_data.sample_attributes(
-                        bioproject, enrichment=mgs.Enrichment.VIRAL
-                    ).items():
-                        with self.subTest(sample=sample):
-                            chosen_predictors = stats.lookup_variables(
-                                sample_attributes, predictors
-                            )
-                            self.assertNotEqual(chosen_predictors, [])
+            for study, bioprojects in mgs.target_bioprojects.items():
+                for bioproject in bioprojects:
+                    with self.subTest(
+                        pathogen=pathogen_name,
+                        taxids=taxids,
+                        predictor=predictor_type,
+                        study=study,
+                        bioproject=bioproject,
+                    ):
+                        for (
+                            sample,
+                            sample_attributes,
+                        ) in mgs_data.sample_attributes(
+                            bioproject, enrichment=mgs.Enrichment.VIRAL
+                        ).items():
+                            with self.subTest(sample=sample):
+                                chosen_predictors = stats.lookup_variables(
+                                    sample_attributes, predictors
+                                )
+                                self.assertNotEqual(chosen_predictors, [])
 
-                            for predictor in chosen_predictors:
-                                with self.subTest(predictor=predictor):
-                                    self.assertGreater(predictor.get_data(), 0)
+                                for predictor in chosen_predictors:
+                                    with self.subTest(predictor=predictor):
+                                        self.assertGreater(
+                                            predictor.get_data(), 0
+                                        )
 
 
 if __name__ == "__main__":

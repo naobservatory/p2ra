@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 import stats
-from mgs import MGSData, rna_bioprojects
+from mgs import Enrichment, MGSData, target_bioprojects
 from pathogens import predictors_by_taxid
 
 
@@ -29,13 +29,15 @@ def start(num_samples: int, plot: bool) -> None:
         predictors,
     ) in predictors_by_taxid():
         taxids_str = "_".join(str(t) for t in taxids)
-        for study, bioproject in rna_bioprojects.items():
+        for study, bioprojects in target_bioprojects.items():
+            enrichment = None if study == "brinch" else Enrichment.VIRAL
             model = stats.build_model(
                 mgs_data,
-                bioproject,
+                bioprojects,
                 predictors,
                 taxids,
                 random_seed=sum(taxids),
+                enrichment=enrichment,
             )
             model.fit_model(num_samples=num_samples)
             if plot:
