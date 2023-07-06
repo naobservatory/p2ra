@@ -384,13 +384,12 @@ def build_model(
     random_seed: int,
     enrichment: Optional[Enrichment],
 ) -> Model:
-    all_sample_attributes = {}  # sample -> attributes
+    sample_attributes = {}  # sample -> attributes
     study_viral_reads = {}  # sample -> viral_reads
     for bioproject in bioprojects:
-        sample_attributes = mgs_data.sample_attributes(
-            bioproject, enrichment=enrichment
+        sample_attributes.update(
+            mgs_data.sample_attributes(bioproject, enrichment=enrichment)
         )
-        all_sample_attributes.update(sample_attributes)
         study_viral_reads.update(mgs_data.viral_reads(bioproject, taxids))
     data = [
         DataPoint(
@@ -399,7 +398,7 @@ def build_model(
             viral_reads=study_viral_reads[sample],
             predictor=choose_predictor(lookup_variables(attrs, predictors)),
         )
-        for sample, attrs in all_sample_attributes.items()
+        for sample, attrs in sample_attributes.items()
     ]
     return Model(data=data, random_seed=random_seed)
 
