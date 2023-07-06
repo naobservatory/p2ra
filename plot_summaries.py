@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt  # type: ignore
 import pandas as pd
 import seaborn as sns  # type: ignore
 
-from mgs import rna_bioprojects
+from mgs import target_bioprojects
 
 
 def plot_overall(data: pd.DataFrame) -> plt.Figure:
@@ -25,7 +25,7 @@ def plot_overall(data: pd.DataFrame) -> plt.Figure:
 
 def plot_by_location(data: pd.DataFrame) -> plt.Figure:
     fig = plt.figure(figsize=(30, 15))
-    for i, study in enumerate(rna_bioprojects):
+    for i, study in enumerate(target_bioprojects):
         ax = fig.add_subplot(1, 3, i + 1)
         sns.boxenplot(
             ax=ax,
