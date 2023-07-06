@@ -42,7 +42,7 @@ def northern_european_average_seroprevalence() -> Prevalence:
     # supplement. We do this, because differences in seroprevalence between
     # countries are likely driven by small sample sizes, not by in-between-
     # country differences.
-    seroprevalence_by_country = {
+    participants_and_seroprevalence_by_country = {
         "France": (87, 0.605),
         "Germany": (90, 0.483),
         "United Kingdom": (17, 0.647),
@@ -68,7 +68,7 @@ def northern_european_average_seroprevalence() -> Prevalence:
         for country, (
             n_participants,
             seroprevalence,
-        ) in seroprevalence_by_country.items()
+        ) in participants_and_seroprevalence_by_country.items()
     ]
 
     return Prevalence.weightedAverageByPopulation(*prevalence_population_pairs)
