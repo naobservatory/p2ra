@@ -12,6 +12,7 @@ pathogen_chars = PathogenChars(
     selection=SelectionRound.ROUND_2,
 )
 
+
 ch_2009_seroprevalence = Prevalence(
     infections_per_100k=0.82 * 100_000,
     # "Prevalence of BKV [...]antibodies [...] among healthy blood donors was
@@ -76,12 +77,45 @@ def estimate_prevalences() -> list[Prevalence]:
     us_2021 = dataclasses.replace(
         us_2007_seroprevalence, date_source=Variable(date="2021")
     )
+    # Due to a lack of polyomavirus prevalence data for Denmark, we
+    # extrapolate Swiss data from 2009 to Denmark, 2015-2018.
+    # Originally we intended to use the same Dutch study as used in mcv.py:
+    # https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0206273#pone.0206273.ref024:~:text=Table%202.%20Seropositivity%20numbers%20and%20seroprevalence."
+    # Table 2, row 1, column 1.
+    # But looking into the methods paper underlying the used immunoassay, we
+    # found evidence for crossreactivity between JC Virus and BK Virus,
+    # potentially leading to seroprevalence measurements that are
+    # overstimates. https://journals.asm.org/doi/full/10.1128/jcm.01566-17#:~:text=Preincubation%20with%20JCPyV,S6B1%20and%20B3).
+    dk_2015 = dataclasses.replace(
+        ch_2009_seroprevalence,
+        date_source=Variable(date="2015"),
+        location_source=Variable(country="Denmark"),
+    )
+    dk_2016 = dataclasses.replace(
+        ch_2009_seroprevalence,
+        date_source=Variable(date="2016"),
+        location_source=Variable(country="Denmark"),
+    )
+    dk_2017 = dataclasses.replace(
+        ch_2009_seroprevalence,
+        date_source=Variable(date="2017"),
+        location_source=Variable(country="Denmark"),
+    )
+    dk_2018 = dataclasses.replace(
+        ch_2009_seroprevalence,
+        date_source=Variable(date="2018"),
+        location_source=Variable(country="Denmark"),
+    )
     return [
         ch_2009_seroprevalence,
         uk_1991_seroprevalence,
         us_2007_seroprevalence,
         us_2020,
         us_2021,
+        dk_2015,
+        dk_2016,
+        dk_2017,
+        dk_2018,
     ]
 
 
