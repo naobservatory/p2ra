@@ -85,7 +85,7 @@ def estimate_prevalences() -> list[Prevalence]:
     # But looking into the methods paper underlying the used immunoassay, we
     # found evidence for crossreactivity between JC Virus and BK Virus,
     # potentially leading to seroprevalence measurements that are
-    # overstimates. https://journals.asm.org/doi/full/10.1128/jcm.01566-17#:~:text=Preincubation%20with%20JCPyV,S6B1%20and%20B3).
+    # overestimates. https://journals.asm.org/doi/full/10.1128/jcm.01566-17#:~:text=Preincubation%20with%20JCPyV,S6B1%20and%20B3).
     dk_2015 = dataclasses.replace(
         ch_2009_seroprevalence,
         date_source=Variable(date="2015"),

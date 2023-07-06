@@ -18,7 +18,7 @@ nl_seroprevalence_2018 = Prevalence(
     # Note that we didn't use this study for JCV and BKV, as the underlying
     # methods paper for the test used shows that the two tests used for JCV
     # and BKV show some crossreactivity and are thus likely to overestimate
-    # seroprevalence ,(https://journals.asm.org/doi/full/10.1128/jcm.01566-17#:~:text=Preincubation%20with%20JCPyV,S6B1%20and%20B3)
+    # seroprevalence: https://journals.asm.org/doi/full/10.1128/jcm.01566-17#:~:text=Preincubation%20with%20JCPyV,S6B1%20and%20B3
     country="Netherlands",
     number_of_participants=1044,
     # The study population consisted of serum samples from 1050 Dutch blood
