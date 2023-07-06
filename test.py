@@ -552,6 +552,7 @@ class TestStats(unittest.TestCase):
         mgs_data = mgs.MGSData.from_repo()
         for (
             pathogen_name,
+            tidy_name,
             predictor_type,
             taxids,
             predictors,
@@ -619,6 +620,7 @@ class TestPathogensMatchStudies(unittest.TestCase):
         mgs_data = mgs.MGSData.from_repo()
         for (
             pathogen_name,
+            tidy_name,
             predictor_type,
             taxids,
             predictors,

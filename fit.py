@@ -22,6 +22,7 @@ def start(num_samples: int, plot: bool) -> None:
     input_data = []
     output_data = []
     for (
+        _,
         pathogen_name,
         predictor_type,
         taxids,

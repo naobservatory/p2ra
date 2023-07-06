@@ -29,7 +29,9 @@ def tidy_name(pathogen_name, taxids):
 
 
 def predictors_by_taxid() -> (
-    Generator[tuple[str, str, frozenset[TaxID], list[Predictor]], None, None]
+    Generator[
+        tuple[str, str, str, frozenset[TaxID], list[Predictor]], None, None
+    ]
 ):
     pathogen_name: str
     predictor_type: str
@@ -42,6 +44,6 @@ def predictors_by_taxid() -> (
                 pathogen.pathogen_chars,
                 all_predictors,
             ).items():
-                yield tidy_name(
+                yield pathogen_name, tidy_name(
                     pathogen_name, taxids
                 ), predictor_type, taxids, predictors
