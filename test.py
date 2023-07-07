@@ -553,6 +553,7 @@ class TestStats(unittest.TestCase):
         mgs_data = mgs.MGSData.from_repo()
         for (
             pathogen_name,
+            tidy_name,
             predictor_type,
             taxids,
             predictors,
@@ -591,6 +592,38 @@ class TestStats(unittest.TestCase):
                         len(model.data), len(all_sample_attributes)
                     )
 
+    def test_fit_model(self):
+        mgs_data = mgs.MGSData.from_repo()
+        pathogen = pathogens.pathogens["sars_cov_2"]
+        bioprojects = mgs.target_bioprojects["rothman"]
+        taxids, predictors = next(
+            iter(
+                by_taxids(
+                    pathogen.pathogen_chars,
+                    pathogen.estimate_incidences(),
+                ).items()
+            )
+        )
+        model = stats.build_model(
+            mgs_data,
+            bioprojects,
+            predictors,
+            taxids,
+            random_seed=1,
+            enrichment=mgs.Enrichment.VIRAL,
+        )
+        self.assertIsNone(model.fit)
+        self.assertIsNone(model.output_df)
+        with self.assertRaises(ValueError):
+            model.get_output_by_sample()
+        with self.assertRaises(ValueError):
+            model.get_coefficients()
+        model.fit_model(num_chains=1, num_samples=1)
+        self.assertIsNotNone(model.fit)
+        self.assertIsNotNone(model.output_df)
+        model.get_output_by_sample()
+        model.get_coefficients()
+
 
 class TestPathogensMatchStudies(unittest.TestCase):
     def test_pathogens_match_studies(self):
@@ -599,6 +632,7 @@ class TestPathogensMatchStudies(unittest.TestCase):
         mgs_data = mgs.MGSData.from_repo()
         for (
             pathogen_name,
+            tidy_name,
             predictor_type,
             taxids,
             predictors,

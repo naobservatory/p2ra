@@ -49,6 +49,7 @@ generated quantities {
   b[L + 1] = mu;
   // location-specific expected relative abundance
   // last element is the overall coefficient
+  // Converting from 1:100K to 1:1K means multiplying by 100
   vector[L + 1] ra_at_1in1000 = inv_logit(
     b - mean(log(x)) + log_mean_y - log_mean_n + log(100)
   );
