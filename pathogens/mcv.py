@@ -11,8 +11,29 @@ pathogen_chars = PathogenChars(
     selection=SelectionRound.ROUND_2,
 )
 
+
+nl_seroprevalence_2018 = Prevalence(
+    infections_per_100k=0.819 * 100_000,
+    # Found in Table 2, row 5, column 1.
+    # Note that we didn't use this study for JCV and BKV, as the underlying
+    # methods paper for the test used shows that the two tests used for JCV
+    # and BKV show some crossreactivity and are thus likely to overestimate
+    # seroprevalence: https://journals.asm.org/doi/full/10.1128/jcm.01566-17#:~:text=Preincubation%20with%20JCPyV,S6B1%20and%20B3
+    country="Netherlands",
+    number_of_participants=1044,
+    # The study population consisted of serum samples from 1050 Dutch blood
+    # donors. Donors were included using weighted random selection from Dutch
+    # blood donations to obtain groups of equal size in terms of age and sex.
+    # Serum samples from eighty blood donation centres were collected over a
+    # period of two weeks to ensure an even geographic distribution over the
+    # Netherlands.
+    date="2018",
+    active=Active.LATENT,
+    source="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0206273#pone.0206273.ref024:~:text=Table%202.%20Seropositivity%20numbers%20and%20seroprevalence.",
+)
+
 seroprevalence_women_us_2009 = Prevalence(
-    infections_per_100k=59.4 * 100_000,
+    infections_per_100k=0.594 * 100_000,
     number_of_participants=451,
     country="United States",
     date="2009",
@@ -27,7 +48,7 @@ seroprevalence_women_us_2009 = Prevalence(
     # the Netherlands [17], 69% in adults from Hungary [18], and up to 96% in
     # Italian persons aged 70–79 years"
     # Source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9776808/#:~:text=In%20an%20early,70%E2%80%9379%20years
-    # Based on this, our number is at least not an outlier, so even thought it
+    # Based on this, our number is at least not an outlier, so even though it
     # only measures female seroprevalence, we'll use it.
 )
 
@@ -41,10 +62,36 @@ def estimate_prevalences() -> list[Prevalence]:
     us_2021 = dataclasses.replace(
         seroprevalence_women_us_2009, date_source=Variable(date="2021")
     )
-
+    # Due to a lack of polyomavirus prevalence data for Denmark, we
+    # extrapolate Dutch data from 2018 to Denmark, 2015-2018.
+    dk_2015 = dataclasses.replace(
+        nl_seroprevalence_2018,
+        date_source=Variable(date="2015"),
+        location_source=Variable(country="Denmark"),
+    )
+    dk_2016 = dataclasses.replace(
+        nl_seroprevalence_2018,
+        date_source=Variable(date="2016"),
+        location_source=Variable(country="Denmark"),
+    )
+    dk_2017 = dataclasses.replace(
+        nl_seroprevalence_2018,
+        date_source=Variable(date="2017"),
+        location_source=Variable(country="Denmark"),
+    )
+    dk_2018 = dataclasses.replace(
+        nl_seroprevalence_2018,
+        date_source=Variable(date="2018"),
+        location_source=Variable(country="Denmark"),
+    )
     return [
         us_2020,
         us_2021,
+        nl_seroprevalence_2018,
+        dk_2015,
+        dk_2016,
+        dk_2017,
+        dk_2018,
     ]
 
 
