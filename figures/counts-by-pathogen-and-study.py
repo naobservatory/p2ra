@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 
 import mgs
-import pathogen_properties
 import pathogens
 
 
@@ -20,24 +19,12 @@ def start():
     pathogen_taxids_by_name = defaultdict(list)
     for (
         pathogen_name,
-        predictor_type,
+        _,
+        _,
         taxids,
-        predictors,
+        _,
     ) in pathogens.predictors_by_taxid():
         pathogen_taxids_by_name[pathogen_name].append(taxids)
-
-    def tidy_name(pathogen_name, taxids):
-        if len(pathogen_taxids_by_name[pathogen_name]) == 1:
-            return pathogen_name.replace("_", "-").upper()
-
-        (taxid,) = taxids
-        return {
-            142786: "Norovirus (all)",
-            122928: "Norovirus (GI)",
-            122929: "Norovirus (GII)",
-            11320: "Influenza A",
-            11520: "Influenza B",
-        }[taxid]
 
     row_names = []
     row_scores = []
@@ -55,11 +42,12 @@ def start():
 
     for (
         pathogen_name,
+        tidy_name,
         predictor_type,
         taxids,
-        predictors,
+        _,
     ) in sorted(pathogens.predictors_by_taxid()):
-        name = tidy_name(pathogen_name, taxids)
+        name = tidy_name
         row_names.append(name)
 
         white_rgb = 1, 1, 1

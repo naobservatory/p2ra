@@ -15,6 +15,10 @@ pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.NON_ENVELOPED,
     taxids=frozenset((NOROVIRUS_GROUP_I, NOROVIRUS_GROUP_II)),
+    names_by_taxid={
+        NOROVIRUS_GROUP_I: "Norovirus (GI)",
+        NOROVIRUS_GROUP_II: "Norovirus (GII)",
+    },
     selection=SelectionRound.ROUND_1,
 )
 

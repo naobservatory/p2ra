@@ -18,8 +18,20 @@ for pathogen_fname in os.listdir(os.path.dirname(__file__)):
     )
 
 
+def tidy_name(pathogen_name, taxids):
+    names = pathogens[pathogen_name].pathogen_chars.names_by_taxid
+    if names:
+        assert len(taxids) == 1
+        (taxid,) = taxids
+        return names[taxid]
+    else:
+        return pathogen_name.replace("_", "-").upper()
+
+
 def predictors_by_taxid() -> (
-    Generator[tuple[str, str, frozenset[TaxID], list[Predictor]], None, None]
+    Generator[
+        tuple[str, str, str, frozenset[TaxID], list[Predictor]], None, None
+    ]
 ):
     pathogen_name: str
     predictor_type: str
@@ -32,4 +44,6 @@ def predictors_by_taxid() -> (
                 pathogen.pathogen_chars,
                 all_predictors,
             ).items():
-                yield pathogen_name, predictor_type, taxids, predictors
+                yield pathogen_name, tidy_name(
+                    pathogen_name, taxids
+                ), predictor_type, taxids, predictors
