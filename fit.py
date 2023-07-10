@@ -39,6 +39,8 @@ def start(num_samples: int, plot: bool) -> None:
                 random_seed=sum(taxids),
                 enrichment=enrichment,
             )
+            if model is None:
+                continue
             model.fit_model(num_samples=num_samples)
             if plot:
                 model.plot_figures(
