@@ -17,12 +17,36 @@ pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.NON_ENVELOPED,
     taxid=TaxID(10566),
+    selection=SelectionRound.ROUND_1,
 )
 
+dk_male_conscripts_seroprevalence_2016 = Prevalence(
+    infections_per_100k=0.418 * 100_000,
+    confidence_interval=(0.399 * 100_000, 0.438 * 100_000),  # 95% CI
+    # The study used both the "hybrid capture 2" (HC2) method and PCR for
+    # detection. We use PCR numbers here, as it is more sensitive:
+    # "Most (97.0%) of the 1417 PCR-negative men were also HC2 negative,
+    # whereas 50.9% of the 1019 PCR-positive men were HC2 negative."
+    #
+    # "The overall HPV prevalence was [...] 41.8% (95% CI, 39.9–43.8) with
+    # PCR. "
+    number_of_participants=2436,
+    # "This cross-sectional study, the DanMale study, was conducted between
+    # February 2006 and January 2007. Male employees and conscripts at
+    # military barracks all over Denmark were invited to participate. [...]
+    # The study participants were 18 to 65 years of age; 69.0% were younger
+    # than 21 years (mean, 23 years) and 14.5% were 30 years or older."
+    country="Denmark",
+    date="2016",
+    active=Active.LATENT,
+    source="https://journals.lww.com/stdjournal/Fulltext/2015/08000/Human_Papillomavirus_Infection_Among_2460_Men_in.12.aspx#:~:text=With%20the%20PCR%20test%2C%20the%20HPV%20prevalence%20was%2041.8%25%3B%20730%20(30.0%25)%20men%20had%20HR%20types%20and%20279%20(11.5%25)%20had%20LR%20types.%20In%20183%20PCR%2Dpositive%20men%20(7.5%25)%2C%20the%20HPV%20type%20could%20not%20be%20identified%20and%20they%20were%20classified%20as%20HPVX%20positive%20(Table%202).",
+)
 
 nhanes_2013_2016_18_59_yo_prevalence = Prevalence(
     # Among 15–59-year-olds, 2013–2016 prevalence of any HPV infection was 40%
-    # overall, 41.8% among males, and 38.4% among females.
+    # overall, 41.8% among males, and 38.4% among females. These prevalences
+    # correspond to 77.3 million persons overall, or 40.5 million males and
+    # 37.0 million females, with a prevalent HPV infection in 2018.
     infections_per_100k=0.400 * 100_000,
     # We assume that measurements for 18 to 59 year olds roughly correspond to
     # the true all-age population prevalence.
@@ -49,24 +73,44 @@ nhanes_based_2018_18_59_yo_incidence = IncidenceRate(
 
 
 def estimate_prevalences():
-    # HPV prevalence is probably decreasing from 2013-2016 to the present, as
-    # vaccination is increasing and they're covering more subtypes.
-    # Extrapolating to 2020 and 2021 without adjusting for this might not be
-    # very good.
-    # TODO(#157): look into whether we can get estimates for 2020 and 2021.
-    return []
+    # HPV prevalence (any subtype) was extrapolated in the study from
+    # 2013-2016 to 2018. We extrapolate forward to 2020 and 2021. Though there
+    # is a 9-valent vaccine that got rolled out in 2016, this should not have
+    # a very large effect on prevalence, as only young individuals are
+    # vaccinated.
+    us_2020 = dataclasses.replace(
+        nhanes_2013_2016_18_59_yo_prevalence,
+        date_source=Variable(date="2020"),
+    )
+    us_2021 = dataclasses.replace(
+        nhanes_2013_2016_18_59_yo_prevalence,
+        date_source=Variable(date="2021"),
+    )
+
+    # Prevalence among male Danish men matches US estimates. Furthermore,
+    # NHANES HPV measurements of men (41.8%) and women (38.4%) are similar,
+    # we can thus extrapolate male Danish prevalence to the whole population.
+    dk_2015 = dataclasses.replace(
+        dk_male_conscripts_seroprevalence_2016,
+        date_source=Variable(date="2015"),
+    )
+    dk_2017 = dataclasses.replace(
+        dk_male_conscripts_seroprevalence_2016,
+        date_source=Variable(date="2017"),
+    )
+    dk_2018 = dataclasses.replace(
+        dk_male_conscripts_seroprevalence_2016,
+        date_source=Variable(date="2018"),
+    )
+    return [
+        us_2020,
+        us_2021,
+        dk_2015,
+        dk_male_conscripts_seroprevalence_2016,
+        dk_2017,
+        dk_2018,
+    ]
 
 
 def estimate_incidences():
-    # HPV prevalence should be close to constant, so extrapolate from
-    # 2018 to 2020 and 2021.
-    return [
-        dataclasses.replace(
-            nhanes_based_2018_18_59_yo_incidence,
-            date_source=Variable(date="2020"),
-        ),
-        dataclasses.replace(
-            nhanes_based_2018_18_59_yo_incidence,
-            date_source=Variable(date="2021"),
-        ),
-    ]
+    return []

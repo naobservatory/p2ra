@@ -11,6 +11,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.ENVELOPED,
     taxid=TaxID(11676),
+    selection=SelectionRound.ROUND_1,
 )
 
 # Controlled HIV has basically no sheddding, and we're really only interested

@@ -23,6 +23,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.ENVELOPED,
     taxid=TaxID(10376),
+    selection=SelectionRound.ROUND_1,
 )
 
 us_fraction_u18 = Scalar(
@@ -257,16 +258,21 @@ def denmark_seroprevalence_2023() -> Prevalence:
 def estimate_prevalences():
     denmark_2023 = denmark_seroprevalence_2023()
     # Seroprevalence should remain constant, so we can extrapolate from 1983
-    # data, applied to the 2023 Denmark population backwards to 2021-2020.
-    # This assumes that the population breakdown by age remained constant
-    # between 2023 and 2021/2020.
-
-    denmark_2020 = dataclasses.replace(
-        denmark_2023, date_source=Variable(date="2020")
+    # data, applied to the 2023 Denmark population backwards to 2015-2018
+    # This assumes both that EBV stayed at similar seroprevalence since 1983,
+    # and that population breakdown by age remained constant between 2023 and
+    # 2015-2018.
+    denmark_2015 = dataclasses.replace(
+        denmark_2023, date_source=Variable(date="2015")
     )
-
-    denmark_2021 = dataclasses.replace(
-        denmark_2023, date_source=Variable(date="2021")
+    denmark_2016 = dataclasses.replace(
+        denmark_2023, date_source=Variable(date="2016")
+    )
+    denmark_2017 = dataclasses.replace(
+        denmark_2023, date_source=Variable(date="2017")
+    )
+    denmark_2018 = dataclasses.replace(
+        denmark_2023, date_source=Variable(date="2018")
     )
     # Similar to Denmark, seroprevalence should remain constant, so we can
     # extrapolate from 2003-2010 data, applied to 2020 US population to 2021.
@@ -276,9 +282,10 @@ def estimate_prevalences():
     return [
         us_2020,
         us_2021,
-        denmark_2020,
-        denmark_2021,
-        denmark_2023,
+        denmark_2015,
+        denmark_2016,
+        denmark_2017,
+        denmark_2018,
         uk_seroprevalence_0_to_25,
     ]
 

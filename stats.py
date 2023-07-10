@@ -131,27 +131,44 @@ class Model(Generic[P]):
     random_seed: int
     model: stan.model.Model = field(init=False)
     locations: list[str | None] = field(init=False)
+    input_df: pd.DataFrame = field(init=False)
     fit: None | stan.fit.Fit = None
-    dataframe: None | pd.DataFrame = None
+    output_df: None | pd.DataFrame = None
 
     def __post_init__(self) -> None:
         with open(STANFILE, "r") as stanfile:
             stan_code = Template(stanfile.read()).substitute(**HYPERPARAMS)
+        self.input_df = pd.DataFrame(
+            {
+                # Stan vectors are 1-indexed
+                "sample": [i + 1 for i, _ in enumerate(self.data)],
+                "viral_reads": [dp.viral_reads for dp in self.data],
+                "total_reads": [dp.attrs.reads for dp in self.data],
+                "predictor": [dp.predictor.get_data() for dp in self.data],
+                "fine_location": [dp.attrs.fine_location for dp in self.data],
+                "date": [dp.attrs.date for dp in self.data],
+                "county": [dp.attrs.county for dp in self.data],
+                "relative_abundance": np.array(
+                    [dp.viral_reads for dp in self.data]
+                )
+                / np.array([dp.attrs.reads for dp in self.data]),
+            }
+        )
         # TODO: Make it more automatic to associate fine locations with coeffs
         self.locations = sorted(
             list(set(dp.attrs.fine_location for dp in self.data)), key=str
         ) + ["Overall"]
         stan_data = {
             "J": len(self.data),
-            "y": np.array([dp.viral_reads for dp in self.data]),
-            "n": np.array([dp.attrs.reads for dp in self.data]),
-            "x": np.array([dp.predictor.get_data() for dp in self.data]),
+            "y": self.input_df.viral_reads.to_numpy(),
+            "n": self.input_df.total_reads.to_numpy(),
+            "x": self.input_df.predictor.to_numpy(),
             # Overall is not a location
             "L": len(self.locations) - 1,
             "ll": [
                 # Stan vectors are one-indexed
-                self.locations.index(dp.attrs.fine_location) + 1
-                for dp in self.data
+                self.locations.index(loc) + 1
+                for loc in self.input_df.fine_location
             ],
         }
         self.model = stan.build(
@@ -162,34 +179,21 @@ class Model(Generic[P]):
         self.fit = self.model.sample(
             num_chains=num_chains, num_samples=num_samples
         )
-        self.dataframe = self._make_dataframe()
+        self.output_df = self.fit.to_frame()
 
-    # TODO: Deprecate/rename?
-    def _make_dataframe(self) -> pd.DataFrame:
-        if self.fit is None:
+    def get_output_by_sample(self) -> pd.DataFrame:
+        if self.output_df is None:
             raise ValueError("Model not fit yet")
 
-        df_input = pd.DataFrame(
-            {
-                "sample": [i + 1 for i, _ in enumerate(self.data)],
-                "viral_reads": [dp.viral_reads for dp in self.data],
-                "predictor": [dp.predictor.get_data() for dp in self.data],
-                "observation_type": "data",
-            }
-        )
-
-        df_output = pd.wide_to_long(
-            self.fit.to_frame().reset_index(),
+        df = pd.wide_to_long(
+            self.output_df.reset_index(),
             stubnames=["y_tilde", "theta", "theta_std"],
             i="draws",
             j="sample",
             sep=".",
         ).reset_index()
-        df_output["predictor"] = np.exp(df_output["theta"])
-        df_output["observation_type"] = "posterior"
-        df_output.rename(columns={"y_tilde": "viral_reads"}, inplace=True)
-
-        df = pd.concat([df_input, df_output], ignore_index=True)
+        df["predictor"] = np.exp(df["theta"])
+        df.rename(columns={"y_tilde": "viral_reads"}, inplace=True)
 
         def get_sample_attrs(attr: str):
             f = lambda i: getattr(self.data[i - 1].attrs, attr)
@@ -201,15 +205,12 @@ class Model(Generic[P]):
 
         return df
 
-    def get_per_draw_statistics(self) -> pd.DataFrame:
-        if self.fit is None:
-            raise ValueError("Model not fit yet")
-        return self.fit.to_frame()
-
     def get_coefficients(self) -> pd.DataFrame:
+        if self.output_df is None:
+            raise ValueError("Model not fit yet")
         cols = ["b", "ra_at_1in1000"]
         coeffs = pd.wide_to_long(
-            self.get_per_draw_statistics().reset_index(),
+            self.output_df.reset_index(),
             stubnames=cols,
             i="draws",
             j="location_index",
@@ -221,22 +222,9 @@ class Model(Generic[P]):
         return coeffs[["location"] + cols]
 
     def plot_data_scatter(self) -> matplotlib.figure.Figure:
-        df = pd.DataFrame(
-            {
-                "county": [dp.attrs.county for dp in self.data],
-                "fine_location": [dp.attrs.fine_location for dp in self.data],
-                "relative_abundance": np.array(
-                    [dp.viral_reads for dp in self.data]
-                )
-                / np.array([dp.attrs.reads for dp in self.data]),
-                "predictor": np.array(
-                    [dp.predictor.get_data() for dp in self.data]
-                ),
-            }
-        )
         fig, ax = plt.subplots(1, 1)
         sns.scatterplot(
-            data=df,
+            data=self.input_df,
             x="predictor",
             y="relative_abundance",
             ax=ax,
@@ -272,13 +260,12 @@ class Model(Generic[P]):
                 ),
             ),
         ]
-        per_draw_df = self.get_per_draw_statistics()
         fig, axes = plt.subplots(
             1, len(params), layout="constrained", figsize=(6, 3)
         )
         for (param, x, prior), ax in zip(params, axes):
             posterior_hist(
-                data=per_draw_df, param=param, prior_x=x, prior=prior, ax=ax
+                data=self.output_df, param=param, prior_x=x, prior=prior, ax=ax
             )
         return fig
 
@@ -292,10 +279,9 @@ class Model(Generic[P]):
         return fig
 
     def plot_joint_posterior(self, x: str, y: str) -> matplotlib.figure.Figure:
-        per_draw_df = self.get_per_draw_statistics()
         fig, ax = plt.subplots(1, 1)
         sns.kdeplot(
-            data=per_draw_df,
+            data=self.output_df,
             ax=ax,
             x=x,
             y=y,
@@ -310,13 +296,11 @@ class Model(Generic[P]):
         self, x: str, y: str, **kwargs
     ) -> sns.FacetGrid:
         # Plot posterior predictive draws
-        data = self.dataframe
-        if data is None:
+        if self.output_df is None:
             raise ValueError("Model not fit yet")
+        posterior_draws = self.get_output_by_sample()
         g = sns.relplot(
-            data=data[
-                (data["observation_type"] == "posterior") & (data["draws"] < 9)
-            ],
+            data=posterior_draws[posterior_draws.draws < 9],
             x=x,
             y=y,
             col="draws",
@@ -330,7 +314,7 @@ class Model(Generic[P]):
         for col in ax.collections:
             col.remove()
         sns.scatterplot(
-            data=data[data["observation_type"] == "data"],
+            data=self.input_df,
             x=x,
             y=y,
             ax=ax,
@@ -378,22 +362,27 @@ def choose_predictor(predictors: list[Predictor]) -> Predictor:
 
 def build_model(
     mgs_data: MGSData,
-    bioproject: BioProject,
+    bioprojects: list[BioProject],
     predictors: list[Predictor],
     taxids: frozenset[TaxID],
     random_seed: int,
+    enrichment: Optional[Enrichment],
 ) -> Model:
-    samples = mgs_data.sample_attributes(
-        bioproject, enrichment=Enrichment.VIRAL
-    )
+    sample_attributes = {}  # sample -> attributes
+    study_viral_reads = {}  # sample -> viral_reads
+    for bioproject in bioprojects:
+        sample_attributes.update(
+            mgs_data.sample_attributes(bioproject, enrichment=enrichment)
+        )
+        study_viral_reads.update(mgs_data.viral_reads(bioproject, taxids))
     data = [
         DataPoint(
-            sample=s,
+            sample=sample,
             attrs=attrs,
-            viral_reads=mgs_data.viral_reads(bioproject, taxids)[s],
+            viral_reads=study_viral_reads[sample],
             predictor=choose_predictor(lookup_variables(attrs, predictors)),
         )
-        for s, attrs in samples.items()
+        for sample, attrs in sample_attributes.items()
     ]
     return Model(data=data, random_seed=random_seed)
 

@@ -19,30 +19,18 @@ def start():
     pathogen_taxids_by_name = defaultdict(list)
     for (
         pathogen_name,
-        predictor_type,
+        _,
+        _,
         taxids,
-        predictors,
+        _,
     ) in pathogens.predictors_by_taxid():
         pathogen_taxids_by_name[pathogen_name].append(taxids)
 
-    def tidy_name(pathogen_name, taxids):
-        if len(pathogen_taxids_by_name[pathogen_name]) == 1:
-            return pathogen_name.replace("_", "-").upper()
-
-        (taxid,) = taxids
-        return {
-            142786: "Norovirus (all)",
-            122928: "Norovirus (GI)",
-            122929: "Norovirus (GII)",
-            11320: "Influenza A",
-            11520: "Influenza B",
-        }[taxid]
-
     row_names = []
     row_scores = []
-    col_names = [
+    col_names = ["Nucleic Acid", "Predictor", "Selection"] + [
         "-".join(word.capitalize() for word in author.split("_"))
-        for author in sorted(mgs.rna_bioprojects)
+        for author in sorted(mgs.target_bioprojects)
     ]
     # columns: studies
     # rows: pathogens
@@ -54,37 +42,49 @@ def start():
 
     for (
         pathogen_name,
+        tidy_name,
         predictor_type,
         taxids,
-        predictors,
+        _,
     ) in sorted(pathogens.predictors_by_taxid()):
-        name = tidy_name(pathogen_name, taxids)
+        name = tidy_name
         row_names.append(name)
 
-        table_row_text = []
-        table_row_colors = []
+        white_rgb = 1, 1, 1
+
+        table_row_text = [
+            pathogens.pathogens[pathogen_name].pathogen_chars.na_type.value,
+            predictor_type.capitalize(),
+            pathogens.pathogens[pathogen_name].pathogen_chars.selection.value,
+        ]
+        table_row_colors = [white_rgb, white_rgb, white_rgb]
 
         row_score = 0
 
-        for study, bioproject in sorted(mgs.rna_bioprojects.items()):
-            matching_reads = mgs_data.viral_reads(bioproject, taxids)
-            viral_samples = mgs_data.sample_attributes(
-                bioproject,
-                enrichment=mgs.Enrichment.VIRAL,
-            )
-
-            n_samples = len(viral_samples)
-            counts = [
-                count
-                for sample, count in matching_reads.items()
-                if sample in viral_samples and count
-            ]
-            n_samples_with_match = len(counts)
-            n_matches = sum(counts)
+        for study, bioprojects in sorted(mgs.target_bioprojects.items()):
+            n_samples = 0
+            n_samples_with_match = 0
+            n_matches = 0
+            for bioproject in bioprojects:
+                matching_reads = mgs_data.viral_reads(bioproject, taxids)
+                viral_samples = mgs_data.sample_attributes(
+                    bioproject,
+                    enrichment=None
+                    if study == "brinch"
+                    else mgs.Enrichment.VIRAL,
+                )
+                n_samples += len(viral_samples)
+                counts = [
+                    count
+                    for sample, count in matching_reads.items()
+                    if sample in viral_samples and count
+                ]
+                n_samples_with_match += len(counts)
+                n_matches += sum(counts)
 
             ratio = n_samples_with_match / n_samples
             if n_samples_with_match == 0:
-                color = (1, 1, 1)
+                color = white_rgb
             elif n_samples_with_match == 1:
                 color = colors[1]
             elif ratio < 1 / 55:
@@ -119,7 +119,7 @@ def start():
     table_text = [x for _, x in sorted(zip(row_scores, table_text))]
     table_colors = [x for _, x in sorted(zip(row_scores, table_colors))]
 
-    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 3))
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
     ax.set_axis_off()
 
     table = ax.table(

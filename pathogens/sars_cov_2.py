@@ -13,6 +13,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.ENVELOPED,
     taxid=TaxID(2697049),
+    selection=SelectionRound.ROUND_1,
 )
 
 underreporting = Scalar(

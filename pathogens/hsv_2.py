@@ -13,6 +13,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.DNA,
     enveloped=Enveloped.ENVELOPED,
     taxid=TaxID(10310),
+    selection=SelectionRound.ROUND_1,
 )
 
 
@@ -92,15 +93,62 @@ us_population_2018_18_to_49yo = Population(
     inputs=list(stratified_us_pop.values()),
 )
 
+german_seroprevalence_2008_2011 = Prevalence(
+    infections_per_100k=0.094 * 100_000,
+    confidence_interval=(0.083 * 100_000, 0.105 * 100_000),  # 95% CI
+    coverage_probability=0.95,
+    # "Weighted seroprevalence of HSV2:
+    # The overall seroprevalence of HSV2 in the DEGS was 9.4% (95%CI 8.3–10.5)."
+    number_of_participants=5013,
+    # "In total, 6627 DEGS participants were tested for HSV1, and 5013 were
+    # also tested for HSV2."
+    country="Germany",
+    start_date="2008",
+    end_date="2011",
+    active=Active.LATENT,
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5500947/#:~:text=Weighted%20seroprevalence%20of,CI%207.2%E2%80%9380.1).",
+)
+
 
 def estimate_prevalences() -> list[Prevalence]:
-    us_2018 = cdc_2018_nhanes_estimate.to_rate(us_population_2018_18_to_49yo)
-
-    # HSV_1 prevalence should be close to constant, so extrapolate from
+    # HSV 2 prevalence should be close to constant, so extrapolate from
     # 2018 to 2020 and 2021.
+    us_2018 = cdc_2018_nhanes_estimate.to_rate(us_population_2018_18_to_49yo)
+    us_2020 = dataclasses.replace(us_2018, date_source=Variable(date="2020"))
+    us_2021 = dataclasses.replace(us_2018, date_source=Variable(date="2021"))
+
+    # We assume that the demographics of Denmark and Germany are similar
+    # enough to extrapolate German seroprevalence data to Denmark.
+    # We furthermore assume that HSV-1 prevalence remains constant over time,
+    # extrapolating measurements to 2015-2018.
+    dk_2015 = dataclasses.replace(
+        german_seroprevalence_2008_2011,
+        date_source=Variable(date="2015"),
+        location_source=Variable(country="Denmark"),
+    )
+    dk_2016 = dataclasses.replace(
+        german_seroprevalence_2008_2011,
+        date_source=Variable(date="2016"),
+        location_source=Variable(country="Denmark"),
+    )
+    dk_2017 = dataclasses.replace(
+        german_seroprevalence_2008_2011,
+        date_source=Variable(date="2017"),
+        location_source=Variable(country="Denmark"),
+    )
+    dk_2018 = dataclasses.replace(
+        german_seroprevalence_2008_2011,
+        date_source=Variable(date="2018"),
+        location_source=Variable(country="Denmark"),
+    )
+
     return [
-        dataclasses.replace(us_2018, date_source=Variable(date="2020")),
-        dataclasses.replace(us_2018, date_source=Variable(date="2021")),
+        us_2020,
+        us_2021,
+        dk_2015,
+        dk_2016,
+        dk_2017,
+        dk_2018,
     ]
 
 

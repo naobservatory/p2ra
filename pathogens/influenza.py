@@ -17,6 +17,11 @@ pathogen_chars = PathogenChars(
     enveloped=Enveloped.ENVELOPED,
     taxids=frozenset((FLU_A, FLU_B)),
     subtaxids=frozenset((FLU_A, FLU_B)),
+    names_by_taxid={
+        FLU_A: "Influenza A",
+        FLU_B: "Influenza B",
+    },
+    selection=SelectionRound.ROUND_1,
 )
 
 

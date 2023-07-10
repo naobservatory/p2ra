@@ -6,6 +6,7 @@ pathogen_chars = PathogenChars(
     na_type=NAType.RNA,
     enveloped=Enveloped.ENVELOPED,
     taxid=TaxID(11103),
+    selection=SelectionRound.ROUND_1,
 )
 
 us_population_2019 = Population(
@@ -14,11 +15,6 @@ us_population_2019 = Population(
     date="2019",
     source="https://data.census.gov/table?q=us+population+2019&tid=ACSDP1Y2019.DP05",
 )
-
-
-# Data below is from the Ohio Department of Health. They give case rates,
-# which are "shown per 100,000 persons and were calculated using census
-# estimates for that year, except 2021 is using 2020 census."
 
 
 reported_acute_ohio_2020 = IncidenceRate(
@@ -154,35 +150,16 @@ def estimate_incidences():
         acute_2019, date_source=Variable(date="2021")
     )
 
-    estimates = [
-        acute_2019,
-        acute_2020,
-        acute_2021,
-        reported_acute_ohio_2020 * (acute_underreporting_factor),
-        reported_acute_ohio_2021 * (acute_underreporting_factor),
-    ]
-    for county in ohio_counties_case_rates:
-        for year in ohio_counties_case_rates[county]:
-            estimates.append(
-                IncidenceRate(
-                    annual_infections_per_100k=ohio_counties_case_rates[
-                        county
-                    ][year]["acute"],
-                    date=year,
-                    country="United States",
-                    state="Ohio",
-                    county=county,
-                    source=OHIO_COUNTY_ESTIMATES_SOURCE,
-                )
-                * acute_underreporting_factor
-            )
+    estimates = []
+
     return estimates
 
 
 def estimate_prevalences() -> list[Prevalence]:
     # Estimated acute cases have increased slighly since 2016 (https://www.cdc.gov/hepatitis/statistics/2020surveillance/hepatitis-c/figure-3.1.htm), but
-    # not to a level that would change the chronic rate by much. We thus
-    # extrapolate the 2016 rate to 2020 and 2021.
+    # not to a level that would change the chronic rate by much, given that
+    # it lies in the 2-3 million range. We thus extrapolate the 2016 rate to
+    # 2020 and 2021.
     chronic_2020 = dataclasses.replace(
         estimated_chronic_us_2013_2016, date_source=Variable(date="2020")
     )

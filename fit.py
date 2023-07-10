@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 import stats
-from mgs import MGSData, rna_bioprojects
+from mgs import Enrichment, MGSData, target_bioprojects
 from pathogens import predictors_by_taxid
 
 
@@ -19,35 +19,42 @@ def start(num_samples: int, plot: bool) -> None:
     if plot:
         figdir.mkdir(exist_ok=True)
     mgs_data = MGSData.from_repo()
+    input_data = []
     output_data = []
     for (
+        _,
         pathogen_name,
         predictor_type,
         taxids,
         predictors,
     ) in predictors_by_taxid():
         taxids_str = "_".join(str(t) for t in taxids)
-        for study, bioproject in rna_bioprojects.items():
+        for study, bioprojects in target_bioprojects.items():
+            enrichment = None if study == "brinch" else Enrichment.VIRAL
             model = stats.build_model(
                 mgs_data,
-                bioproject,
+                bioprojects,
                 predictors,
                 taxids,
                 random_seed=sum(taxids),
+                enrichment=enrichment,
             )
             model.fit_model(num_samples=num_samples)
             if plot:
                 model.plot_figures(
                     path=figdir,
-                    prefix=f"{pathogen_name}-{taxids_str}-{predictor_type}-{study}",
+                    prefix=f"{pathogen_name}-{predictor_type}-{study}",
                 )
-            out = model.get_coefficients().assign(
+            metadata = dict(
                 pathogen=pathogen_name,
                 taxids=taxids_str,
                 predictor_type=predictor_type,
                 study=study,
             )
-            output_data.append(out)
+            input_data.append(model.input_df.assign(**metadata))
+            output_data.append(model.get_coefficients().assign(**metadata))
+    input = pd.concat(input_data)
+    input.to_csv("input.tsv", sep="\t", index=False)
     coeffs = pd.concat(output_data)
     coeffs.to_csv("fits.tsv", sep="\t", index=False)
     summary = summarize_output(coeffs)

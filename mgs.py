@@ -22,10 +22,11 @@ BioProject = NewType("BioProject", str)
 Sample = NewType("Sample", str)
 
 
-rna_bioprojects = {
-    "crits_christoph": BioProject("PRJNA661613"),
-    "rothman": BioProject("PRJNA729801"),
-    "spurbeck": BioProject("PRJNA924011"),
+target_bioprojects = {
+    "crits_christoph": [BioProject("PRJNA661613")],
+    "rothman": [BioProject("PRJNA729801")],
+    "spurbeck": [BioProject("PRJNA924011")],
+    "brinch": [BioProject("PRJEB13832"), BioProject("PRJEB34633")],
 }
 
 
@@ -72,7 +73,7 @@ class SampleAttributes(BaseModel):
     # Fixme: Not all the dates are real dates
     date: date | str
     reads: int
-    enrichment: Optional[Enrichment]
+    enrichment: Optional[Enrichment] = None
     method: Optional[str] = None
 
 
