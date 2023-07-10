@@ -37,11 +37,11 @@ seroprevalence_hemophilia_global_2021 = Prevalence(
 
 
 def northern_european_average_seroprevalence() -> Prevalence:
-    # Taking weighted average of Northern European AAV-5 seropositivity
-    # numbers from Figure 1D, combined with participant numbers taken from the
-    # supplement. We do this, because differences in seroprevalence between
-    # countries are likely driven by small sample sizes, not by in-between-
-    # country differences.
+    # We aim to estimate AAV prevalence in a population that comes as close as
+    # possible to reflecting the Danish population. To do so, we're
+    # aggregating seroprevalence measurements from Northern European countries
+    # (France, UK, Germany) from Figure 1C, weighted by their participant
+    # counts.
     participants_and_seroprevalence_by_country = {
         "France": (87, 0.605),
         "Germany": (90, 0.483),
