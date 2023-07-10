@@ -19,13 +19,14 @@ def start():
     for (
         pathogen_name,
         predictor_type,
+        _,
         taxids,
         predictors,
     ) in sorted(pathogens.predictors_by_taxid()):
         if pathogen_name != "sars_cov_2":
             continue
 
-        for study, bioproject in sorted(mgs.rna_bioprojects.items()):
+        for study, bioproject in sorted(mgs.load_bioprojects.items()):
             matching_reads = mgs_data.viral_reads(bioproject, taxids)
             viral_samples = mgs_data.sample_attributes(
                 bioproject,
