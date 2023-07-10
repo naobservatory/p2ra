@@ -110,7 +110,16 @@ class DataPoint(Generic[P]):
     sample: Sample
     attrs: SampleAttributes
     viral_reads: int
-    predictor: P
+    predictor: P | None
+
+    def get_predictor_value(self) -> float:
+        # TODO: Handle missing data
+        if self.predictor is None:
+            raise NotImplementedError(
+                f"Data point for sample {self.sample} missing predictor"
+            )
+        else:
+            return self.predictor.get_data()
 
 
 STANFILE = Path("model.stan")
@@ -144,7 +153,7 @@ class Model(Generic[P]):
                 "sample": [i + 1 for i, _ in enumerate(self.data)],
                 "viral_reads": [dp.viral_reads for dp in self.data],
                 "total_reads": [dp.attrs.reads for dp in self.data],
-                "predictor": [dp.predictor.get_data() for dp in self.data],
+                "predictor": [dp.get_predictor_value() for dp in self.data],
                 "fine_location": [dp.attrs.fine_location for dp in self.data],
                 "date": [dp.attrs.date for dp in self.data],
                 "county": [dp.attrs.county for dp in self.data],
@@ -355,9 +364,13 @@ class Model(Generic[P]):
         plt.close("all")
 
 
-def choose_predictor(predictors: list[Predictor]) -> Predictor:
-    assert len(predictors) == 1
-    return predictors[0]
+def choose_predictor(predictors: list[Predictor]) -> Predictor | None:
+    if len(predictors) == 0:
+        return None
+    elif len(predictors) == 1:
+        return predictors[0]
+    else:
+        raise NotImplementedError("More than one matching predictor")
 
 
 def build_model(
@@ -367,7 +380,7 @@ def build_model(
     taxids: frozenset[TaxID],
     random_seed: int,
     enrichment: Optional[Enrichment],
-) -> Model:
+) -> Model | None:
     sample_attributes = {}  # sample -> attributes
     study_viral_reads = {}  # sample -> viral_reads
     for bioproject in bioprojects:
@@ -384,7 +397,11 @@ def build_model(
         )
         for sample, attrs in sample_attributes.items()
     ]
-    return Model(data=data, random_seed=random_seed)
+    # No predictors found
+    if all(point.predictor is None for point in data):
+        return None
+    else:
+        return Model(data=data, random_seed=random_seed)
 
 
 def posterior_hist(data, param: str, prior_x, prior, ax=None):
