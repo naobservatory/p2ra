@@ -112,14 +112,17 @@ def estimate_prevalences():
     dk_2016 = dataclasses.replace(
         nl_seroprevalence_2006,
         date_source=Variable(date="2016"),
+        location_source=Variable(country="Denmark"),
     )
     dk_2017 = dataclasses.replace(
         nl_seroprevalence_2006,
         date_source=Variable(date="2017"),
+        location_source=Variable(country="Denmark"),
     )
     dk_2018 = dataclasses.replace(
         nl_seroprevalence_2006,
         date_source=Variable(date="2018"),
+        location_source=Variable(country="Denmark"),
     )
     # CMV should be close to constant, so extrapolate from 2003-2010 to
     # 2020 and 2021.
