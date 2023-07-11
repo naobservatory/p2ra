@@ -35,7 +35,7 @@ def start():
     white_rgb = 1, 1, 1
     yellow_rgb = 1, 1, 0.94
     purple_rgb = 1, 0.94, 1
-    green_rgb = 0.96, 1, 0.96
+    green_rgb = 0.93, 1, 0.93
     red_rgb = 1, 0.96, 0.96
 
     col_colors = [white_rgb, white_rgb] + [
