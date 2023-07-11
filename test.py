@@ -565,10 +565,6 @@ class TestStats(unittest.TestCase):
                     predictor=predictor_type,
                     study=study,
                 ):
-                    if study == "brinch":
-                        # TODO: can't include Brinch here until we extend our
-                        # public health estimates to cover Denmark.
-                        continue
                     enrichment = (
                         None if study == "brinch" else mgs.Enrichment.VIRAL
                     )
@@ -580,6 +576,9 @@ class TestStats(unittest.TestCase):
                         random_seed=1,
                         enrichment=enrichment,
                     )
+                    # No matching data
+                    if model is None:
+                        continue
                     all_sample_attributes = {}
                     for bioproject in bioprojects:
                         all_sample_attributes.update(
@@ -612,6 +611,7 @@ class TestStats(unittest.TestCase):
             random_seed=1,
             enrichment=mgs.Enrichment.VIRAL,
         )
+        assert model is not None
         self.assertIsNone(model.fit)
         self.assertIsNone(model.output_df)
         with self.assertRaises(ValueError):
@@ -627,7 +627,7 @@ class TestStats(unittest.TestCase):
 
 class TestPathogensMatchStudies(unittest.TestCase):
     def test_pathogens_match_studies(self):
-        # Every RNA pathogen should have at least one estimate for every sample
+        # Every pathogen should have at least one estimate for every sample
         # in the projects we're working with.
         mgs_data = mgs.MGSData.from_repo()
         for (
@@ -646,19 +646,23 @@ class TestPathogensMatchStudies(unittest.TestCase):
                         study=study,
                         bioproject=bioproject,
                     ):
-                        for (
-                            sample,
-                            sample_attributes,
-                        ) in mgs_data.sample_attributes(
-                            bioproject, enrichment=mgs.Enrichment.VIRAL
-                        ).items():
+                        enrichment = (
+                            None if study == "brinch" else mgs.Enrichment.VIRAL
+                        )
+                        chosen_predictors = {
+                            sample: stats.lookup_variables(attrs, predictors)
+                            for sample, attrs in mgs_data.sample_attributes(
+                                bioproject, enrichment=enrichment
+                            ).items()
+                        }
+                        # It's ok to have no data at all.
+                        # We just can't handle partial data at the moment.
+                        if all(ps == [] for ps in chosen_predictors.values()):
+                            continue
+                        for sample, preds in chosen_predictors.items():
                             with self.subTest(sample=sample):
-                                chosen_predictors = stats.lookup_variables(
-                                    sample_attributes, predictors
-                                )
-                                self.assertNotEqual(chosen_predictors, [])
-
-                                for predictor in chosen_predictors:
+                                self.assertNotEqual(preds, [])
+                                for predictor in preds:
                                     with self.subTest(predictor=predictor):
                                         self.assertGreater(
                                             predictor.get_data(), 0

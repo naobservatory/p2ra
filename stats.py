@@ -110,7 +110,18 @@ class DataPoint(Generic[P]):
     sample: Sample
     attrs: SampleAttributes
     viral_reads: int
-    predictor: P
+    predictor: P | None
+
+    def get_predictor_value(self) -> float:
+        # TODO: If we update the Stan code to allow some samples to be
+        # missing predictors, have this return the value Stan expects for
+        # missing input data (e.g. NaN)
+        if self.predictor is None:
+            raise NotImplementedError(
+                f"Data point for sample {self.sample} missing predictor"
+            )
+        else:
+            return self.predictor.get_data()
 
 
 STANFILE = Path("model.stan")
@@ -144,7 +155,7 @@ class Model(Generic[P]):
                 "sample": [i + 1 for i, _ in enumerate(self.data)],
                 "viral_reads": [dp.viral_reads for dp in self.data],
                 "total_reads": [dp.attrs.reads for dp in self.data],
-                "predictor": [dp.predictor.get_data() for dp in self.data],
+                "predictor": [dp.get_predictor_value() for dp in self.data],
                 "fine_location": [dp.attrs.fine_location for dp in self.data],
                 "date": [dp.attrs.date for dp in self.data],
                 "county": [dp.attrs.county for dp in self.data],
@@ -221,16 +232,16 @@ class Model(Generic[P]):
         ]
         return coeffs[["location"] + cols]
 
-    def plot_data_scatter(self) -> matplotlib.figure.Figure:
+    def plot_data_scatter(self, **kwargs) -> matplotlib.figure.Figure:
         fig, ax = plt.subplots(1, 1)
         sns.scatterplot(
             data=self.input_df,
             x="predictor",
             y="relative_abundance",
             ax=ax,
-            style="county",
             hue="fine_location",
             hue_order=self.locations,
+            **kwargs,
         )
         sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
         return fig
@@ -326,7 +337,11 @@ class Model(Generic[P]):
 
     def plot_figures(self, path: Path, prefix: str) -> None:
         assert self.fit is not None
-        data_scatter = self.plot_data_scatter()
+        if any(self.input_df["county"]):
+            style = "county"
+        else:
+            style = None
+        data_scatter = self.plot_data_scatter(style=style)
         data_scatter.savefig(
             path / f"{prefix}-datascatter.pdf", bbox_inches="tight"
         )
@@ -345,7 +360,7 @@ class Model(Generic[P]):
             g = self.plot_posterior_samples(
                 x,
                 y,
-                style="county",
+                style=style,
                 hue="fine_location",
                 hue_order=self.locations,
             )
@@ -355,9 +370,13 @@ class Model(Generic[P]):
         plt.close("all")
 
 
-def choose_predictor(predictors: list[Predictor]) -> Predictor:
-    assert len(predictors) == 1
-    return predictors[0]
+def choose_predictor(predictors: list[Predictor]) -> Predictor | None:
+    if len(predictors) == 0:
+        return None
+    elif len(predictors) == 1:
+        return predictors[0]
+    else:
+        raise NotImplementedError("More than one matching predictor")
 
 
 def build_model(
@@ -367,7 +386,7 @@ def build_model(
     taxids: frozenset[TaxID],
     random_seed: int,
     enrichment: Optional[Enrichment],
-) -> Model:
+) -> Model | None:
     sample_attributes = {}  # sample -> attributes
     study_viral_reads = {}  # sample -> viral_reads
     for bioproject in bioprojects:
@@ -384,7 +403,11 @@ def build_model(
         )
         for sample, attrs in sample_attributes.items()
     ]
-    return Model(data=data, random_seed=random_seed)
+    # No predictors found
+    if all(point.predictor is None for point in data):
+        return None
+    else:
+        return Model(data=data, random_seed=random_seed)
 
 
 def posterior_hist(data, param: str, prior_x, prior, ax=None):
