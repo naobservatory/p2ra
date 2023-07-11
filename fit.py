@@ -10,7 +10,14 @@ from pathogens import predictors_by_taxid
 
 def summarize_output(coeffs: pd.DataFrame) -> pd.DataFrame:
     return coeffs.groupby(
-        ["pathogen", "taxids", "predictor_type", "study", "location"]
+        [
+            "pathogen",
+            "tidy_name",
+            "taxids",
+            "predictor_type",
+            "study",
+            "location",
+        ]
     ).ra_at_1in1000.describe(percentiles=[0.05, 0.25, 0.5, 0.75, 0.95])
 
 
@@ -22,14 +29,15 @@ def start(num_samples: int, plot: bool) -> None:
     input_data = []
     output_data = []
     for (
-        _,
         pathogen_name,
+        tidy_name,
         predictor_type,
         taxids,
         predictors,
     ) in predictors_by_taxid():
         taxids_str = "_".join(str(t) for t in taxids)
         for study, bioprojects in target_bioprojects.items():
+            print(pathogen_name, study)
             enrichment = None if study == "brinch" else Enrichment.VIRAL
             model = stats.build_model(
                 mgs_data,
@@ -49,6 +57,7 @@ def start(num_samples: int, plot: bool) -> None:
                 )
             metadata = dict(
                 pathogen=pathogen_name,
+                tidy_name=tidy_name,
                 taxids=taxids_str,
                 predictor_type=predictor_type,
                 study=study,

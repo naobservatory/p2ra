@@ -230,16 +230,16 @@ class Model(Generic[P]):
         ]
         return coeffs[["location"] + cols]
 
-    def plot_data_scatter(self) -> matplotlib.figure.Figure:
+    def plot_data_scatter(self, **kwargs) -> matplotlib.figure.Figure:
         fig, ax = plt.subplots(1, 1)
         sns.scatterplot(
             data=self.input_df,
             x="predictor",
             y="relative_abundance",
             ax=ax,
-            style="county",
             hue="fine_location",
             hue_order=self.locations,
+            **kwargs,
         )
         sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
         return fig
@@ -335,7 +335,11 @@ class Model(Generic[P]):
 
     def plot_figures(self, path: Path, prefix: str) -> None:
         assert self.fit is not None
-        data_scatter = self.plot_data_scatter()
+        if any(self.input_df["county"]):
+            style = "county"
+        else:
+            style = None
+        data_scatter = self.plot_data_scatter(style=style)
         data_scatter.savefig(
             path / f"{prefix}-datascatter.pdf", bbox_inches="tight"
         )
@@ -354,7 +358,7 @@ class Model(Generic[P]):
             g = self.plot_posterior_samples(
                 x,
                 y,
-                style="county",
+                style=style,
                 hue="fine_location",
                 hue_order=self.locations,
             )

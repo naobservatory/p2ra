@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt  # type: ignore
 import pandas as pd
 import seaborn as sns  # type: ignore
 
-study_order = ["Crits-Christoph", "Rothman", "Spurbeck"]
+study_order = ["Crits-Christoph", "Rothman", "Spurbeck", "Brinch"]
 
 plt.rcParams["font.size"] = 8
 
@@ -70,7 +70,7 @@ def adjust_axes(ax) -> None:
 def plot_overall(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
     viral_reads = count_viral_reads(input_data)
     plotting_order = viral_reads.sort_values(
-        ["reads_by_pathogen", "pathogen"]
+        ["reads_by_pathogen", "tidy_name"]
     ).reset_index()
     fig = plt.figure(figsize=FIGSIZE)
     ax = fig.add_subplot(1, 1, 1)
@@ -78,8 +78,8 @@ def plot_overall(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
         ax=ax,
         data=data[data.location == "Overall"],
         x="ra_at_1in1000",
-        y="pathogen",
-        order=plotting_order.pathogen.unique(),
+        y="tidy_name",
+        order=plotting_order.tidy_name.unique(),
         hue="study",
         hue_order=study_order,
         showfliers=False,
@@ -170,7 +170,7 @@ def plot_three_virus(
 def count_viral_reads(
     df: pd.DataFrame, by_location: bool = False
 ) -> pd.DataFrame:
-    groups = ["pathogen", "predictor_type", "study"]
+    groups = ["pathogen", "tidy_name", "predictor_type", "study"]
     if by_location:
         groups.append("fine_location")
     out = df.groupby(groups).viral_reads.sum().reset_index()
@@ -195,9 +195,9 @@ def start() -> None:
     save_plot(fig_overall, figdir, "overall-boxen")
     fig_three_virus = plot_three_virus(fits_df, input_df)
     save_plot(fig_three_virus, figdir, "three_virus-boxen")
-    for pathogen in input_df.pathogen.unique():
-        fig_virus = plot_virus(fits_df, input_df, pathogen)
-        save_plot(fig_virus, figdir, f"{pathogen.replace(' ', '_')}-boxen")
+    # for pathogen in input_df.pathogen.unique():
+    #     fig_virus = plot_virus(fits_df, input_df, pathogen)
+    #     save_plot(fig_virus, figdir, f"{pathogen.replace(' ', '_')}-boxen")
 
 
 if __name__ == "__main__":
