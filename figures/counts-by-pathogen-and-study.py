@@ -28,10 +28,21 @@ def start():
 
     row_names = []
     row_scores = []
-    col_names = ["Nucleic Acid", "Predictor", "Selection"] + [
+    col_names = ["Nucleic Acid", "Selection"] + [
         "-".join(word.capitalize() for word in author.split("_"))
         for author in sorted(mgs.target_bioprojects)
     ]
+    white_rgb = 1, 1, 1
+    yellow_rgb = 1, 1, 0.94
+    purple_rgb = 1, 0.94, 1
+    green_rgb = 0.93, 1, 0.93
+    red_rgb = 1, 0.96, 0.96
+
+    col_colors = [white_rgb, white_rgb] + [
+        yellow_rgb if author == "brinch" else purple_rgb
+        for author in sorted(mgs.target_bioprojects)
+    ]
+
     # columns: studies
     # rows: pathogens
     table_text = []
@@ -52,12 +63,18 @@ def start():
 
         white_rgb = 1, 1, 1
 
-        table_row_text = [
-            pathogens.pathogens[pathogen_name].pathogen_chars.na_type.value,
-            predictor_type.capitalize(),
-            pathogens.pathogens[pathogen_name].pathogen_chars.selection.value,
+        na_type = pathogens.pathogens[
+            pathogen_name
+        ].pathogen_chars.na_type.value
+        selection = pathogens.pathogens[
+            pathogen_name
+        ].pathogen_chars.selection.value
+        table_row_text = [na_type, selection]
+
+        table_row_colors = [
+            yellow_rgb if na_type == "DNA" else purple_rgb,
+            green_rgb if selection == "Round 1" else red_rgb,
         ]
-        table_row_colors = [white_rgb, white_rgb, white_rgb]
 
         row_score = 0
 
@@ -106,7 +123,9 @@ def start():
         table_text.append(table_row_text)
         table_colors.append(table_row_colors)
         # include name as a tiebreaker, for consistent sorting below
-        row_scores.append((-row_score, name))
+        row_scores.append(
+            (1 if na_type == "DNA" else 0, selection, -row_score, name)
+        )
 
     # now sort everything by row_scores
     assert (
@@ -125,6 +144,7 @@ def start():
     table = ax.table(
         cellText=table_text,
         cellColours=table_colors,
+        colColours=col_colors,
         rowLabels=row_names,
         colLabels=col_names,
         cellLoc="center",
