@@ -37,7 +37,6 @@ def start(num_samples: int, plot: bool) -> None:
     ) in predictors_by_taxid():
         taxids_str = "_".join(str(t) for t in taxids)
         for study, bioprojects in target_bioprojects.items():
-            print(pathogen_name, study)
             enrichment = None if study == "brinch" else Enrichment.VIRAL
             model = stats.build_model(
                 mgs_data,

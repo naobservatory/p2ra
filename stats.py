@@ -113,7 +113,9 @@ class DataPoint(Generic[P]):
     predictor: P | None
 
     def get_predictor_value(self) -> float:
-        # TODO: Handle missing data
+        # TODO: If we update the Stan code to allow some samples to be
+        # missing predictors, have this return the value Stan expects for
+        # missing input data (e.g. NaN)
         if self.predictor is None:
             raise NotImplementedError(
                 f"Data point for sample {self.sample} missing predictor"
