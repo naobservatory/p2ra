@@ -96,34 +96,6 @@ def plot_overall(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
     return fig
 
 
-def plot_virus(
-    data: pd.DataFrame, input_data: pd.DataFrame, pathogen: str
-) -> plt.Figure:
-    viral_reads = count_viral_reads(
-        input_data[input_data.pathogen == pathogen], by_location=True
-    )
-    fig = plt.figure(figsize=(4, 3))
-    ax = fig.add_subplot()
-    sns.boxenplot(
-        ax=ax,
-        data=data[(data.location != "Overall") & (data.pathogen == pathogen)],
-        x="ra_at_1in1000",
-        y="location",
-        hue="study",
-        showfliers=False,
-        box_kws={"linewidth": 0.5},
-    )
-    for num_reads, artist_list in zip(
-        viral_reads.viral_reads,
-        ax.collections,
-    ):
-        artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
-    separate_studies(ax)
-    adjust_axes(ax)
-    ax.set_title(pathogen)
-    return fig
-
-
 def plot_three_virus(
     data: pd.DataFrame, input_data: pd.DataFrame
 ) -> plt.Figure:
@@ -138,11 +110,12 @@ def plot_three_virus(
             input_data[input_data.pathogen == pathogen], by_location=True
         )
         ax = fig.add_subplot(1, 3, i + 1)
+        to_plot = data[
+            (data.location != "Overall") & (data.tidy_name == pathogen)
+        ]
         sns.boxenplot(
             ax=ax,
-            data=data[
-                (data.location != "Overall") & (data.pathogen == pathogen)
-            ],
+            data=to_plot,
             x="ra_at_1in1000",
             y="location",
             hue="study",
@@ -195,9 +168,6 @@ def start() -> None:
     save_plot(fig_overall, figdir, "overall-boxen")
     fig_three_virus = plot_three_virus(fits_df, input_df)
     save_plot(fig_three_virus, figdir, "three_virus-boxen")
-    # for pathogen in input_df.pathogen.unique():
-    #     fig_virus = plot_virus(fits_df, input_df, pathogen)
-    #     save_plot(fig_virus, figdir, f"{pathogen.replace(' ', '_')}-boxen")
 
 
 if __name__ == "__main__":
