@@ -69,7 +69,6 @@ def adjust_axes(ax, predictor_type: str) -> None:
 
 def plot_boxen(ax, data: pd.DataFrame, input_data: pd.DataFrame) -> None:
     viral_reads = count_viral_reads(input_data)
-    print(viral_reads)
     plotting_order = viral_reads.sort_values(
         [
             "nucleic_acid",
@@ -164,13 +163,11 @@ def plot_prevalence(
 
 
 def plot_three_virus(
-    data: pd.DataFrame, input_data: pd.DataFrame
+    data: pd.DataFrame,
+    input_data: pd.DataFrame,
+    viruses: dict[str, tuple[float, float]],
+    predictor_type: str,
 ) -> plt.Figure:
-    viruses = {
-        "Norovirus (GII)": (1e-10, 1e-3),
-        "Norovirus (GI)": (1e-10, 1e-3),
-        "SARS-COV-2": (1e-13, 1e-5),
-    }
     fig = plt.figure(figsize=(6, 4))
     for i, (pathogen, xlim) in enumerate(viruses.items()):
         viral_reads = count_viral_reads(
@@ -196,7 +193,7 @@ def plot_three_virus(
             artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
         ax.set_xlim(xlim)
         separate_studies(ax)
-        adjust_axes(ax, predictor_type="incidence")
+        adjust_axes(ax, predictor_type=predictor_type)
         ax.set_title(pathogen)
         if i == 2:
             ax.legend(
@@ -259,13 +256,30 @@ def start() -> None:
     input_df["nucleic_acid"] = input_df.pathogen.map(lambda p: nucleic_acid[p])
     input_df["selection_round"] = input_df.pathogen.map(selection_round)
     input_df["observed?"] = input_df.viral_reads > 0
-    print(input_df)
     fig_incidence = plot_incidence(fits_df, input_df)
     save_plot(fig_incidence, figdir, "incidence-boxen")
     fig_prevalence = plot_prevalence(fits_df, input_df)
     save_plot(fig_prevalence, figdir, "prevalence-boxen")
-    fig_three_virus = plot_three_virus(fits_df, input_df)
-    save_plot(fig_three_virus, figdir, "three_virus-boxen")
+    incidence_viruses = {
+        "Norovirus (GII)": (1e-10, 1e-3),
+        "Norovirus (GI)": (1e-10, 1e-3),
+        "SARS-COV-2": (1e-12, 1e-6),
+    }
+    fig_three_virus_incidence = plot_three_virus(
+        fits_df, input_df, incidence_viruses, "incidence"
+    )
+    save_plot(fig_three_virus_incidence, figdir, "by_location_incidence-boxen")
+    prevalence_viruses = {
+        "HSV-1": (1e-14, 1e-9),
+        "EBV": (1e-14, 1e-10),
+        "CMV": (1e-14, 1e-10),
+    }
+    fig_three_virus_prevalence = plot_three_virus(
+        fits_df, input_df, prevalence_viruses, "prevalence"
+    )
+    save_plot(
+        fig_three_virus_prevalence, figdir, "by_location_prevalence-boxen"
+    )
 
 
 if __name__ == "__main__":
