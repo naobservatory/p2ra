@@ -30,7 +30,7 @@ def separate_viruses(ax) -> None:
     ax.hlines(
         [(y1 + y2) / 2 for y1, y2 in zip(yticks[:-1], yticks[1:])],
         *ax.get_xlim(),
-        linestyle="dashed",
+        linestyle="dotted",
         color="0.5",
         linewidth=0.5,
     )
@@ -65,13 +65,6 @@ def adjust_axes(ax, predictor_type: str) -> None:
         r"_{1:1000}$)"
     )
     ax.set_ylabel("")
-    ax.legend(
-        title="MGS study",
-        bbox_to_anchor=(1.02, 1),
-        loc="upper left",
-        borderaxespad=0,
-        frameon=False,
-    )
 
 
 def plot_boxen(ax, data: pd.DataFrame, input_data: pd.DataFrame) -> None:
@@ -116,6 +109,13 @@ def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
     ax.set_xlim([1e-14, 1e-4])
     separate_viruses(ax)
     adjust_axes(ax, predictor_type=predictor_type)
+    ax.legend(
+        title="MGS study",
+        bbox_to_anchor=(1.02, 1),
+        loc="upper left",
+        borderaxespad=0,
+        frameon=False,
+    )
     return fig
 
 
@@ -132,25 +132,34 @@ def plot_prevalence(
     )
     ax.set_xlim([1e-16, 1e-8])
     separate_viruses(ax)
+    # TODO Get these values automatically
+    num_rna_1 = 2
+    num_dna_1 = 6
     ax.hlines(
-        [1.5],
+        [num_rna_1 - 0.5, num_rna_1 + num_dna_1 - 0.5],
         *ax.get_xlim(),
         linestyle="solid",
         color="k",
-        linewidth=1.0,
+        linewidth=0.5,
     )
-    ax.hlines(
-        [7.5],
-        *ax.get_xlim(),
-        linestyle="dashed",
-        color="k",
-        linewidth=1.0,
+    ax.text(1.1e-8, -0.4, "RNA viruses\nSelection Round 1", va="top")
+    ax.text(
+        1.1e-8, num_rna_1 - 0.4, "DNA viruses\nSelection Round 1", va="top"
     )
-    ax.text(1e-18, 0.5, "RNA viruses", rotation="vertical", va="center")
-    ax.text(1e-18, 7.5, "DNA viruses", rotation="vertical", va="center")
-    ax.text(1e-8, 7.3, "Selection Round 1", va="bottom")
-    ax.text(1e-8, 7.7, "Selection Round 2", va="top")
+    ax.text(
+        1.1e-8,
+        num_rna_1 + num_dna_1 - 0.4,
+        "DNA viruses\nSelection Round 2",
+        va="top",
+    )
     adjust_axes(ax, predictor_type=predictor_type)
+    ax.legend(
+        title="MGS study",
+        bbox_to_anchor=(1.02, 0),
+        loc="lower left",
+        borderaxespad=0,
+        frameon=False,
+    )
     return fig
 
 
@@ -159,7 +168,7 @@ def plot_three_virus(
 ) -> plt.Figure:
     viruses = {
         "Norovirus (GII)": (1e-10, 1e-3),
-        "MCV": (1e-16, 1e-9),
+        "Norovirus (GI)": (1e-10, 1e-3),
         "SARS-COV-2": (1e-13, 1e-5),
     }
     fig = plt.figure(figsize=(6, 4))
@@ -187,9 +196,17 @@ def plot_three_virus(
             artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
         ax.set_xlim(xlim)
         separate_studies(ax)
-        adjust_axes(ax, predictor_type="TEST")
+        adjust_axes(ax, predictor_type="incidence")
         ax.set_title(pathogen)
-        if i < 2:
+        if i == 2:
+            ax.legend(
+                title="MGS study",
+                bbox_to_anchor=(1.02, 1),
+                loc="upper left",
+                borderaxespad=0,
+                frameon=False,
+            )
+        else:
             ax.get_legend().remove()
         if i != 1:
             ax.set_xlabel("")
