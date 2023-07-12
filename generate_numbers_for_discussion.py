@@ -18,7 +18,7 @@ with open("fits_summary.tsv") as inf:
 
         pathogen = row[cols.index("pathogen")]
         study = row[cols.index("study")]
-        mean = float(row[cols.index("mean")])
+        median = float(row[cols.index("50%")])
         predictor_type = row[cols.index("predictor_type")]
         is_prevalence = {
             "prevalence": True,
@@ -26,7 +26,7 @@ with open("fits_summary.tsv") as inf:
         }[predictor_type]
 
         # 1% prevalence or 0.5% weekly incidence
-        adjusted_relative_abundance = mean * 10 if is_prevalence else mean * 5
+        adjusted_relative_abundance = median * 10 if is_prevalence else median * 5
 
         print(pathogen, study)
         print(
