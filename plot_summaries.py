@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 from pathlib import Path
 
-from pathogens import pathogens
-
 import matplotlib.pyplot as plt  # type: ignore
 import pandas as pd
 import seaborn as sns  # type: ignore
+
+from pathogens import pathogens
 
 nucleic_acid = {
     pathogen_name: module.pathogen_chars.na_type.value
