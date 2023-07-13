@@ -36,18 +36,6 @@ def separate_viruses(ax) -> None:
     )
 
 
-def separate_studies(ax) -> None:
-    # yticks = ax.get_yticks()
-    ax.hlines(
-        [3.5, 11.5],  # TODO: get this from data
-        # [(y1 + y2) / 2 for y1, y2 in zip(yticks[:-1], yticks[1:])],
-        *ax.get_xlim(),
-        linestyle="dashed",
-        color="0.5",
-        linewidth=0.5,
-    )
-
-
 def adjust_axes(ax, predictor_type: str) -> None:
     yticks = ax.get_yticks()
     # Y-axis is reflected
@@ -173,6 +161,10 @@ def plot_three_virus(
         viral_reads = count_viral_reads(
             input_data[input_data.tidy_name == pathogen], by_location=True
         )
+        plotting_order = viral_reads.sort_values(
+            ["study", "fine_location"],
+            ascending=[False, True],
+        ).reset_index()
         ax = fig.add_subplot(1, 3, i + 1)
         to_plot = data[
             (data.location != "Overall") & (data.tidy_name == pathogen)
@@ -182,29 +174,45 @@ def plot_three_virus(
             data=to_plot,
             x="ra_at_1in1000",
             y="location",
+            order=plotting_order.fine_location.unique(),
             hue="study",
+            hue_order=plotting_order.study.unique(),
             showfliers=False,
             box_kws={"linewidth": 0.5},
         )
         for num_reads, artist_list in zip(
-            viral_reads.viral_reads,
-            ax.collections,
+            plotting_order.viral_reads, ax.collections
         ):
             artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
         ax.set_xlim(xlim)
-        separate_studies(ax)
+        # TODO Get these values automatically
+        num_spurbeck = 10
+        num_rothman = 8
+        ax.hlines(
+            [num_spurbeck - 0.5, num_spurbeck + num_rothman - 0.5],
+            *ax.get_xlim(),
+            linestyle="solid",
+            color="k",
+            linewidth=0.5,
+        )
+        if i == 2:
+            x_text = 1.2e-6
+            ax.text(x_text, -0.4, "Spurbeck", va="top")
+            ax.text(
+                x_text,
+                num_spurbeck - 0.4,
+                "Rothman",
+                va="top",
+            )
+            ax.text(
+                x_text,
+                num_spurbeck + num_rothman - 0.4,
+                "Crits-Christoph",
+                va="top",
+            )
         adjust_axes(ax, predictor_type=predictor_type)
         ax.set_title(pathogen)
-        if i == 2:
-            ax.legend(
-                title="MGS study",
-                bbox_to_anchor=(1.02, 1),
-                loc="upper left",
-                borderaxespad=0,
-                frameon=False,
-            )
-        else:
-            ax.get_legend().remove()
+        ax.get_legend().remove()
         if i != 1:
             ax.set_xlabel("")
         if i > 0:
@@ -269,17 +277,17 @@ def start() -> None:
         fits_df, input_df, incidence_viruses, "incidence"
     )
     save_plot(fig_three_virus_incidence, figdir, "by_location_incidence-boxen")
-    prevalence_viruses = {
-        "HSV-1": (1e-14, 1e-9),
-        "EBV": (1e-14, 1e-10),
-        "CMV": (1e-14, 1e-10),
-    }
-    fig_three_virus_prevalence = plot_three_virus(
-        fits_df, input_df, prevalence_viruses, "prevalence"
-    )
-    save_plot(
-        fig_three_virus_prevalence, figdir, "by_location_prevalence-boxen"
-    )
+    # prevalence_viruses = {
+    #     "HSV-1": (1e-14, 1e-9),
+    #     "EBV": (1e-14, 1e-10),
+    #     "CMV": (1e-14, 1e-10),
+    # }
+    # fig_three_virus_prevalence = plot_three_virus(
+    #     fits_df, input_df, prevalence_viruses, "prevalence"
+    # )
+    # save_plot(
+    #     fig_three_virus_prevalence, figdir, "by_location_prevalence-boxen"
+    # )
 
 
 if __name__ == "__main__":
