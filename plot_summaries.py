@@ -7,10 +7,9 @@ import seaborn as sns  # type: ignore
 
 from pathogens import pathogens
 
-nucleic_acid = {
-    pathogen_name: module.pathogen_chars.na_type.value
-    for pathogen_name, module in pathogens.items()
-}
+
+def nucleic_acid(pathogen: str) -> str:
+    return pathogens[pathogen].pathogen_chars.na_type.value
 
 
 def selection_round(pathogen: str) -> int:
@@ -18,6 +17,15 @@ def selection_round(pathogen: str) -> int:
         return 2
     else:
         return 1
+
+
+def study_name(study: str) -> str:
+    return {
+        "brinch": "Brinch (DNA)",
+        "crits_christoph": "Crits-Christoph",
+        "rothman": "Rothman",
+        "spurbeck": "Spurbeck",
+    }[study]
 
 
 plt.rcParams["font.size"] = 8
@@ -245,7 +253,7 @@ def count_viral_reads(
         "selection_round",
     ]
     if by_location:
-        groups.append("fine_location")
+        groups.append("location")
     out = df.groupby(groups)[["viral_reads", "observed?"]].sum().reset_index()
     out["reads_by_tidy_name"] = out.viral_reads.groupby(
         out.tidy_name
@@ -253,8 +261,7 @@ def count_viral_reads(
     out["samples_observed_by_tidy_name"] = (
         out["observed?"].groupby(out.tidy_name).transform("sum")
     )
-    # For consistency
-    return out.rename(columns={"fine_location": "location"})
+    return out
 
 
 def save_plot(fig, figdir: Path, name: str) -> None:
@@ -266,18 +273,15 @@ def start() -> None:
     figdir = Path("fig")
     figdir.mkdir(exist_ok=True)
     fits_df = pd.read_csv("fits.tsv", sep="\t")
-    studies = {
-        "brinch": "Brinch (DNA)",
-        "crits_christoph": "Crits-Christoph",
-        "rothman": "Rothman",
-        "spurbeck": "Spurbeck",
-    }
-    fits_df["study"] = fits_df.study.map(lambda s: studies[s])
+    fits_df["study"] = fits_df.study.map(study_name)
     input_df = pd.read_csv("input.tsv", sep="\t")
-    input_df["study"] = input_df.study.map(lambda s: studies[s])
-    input_df["nucleic_acid"] = input_df.pathogen.map(lambda p: nucleic_acid[p])
+    input_df["study"] = input_df.study.map(study_name)
+    # TODO: Store these in the files instead?
+    input_df["nucleic_acid"] = input_df.pathogen.map(nucleic_acid)
     input_df["selection_round"] = input_df.pathogen.map(selection_round)
     input_df["observed?"] = input_df.viral_reads > 0
+    # For consistency between dataframes (TODO: fix that elsewhere)
+    input_df["location"] = input_df.fine_location
     fig_incidence = plot_incidence(fits_df, input_df)
     save_plot(fig_incidence, figdir, "incidence-boxen")
     fig_prevalence = plot_prevalence(fits_df, input_df)
@@ -291,17 +295,6 @@ def start() -> None:
         fits_df, input_df, incidence_viruses, "incidence"
     )
     save_plot(fig_three_virus_incidence, figdir, "by_location_incidence-boxen")
-    # prevalence_viruses = {
-    #     "HSV-1": (1e-14, 1e-9),
-    #     "EBV": (1e-14, 1e-10),
-    #     "CMV": (1e-14, 1e-10),
-    # }
-    # fig_three_virus_prevalence = plot_three_virus(
-    #     fits_df, input_df, prevalence_viruses, "prevalence"
-    # )
-    # save_plot(
-    #     fig_three_virus_prevalence, figdir, "by_location_prevalence-boxen"
-    # )
 
 
 if __name__ == "__main__":
