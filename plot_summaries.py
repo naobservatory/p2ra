@@ -22,8 +22,6 @@ def selection_round(pathogen: str) -> int:
 
 plt.rcParams["font.size"] = 8
 
-FIGSIZE = (4, 6)
-
 
 def separate_viruses(ax) -> None:
     yticks = ax.get_yticks()
@@ -46,33 +44,33 @@ def adjust_axes(ax, predictor_type: str) -> None:
     ax.spines["left"].set_visible(False)
     ax.set_xscale("log")
     ax.set_xlabel(
-        "Expected relative abundance when\n"
-        f"{predictor_type} = 1:1000 "
-        r"($RA"
-        f"^{predictor_type[0]}"
-        r"_{1:1000}$)"
+        "Expected relative abundance when "
+        f"{predictor_type} = 1:1000, "
+        r"$RA"
+        f"{predictor_type[0]}"
+        r"(1\perthousand)$"
     )
     ax.set_ylabel("")
 
 
-def plot_boxen(ax, data: pd.DataFrame, input_data: pd.DataFrame) -> None:
-    viral_reads = count_viral_reads(input_data)
+def plot_boxen(
+    ax,
+    data: pd.DataFrame,
+    viral_reads: pd.DataFrame,
+    y: str,
+    sorting_order: list[str],
+    ascending: list[bool],
+) -> None:
+    assert len(sorting_order) == len(ascending)
     plotting_order = viral_reads.sort_values(
-        [
-            "nucleic_acid",
-            "selection_round",
-            "samples_observed_by_tidy_name",
-            "tidy_name",
-            "study",
-        ],
-        ascending=[False, True, False, True, False],
+        sorting_order, ascending=ascending
     ).reset_index()
     sns.boxenplot(
         ax=ax,
-        data=data[data.location == "Overall"],
+        data=data,
         x="ra_at_1in1000",
-        y="tidy_name",
-        order=plotting_order.tidy_name.unique(),
+        y=y,
+        order=plotting_order[y].unique(),
         hue="study",
         hue_order=plotting_order.study.unique(),
         showfliers=False,
@@ -89,9 +87,23 @@ def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
     fig = plt.figure(figsize=(4, 3))
     ax = fig.add_subplot(1, 1, 1)
     plot_boxen(
-        ax,
-        data[data.predictor_type == predictor_type],
-        input_data[input_data.predictor_type == predictor_type],
+        ax=ax,
+        data=data[
+            (data.predictor_type == predictor_type)
+            & (data.location == "Overall")
+        ],
+        viral_reads=count_viral_reads(
+            input_data[input_data.predictor_type == predictor_type]
+        ),
+        y="tidy_name",
+        sorting_order=[
+            "nucleic_acid",
+            "selection_round",
+            "samples_observed_by_tidy_name",
+            "tidy_name",
+            "study",
+        ],
+        ascending=[False, True, False, True, False],
     )
     ax.set_xlim([1e-14, 1e-4])
     separate_viruses(ax)
@@ -110,12 +122,26 @@ def plot_prevalence(
     data: pd.DataFrame, input_data: pd.DataFrame
 ) -> plt.Figure:
     predictor_type = "prevalence"
-    fig = plt.figure(figsize=FIGSIZE)
+    fig = plt.figure(figsize=(4, 6))
     ax = fig.add_subplot(1, 1, 1)
     plot_boxen(
-        ax,
-        data[data.predictor_type == predictor_type],
-        input_data[input_data.predictor_type == predictor_type],
+        ax=ax,
+        data=data[
+            (data.predictor_type == predictor_type)
+            & (data.location == "Overall")
+        ],
+        viral_reads=count_viral_reads(
+            input_data[input_data.predictor_type == predictor_type]
+        ),
+        y="tidy_name",
+        sorting_order=[
+            "nucleic_acid",
+            "selection_round",
+            "samples_observed_by_tidy_name",
+            "tidy_name",
+            "study",
+        ],
+        ascending=[False, True, False, True, False],
     )
     ax.set_xlim([1e-16, 1e-8])
     separate_viruses(ax)
@@ -158,32 +184,19 @@ def plot_three_virus(
 ) -> plt.Figure:
     fig = plt.figure(figsize=(6, 4))
     for i, (pathogen, xlim) in enumerate(viruses.items()):
-        viral_reads = count_viral_reads(
-            input_data[input_data.tidy_name == pathogen], by_location=True
-        )
-        plotting_order = viral_reads.sort_values(
-            ["study", "fine_location"],
-            ascending=[False, True],
-        ).reset_index()
         ax = fig.add_subplot(1, 3, i + 1)
-        to_plot = data[
-            (data.location != "Overall") & (data.tidy_name == pathogen)
-        ]
-        sns.boxenplot(
+        plot_boxen(
             ax=ax,
-            data=to_plot,
-            x="ra_at_1in1000",
+            data=data[
+                (data.location != "Overall") & (data.tidy_name == pathogen)
+            ],
+            viral_reads=count_viral_reads(
+                input_data[input_data.tidy_name == pathogen], by_location=True
+            ),
             y="location",
-            order=plotting_order.fine_location.unique(),
-            hue="study",
-            hue_order=plotting_order.study.unique(),
-            showfliers=False,
-            box_kws={"linewidth": 0.5},
+            sorting_order=["study", "location"],
+            ascending=[False, True],
         )
-        for num_reads, artist_list in zip(
-            plotting_order.viral_reads, ax.collections
-        ):
-            artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
         ax.set_xlim(xlim)
         # TODO Get these values automatically
         num_spurbeck = 10
@@ -240,7 +253,8 @@ def count_viral_reads(
     out["samples_observed_by_tidy_name"] = (
         out["observed?"].groupby(out.tidy_name).transform("sum")
     )
-    return out
+    # For consistency
+    return out.rename(columns={"fine_location": "location"})
 
 
 def save_plot(fig, figdir: Path, name: str) -> None:
