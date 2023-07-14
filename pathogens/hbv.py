@@ -122,15 +122,7 @@ def estimate_prevalences() -> list[Prevalence]:
         denmark_estimated_chronic_2007, date_source=Variable(date="2018")
     )
 
-    return [
-        denmark_estimated_chronic_2007,
-        dk_2015,
-        dk_2016,
-        dk_2017,
-        dk_2018,
-        chronic_2020,
-        chronic_2021,
-    ]
+    return []
 
 
 def estimate_incidences() -> list[IncidenceRate]:

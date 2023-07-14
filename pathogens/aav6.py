@@ -117,14 +117,7 @@ def estimate_prevalences() -> list[Prevalence]:
         location_source=Variable(country="Denmark"),
     )
 
-    return [
-        us_2020,
-        us_2021,
-        dk_2015,
-        dk_2016,
-        dk_2017,
-        dk_2018,
-    ]
+    return []
 
 
 def estimate_incidences():
