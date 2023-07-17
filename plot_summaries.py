@@ -12,11 +12,8 @@ def nucleic_acid(pathogen: str) -> str:
     return pathogens[pathogen].pathogen_chars.na_type.value
 
 
-def selection_round(pathogen: str) -> int:
-    if pathogen in ["jcv", "bkv", "mcv", "aav2", "aav5", "aav6"]:
-        return 2
-    else:
-        return 1
+def selection_round(pathogen: str) -> str:
+    return pathogens[pathogen].pathogen_chars.selection.value
 
 
 def study_name(study: str) -> str:
