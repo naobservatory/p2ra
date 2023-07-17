@@ -117,6 +117,8 @@ def estimate_prevalences() -> list[Prevalence]:
         location_source=Variable(country="Denmark"),
     )
 
+    # Dropped because AAV6 is not in Viral RefSeq, and so we aren't able to
+    # classify any reads as this virus.
     return []
 
 
