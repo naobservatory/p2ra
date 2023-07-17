@@ -5,11 +5,27 @@ import matplotlib.pyplot as plt  # type: ignore
 import pandas as pd
 import seaborn as sns  # type: ignore
 
-study_order = ["Crits-Christoph", "Rothman", "Spurbeck", "Brinch"]
+from pathogens import pathogens
+
+
+def nucleic_acid(pathogen: str) -> str:
+    return pathogens[pathogen].pathogen_chars.na_type.value
+
+
+def selection_round(pathogen: str) -> str:
+    return pathogens[pathogen].pathogen_chars.selection.value
+
+
+def study_name(study: str) -> str:
+    return {
+        "brinch": "Brinch (DNA)",
+        "crits_christoph": "Crits-Christoph",
+        "rothman": "Rothman",
+        "spurbeck": "Spurbeck",
+    }[study]
+
 
 plt.rcParams["font.size"] = 8
-
-FIGSIZE = (4, 6)
 
 
 def separate_viruses(ax) -> None:
@@ -17,33 +33,13 @@ def separate_viruses(ax) -> None:
     ax.hlines(
         [(y1 + y2) / 2 for y1, y2 in zip(yticks[:-1], yticks[1:])],
         *ax.get_xlim(),
-        linestyle="dashed",
+        linestyle="dotted",
         color="0.5",
         linewidth=0.5,
     )
 
 
-def separate_studies(ax) -> None:
-    # yticks = ax.get_yticks()
-    ax.hlines(
-        [3.5, 11.5],  # TODO: get this from data
-        # [(y1 + y2) / 2 for y1, y2 in zip(yticks[:-1], yticks[1:])],
-        *ax.get_xlim(),
-        linestyle="dashed",
-        color="0.5",
-        linewidth=0.5,
-    )
-
-
-def italicize_incidence_viruses(ax) -> None:
-    # TODO: Get from data
-    incidence_viruses = ["SARS-COV-2", "Norovirus (GI)", "Norovirus (GII)"]
-    for label in ax.get_yticklabels():
-        if label.get_text() in incidence_viruses:
-            label.set_fontstyle("oblique")
-
-
-def adjust_axes(ax) -> None:
+def adjust_axes(ax, predictor_type: str) -> None:
     yticks = ax.get_yticks()
     # Y-axis is reflected
     ax.set_ylim([max(yticks) + 0.5, min(yticks - 0.5)])
@@ -53,35 +49,35 @@ def adjust_axes(ax) -> None:
     ax.spines["left"].set_visible(False)
     ax.set_xscale("log")
     ax.set_xlabel(
-        "Expected relative abundance when\n"
-        "incidence|prevalence = 1:1000 "
-        r"($RA_{1:1000}$)"
+        "Expected relative abundance when "
+        f"{predictor_type} = 1:1000, "
+        r"$RA"
+        f"{predictor_type[0]}"
+        r"(1\perthousand)$"
     )
     ax.set_ylabel("")
-    ax.legend(
-        title="MGS study",
-        bbox_to_anchor=(1.02, 1),
-        loc="upper left",
-        borderaxespad=0,
-        frameon=False,
-    )
 
 
-def plot_overall(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
-    viral_reads = count_viral_reads(input_data)
+def plot_boxen(
+    ax,
+    data: pd.DataFrame,
+    viral_reads: pd.DataFrame,
+    y: str,
+    sorting_order: list[str],
+    ascending: list[bool],
+) -> None:
+    assert len(sorting_order) == len(ascending)
     plotting_order = viral_reads.sort_values(
-        ["reads_by_pathogen", "tidy_name"]
+        sorting_order, ascending=ascending
     ).reset_index()
-    fig = plt.figure(figsize=FIGSIZE)
-    ax = fig.add_subplot(1, 1, 1)
     sns.boxenplot(
         ax=ax,
-        data=data[data.location == "Overall"],
+        data=data,
         x="ra_at_1in1000",
-        y="tidy_name",
-        order=plotting_order.tidy_name.unique(),
+        y=y,
+        order=plotting_order[y].unique(),
         hue="study",
-        hue_order=study_order,
+        hue_order=plotting_order.study.unique(),
         showfliers=False,
         box_kws={"linewidth": 0.5},
     )
@@ -89,77 +85,152 @@ def plot_overall(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
         plotting_order.viral_reads, ax.collections
     ):
         artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
-    ax.set_xlim([1e-18, 1e-3])
+
+
+def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
+    predictor_type = "incidence"
+    fig = plt.figure(figsize=(4, 3))
+    ax = fig.add_subplot(1, 1, 1)
+    plot_boxen(
+        ax=ax,
+        data=data[
+            (data.predictor_type == predictor_type)
+            & (data.location == "Overall")
+        ],
+        viral_reads=count_viral_reads(
+            input_data[input_data.predictor_type == predictor_type]
+        ),
+        y="tidy_name",
+        sorting_order=[
+            "nucleic_acid",
+            "selection_round",
+            "samples_observed_by_tidy_name",
+            "tidy_name",
+            "study",
+        ],
+        ascending=[False, True, False, True, False],
+    )
+    ax.set_xlim([1e-14, 1e-4])
     separate_viruses(ax)
-    adjust_axes(ax)
-    italicize_incidence_viruses(ax)
+    adjust_axes(ax, predictor_type=predictor_type)
+    ax.legend(
+        title="MGS study",
+        bbox_to_anchor=(1.02, 1),
+        loc="upper left",
+        borderaxespad=0,
+        frameon=False,
+    )
     return fig
 
 
-def plot_virus(
-    data: pd.DataFrame, input_data: pd.DataFrame, pathogen: str
+def plot_prevalence(
+    data: pd.DataFrame, input_data: pd.DataFrame
 ) -> plt.Figure:
-    viral_reads = count_viral_reads(
-        input_data[input_data.pathogen == pathogen], by_location=True
-    )
-    fig = plt.figure(figsize=(4, 3))
-    ax = fig.add_subplot()
-    sns.boxenplot(
+    predictor_type = "prevalence"
+    fig = plt.figure(figsize=(4, 6))
+    ax = fig.add_subplot(1, 1, 1)
+    plot_boxen(
         ax=ax,
-        data=data[(data.location != "Overall") & (data.pathogen == pathogen)],
-        x="ra_at_1in1000",
-        y="location",
-        hue="study",
-        showfliers=False,
-        box_kws={"linewidth": 0.5},
+        data=data[
+            (data.predictor_type == predictor_type)
+            & (data.location == "Overall")
+        ],
+        viral_reads=count_viral_reads(
+            input_data[input_data.predictor_type == predictor_type]
+        ),
+        y="tidy_name",
+        sorting_order=[
+            "nucleic_acid",
+            "selection_round",
+            "samples_observed_by_tidy_name",
+            "tidy_name",
+            "study",
+        ],
+        ascending=[False, True, False, True, False],
     )
-    for num_reads, artist_list in zip(
-        viral_reads.viral_reads,
-        ax.collections,
-    ):
-        artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
-    separate_studies(ax)
-    adjust_axes(ax)
-    ax.set_title(pathogen)
+    ax.set_xlim([1e-16, 1e-8])
+    separate_viruses(ax)
+    # TODO Get these values automatically
+    num_rna_1 = 2
+    num_dna_1 = 6
+    ax.hlines(
+        [num_rna_1 - 0.5, num_rna_1 + num_dna_1 - 0.5],
+        *ax.get_xlim(),
+        linestyle="solid",
+        color="k",
+        linewidth=0.5,
+    )
+    ax.text(1.1e-8, -0.4, "RNA viruses\nSelection Round 1", va="top")
+    ax.text(
+        1.1e-8, num_rna_1 - 0.4, "DNA viruses\nSelection Round 1", va="top"
+    )
+    ax.text(
+        1.1e-8,
+        num_rna_1 + num_dna_1 - 0.4,
+        "DNA viruses\nSelection Round 2",
+        va="top",
+    )
+    adjust_axes(ax, predictor_type=predictor_type)
+    ax.legend(
+        title="MGS study",
+        bbox_to_anchor=(1.02, 0),
+        loc="lower left",
+        borderaxespad=0,
+        frameon=False,
+    )
     return fig
 
 
 def plot_three_virus(
-    data: pd.DataFrame, input_data: pd.DataFrame
+    data: pd.DataFrame,
+    input_data: pd.DataFrame,
+    viruses: dict[str, tuple[float, float]],
+    predictor_type: str,
 ) -> plt.Figure:
-    viruses = {
-        "Norovirus (GII)": (1e-10, 1e-3),
-        "MCV": (1e-16, 1e-9),
-        "SARS-COV-2": (1e-13, 1e-5),
-    }
     fig = plt.figure(figsize=(6, 4))
     for i, (pathogen, xlim) in enumerate(viruses.items()):
-        viral_reads = count_viral_reads(
-            input_data[input_data.pathogen == pathogen], by_location=True
-        )
         ax = fig.add_subplot(1, 3, i + 1)
-        sns.boxenplot(
+        plot_boxen(
             ax=ax,
             data=data[
-                (data.location != "Overall") & (data.pathogen == pathogen)
+                (data.location != "Overall") & (data.tidy_name == pathogen)
             ],
-            x="ra_at_1in1000",
+            viral_reads=count_viral_reads(
+                input_data[input_data.tidy_name == pathogen], by_location=True
+            ),
             y="location",
-            hue="study",
-            showfliers=False,
-            box_kws={"linewidth": 0.5},
+            sorting_order=["study", "location"],
+            ascending=[False, True],
         )
-        for num_reads, artist_list in zip(
-            viral_reads.viral_reads,
-            ax.collections,
-        ):
-            artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
         ax.set_xlim(xlim)
-        separate_studies(ax)
-        adjust_axes(ax)
+        # TODO Get these values automatically
+        num_spurbeck = 10
+        num_rothman = 8
+        ax.hlines(
+            [num_spurbeck - 0.5, num_spurbeck + num_rothman - 0.5],
+            *ax.get_xlim(),
+            linestyle="solid",
+            color="k",
+            linewidth=0.5,
+        )
+        if i == 2:
+            x_text = 1.2e-6
+            ax.text(x_text, -0.4, "Spurbeck", va="top")
+            ax.text(
+                x_text,
+                num_spurbeck - 0.4,
+                "Rothman",
+                va="top",
+            )
+            ax.text(
+                x_text,
+                num_spurbeck + num_rothman - 0.4,
+                "Crits-Christoph",
+                va="top",
+            )
+        adjust_axes(ax, predictor_type=predictor_type)
         ax.set_title(pathogen)
-        if i < 2:
-            ax.get_legend().remove()
+        ax.get_legend().remove()
         if i != 1:
             ax.set_xlabel("")
         if i > 0:
@@ -170,12 +241,22 @@ def plot_three_virus(
 def count_viral_reads(
     df: pd.DataFrame, by_location: bool = False
 ) -> pd.DataFrame:
-    groups = ["pathogen", "tidy_name", "predictor_type", "study"]
+    groups = [
+        "pathogen",
+        "tidy_name",
+        "predictor_type",
+        "study",
+        "nucleic_acid",
+        "selection_round",
+    ]
     if by_location:
-        groups.append("fine_location")
-    out = df.groupby(groups).viral_reads.sum().reset_index()
-    out["reads_by_pathogen"] = out.viral_reads.groupby(out.pathogen).transform(
-        "sum"
+        groups.append("location")
+    out = df.groupby(groups)[["viral_reads", "observed?"]].sum().reset_index()
+    out["reads_by_tidy_name"] = out.viral_reads.groupby(
+        out.tidy_name
+    ).transform("sum")
+    out["samples_observed_by_tidy_name"] = (
+        out["observed?"].groupby(out.tidy_name).transform("sum")
     )
     return out
 
@@ -189,15 +270,28 @@ def start() -> None:
     figdir = Path("fig")
     figdir.mkdir(exist_ok=True)
     fits_df = pd.read_csv("fits.tsv", sep="\t")
-    fits_df["study"] = [x.replace("_", "-").title() for x in fits_df["study"]]
+    fits_df["study"] = fits_df.study.map(study_name)
     input_df = pd.read_csv("input.tsv", sep="\t")
-    fig_overall = plot_overall(fits_df, input_df)
-    save_plot(fig_overall, figdir, "overall-boxen")
-    fig_three_virus = plot_three_virus(fits_df, input_df)
-    save_plot(fig_three_virus, figdir, "three_virus-boxen")
-    # for pathogen in input_df.pathogen.unique():
-    #     fig_virus = plot_virus(fits_df, input_df, pathogen)
-    #     save_plot(fig_virus, figdir, f"{pathogen.replace(' ', '_')}-boxen")
+    input_df["study"] = input_df.study.map(study_name)
+    # TODO: Store these in the files instead?
+    input_df["nucleic_acid"] = input_df.pathogen.map(nucleic_acid)
+    input_df["selection_round"] = input_df.pathogen.map(selection_round)
+    input_df["observed?"] = input_df.viral_reads > 0
+    # For consistency between dataframes (TODO: fix that elsewhere)
+    input_df["location"] = input_df.fine_location
+    fig_incidence = plot_incidence(fits_df, input_df)
+    save_plot(fig_incidence, figdir, "incidence-boxen")
+    fig_prevalence = plot_prevalence(fits_df, input_df)
+    save_plot(fig_prevalence, figdir, "prevalence-boxen")
+    incidence_viruses = {
+        "Norovirus (GII)": (1e-10, 1e-3),
+        "Norovirus (GI)": (1e-10, 1e-3),
+        "SARS-COV-2": (1e-12, 1e-6),
+    }
+    fig_three_virus_incidence = plot_three_virus(
+        fits_df, input_df, incidence_viruses, "incidence"
+    )
+    save_plot(fig_three_virus_incidence, figdir, "by_location_incidence-boxen")
 
 
 if __name__ == "__main__":
