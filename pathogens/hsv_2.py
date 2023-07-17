@@ -142,6 +142,9 @@ def estimate_prevalences() -> list[Prevalence]:
         location_source=Variable(country="Denmark"),
     )
 
+    # Dropped because our Kraken2 configuration isn't able to classify any
+    # reads as this virus, even if they're taken straight from it's RefSeq
+    # genome.  See https://github.com/BenLangmead/aws-indexes/issues/18.
     return []
 
 
