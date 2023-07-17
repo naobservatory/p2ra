@@ -50,7 +50,13 @@ class TestPathogens(unittest.TestCase):
                 for estimate in pathogen.estimate_incidences():
                     self.assertIsInstance(estimate, IncidenceRate)
                     saw_estimate = True
-                self.assertTrue(saw_estimate)
+
+                if pathogen_name in ["aav6", "hbv", "hsv_2"]:
+                    # It's expected that these pathogens have no estimates; see
+                    # https://docs.google.com/document/d/1IIeOFKNqAwf9NTJeVFRSl_Q9asvu9_TGc_HSrlXg8PI/edit
+                    self.assertFalse(saw_estimate)
+                else:
+                    self.assertTrue(saw_estimate)
 
     def test_dates_set(self):
         for pathogen_name, pathogen in pathogens.pathogens.items():

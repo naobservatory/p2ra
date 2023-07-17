@@ -122,15 +122,10 @@ def estimate_prevalences() -> list[Prevalence]:
         denmark_estimated_chronic_2007, date_source=Variable(date="2018")
     )
 
-    return [
-        denmark_estimated_chronic_2007,
-        dk_2015,
-        dk_2016,
-        dk_2017,
-        dk_2018,
-        chronic_2020,
-        chronic_2021,
-    ]
+    # Dropped because our Kraken2 configuration isn't able to classify any
+    # reads as this virus, even if they're taken straight from it's RefSeq
+    # genome.  See https://github.com/BenLangmead/aws-indexes/issues/18.
+    return []
 
 
 def estimate_incidences() -> list[IncidenceRate]:

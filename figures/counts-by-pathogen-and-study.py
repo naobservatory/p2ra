@@ -138,7 +138,7 @@ def start():
     table_text = [x for _, x in sorted(zip(row_scores, table_text))]
     table_colors = [x for _, x in sorted(zip(row_scores, table_colors))]
 
-    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 3.7))
     ax.set_axis_off()
 
     table = ax.table(
