@@ -152,7 +152,7 @@ def plot_prevalence(
     separate_viruses(ax)
     # TODO Get these values automatically
     num_rna_1 = 2
-    num_dna_1 = 6
+    num_dna_1 = 4
     ax.hlines(
         [num_rna_1 - 0.5, num_rna_1 + num_dna_1 - 0.5],
         *ax.get_xlim(),
