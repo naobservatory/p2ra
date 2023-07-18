@@ -87,7 +87,7 @@ def plot_boxen(
     for num_reads, line, patches in zip(
         plotting_order.viral_reads, ax.lines, ax.collections
     ):
-        alpha = min(num_reads / 10 + 0.1, 1.0)
+        alpha = min((num_reads + 1) / 10, 1.0)
         line.set_alpha(alpha)
         patches.set_alpha(alpha)
         if (not show_zero_counts) and (num_reads == 0):
