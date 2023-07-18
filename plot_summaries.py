@@ -65,6 +65,7 @@ def plot_boxen(
     y: str,
     sorting_order: list[str],
     ascending: list[bool],
+    show_zero_counts: bool = False,
 ) -> None:
     assert len(sorting_order) == len(ascending)
     plotting_order = viral_reads.sort_values(
@@ -81,10 +82,39 @@ def plot_boxen(
         showfliers=False,
         box_kws={"linewidth": 0.5},
     )
-    for num_reads, artist_list in zip(
-        plotting_order.viral_reads, ax.collections
+
+    lhs = ax.get_xlim()[0]
+    for num_reads, line, patches in zip(
+        plotting_order.viral_reads, ax.lines, ax.collections
     ):
-        artist_list.set_alpha(min(num_reads / 10 + 0.02, 1.0))
+        alpha = min(num_reads / 10 + 0.1, 1.0)
+        line.set_alpha(alpha)
+        patches.set_alpha(alpha)
+        if (not show_zero_counts) and (num_reads == 0):
+            patches.set_visible(False)
+            line.set_visible(False)
+            # The third patch from center marks the ~94 percentile
+            path = patches.get_paths()[-3]
+            right_edge_midpoint = (
+                (path.vertices[1][0] + path.vertices[2][0]) / 2,
+                (path.vertices[1][1] + path.vertices[2][1]) / 2,
+            )
+            color = patches.get_cmap()(0)
+            ax.hlines(
+                right_edge_midpoint[1],
+                lhs,
+                right_edge_midpoint[0],
+                linestyle="dashed",
+                color=color,
+                alpha=0.1,
+            )
+            ax.scatter(
+                *right_edge_midpoint,
+                color=color,
+                alpha=0.5,
+                marker="<",
+                s=10,
+            )
 
 
 def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
@@ -201,6 +231,7 @@ def plot_three_virus(
             y="location",
             sorting_order=["study", "location"],
             ascending=[False, True],
+            show_zero_counts=True,
         )
         ax.set_xlim(xlim)
         # TODO Get these values automatically
