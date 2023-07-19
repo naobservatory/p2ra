@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import matplotlib.ticker as ticker
+import matplotlib.patches as mpatches
 
 from pathlib import Path
 
@@ -47,6 +48,7 @@ def adjust_axes(ax, predictor_type: str) -> None:
     # Y-axis is reflected
     ax.set_ylim([max(yticks) + 0.5, min(yticks - 0.5)])
     ax.tick_params(left=False)
+    ax.xaxis.set_major_formatter(ticker.FuncFormatter(format_func))
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
     ax.spines["left"].set_visible(False)
@@ -68,7 +70,7 @@ def plot_violin(
     y: str,
     sorting_order: list[str],
     ascending: list[bool],
-    show_zero_counts: bool = False,
+    hatch_zero_counts: bool = False,
     violin_scale=1.0,
 ) -> None:
     assert len(sorting_order) == len(ascending)
@@ -86,14 +88,19 @@ def plot_violin(
         inner=None,
         linewidth=0.0,
         bw=0.5,
-        # scale="width",
         scale="area",
         scale_hue=False,
         cut=0,
     )
-    lhs = ax.get_xlim()[0]
+    x_min = ax.get_xlim()[0]
     for num_reads, patches in zip(plotting_order.viral_reads, ax.collections):
-        alpha = min((num_reads + 1) / 10, 1.0)
+        # alpha = min((num_reads + 1) / 10, 1.0)
+        if num_reads == 0:
+            alpha = 0.5
+        elif num_reads < 10:
+            alpha = 0.5
+        else:
+            alpha = 1.0
         patches.set_alpha(alpha)
         # Make violins fatter
         for path in patches.get_paths():
@@ -101,31 +108,23 @@ def plot_violin(
             path.vertices[:, 1] = (
                 violin_scale * (path.vertices[:, 1] - y_mid) + y_mid
             )
-        # if (not show_zero_counts) and (num_reads == 0):
-        #     patches.set_visible(False)
-        #     line.set_visible(False)
-        #     # The third patch from center marks the ~94 percentile
-        #     path = patches.get_paths()[-3]
-        #     right_edge_midpoint = (
-        #         (path.vertices[1][0] + path.vertices[2][0]) / 2,
-        #         (path.vertices[1][1] + path.vertices[2][1]) / 2,
-        #     )
-        #     color = patches.get_cmap()(0)
-        #     ax.hlines(
-        #         right_edge_midpoint[1],
-        #         lhs,
-        #         right_edge_midpoint[0],
-        #         color=color,
-        #         alpha=0.1,
-        #     )
-        #     ax.scatter(
-        #         *right_edge_midpoint,
-        #         color=color,
-        #         alpha=0.5,
-        #         marker="<",
-        #         s=10,
-        #         linewidths=0,
-        #     )
+            if (not hatch_zero_counts) and (num_reads == 0):
+                color = patches.get_facecolor()
+                y_max = np.max(path.vertices[:, 1])
+                y_min = np.min(path.vertices[:, 1])
+                x_max = path.vertices[np.argmax(path.vertices[:, 1]), 0]
+                rect = mpatches.Rectangle(
+                    (x_min, y_min),
+                    x_max - x_min,
+                    y_max - y_min,
+                    facecolor=color,
+                    linewidth=0.0,
+                    alpha=alpha,
+                    fill=False,
+                    hatch="|||",
+                    edgecolor=color,
+                )
+                ax.add_patch(rect)
 
 
 def format_func(value, tick_number):
@@ -158,8 +157,6 @@ def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
         violin_scale=2.0,
     )
     ax.set_xlim([-14, -4])
-    ax.xaxis.set_major_formatter(ticker.FuncFormatter(format_func))
-
     separate_viruses(ax)
     adjust_axes(ax, predictor_type=predictor_type)
     legend = ax.legend(
@@ -201,7 +198,7 @@ def plot_prevalence(
         violin_scale=1.5,
     )
     ax.set_xlim([-16, -8])
-    ax.xaxis.set_major_formatter(ticker.FuncFormatter(format_func))
+    ax.set_xticks(list(range(-16, -6, 2)))
     separate_viruses(ax)
     # TODO Get these values automatically
     num_rna_1 = 2
@@ -258,10 +255,9 @@ def plot_three_virus(
             sorting_order=["study", "location"],
             ascending=[False, True],
             violin_scale=2.5,
-            show_zero_counts=True,
+            hatch_zero_counts=True,
         )
         ax.set_xlim(xlim)
-        ax.xaxis.set_major_formatter(ticker.FuncFormatter(format_func))
         # TODO Get these values automatically
         num_spurbeck = 10
         num_rothman = 8
@@ -340,9 +336,9 @@ def start() -> None:
     # For consistency between dataframes (TODO: fix that elsewhere)
     input_df["location"] = input_df.fine_location
     fig_incidence = plot_incidence(fits_df, input_df)
-    save_plot(fig_incidence, figdir, "incidence-boxen")
+    save_plot(fig_incidence, figdir, "incidence-violin")
     fig_prevalence = plot_prevalence(fits_df, input_df)
-    save_plot(fig_prevalence, figdir, "prevalence-boxen")
+    save_plot(fig_prevalence, figdir, "prevalence-violin")
     incidence_viruses = {
         "Norovirus (GII)": (-10, -3),
         "Norovirus (GI)": (-10, -3),
@@ -351,7 +347,9 @@ def start() -> None:
     fig_three_virus_incidence = plot_three_virus(
         fits_df, input_df, incidence_viruses, "incidence"
     )
-    save_plot(fig_three_virus_incidence, figdir, "by_location_incidence-boxen")
+    save_plot(
+        fig_three_virus_incidence, figdir, "by_location_incidence-violin"
+    )
 
 
 if __name__ == "__main__":
