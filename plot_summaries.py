@@ -80,7 +80,8 @@ def plot_boxen(
         hue="study",
         hue_order=plotting_order.study.unique(),
         showfliers=False,
-        box_kws={"linewidth": 0.5},
+        box_kws={"linewidth": 0.0},
+        line_kws={"linewidth": 1.0, "color": "0.25"},
     )
 
     lhs = ax.get_xlim()[0]
@@ -113,6 +114,7 @@ def plot_boxen(
                 alpha=0.5,
                 marker="<",
                 s=10,
+                linewidths=0,
             )
 
 
@@ -142,13 +144,15 @@ def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
     ax.set_xlim([1e-14, 1e-4])
     separate_viruses(ax)
     adjust_axes(ax, predictor_type=predictor_type)
-    ax.legend(
+    legend = ax.legend(
         title="MGS study",
         bbox_to_anchor=(1.02, 1),
         loc="upper left",
         borderaxespad=0,
         frameon=False,
     )
+    for legend_handle in legend.legend_handles:
+        legend_handle.set_edgecolor(legend_handle.get_facecolor())
     return fig
 
 
@@ -200,13 +204,15 @@ def plot_prevalence(
         va="top",
     )
     adjust_axes(ax, predictor_type=predictor_type)
-    ax.legend(
+    legend = ax.legend(
         title="MGS study",
         bbox_to_anchor=(1.02, 0),
         loc="lower left",
         borderaxespad=0,
         frameon=False,
     )
+    for legend_handle in legend.legend_handles:
+        legend_handle.set_edgecolor(legend_handle.get_facecolor())
     return fig
 
 
