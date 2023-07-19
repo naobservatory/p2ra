@@ -104,7 +104,6 @@ def plot_boxen(
                 right_edge_midpoint[1],
                 lhs,
                 right_edge_midpoint[0],
-                linestyle="dashed",
                 color=color,
                 alpha=0.1,
             )
