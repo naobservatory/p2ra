@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-import matplotlib.ticker as ticker
-import matplotlib.patches as mpatches
-
 from pathlib import Path
 
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt  # type: ignore
+import matplotlib.ticker as ticker
 import numpy as np
 import pandas as pd
 import seaborn as sns  # type: ignore
@@ -102,7 +101,7 @@ def plot_violin(
         else:
             alpha = 1.0
         patches.set_alpha(alpha)
-        # Make violins fatter
+        # Make violins fatter and hatch if zero counts
         for path in patches.get_paths():
             y_mid = path.vertices[0, 1]
             path.vertices[:, 1] = (
