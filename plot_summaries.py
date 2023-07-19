@@ -69,6 +69,7 @@ def plot_violin(
     sorting_order: list[str],
     ascending: list[bool],
     show_zero_counts: bool = False,
+    violin_scale=1.0,
 ) -> None:
     assert len(sorting_order) == len(ascending)
     plotting_order = viral_reads.sort_values(
@@ -85,14 +86,21 @@ def plot_violin(
         inner=None,
         linewidth=0.0,
         bw=0.5,
-        scale="width",
-        # scale="area",
+        # scale="width",
+        scale="area",
         scale_hue=False,
+        cut=0,
     )
     lhs = ax.get_xlim()[0]
     for num_reads, patches in zip(plotting_order.viral_reads, ax.collections):
         alpha = min((num_reads + 1) / 10, 1.0)
         patches.set_alpha(alpha)
+        # Make violins fatter
+        for path in patches.get_paths():
+            y_mid = path.vertices[0, 1]
+            path.vertices[:, 1] = (
+                violin_scale * (path.vertices[:, 1] - y_mid) + y_mid
+            )
         # if (not show_zero_counts) and (num_reads == 0):
         #     patches.set_visible(False)
         #     line.set_visible(False)
@@ -118,65 +126,6 @@ def plot_violin(
         #         s=10,
         #         linewidths=0,
         #     )
-
-
-def plot_boxen(
-    ax,
-    data: pd.DataFrame,
-    viral_reads: pd.DataFrame,
-    y: str,
-    sorting_order: list[str],
-    ascending: list[bool],
-    show_zero_counts: bool = False,
-) -> None:
-    assert len(sorting_order) == len(ascending)
-    plotting_order = viral_reads.sort_values(
-        sorting_order, ascending=ascending
-    ).reset_index()
-    sns.boxenplot(
-        ax=ax,
-        data=data,
-        x="ra_at_1in1000",
-        y=y,
-        order=plotting_order[y].unique(),
-        hue="study",
-        hue_order=plotting_order.study.unique(),
-        showfliers=False,
-        box_kws={"linewidth": 0.0},
-        line_kws={"linewidth": 1.0, "color": "0.25"},
-    )
-    lhs = ax.get_xlim()[0]
-    for num_reads, line, patches in zip(
-        plotting_order.viral_reads, ax.lines, ax.collections
-    ):
-        alpha = min((num_reads + 1) / 10, 1.0)
-        line.set_alpha(alpha)
-        patches.set_alpha(alpha)
-        if (not show_zero_counts) and (num_reads == 0):
-            patches.set_visible(False)
-            line.set_visible(False)
-            # The third patch from center marks the ~94 percentile
-            path = patches.get_paths()[-3]
-            right_edge_midpoint = (
-                (path.vertices[1][0] + path.vertices[2][0]) / 2,
-                (path.vertices[1][1] + path.vertices[2][1]) / 2,
-            )
-            color = patches.get_cmap()(0)
-            ax.hlines(
-                right_edge_midpoint[1],
-                lhs,
-                right_edge_midpoint[0],
-                color=color,
-                alpha=0.1,
-            )
-            ax.scatter(
-                *right_edge_midpoint,
-                color=color,
-                alpha=0.5,
-                marker="<",
-                s=10,
-                linewidths=0,
-            )
 
 
 def format_func(value, tick_number):
@@ -206,6 +155,7 @@ def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
             "study",
         ],
         ascending=[False, True, False, True, False],
+        violin_scale=2.0,
     )
     ax.set_xlim([-14, -4])
     ax.xaxis.set_major_formatter(ticker.FuncFormatter(format_func))
@@ -248,6 +198,7 @@ def plot_prevalence(
             "study",
         ],
         ascending=[False, True, False, True, False],
+        violin_scale=1.5,
     )
     ax.set_xlim([-16, -8])
     ax.xaxis.set_major_formatter(ticker.FuncFormatter(format_func))
@@ -306,7 +257,8 @@ def plot_three_virus(
             y="location",
             sorting_order=["study", "location"],
             ascending=[False, True],
-            # show_zero_counts=True,
+            violin_scale=2.5,
+            show_zero_counts=True,
         )
         ax.set_xlim(xlim)
         ax.xaxis.set_major_formatter(ticker.FuncFormatter(format_func))
