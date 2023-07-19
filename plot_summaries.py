@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 from pathlib import Path
 
-import matplotlib.patches as mpatches
+import matplotlib.patches as mpatches  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
-import matplotlib.ticker as ticker
+import matplotlib.ticker as ticker  # type: ignore
 import numpy as np
 import pandas as pd
 import seaborn as sns  # type: ignore
@@ -339,9 +339,9 @@ def start() -> None:
     fig_prevalence = plot_prevalence(fits_df, input_df)
     save_plot(fig_prevalence, figdir, "prevalence-violin")
     incidence_viruses = {
-        "Norovirus (GII)": (-10, -3),
-        "Norovirus (GI)": (-10, -3),
-        "SARS-COV-2": (-12, -6),
+        "Norovirus (GII)": (-10.0, -3.0),
+        "Norovirus (GI)": (-10.0, -3.0),
+        "SARS-COV-2": (-12.0, -6.0),
     }
     fig_three_virus_incidence = plot_three_virus(
         fits_df, input_df, incidence_viruses, "incidence"
