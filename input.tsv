@@ -1,6 +1,6 @@
 sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abundance	pathogen	tidy_name	taxids	predictor_type	study
 1	6	45434265	234.94685725847725	Oakland	2020-06-30	Alameda County	1.320589207286615e-07	sars_cov_2	SARS-COV-2	2697049	incidence	crits_christoph
-2	15	41207484	825.162085409634	Marin	2020-07-01	Marin County	3.640115470286902e-07	sars_cov_2	SARS-COV-2	2697049	incidence	crits_christoph
+2	14	41207484	825.162085409634	Marin	2020-07-01	Marin County	3.397441105601109e-07	sars_cov_2	SARS-COV-2	2697049	incidence	crits_christoph
 3	19	38572859	825.162085409634	Marin	2020-07-01	Marin County	4.925743253825183e-07	sars_cov_2	SARS-COV-2	2697049	incidence	crits_christoph
 4	0	47832942	207.26269627627977	SF	2020-06-30	San Francisco County	0.0	sars_cov_2	SARS-COV-2	2697049	incidence	crits_christoph
 5	5	48462833	234.94685725847725	Oakland	2020-06-30	Alameda County	1.0317184717616487e-07	sars_cov_2	SARS-COV-2	2697049	incidence	crits_christoph
@@ -1403,7 +1403,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 18	0	10324347	50400.0	F	2021-12-05	Franklin County	0.0	cmv	CMV	10359	prevalence	spurbeck
 19	0	4526832	50400.0	F	2022-01-09	Franklin County	0.0	cmv	CMV	10359	prevalence	spurbeck
 20	0	26761777	50400.0	F	2022-01-02	Franklin County	0.0	cmv	CMV	10359	prevalence	spurbeck
-21	1	93165126	50400.0	A	2021-12-05	Summit County	1.0733630092444678e-08	cmv	CMV	10359	prevalence	spurbeck
+21	0	93165126	50400.0	A	2021-12-05	Summit County	0.0	cmv	CMV	10359	prevalence	spurbeck
 22	0	8675446	50400.0	E	2021-12-26	Sandusky County	0.0	cmv	CMV	10359	prevalence	spurbeck
 23	0	22756198	50400.0	E	2021-12-19	Sandusky County	0.0	cmv	CMV	10359	prevalence	spurbeck
 24	0	53418977	50400.0	E	2021-12-12	Sandusky County	0.0	cmv	CMV	10359	prevalence	spurbeck
@@ -1486,8 +1486,8 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 46	0	3004252	45600.0	Valby	2016-06-05		0.0	cmv	CMV	10359	prevalence	brinch
 47	0	3428079	45600.0	Valby	2016-06-14		0.0	cmv	CMV	10359	prevalence	brinch
 48	0	26035123	45600.0	Avedoere	2015-11-23		0.0	cmv	CMV	10359	prevalence	brinch
-49	3	42800891	45600.0	Avedoere	2015-12-02		7.009199878572621e-08	cmv	CMV	10359	prevalence	brinch
-50	1	3879197	45600.0	Avedoere	2016-01-09		2.577853096916707e-07	cmv	CMV	10359	prevalence	brinch
+49	1	42800891	45600.0	Avedoere	2015-12-02		2.336399959524207e-08	cmv	CMV	10359	prevalence	brinch
+50	0	3879197	45600.0	Avedoere	2016-01-09		0.0	cmv	CMV	10359	prevalence	brinch
 51	0	4360713	45600.0	Avedoere	2016-01-11		0.0	cmv	CMV	10359	prevalence	brinch
 52	0	625387	45600.0	Avedoere	2016-01-20		0.0	cmv	CMV	10359	prevalence	brinch
 53	0	668717	45600.0	Avedoere	2016-01-22		0.0	cmv	CMV	10359	prevalence	brinch
@@ -1513,10 +1513,10 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 73	0	44493451	45600.0	Amager	2015-11-20		0.0	cmv	CMV	10359	prevalence	brinch
 74	0	23158276	45600.0	Amager	2015-11-25		0.0	cmv	CMV	10359	prevalence	brinch
 75	0	25039649	45600.0	Amager	2015-12-01		0.0	cmv	CMV	10359	prevalence	brinch
-76	3	27997532	45600.0	Amager	2015-12-09		1.0715230185289189e-07	cmv	CMV	10359	prevalence	brinch
+76	1	27997532	45600.0	Amager	2015-12-09		3.5717433950963967e-08	cmv	CMV	10359	prevalence	brinch
 77	0	34199832	45600.0	Amager	2015-12-15		0.0	cmv	CMV	10359	prevalence	brinch
 78	0	38958998	45600.0	Amager	2015-12-17		0.0	cmv	CMV	10359	prevalence	brinch
-79	1	35827486	45600.0	Amager	2015-12-21		2.791153138682407e-08	cmv	CMV	10359	prevalence	brinch
+79	0	35827486	45600.0	Amager	2015-12-21		0.0	cmv	CMV	10359	prevalence	brinch
 80	0	29926797	45600.0	Amager	2015-12-28		0.0	cmv	CMV	10359	prevalence	brinch
 81	3	32796585	45600.0	Amager	2015-12-29		9.147293841721631e-08	cmv	CMV	10359	prevalence	brinch
 82	0	33521075	45600.0	Amager	2016-01-05		0.0	cmv	CMV	10359	prevalence	brinch
@@ -1592,7 +1592,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 152	0	32600078	45600.0	Amager	2016-09-21		0.0	cmv	CMV	10359	prevalence	brinch
 153	0	33446849	45600.0	Avedoere	2016-09-21		0.0	cmv	CMV	10359	prevalence	brinch
 154	0	40603061	45600.0	Valby	2016-09-21		0.0	cmv	CMV	10359	prevalence	brinch
-155	1	36554815	45600.0	Amager	2016-09-24		2.7356177291555163e-08	cmv	CMV	10359	prevalence	brinch
+155	0	36554815	45600.0	Amager	2016-09-24		0.0	cmv	CMV	10359	prevalence	brinch
 156	0	37096227	45600.0	Valby	2016-09-29		0.0	cmv	CMV	10359	prevalence	brinch
 157	0	27182426	45600.0	Valby	2016-10-02		0.0	cmv	CMV	10359	prevalence	brinch
 158	0	25092715	45600.0	Amager	2016-10-06		0.0	cmv	CMV	10359	prevalence	brinch
@@ -1615,7 +1615,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 175	0	6278583	45600.0	Valby	2016-11-17		0.0	cmv	CMV	10359	prevalence	brinch
 176	0	5708601	45600.0	Amager	2016-11-02		0.0	cmv	CMV	10359	prevalence	brinch
 177	0	5671392	45600.0	Amager	2016-11-09		0.0	cmv	CMV	10359	prevalence	brinch
-178	1	8529644	45600.0	Valby	2016-11-09		1.1723818719749617e-07	cmv	CMV	10359	prevalence	brinch
+178	0	8529644	45600.0	Valby	2016-11-09		0.0	cmv	CMV	10359	prevalence	brinch
 179	0	15148425	45600.0	Valby	2016-11-26		0.0	cmv	CMV	10359	prevalence	brinch
 180	0	14797092	45600.0	Amager	2016-11-26		0.0	cmv	CMV	10359	prevalence	brinch
 181	0	8436726	45600.0	Amager	2016-12-04		0.0	cmv	CMV	10359	prevalence	brinch
@@ -1702,12 +1702,12 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 262	0	20923232	45600.0	Amager	2017-07-05		0.0	cmv	CMV	10359	prevalence	brinch
 263	1	15038873	45600.0	Valby	2017-07-11		6.649434435678791e-08	cmv	CMV	10359	prevalence	brinch
 264	0	14626320	45600.0	Valby	2017-07-18		0.0	cmv	CMV	10359	prevalence	brinch
-265	2	21625238	45600.0	Valby	2017-07-27		9.248453126851135e-08	cmv	CMV	10359	prevalence	brinch
+265	0	21625238	45600.0	Valby	2017-07-27		0.0	cmv	CMV	10359	prevalence	brinch
 266	0	14657253	45600.0	Amager	2017-08-08		0.0	cmv	CMV	10359	prevalence	brinch
 267	0	19079997	45600.0	Avedoere	2017-08-08		0.0	cmv	CMV	10359	prevalence	brinch
 268	0	22209957	45600.0	Valby	2017-08-09		0.0	cmv	CMV	10359	prevalence	brinch
-269	1	20360669	45600.0	Valby	2017-08-23		4.9114299731506856e-08	cmv	CMV	10359	prevalence	brinch
-270	1	20995767	45600.0	Valby	2017-09-13		4.762864819370495e-08	cmv	CMV	10359	prevalence	brinch
+269	0	20360669	45600.0	Valby	2017-08-23		0.0	cmv	CMV	10359	prevalence	brinch
+270	0	20995767	45600.0	Valby	2017-09-13		0.0	cmv	CMV	10359	prevalence	brinch
 271	0	27319848	45600.0	Amager	2017-09-13		0.0	cmv	CMV	10359	prevalence	brinch
 272	0	24060145	45600.0	Avedoere	2017-09-20		0.0	cmv	CMV	10359	prevalence	brinch
 273	0	20344545	45600.0	Valby	2017-10-05		0.0	cmv	CMV	10359	prevalence	brinch
@@ -1754,7 +1754,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 314	0	23423083	45600.0	Valby	2018-09-05		0.0	cmv	CMV	10359	prevalence	brinch
 315	0	19603987	45600.0	Valby	2018-09-19		0.0	cmv	CMV	10359	prevalence	brinch
 316	0	28555467	45600.0	Valby	2018-09-26		0.0	cmv	CMV	10359	prevalence	brinch
-317	1	48437901	45600.0	Valby	2018-10-04		2.064499037644096e-08	cmv	CMV	10359	prevalence	brinch
+317	0	48437901	45600.0	Valby	2018-10-04		0.0	cmv	CMV	10359	prevalence	brinch
 318	0	12849078	45600.0	Valby	2018-10-18		0.0	cmv	CMV	10359	prevalence	brinch
 319	0	37674313	45600.0	Avedoere	2018-10-18		0.0	cmv	CMV	10359	prevalence	brinch
 320	0	15492296	45600.0	Amager	2018-10-18		0.0	cmv	CMV	10359	prevalence	brinch
@@ -2189,7 +2189,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 268	0	22209957	30235.567010309278	Valby	2017-08-09		0.0	aav5	AAV5	82300	prevalence	brinch
 269	0	20360669	30235.567010309278	Valby	2017-08-23		0.0	aav5	AAV5	82300	prevalence	brinch
 270	0	20995767	30235.567010309278	Valby	2017-09-13		0.0	aav5	AAV5	82300	prevalence	brinch
-271	1	27319848	30235.567010309278	Amager	2017-09-13		3.660342473354903e-08	aav5	AAV5	82300	prevalence	brinch
+271	0	27319848	30235.567010309278	Amager	2017-09-13		0.0	aav5	AAV5	82300	prevalence	brinch
 272	0	24060145	30235.567010309278	Avedoere	2017-09-20		0.0	aav5	AAV5	82300	prevalence	brinch
 273	0	20344545	30235.567010309278	Valby	2017-10-05		0.0	aav5	AAV5	82300	prevalence	brinch
 274	0	29839571	30235.567010309278	Avedoere	2017-10-18		0.0	aav5	AAV5	82300	prevalence	brinch
@@ -2832,7 +2832,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 4	0	19873663	47800.0	H	2021-12-19	Franklin County	0.0	hsv_1	HSV-1	10298	prevalence	spurbeck
 5	0	65391438	47800.0	H	2021-12-05	Franklin County	0.0	hsv_1	HSV-1	10298	prevalence	spurbeck
 6	0	7683321	47800.0	H	2022-01-09	Franklin County	0.0	hsv_1	HSV-1	10298	prevalence	spurbeck
-7	1	106734757	47800.0	H	2022-01-02	Franklin County	9.369019315797946e-09	hsv_1	HSV-1	10298	prevalence	spurbeck
+7	0	106734757	47800.0	H	2022-01-02	Franklin County	0.0	hsv_1	HSV-1	10298	prevalence	spurbeck
 8	0	27498895	47800.0	G	2021-12-26	Licking County	0.0	hsv_1	HSV-1	10298	prevalence	spurbeck
 9	0	21866784	47800.0	G	2021-12-19	Licking County	0.0	hsv_1	HSV-1	10298	prevalence	spurbeck
 10	0	25615577	47800.0	A	2021-12-12	Summit County	0.0	hsv_1	HSV-1	10298	prevalence	spurbeck
@@ -2929,7 +2929,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 46	0	3004252	78700.0	Valby	2016-06-05		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 47	0	3428079	78700.0	Valby	2016-06-14		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 48	0	26035123	78700.0	Avedoere	2015-11-23		0.0	hsv_1	HSV-1	10298	prevalence	brinch
-49	1	42800891	78700.0	Avedoere	2015-12-02		2.336399959524207e-08	hsv_1	HSV-1	10298	prevalence	brinch
+49	0	42800891	78700.0	Avedoere	2015-12-02		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 50	0	3879197	78700.0	Avedoere	2016-01-09		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 51	0	4360713	78700.0	Avedoere	2016-01-11		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 52	0	625387	78700.0	Avedoere	2016-01-20		0.0	hsv_1	HSV-1	10298	prevalence	brinch
@@ -2957,7 +2957,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 74	0	23158276	78700.0	Amager	2015-11-25		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 75	0	25039649	78700.0	Amager	2015-12-01		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 76	0	27997532	78700.0	Amager	2015-12-09		0.0	hsv_1	HSV-1	10298	prevalence	brinch
-77	4	34199832	78700.0	Amager	2015-12-15		1.1695963886606226e-07	hsv_1	HSV-1	10298	prevalence	brinch
+77	0	34199832	78700.0	Amager	2015-12-15		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 78	0	38958998	78700.0	Amager	2015-12-17		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 79	0	35827486	78700.0	Amager	2015-12-21		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 80	0	29926797	78700.0	Amager	2015-12-28		0.0	hsv_1	HSV-1	10298	prevalence	brinch
@@ -3013,7 +3013,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 130	0	722892	78700.0	Avedoere	2016-08-02		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 131	0	730471	78700.0	Valby	2016-08-02		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 132	0	25768237	78700.0	Amager	2016-08-10		0.0	hsv_1	HSV-1	10298	prevalence	brinch
-133	1	25769121	78700.0	Valby	2016-08-10		3.8806135451806835e-08	hsv_1	HSV-1	10298	prevalence	brinch
+133	0	25769121	78700.0	Valby	2016-08-10		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 134	0	34071641	78700.0	Amager	2016-08-16		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 135	0	28463411	78700.0	Amager	2016-08-18		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 136	0	5606141	78700.0	Valby	2016-08-18		0.0	hsv_1	HSV-1	10298	prevalence	brinch
@@ -3042,7 +3042,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 159	0	30189273	78700.0	Avedoere	2016-10-06		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 160	0	31497642	78700.0	Valby	2016-10-06		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 161	0	36136496	78700.0	Amager	2016-10-09		0.0	hsv_1	HSV-1	10298	prevalence	brinch
-162	1	22919585	78700.0	Valby	2016-10-09		4.363080745135656e-08	hsv_1	HSV-1	10298	prevalence	brinch
+162	0	22919585	78700.0	Valby	2016-10-09		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 163	0	39501521	78700.0	Amager	2016-10-12		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 164	0	40802893	78700.0	Valby	2016-10-12		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 165	0	18238408	78700.0	Avedoere	2016-10-15		0.0	hsv_1	HSV-1	10298	prevalence	brinch
@@ -3133,7 +3133,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 250	0	19122453	78700.0	Amager	2017-04-20		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 251	0	29738766	78700.0	Valby	2017-04-24		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 252	0	22222549	78700.0	Valby	2017-04-07		0.0	hsv_1	HSV-1	10298	prevalence	brinch
-253	2	36195295	78700.0	Valby	2017-04-20		5.525580051219364e-08	hsv_1	HSV-1	10298	prevalence	brinch
+253	0	36195295	78700.0	Valby	2017-04-20		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 254	0	21789607	78700.0	Valby	2017-05-04		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 255	0	17917049	78700.0	Valby	2017-05-06		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 256	1	25333875	78700.0	Valby	2017-05-09		3.94728402188769e-08	hsv_1	HSV-1	10298	prevalence	brinch
@@ -3150,7 +3150,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 267	0	19079997	78700.0	Avedoere	2017-08-08		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 268	0	22209957	78700.0	Valby	2017-08-09		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 269	0	20360669	78700.0	Valby	2017-08-23		0.0	hsv_1	HSV-1	10298	prevalence	brinch
-270	3	20995767	78700.0	Valby	2017-09-13		1.4288594458111485e-07	hsv_1	HSV-1	10298	prevalence	brinch
+270	0	20995767	78700.0	Valby	2017-09-13		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 271	0	27319848	78700.0	Amager	2017-09-13		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 272	0	24060145	78700.0	Avedoere	2017-09-20		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 273	0	20344545	78700.0	Valby	2017-10-05		0.0	hsv_1	HSV-1	10298	prevalence	brinch
@@ -3181,7 +3181,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 298	0	21907158	78700.0	Valby	2018-03-16		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 299	0	33771289	78700.0	Avedoere	2018-03-20		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 300	0	26566940	78700.0	Amager	2018-03-20		0.0	hsv_1	HSV-1	10298	prevalence	brinch
-301	1	23756953	78700.0	Valby	2018-03-20		4.2092940117362694e-08	hsv_1	HSV-1	10298	prevalence	brinch
+301	0	23756953	78700.0	Valby	2018-03-20		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 302	0	22801450	78700.0	Valby	2018-04-22		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 303	0	32643077	78700.0	Avedoere	2018-05-04		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 304	0	22010122	78700.0	Valby	2018-05-04		0.0	hsv_1	HSV-1	10298	prevalence	brinch
@@ -3201,7 +3201,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 318	0	12849078	78700.0	Valby	2018-10-18		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 319	0	37674313	78700.0	Avedoere	2018-10-18		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 320	0	15492296	78700.0	Amager	2018-10-18		0.0	hsv_1	HSV-1	10298	prevalence	brinch
-321	1	27254321	78700.0	Valby	2018-11-02		3.6691429590192323e-08	hsv_1	HSV-1	10298	prevalence	brinch
+321	0	27254321	78700.0	Valby	2018-11-02		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 322	0	18648489	78700.0	Valby	2018-11-27		0.0	hsv_1	HSV-1	10298	prevalence	brinch
 1	0	45434265	0.0378335831047036	Oakland	2020-06-30	Alameda County	0.0	influenza	Influenza A	11320	incidence	crits_christoph
 2	0	41207484	0.0378335831047036	Marin	2020-07-01	Marin County	0.0	influenza	Influenza A	11320	incidence	crits_christoph
@@ -5275,7 +5275,7 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 313	0	29524901	86144.6930074135	Valby	2018-08-21		0.0	ebv	EBV	10376	prevalence	brinch
 314	0	23423083	86144.6930074135	Valby	2018-09-05		0.0	ebv	EBV	10376	prevalence	brinch
 315	0	19603987	86144.6930074135	Valby	2018-09-19		0.0	ebv	EBV	10376	prevalence	brinch
-316	1	28555467	86144.6930074135	Valby	2018-09-26		3.50195638544451e-08	ebv	EBV	10376	prevalence	brinch
+316	0	28555467	86144.6930074135	Valby	2018-09-26		0.0	ebv	EBV	10376	prevalence	brinch
 317	2	48437901	86144.6930074135	Valby	2018-10-04		4.128998075288192e-08	ebv	EBV	10376	prevalence	brinch
 318	1	12849078	86144.6930074135	Valby	2018-10-18		7.782659580710772e-08	ebv	EBV	10376	prevalence	brinch
 319	0	37674313	86144.6930074135	Avedoere	2018-10-18		0.0	ebv	EBV	10376	prevalence	brinch
