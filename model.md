@@ -52,24 +52,21 @@ We use the log of the average viral and total read counts, because the viral rea
 
 ### Parameters
 
+When we run the program, Stan uses a [Hamiltonian Monte Carlo](https://en.wikipedia.org/wiki/Hamiltonian_Monte_Carlo) algorithm to sample from the posterior distribution of the model parameters, defined in the `parameters` block: 
+
 ```stan
 parameters {
   vector[J] theta_std;      // standardized true predictor for each sample
   real<lower=0> sigma;      // standard deviation of true predictors
   real mu;                  // mean P2RA coefficient (on standardized scale)
-  real<lower=0> tau;        // std of P2RA coefficients pre location
+  real<lower=0> tau;        // std of P2RA coefficients per location
   vector[L] b_l;            // P2RA coefficient per location
 }
 ```
 
-When we run the program, Stan uses a [Hamiltonian Monte Carlo](https://en.wikipedia.org/wiki/Hamiltonian_Monte_Carlo) algorithm to sample from the posterior distribution of the model parameters. 
-They are:
-
-- The true log-prevalence of the focal clade in the population contributing to each sample, $\theta_j$.
-- The coefficient linking the log-prevalence to the expected number of viral reads, $b$. Note that this is a scalar quantity, assumed to be the same across all samples.
-- An inverse overdispersion parameter $\phi$, representing the extra variation in read counts beyond a Poisson distribution. Larger $\phi$ is more Poisson-like, smaller $\phi$ is more overdispersed.
-
 ### Model
+
+The `model` block defines the model to be fit:
 
 ```stan
 model {
@@ -84,32 +81,19 @@ model {
 }
 ```
 
-We assume that the read counts follow a negative binomial distribution and are independent (conditional on the parameters):
+The first five lines give prior distributions for the parameters:
 
-$$
-y_i \sim NB(n_i \exp(b + \theta_i), \phi),
-$$
+* The variance parameteters `sigma` and `tau` are given gamma priors with hyperparameters supplied at runtime.
+* The true standardized predictor for each sample `theta_std` is given a normal prior centered on the estimated value
+* The coefficients linking predictors to relative abundance are given a hierarchical model, where the overall coefficient `mu` has a prior centered at zero (because of the mean-centering) and the location-specific coefficients are centered at `mu`.
 
-using the (mean, reciprocal overdispersion) parameterization.
-Note that expected number of reads is proportional to the total number of reads times the exponentiated log-prevalence.
-The constant of proportionality is $e^b$.
-In other words, $b$ is the intercept term of a negative binomial regression with a log link function.
-If we wanted to include other predictors of the abundance, $x$, we would multiply the mean by $e^{\beta x}$. 
+The last two lines define the likelihood.
+We assume that the read counts follow a binomial distribuion and are independent, conditional on the parameters.
+The expected relative abundance in each sample is given by the inverse logit of the sum of:
 
-We give our true log-prevalence parameters independent Gaussian priors centered on our log-prevalence estimates:
-
-$$
-\theta_i \sim Normal(\mu_i, \sigma).
-$$
-
-This is equivalent to assuming a flat prior on the log-prevalence and updating with Gaussian-likelihood to our prevalence data.
-
-We put a weakly informative Gaussian prior on $b$.
-We can center the prior at zero by choosing the right scale for prevalence inputs.
-That is, we can convert prevalence to cases per $n$ individuals and choose $n$ so that when $\theta = \log prevalence = 0$, we expect to see $O(1)$ reads.
-
-Finally, we give $\phi$ a Gamma prior with a mode at $\phi = 1$.
-(This is largely arbitrary at this stage, but enforces $\phi > 0$.)
+* `b_l[ll[j]]`, the coefficient for the location of the sample
+* `theta_std[j]`, the true value of the (standardized) public health predictor
+* `log_mean_y - log_mean_n`, included to center the coefficients near zero.
 
 ### Generated quantities
 
