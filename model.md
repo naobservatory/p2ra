@@ -1,39 +1,25 @@
 ## Statistical model
 
-The `stats` module uses the [Stan](https://mc-stan.org/) statistical programming language to define a Bayesian model of viral prevalences and metagenomic sequencing read counts.
+The `stats` module uses the [Stan](https://mc-stan.org/) statistical programming language to fit a Bayesian model of viral prevalences and metagenomic sequencing read counts.
 Our objective is to estimate a coefficient that connects a viral clade's estimated prevalence to the number of metagenomic reads assigned to that clade across a set of samples.
 
-The model is a work in progress.
-The goal so far has been to have something that is a reasonable representation of the problem that we can feed our various data sources into.
-Now that we have data and working glue code, we will work to assess and improve the model.
+The stan code defining the model is contained in `model.stan`.
+In the following sections, we will explain each block of the code.
 
-Here is the Stan code.
-In the following sections, we will explain each component.
-If you are not familiar with Stan, you may skip to the [Data](#data) section.
+### Data
+
+The `data` block defines the data that we provide to the model:
 
 ```stan
 data {
-  int<lower=1> J;               // number of samples
-  array[J] int<lower=0> y;      // reads mapped to virus
-  vector[J] n;                  // total reads
-  vector[J] mu;                 // mean log prevalence
-  real<lower=0>  sigma;         // std log prevalence
-}
-parameters {
-  real b;                 // log conversion factor
-  real<lower=0> phi;      // inverse overdispersion
-  vector[J] theta;        // true log prevalence
-}
-model {
-  b ~ normal(0, 10);
-  phi ~ gamma(2, 2);
-
-  theta ~ normal(mu, sigma);
-  y ~ neg_binomial_2(exp(b + theta) .* n, phi);
+  int<lower=1> J;           // number of samples
+  array[J] int<lower=0> y;  // viral read counts
+  array[J] int<lower=0> n;  // total read counts
+  vector[J] x;              // estimated predictor (prevalence or incidence)
+  int<lower=1> L;           // number of sampling locations
+  array[J] int<lower=1, upper=L> ll;  // sampling locations
 }
 ```
-
-### Data
 
 The input to the model is data on read counts and viral prevalence.
 In particular, we must provide:
@@ -44,7 +30,29 @@ In particular, we must provide:
 - The expected log-prevalence of the viral clade in the population contributing to each sample, $\mu_j$.
 - An estimate of the uncertainty in the log-prevalence, represented as a standard deviation $\sigma$, assumed to be the same across samples. (It is easy to relax this assumption to let $\sigma$ be a vector with a value for each sample.)
 
+### Transformed data
+
+```stan
+transformed data {
+  vector[J] x_std = log(x) - mean(log(x));
+  real log_mean_y = 0;
+  if (sum(y) > 0)           // can't normalize by this if there are no viral reads
+    log_mean_y = log(mean(y));
+  real log_mean_n = log(mean(n));
+}
+```
+
 ### Parameters
+
+```stan
+parameters {
+  vector[J] theta_std;      // standardized true predictor for each sample
+  real<lower=0> sigma;      // standard deviation of true predictors
+  real mu;                  // mean P2RA coefficient (on standardized scale)
+  real<lower=0> tau;        // std of P2RA coefficients pre location
+  vector[L] b_l;            // P2RA coefficient per location
+}
+```
 
 When we run the program, Stan uses a [Hamiltonian Monte Carlo](https://en.wikipedia.org/wiki/Hamiltonian_Monte_Carlo) algorithm to sample from the posterior distribution of the model parameters. 
 They are:
@@ -54,6 +62,19 @@ They are:
 - An inverse overdispersion parameter $\phi$, representing the extra variation in read counts beyond a Poisson distribution. Larger $\phi$ is more Poisson-like, smaller $\phi$ is more overdispersed.
 
 ### Model
+
+```stan
+model {
+  sigma ~ gamma($sigma_alpha, $sigma_beta);
+  theta_std ~ normal(x_std, sigma);
+  mu ~ normal(0, $mu_sigma);
+  tau ~ gamma($tau_alpha, $tau_beta);
+  b_l ~ normal(mu, tau);
+  for (j in 1:J){
+    y[j] ~ binomial_logit(n[j], b_l[ll[j]] + theta_std[j] + log_mean_y - log_mean_n);
+  }
+}
+```
 
 We assume that the read counts follow a negative binomial distribution and are independent (conditional on the parameters):
 
@@ -81,6 +102,35 @@ That is, we can convert prevalence to cases per $n$ individuals and choose $n$ s
 
 Finally, we give $\phi$ a Gamma prior with a mode at $\phi = 1$.
 (This is largely arbitrary at this stage, but enforces $\phi > 0$.)
+
+### Generated quantities
+
+```stan
+generated quantities {
+  // posterior predictive viral read counts
+  array[J] int<lower=0> y_tilde;
+  for (j in 1:J){
+    y_tilde[j] =
+      binomial_rng(
+        n[j],
+        inv_logit(b_l[ll[j]] + theta_std[j] + log_mean_y - log_mean_n)
+      );
+  }
+  // posterior true prevalence for each sample
+  vector[J] theta = theta_std + mean(log(x));
+  // for convenience, a single vector with the location coefficients and
+  // overall coefficient in the final position
+  vector[L + 1] b;
+  b[:L] = b_l;
+  b[L + 1] = mu;
+  // location-specific expected relative abundance
+  // last element is the overall coefficient
+  // Converting from 1:100K to 1:1K means multiplying by 100
+  vector[L + 1] ra_at_1in1000 = inv_logit(
+    b - mean(log(x)) + log_mean_y - log_mean_n + log(100)
+  );
+}
+```
 
 ### Limitations and future directions
 
