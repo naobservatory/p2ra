@@ -33,6 +33,8 @@ In particular, we must provide:
 
 ### Transformed data
 
+The `transformed data` block defines quantities derived from the data that are used in the `model` block:
+
 ```stan
 transformed data {
   vector[J] x_std = log(x) - mean(log(x));
@@ -42,6 +44,11 @@ transformed data {
   real log_mean_n = log(mean(n));
 }
 ```
+
+Because our logistic regression model works with the log predictors, we log-transform and mean-center the predictors to get `x_std`.
+
+In order to center the coefficient, we also need a central value for the read counts.
+We use the log of the average viral and total read counts, because the viral read counts have a lot of zeros.
 
 ### Parameters
 
