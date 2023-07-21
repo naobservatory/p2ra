@@ -97,6 +97,8 @@ The expected relative abundance in each sample is given by the inverse logit of 
 
 ### Generated quantities
 
+The `generated quantities` block defines quantities to simulate from the fitted model:
+
 ```stan
 generated quantities {
   // posterior predictive viral read counts
@@ -124,7 +126,27 @@ generated quantities {
 }
 ```
 
-### Limitations and future directions
+This block generates two important quantities:
+* `y_tilde`, posterior predictive samples of the viral read count in each sample for model checking
+*  `b`, a vector of coefficients transformed to give the expected relative abundance when the public health predictor is 1 in 1000 people.
+
+## Model checking
+
+Running `./fit.py` also generates a number of diagnostic figures in the `fig/` directory.
+Each filename follows the pattern `fig/{pathogen_name}-{public_health_predictor_type}-{study}-{figure_type}.pdf`
+The figure types are:
+
+* `datascatter`, scatterplot of the input relative abundance vs the input public health predictor for each sample
+* `predictor_vs_date`, scatterplot of the public health predictor vs. sample date for the data and eight draws from the posterior distribution
+* `reads_vs_date`, scatterplot of the viral read counts vs. sample date for the data and eight draws from the posterior predictive distribution
+* `viral_reads_vs_predictor`, scatterplot of viral reads vs. public health predictor for the data and eight draws from the posterior (predictive) distribution
+* `violin`, violin plot of the marginal posteriors of the standardized coefficients (overall and for each sample location)
+* `posthist`, histograms of the marginal posteriors of `sigam`, `mu`, and `tau`
+* `sigma_vs_mu`, density plot of the joint posterior of `sigma` and `mu`
+* `tau_vs_mu`, density plot of the joint posterior of `tau` and `mu`
+* `tau_vs_sigma`, density plot of the joint posterior of `tau` and `sigma`
+  
+## Limitations and future directions
 
 Our biggest current limitation is that we model the true prevalences as independent of one another.
 It would be more realistic for them to have shared as well as independent components of variation.
