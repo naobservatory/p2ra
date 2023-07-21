@@ -50,9 +50,10 @@ def start(num_samples: int, plot: bool) -> None:
                 continue
             model.fit_model(num_samples=num_samples)
             if plot:
+                taxid_str = "-".join(str(tid) for tid in taxids)
                 model.plot_figures(
                     path=figdir,
-                    prefix=f"{pathogen_name}-{predictor_type}-{study}",
+                    prefix=f"{pathogen_name}-{taxid_str}-{predictor_type}-{study}",
                 )
             metadata = dict(
                 pathogen=pathogen_name,
