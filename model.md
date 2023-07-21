@@ -148,18 +148,12 @@ The figure types are:
   
 ## Limitations and future directions
 
-Our biggest current limitation is that we model the true prevalences as independent of one another.
+* Currently, we model the true prevalences as independent of one another.
 It would be more realistic for them to have shared as well as independent components of variation.
 For example, our prevalence estimates may be systematically biased in one direction or another and that would induce a correlated effect on all of the samples.
 The amount of shared variation between samples might also depend on features they have in common such as a shared sampling location or similar sampling times.
 (Issue [#59](https://github.com/naobservatory/p2ra/issues/59) outlines a simple way forward here.)
-
-A related issue is that we will usually have prevalence estimates for multiple times and places that don't line up exactly with the sampling times and locations.
+* A related issue is that we will usually have prevalence estimates for multiple times and places that don't line up exactly with the sampling times and locations.
 In this case, we may want to have a stochastic process model (e.g., a Gaussian process) of the true prevalence that can be updated with our prevalence estimates and then emit the parameters for the negative binomial regressions.
-
-As mentioned in the [Model](#model) section, it would also be useful to extend the negative binomial regression to include predictors other than sample identity.
-By including sample processing methods, or viral characteristics as predictors, we could combine information across studies and viruses to develop a general model of MGS abundance. 
-
-Finally, we currently do not do any evaluation of model fit or sensitivity to prior assumptions.
-We will develop a workflow to check that the model is appropriate for the data and to improve it if not.
-This will include steps like examining the mixing of the Markov chains during the HMC runs and comparing the posterior predictive distributions of read counts to the observed counts.
+* Our model only represents sample preparation methods indirectly through the sample-location terms, and so does not provide an explicit estimate of its effect. However, such an estimate would be difficult to obtain reliably from so few studies.
+* Similarly, we do not directly infer any effects of viral properties (DNA vs RNA, enveloped vs not, etc). In principle, we could create a larger model that estimates RA(1‰) for all viruses simultaneously and includes some of these properties as factors. Because we only have public health estimates for about a dozen viruses and those are split between incidence and prevalence, however, we decided that fitting such a model would not be worthwhile with this data set.
