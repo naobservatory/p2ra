@@ -137,6 +137,17 @@ ohio_counties_case_rates = {
 
 OHIO_COUNTY_ESTIMATES_SOURCE = "https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_K9I401S01H7F40QBNJU3SO1F56-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8"
 
+copenhagen_2016 = Prevalence(
+    infections_per_100k=0.0038 * 100_000,
+    confidence_interval=(0.0021 * 100_000, 0.0036 * 100_000),  # 95% CI
+    coverage_probability=0.95,
+    # See table 2, 0.24% in column "Capital"
+    country="Denmark",
+    date="2016",
+    active=Active.LATENT,
+    source="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0238203#:~:text=Table%202.%20Estimated%20number%20of%20people%20living%20with%20chronic%20hepatitis%20C",
+)
+
 
 def estimate_incidences():
     # Hep C acute cases should be approximately constant, so we
@@ -167,5 +178,23 @@ def estimate_prevalences() -> list[Prevalence]:
     chronic_2021 = dataclasses.replace(
         estimated_chronic_us_2013_2016, date_source=Variable(date="2021")
     )
-    estimates = [estimated_chronic_us_2013_2016, chronic_2020, chronic_2021]
+    copenhagen_2015 = dataclasses.replace(
+        copenhagen_2016, date_source=Variable(date="2015")
+    )
+    copenhagen_2017 = dataclasses.replace(
+        copenhagen_2016, date_source=Variable(date="2017")
+    )
+    copenhagen_2018 = dataclasses.replace(
+        copenhagen_2016, date_source=Variable(date="2018")
+    )
+
+    estimates = [
+        estimated_chronic_us_2013_2016,
+        chronic_2020,
+        chronic_2021,
+        copenhagen_2015,
+        copenhagen_2016,
+        copenhagen_2017,
+        copenhagen_2018,
+    ]
     return estimates
