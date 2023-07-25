@@ -17,9 +17,17 @@ class TestPathogens(unittest.TestCase):
         self.assertIn("hsv_1", pathogens.pathogens)
 
     def test_summarize_location(self):
-        us_2019, us_2020, us_2021, la_2020 = pathogens.pathogens[
-            "hiv"
-        ].estimate_prevalences()
+        (
+            us_2019,
+            us_2020,
+            us_2021,
+            la_2020,
+            copenhagen_2022,
+            copenhagen_2018,
+            copenhagen_2017,
+            copenhagen_2016,
+            copenhagen_2015,
+        ) = pathogens.pathogens["hiv"].estimate_prevalences()
         self.assertEqual(us_2019.summarize_location(), "United States")
         self.assertEqual(
             la_2020.summarize_location(),
@@ -27,9 +35,17 @@ class TestPathogens(unittest.TestCase):
         )
 
     def test_dates(self):
-        us_2019, us_2020, us_2021, la_2020 = pathogens.pathogens[
-            "hiv"
-        ].estimate_prevalences()
+        (
+            us_2019,
+            us_2020,
+            us_2021,
+            la_2020,
+            copenhagen_2022,
+            copenhagen_2018,
+            copenhagen_2017,
+            copenhagen_2016,
+            copenhagen_2015,
+        ) = pathogens.pathogens["hiv"].estimate_prevalences()
         self.assertEqual(us_2019.parsed_start, datetime.date(2019, 1, 1))
         self.assertEqual(us_2019.parsed_end, datetime.date(2019, 12, 31))
 
