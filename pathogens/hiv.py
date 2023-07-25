@@ -132,7 +132,7 @@ def estimate_prevalences() -> list[Prevalence]:
         us_2019,
         us_2020,
         us_2021,
-        la_2020,
+        # la_2020,
         copenhagen_2022,
         copenhagen_2018,
         copenhagen_2017,
