@@ -19,6 +19,20 @@ Run `./summarize.py` to get an overview of the data.
 
 For an overview of the statistical model see [model.md](model.md).
 
+To fit the model, run `./fit.py`. This will create:
+
+* `input.tsv`, a table of the input data to the model
+* `fits.tsv`, a table of samples from the posterior distribution of model parameters
+* `fits_summary.tsv`, a table listing summary statistics of the posterior distributions of model parameters
+* `fig/`, a directory containing a large number plots of posterior distributions and samples from posterior predictive distributions
+  (see [model.md](model.md) for details)
+
+Once the model has been fit, run `./plot_summaries.py` to create plots of the posterior distribution of $RA(1\perthousand)$ for the write-up:
+
+* `fig/incidence-violin.{pdf,png}`, posteriors for all incidence viruses
+* `fig/prevalence-violin.{pdf,png}`, posteriors for all prevalence viruses
+* `fig/by_location_incidence-violin.{pdf,png}`, posteriors separated by location for the most common incidence viruses
+
 ### Development
 
 #### Making changes

@@ -15,7 +15,7 @@ from tree import Tree
 MGS_REPO_DEFAULTS = {
     "user": "naobservatory",
     "repo": "mgs-pipeline",
-    "ref": "data-2023-06-02",
+    "ref": "data-2023-07-21",
 }
 
 BioProject = NewType("BioProject", str)

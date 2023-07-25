@@ -17,7 +17,7 @@ parameters {
   vector[J] theta_std;      // standardized true predictor for each sample
   real<lower=0> sigma;      // standard deviation of true predictors
   real mu;                  // mean P2RA coefficient (on standardized scale)
-  real<lower=0> tau;        // std of P2RA coefficients pre location
+  real<lower=0> tau;        // std of P2RA coefficients per location
   vector[L] b_l;            // P2RA coefficient per location
 }
 model {
