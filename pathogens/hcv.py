@@ -176,6 +176,7 @@ def estimate_prevalences() -> list[Prevalence]:
     chronic_2021 = dataclasses.replace(
         estimated_chronic_us_2013_2016, date_source=Variable(date="2021")
     )
+    # Extrapolating HCV rate in Copenhagen from 2016 to 2015-2018. We assume that HCV has mostly stayed constant.
     copenhagen_2015 = dataclasses.replace(
         copenhagen_2016, date_source=Variable(date="2015")
     )

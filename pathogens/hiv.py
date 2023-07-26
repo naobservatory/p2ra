@@ -109,7 +109,7 @@ def estimate_prevalences() -> list[Prevalence]:
         )
         * la_unsuppressed_fraction_2020
     )
-    # Extrapolating HIV rate in Copenhagen backwards from 2022 to 2015-2018.
+    # Extrapolating HIV rate in Copenhagen backwards from 2022 to 2015-2018. We assume that HIV has mostly stayed constant.
     copenhagen_2022 = (
         denmark_infected_undiagnosed_2022.to_rate(copenhagen_population_2022)
         * hiv_share_copenhagen
