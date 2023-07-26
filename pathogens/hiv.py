@@ -70,7 +70,7 @@ denmark_infected_undiagnosed_2022 = PrevalenceAbsolute(
 )
 
 hiv_share_copenhagen = Scalar(
-    scalar=0.48,
+    scalar=0.44,
     source="https://doi.org/10.1080/14034940510005671",  # First paragraph in introduction
     # The cumulative number of AIDS cases in Copenhagen represented 44% by the
     # end of 1998, while the city’s population constituted only 9% of the
@@ -81,7 +81,7 @@ hiv_share_copenhagen = Scalar(
     # (28/108)
 )
 
-copenhagen_population_2018 = Population(
+copenhagen_population_2022 = Population(
     people=652_221,
     country="Denmark",
     date="2022",
@@ -111,7 +111,7 @@ def estimate_prevalences() -> list[Prevalence]:
     )
     # Extrapolating HIV rate in Copenhagen backwards from 2022 to 2015-2018.
     copenhagen_2022 = (
-        denmark_infected_undiagnosed_2022.to_rate(copenhagen_population_2018)
+        denmark_infected_undiagnosed_2022.to_rate(copenhagen_population_2022)
         * hiv_share_copenhagen
     )
     copenhagen_2018 = dataclasses.replace(

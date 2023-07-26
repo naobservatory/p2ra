@@ -138,9 +138,7 @@ ohio_counties_case_rates = {
 OHIO_COUNTY_ESTIMATES_SOURCE = "https://odh.ohio.gov/wps/wcm/connect/gov/ec0dec22-1eea-4d17-a86a-ac4bc35be4d3/HCV+5+Year+Report+2021.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_K9I401S01H7F40QBNJU3SO1F56-ec0dec22-1eea-4d17-a86a-ac4bc35be4d3-oqU9kQ8"
 
 copenhagen_2016 = Prevalence(
-    infections_per_100k=0.0038 * 100_000,
-    confidence_interval=(0.0021 * 100_000, 0.0036 * 100_000),  # 95% CI
-    coverage_probability=0.95,
+    infections_per_100k=0.0024 * 100_000,
     # See table 2, 0.24% in column "Capital"
     country="Denmark",
     date="2016",
