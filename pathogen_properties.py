@@ -406,6 +406,15 @@ class PrevalenceAbsolute(Taggable):
     infections: float
     active: Active
 
+    def __mul__(self, scalar: Scalar) -> "PrevalenceAbsolute":
+        return PrevalenceAbsolute(
+            infections=self.infections * scalar.scalar,
+            inputs=[self, scalar],
+            date_source=self,
+            location_source=self,
+            active=self.active,
+        )
+
     def to_rate(self, population: Population) -> Prevalence:
         self.assert_comparable(population)
 
