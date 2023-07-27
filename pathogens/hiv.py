@@ -70,15 +70,19 @@ denmark_infected_undiagnosed_2022 = PrevalenceAbsolute(
 )
 
 hiv_share_copenhagen = Scalar(
-    scalar=0.44,
-    source="https://doi.org/10.1080/14034940510005671",  # First paragraph in introduction
-    # The cumulative number of AIDS cases in Copenhagen represented 44% by the
-    # end of 1998, while the city’s population constituted only 9% of the
-    # total population in Denmark.
-    date="1998",  # The paper is from 2005, but the data is from 1998.
-    # Cases still cluster in Copenhagen nowadays, though the share is lower.
-    # E.g.,out of new tests in 2019 and 2020, 37% (45 / 143) and 19% of cases
-    # (28/108)
+    scalar=(
+        0.39  # 2017, no raw numbers given
+        + ((38 + 16) / (84 + 67))  # 2018
+        + ((37 + 8) / (76 + 67))  # 2019
+        + ((19 + 9) / (61 + 47))  # 2020
+    )
+    / 4,
+    # Average of 2017- 2020 share of newly diagnosed HIV cases from Copenhagen City, both from HTX and MSM transmission.
+    # 2017 data: https://en.ssi.dk/surveillance-and-preparedness/surveillance-in-denmark/annual-reports-on-disease-incidence/hiv-2017
+    # 2018 data: https://en.ssi.dk/surveillance-and-preparedness/surveillance-in-denmark/annual-reports-on-disease-incidence/hiv-2018
+    # Table 2 in source below shows 2019 and 2020 data.
+    source="https://en.ssi.dk/surveillance-and-preparedness/surveillance-in-denmark/annual-reports-on-disease-incidence/hiv-2020#:~:text=rest%20of%20Denmark%2C-,Table%202.,-CD4%20counts%20at",
+    date="2020",
 )
 
 copenhagen_population_2022 = Population(
@@ -111,9 +115,8 @@ def estimate_prevalences() -> list[Prevalence]:
     )
     # Extrapolating undiagnosed HIV rate in Copenhagen backwards from 2022 to 2015-2018. We assume that HIV has mostly stayed constant.
     copenhagen_2022 = (
-        denmark_infected_undiagnosed_2022.to_rate(copenhagen_population_2022)
-        * hiv_share_copenhagen
-    )
+        denmark_infected_undiagnosed_2022 * hiv_share_copenhagen
+    ).to_rate(copenhagen_population_2022)
     copenhagen_2018 = dataclasses.replace(
         copenhagen_2022, date_source=Variable(date="2018")
     )
