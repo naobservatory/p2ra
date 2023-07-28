@@ -18,7 +18,7 @@ def summarize_output(coeffs: pd.DataFrame) -> pd.DataFrame:
             "study",
             "location",
         ]
-    ).ra_at_1in1000.describe(percentiles=[0.05, 0.25, 0.5, 0.75, 0.95])
+    ).ra_at_1in100.describe(percentiles=[0.05, 0.25, 0.5, 0.75, 0.95])
 
 
 def start(num_samples: int, plot: bool) -> None:

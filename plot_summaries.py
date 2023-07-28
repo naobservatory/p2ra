@@ -53,11 +53,11 @@ def adjust_axes(ax, predictor_type: str) -> None:
     ax.spines["left"].set_visible(False)
     # ax.set_xscale("log")
     ax.set_xlabel(
-        "Expected relative abundance when "
-        f"{predictor_type} = 1:1000, "
         r"$RA"
         f"{predictor_type[0]}"
-        r"(1\perthousand)$"
+        r"(1\%)$"
+        ": expected relative abundance at 1% "
+        f"{predictor_type} "
     )
     ax.set_ylabel("")
 
@@ -155,7 +155,7 @@ def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
         ascending=[False, True, False, True, False],
         violin_scale=2.0,
     )
-    ax.set_xlim([-14, -4])
+    ax.set_xlim([-13, -3])
     separate_viruses(ax)
     adjust_axes(ax, predictor_type=predictor_type)
     legend = ax.legend(
@@ -196,8 +196,8 @@ def plot_prevalence(
         ascending=[False, True, False, True, False],
         violin_scale=1.5,
     )
-    ax.set_xlim([-16, -8])
-    ax.set_xticks(list(range(-16, -6, 2)))
+    ax.set_xlim([-15, -7])
+    ax.set_xticks(list(range(-15, -5, 2)))
     separate_viruses(ax)
     # TODO Get these values automatically
     num_rna_1 = 2
@@ -209,7 +209,7 @@ def plot_prevalence(
         color="k",
         linewidth=0.5,
     )
-    text_x = np.log10(1.1e-8)
+    text_x = np.log10(1.1e-7)
     ax.text(text_x, -0.4, "RNA viruses\nSelection Round 1", va="top")
     ax.text(
         text_x, num_rna_1 - 0.4, "DNA viruses\nSelection Round 1", va="top"
@@ -268,7 +268,7 @@ def plot_three_virus(
             linewidth=0.5,
         )
         if i == 2:
-            x_text = np.log10(1.2e-6)
+            x_text = np.log10(1.2e-5)
             ax.text(x_text, -0.4, "Spurbeck", va="top")
             ax.text(
                 x_text,
@@ -317,7 +317,7 @@ def count_viral_reads(
 
 def save_plot(fig, figdir: Path, name: str) -> None:
     for ext in ["pdf", "png"]:
-        fig.savefig(figdir / f"{name}.{ext}", bbox_inches="tight")
+        fig.savefig(figdir / f"{name}.{ext}", bbox_inches="tight", dpi=600)
 
 
 def start() -> None:
@@ -325,7 +325,7 @@ def start() -> None:
     figdir.mkdir(exist_ok=True)
     fits_df = pd.read_csv("fits.tsv", sep="\t")
     fits_df["study"] = fits_df.study.map(study_name)
-    fits_df["log10ra"] = np.log10(fits_df.ra_at_1in1000)
+    fits_df["log10ra"] = np.log10(fits_df.ra_at_1in100)
     input_df = pd.read_csv("input.tsv", sep="\t")
     input_df["study"] = input_df.study.map(study_name)
     # TODO: Store these in the files instead?
@@ -339,9 +339,9 @@ def start() -> None:
     fig_prevalence = plot_prevalence(fits_df, input_df)
     save_plot(fig_prevalence, figdir, "prevalence-violin")
     incidence_viruses = {
-        "Norovirus (GII)": (-10.0, -3.0),
-        "Norovirus (GI)": (-10.0, -3.0),
-        "SARS-COV-2": (-12.0, -6.0),
+        "Norovirus (GII)": (-9.0, -2.0),
+        "Norovirus (GI)": (-9.0, -2.0),
+        "SARS-COV-2": (-11.0, -5.0),
     }
     fig_three_virus_incidence = plot_three_virus(
         fits_df, input_df, incidence_viruses, "incidence"
