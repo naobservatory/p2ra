@@ -26,9 +26,7 @@ with open("fits_summary.tsv") as inf:
         }[predictor_type]
 
         # 1% prevalence or 0.5% weekly incidence
-        adjusted_relative_abundance = (
-            median * 10 if is_prevalence else median * 5
-        )
+        adjusted_relative_abundance = median if is_prevalence else median / 2
 
         print(pathogen, study)
         print(

@@ -219,7 +219,7 @@ class Model(Generic[P]):
     def get_coefficients(self) -> pd.DataFrame:
         if self.output_df is None:
             raise ValueError("Model not fit yet")
-        cols = ["b", "ra_at_1in1000"]
+        cols = ["b", "ra_at_1in100"]
         coeffs = pd.wide_to_long(
             self.output_df.reset_index(),
             stubnames=cols,
