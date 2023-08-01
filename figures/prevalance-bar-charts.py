@@ -74,12 +74,12 @@ def start():
     dk = [x for _, x in sorted(zip(scores, dk))]
 
     fig, ax = plt.subplots(constrained_layout=True)
-    plt.title("Chronic-Infection Viruses: Prevalence Estimates")
-    plt.xlabel("Fraction of People Infected")
+    plt.title("Estimated prevalence of persistent viral infections")
 
     ax.set_xlim(xmax=100)
 
     width = 0.4
+    gap = 0.04
 
     y_pos_us = np.arange(len(labels))
     y_pos_dk = y_pos_us + width
@@ -87,11 +87,10 @@ def start():
     ax.barh(
         y_pos_us,
         us,
-        width,
-        label="Crits-Christoph, Rothman, Spurbeck\n"
-        "(United States, 2020-2021)",
+        width - gap,
+        label="United States, 2020-2021\n(Crits-Christoph, Rothman, Spurbeck)",
     )
-    ax.barh(y_pos_dk, dk, width, label="Brinch (Denmark, 2015-2018)")
+    ax.barh(y_pos_dk, dk, width - gap, label="Denmark, 2015-2018 (Brinch)")
     ax.set_yticks((y_pos_us + y_pos_dk) / 2, labels=labels, fontsize=9)
 
     def pretty_percentage(v):
@@ -105,6 +104,9 @@ def start():
         np.concatenate((y_pos_us, y_pos_dk)) - 0.15, us + dk
     ):
         ax.text(x_pos + 0.3, y_pos, pretty_percentage(x_pos))
+
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
 
     ax.legend(loc="lower right")
     ax.xaxis.set_major_formatter(mtick.PercentFormatter())
