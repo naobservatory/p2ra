@@ -21,7 +21,6 @@ class TestPathogens(unittest.TestCase):
             us_2019,
             us_2020,
             us_2021,
-            la_2020,
             copenhagen_2022,
             copenhagen_2018,
             copenhagen_2017,
@@ -29,17 +28,12 @@ class TestPathogens(unittest.TestCase):
             copenhagen_2015,
         ) = pathogens.pathogens["hiv"].estimate_prevalences()
         self.assertEqual(us_2019.summarize_location(), "United States")
-        self.assertEqual(
-            la_2020.summarize_location(),
-            "Los Angeles County, California, United States",
-        )
 
     def test_dates(self):
         (
             us_2019,
             us_2020,
             us_2021,
-            la_2020,
             copenhagen_2022,
             copenhagen_2018,
             copenhagen_2017,
@@ -48,9 +42,6 @@ class TestPathogens(unittest.TestCase):
         ) = pathogens.pathogens["hiv"].estimate_prevalences()
         self.assertEqual(us_2019.parsed_start, datetime.date(2019, 1, 1))
         self.assertEqual(us_2019.parsed_end, datetime.date(2019, 12, 31))
-
-        self.assertEqual(la_2020.parsed_start, datetime.date(2020, 1, 1))
-        self.assertEqual(la_2020.parsed_end, datetime.date(2020, 12, 31))
 
     def test_properties_exist(self):
         for pathogen_name, pathogen in pathogens.pathogens.items():

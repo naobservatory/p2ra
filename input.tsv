@@ -165,103 +165,103 @@ sample	viral_reads	total_reads	predictor	fine_location	date	county	relative_abun
 5	0	48462833	157.2061963114753	Oakland	2020-06-30	Alameda County	0.0	hiv	HIV	11676	prevalence	crits_christoph
 6	0	39759745	157.2061963114753	Oakland	2020-06-30	Alameda County	0.0	hiv	HIV	11676	prevalence	crits_christoph
 7	0	36420649	157.2061963114753	Berkeley	2020-06-30	Alameda County	0.0	hiv	HIV	11676	prevalence	crits_christoph
-1	0	2737872	230.97933235363936	SB	2020-09-10	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-2	0	6515759	230.97933235363936	SB	2020-09-24	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-3	0	3204232	230.97933235363936	SB	2020-08-27	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-4	0	2782200	230.97933235363936	SB	2020-08-13	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-5	0	3429177	230.97933235363936	SB	2020-10-22	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-6	0	3842559	230.97933235363936	PL	2020-09-24	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-7	0	4419124	230.97933235363936	PL	2020-09-10	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-8	0	3402804	230.97933235363936	PL	2020-08-27	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-9	0	3786318	230.97933235363936	PL	2020-08-13	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-10	0	3857662	230.97933235363936	PL	2020-10-22	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-11	0	3588085	230.97933235363936	OC	2020-09-30	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-12	0	4520022	230.97933235363936	OC	2020-09-23	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-13	0	1327075	230.97933235363936	OC	2020-09-16	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-14	0	4874211	230.97933235363936	OC	2020-09-03	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-15	0	3689634	230.97933235363936	OC	2020-09-02	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-16	1	3283166	230.97933235363936	OC	2020-08-26	Orange County	3.045840508825932e-07	hiv	HIV	11676	prevalence	rothman
-17	0	3182825	230.97933235363936	OC	2020-08-19	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-18	0	1292650	230.97933235363936	OC	2020-08-12	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-19	0	3890259	230.97933235363936	OC	2020-10-07	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-20	0	2901986	230.97933235363936	NC	2020-09-11	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-21	0	3467617	230.97933235363936	NC	2020-08-28	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-22	0	4099096	230.97933235363936	NC	2020-08-14	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-23	0	4124544	230.97933235363936	NC	2020-10-23	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-24	0	4902017	230.97933235363936	NC	2020-10-09	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-25	0	4514886	230.97933235363936	JWPCP	2020-09-22	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-26	0	4234727	230.97933235363936	JWPCP	2020-09-15	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-27	0	4018438	230.97933235363936	JWPCP	2020-09-08	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-28	0	3630148	230.97933235363936	JWPCP	2020-09-01	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-29	0	3183234	230.97933235363936	JWPCP	2020-08-25	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-30	0	4059288	230.97933235363936	JWPCP	2020-08-18	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-31	0	2102736	230.97933235363936	JWPCP	2020-08-11	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-32	0	4221630	230.97933235363936	JWPCP	2020-10-13	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-33	0	4832507	230.97933235363936	JWPCP	2020-10-06	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-34	0	2374918	230.97933235363936	JWPCP	2020-10-27	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-35	0	4362852	230.97933235363936	JWPCP	2020-10-20	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-36	0	3579700	230.97933235363936	HTP	2020-09-15	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-37	0	3551002	230.97933235363936	HTP	2020-09-08	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-38	0	3604679	230.97933235363936	HTP	2020-09-01	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-39	0	3486258	230.97933235363936	HTP	2020-08-25	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-40	0	2800039	230.97933235363936	HTP	2020-08-18	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-41	0	3318348	230.97933235363936	HTP	2020-08-11	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-42	0	4215471	230.97933235363936	HTP	2020-10-27	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-43	0	4350744	230.97933235363936	HTP	2020-10-20	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-44	0	2179170	230.97933235363936	HTP	2020-10-13	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-45	0	4595209	230.97933235363936	HTP	2020-10-02	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-46	0	10246075	230.97933235363936	SJ	2020-09-23	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-47	0	10232266	230.97933235363936	SJ	2020-11-04	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-48	0	13154158	230.97933235363936	SJ	2020-11-18	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-49	0	11601202	230.97933235363936	SJ	2020-11-11	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-50	0	11389423	230.97933235363936	SB	2020-11-05	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-51	0	11257694	230.97933235363936	SB	2020-10-08	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-52	0	8833468	230.97933235363936	PL	2020-12-28	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-53	0	9334593	230.97933235363936	PL	2020-12-22	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-54	0	10305132	230.97933235363936	PL	2020-12-14	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-55	0	8153083	230.97933235363936	PL	2020-11-05	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-56	0	10775374	230.97933235363936	PL	2020-11-30	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-57	0	10112554	230.97933235363936	PL	2020-11-29	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-58	0	10182955	230.97933235363936	PL	2021-01-04	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-59	0	10140886	230.97933235363936	PL	2021-01-03	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-60	0	9826830	230.97933235363936	OC	2020-12-21	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-61	0	9840771	230.97933235363936	OC	2020-12-14	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-62	0	10616714	230.97933235363936	OC	2020-11-09	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-63	0	8583928	230.97933235363936	OC	2020-11-04	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-64	0	9408142	230.97933235363936	OC	2020-11-25	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-65	0	10523877	230.97933235363936	OC	2020-11-18	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-66	0	11667235	230.97933235363936	OC	2020-11-11	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-67	0	9670784	230.97933235363936	NC	2020-09-25	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-68	0	12434072	230.97933235363936	NC	2020-11-06	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-69	0	10164300	230.97933235363936	JWPCP	2020-09-29	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-70	0	11233097	230.97933235363936	JWPCP	2020-11-03	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-71	0	12720283	230.97933235363936	JWPCP	2020-11-17	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-72	0	9675052	230.97933235363936	JWPCP	2020-11-10	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-73	0	13626688	230.97933235363936	HTP	2020-09-29	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-74	0	12904150	230.97933235363936	HTP	2020-09-22	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-75	0	11504066	230.97933235363936	HTP	2020-12-29	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-76	0	8861526	230.97933235363936	HTP	2020-12-22	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-77	0	11960233	230.97933235363936	HTP	2020-12-15	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-78	0	10874604	230.97933235363936	HTP	2020-12-04	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-79	0	11912829	230.97933235363936	HTP	2020-12-01	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-80	0	11534523	230.97933235363936	HTP	2020-11-03	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-81	0	11045877	230.97933235363936	HTP	2020-11-24	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-82	0	16394657	230.97933235363936	HTP	2020-11-17	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-83	0	9626457	230.97933235363936	HTP	2021-01-03	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-84	0	2810576	230.97933235363936	SJ	2020-09-30	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-85	0	3829748	230.97933235363936	SJ	2020-09-16	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-86	0	3184286	230.97933235363936	SJ	2020-09-09	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-87	0	3041921	230.97933235363936	SJ	2020-09-02	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-88	0	3108434	230.97933235363936	SJ	2020-08-26	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-89	0	3011011	230.97933235363936	SJ	2020-08-19	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-90	0	3241686	230.97933235363936	SJ	2020-08-12	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-91	0	4604124	230.97933235363936	SJ	2020-10-28	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-92	0	4192507	230.97933235363936	SJ	2020-10-21	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-93	0	5260005	230.97933235363936	SJ	2020-10-14	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-94	0	4632349	230.97933235363936	SJ	2020-10-07	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
-95	0	2413516	230.97933235363936	OC	2020-10-21	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
-96	0	16101528	230.97933235363936	ESC	2020-07-27	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
-97	0	23482928	230.97933235363936	ESC	2020-07-20	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+1	0	2737872	157.2061963114753	SB	2020-09-10	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+2	0	6515759	157.2061963114753	SB	2020-09-24	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+3	0	3204232	157.2061963114753	SB	2020-08-27	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+4	0	2782200	157.2061963114753	SB	2020-08-13	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+5	0	3429177	157.2061963114753	SB	2020-10-22	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+6	0	3842559	157.2061963114753	PL	2020-09-24	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+7	0	4419124	157.2061963114753	PL	2020-09-10	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+8	0	3402804	157.2061963114753	PL	2020-08-27	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+9	0	3786318	157.2061963114753	PL	2020-08-13	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+10	0	3857662	157.2061963114753	PL	2020-10-22	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+11	0	3588085	157.2061963114753	OC	2020-09-30	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+12	0	4520022	157.2061963114753	OC	2020-09-23	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+13	0	1327075	157.2061963114753	OC	2020-09-16	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+14	0	4874211	157.2061963114753	OC	2020-09-03	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+15	0	3689634	157.2061963114753	OC	2020-09-02	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+16	1	3283166	157.2061963114753	OC	2020-08-26	Orange County	3.045840508825932e-07	hiv	HIV	11676	prevalence	rothman
+17	0	3182825	157.2061963114753	OC	2020-08-19	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+18	0	1292650	157.2061963114753	OC	2020-08-12	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+19	0	3890259	157.2061963114753	OC	2020-10-07	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+20	0	2901986	157.2061963114753	NC	2020-09-11	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+21	0	3467617	157.2061963114753	NC	2020-08-28	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+22	0	4099096	157.2061963114753	NC	2020-08-14	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+23	0	4124544	157.2061963114753	NC	2020-10-23	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+24	0	4902017	157.2061963114753	NC	2020-10-09	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+25	0	4514886	157.2061963114753	JWPCP	2020-09-22	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+26	0	4234727	157.2061963114753	JWPCP	2020-09-15	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+27	0	4018438	157.2061963114753	JWPCP	2020-09-08	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+28	0	3630148	157.2061963114753	JWPCP	2020-09-01	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+29	0	3183234	157.2061963114753	JWPCP	2020-08-25	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+30	0	4059288	157.2061963114753	JWPCP	2020-08-18	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+31	0	2102736	157.2061963114753	JWPCP	2020-08-11	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+32	0	4221630	157.2061963114753	JWPCP	2020-10-13	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+33	0	4832507	157.2061963114753	JWPCP	2020-10-06	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+34	0	2374918	157.2061963114753	JWPCP	2020-10-27	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+35	0	4362852	157.2061963114753	JWPCP	2020-10-20	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+36	0	3579700	157.2061963114753	HTP	2020-09-15	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+37	0	3551002	157.2061963114753	HTP	2020-09-08	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+38	0	3604679	157.2061963114753	HTP	2020-09-01	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+39	0	3486258	157.2061963114753	HTP	2020-08-25	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+40	0	2800039	157.2061963114753	HTP	2020-08-18	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+41	0	3318348	157.2061963114753	HTP	2020-08-11	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+42	0	4215471	157.2061963114753	HTP	2020-10-27	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+43	0	4350744	157.2061963114753	HTP	2020-10-20	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+44	0	2179170	157.2061963114753	HTP	2020-10-13	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+45	0	4595209	157.2061963114753	HTP	2020-10-02	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+46	0	10246075	157.2061963114753	SJ	2020-09-23	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+47	0	10232266	157.2061963114753	SJ	2020-11-04	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+48	0	13154158	157.2061963114753	SJ	2020-11-18	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+49	0	11601202	157.2061963114753	SJ	2020-11-11	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+50	0	11389423	157.2061963114753	SB	2020-11-05	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+51	0	11257694	157.2061963114753	SB	2020-10-08	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+52	0	8833468	157.2061963114753	PL	2020-12-28	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+53	0	9334593	157.2061963114753	PL	2020-12-22	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+54	0	10305132	157.2061963114753	PL	2020-12-14	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+55	0	8153083	157.2061963114753	PL	2020-11-05	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+56	0	10775374	157.2061963114753	PL	2020-11-30	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+57	0	10112554	157.2061963114753	PL	2020-11-29	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+58	0	10182955	157.2061963114753	PL	2021-01-04	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+59	0	10140886	157.2061963114753	PL	2021-01-03	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+60	0	9826830	157.2061963114753	OC	2020-12-21	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+61	0	9840771	157.2061963114753	OC	2020-12-14	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+62	0	10616714	157.2061963114753	OC	2020-11-09	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+63	0	8583928	157.2061963114753	OC	2020-11-04	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+64	0	9408142	157.2061963114753	OC	2020-11-25	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+65	0	10523877	157.2061963114753	OC	2020-11-18	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+66	0	11667235	157.2061963114753	OC	2020-11-11	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+67	0	9670784	157.2061963114753	NC	2020-09-25	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+68	0	12434072	157.2061963114753	NC	2020-11-06	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+69	0	10164300	157.2061963114753	JWPCP	2020-09-29	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+70	0	11233097	157.2061963114753	JWPCP	2020-11-03	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+71	0	12720283	157.2061963114753	JWPCP	2020-11-17	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+72	0	9675052	157.2061963114753	JWPCP	2020-11-10	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+73	0	13626688	157.2061963114753	HTP	2020-09-29	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+74	0	12904150	157.2061963114753	HTP	2020-09-22	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+75	0	11504066	157.2061963114753	HTP	2020-12-29	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+76	0	8861526	157.2061963114753	HTP	2020-12-22	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+77	0	11960233	157.2061963114753	HTP	2020-12-15	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+78	0	10874604	157.2061963114753	HTP	2020-12-04	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+79	0	11912829	157.2061963114753	HTP	2020-12-01	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+80	0	11534523	157.2061963114753	HTP	2020-11-03	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+81	0	11045877	157.2061963114753	HTP	2020-11-24	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+82	0	16394657	157.2061963114753	HTP	2020-11-17	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+83	0	9626457	157.2061963114753	HTP	2021-01-03	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+84	0	2810576	157.2061963114753	SJ	2020-09-30	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+85	0	3829748	157.2061963114753	SJ	2020-09-16	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+86	0	3184286	157.2061963114753	SJ	2020-09-09	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+87	0	3041921	157.2061963114753	SJ	2020-09-02	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+88	0	3108434	157.2061963114753	SJ	2020-08-26	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+89	0	3011011	157.2061963114753	SJ	2020-08-19	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+90	0	3241686	157.2061963114753	SJ	2020-08-12	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+91	0	4604124	157.2061963114753	SJ	2020-10-28	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+92	0	4192507	157.2061963114753	SJ	2020-10-21	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+93	0	5260005	157.2061963114753	SJ	2020-10-14	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+94	0	4632349	157.2061963114753	SJ	2020-10-07	Los Angeles County	0.0	hiv	HIV	11676	prevalence	rothman
+95	0	2413516	157.2061963114753	OC	2020-10-21	Orange County	0.0	hiv	HIV	11676	prevalence	rothman
+96	0	16101528	157.2061963114753	ESC	2020-07-27	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
+97	0	23482928	157.2061963114753	ESC	2020-07-20	San Diego County	0.0	hiv	HIV	11676	prevalence	rothman
 1	0	34152465	157.2061963114753	I	2022-01-09	Greene County	0.0	hiv	HIV	11676	prevalence	spurbeck
 2	0	15536236	157.2061963114753	I	2022-01-02	Greene County	0.0	hiv	HIV	11676	prevalence	spurbeck
 3	0	24496461	157.2061963114753	H	2021-12-26	Franklin County	0.0	hiv	HIV	11676	prevalence	spurbeck
