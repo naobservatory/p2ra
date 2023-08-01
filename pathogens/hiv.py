@@ -105,6 +105,9 @@ def estimate_prevalences() -> list[Prevalence]:
     # it's about the same in 2020 and 2021 as it was in 2019.
     us_2020 = dataclasses.replace(us_2019, date_source=Variable(date="2020"))
     us_2021 = dataclasses.replace(us_2019, date_source=Variable(date="2021"))
+
+    # We don't use this estimate, because we don't have other county-level
+    # estimates for HIV or other prevalence viruses.
     la_2020 = (
         la_infected_2020.to_rate(
             us_population(
@@ -113,6 +116,7 @@ def estimate_prevalences() -> list[Prevalence]:
         )
         * la_unsuppressed_fraction_2020
     )
+
     # Extrapolating undiagnosed HIV rate in Copenhagen backwards from 2022 to 2015-2018. We assume that HIV has mostly stayed constant.
     copenhagen_2022 = (
         denmark_infected_undiagnosed_2022 * hiv_share_copenhagen
@@ -135,7 +139,6 @@ def estimate_prevalences() -> list[Prevalence]:
         us_2019,
         us_2020,
         us_2021,
-        la_2020,
         copenhagen_2022,
         copenhagen_2018,
         copenhagen_2017,
