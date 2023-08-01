@@ -81,8 +81,8 @@ def start():
     width = 0.4
     gap = 0.04
 
-    y_pos_us = np.arange(len(labels))
-    y_pos_dk = y_pos_us + width
+    y_pos_dk = np.arange(len(labels))
+    y_pos_us = y_pos_dk + width
 
     ax.barh(
         y_pos_us,
