@@ -16,11 +16,11 @@ with open("authors.txt") as inf:
             author = author.removeprefix("and ")
 
             for f, r in [
-                    (".", ""),
-                    ("Thomas Nordahl Petersen", "Thomas N Petersen"),
-                    ("Christina Aaby Svendsen", "Christina A Svendsen"),
-                    ]:
-                author = author.replace(f,r)
+                (".", ""),
+                ("Thomas Nordahl Petersen", "Thomas N Petersen"),
+                ("Christina Aaby Svendsen", "Christina A Svendsen"),
+            ]:
+                author = author.replace(f, r)
 
             # remove middle names
             while re.match(".* [A-Z] .*", author):
@@ -30,7 +30,8 @@ with open("authors.txt") as inf:
             all_authors.add(author)
 
 for last_name in sorted(by_last_name):
-    if len(by_last_name[last_name]) == 1: continue
+    if len(by_last_name[last_name]) == 1:
+        continue
     print(last_name)
     for author in sorted(by_last_name[last_name]):
         print(" ", author)
