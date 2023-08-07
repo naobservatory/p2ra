@@ -140,6 +140,10 @@ def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
         data=data[
             (data.predictor_type == predictor_type)
             & (data.location == "Overall")
+            & ~(
+                (data.study == "Crits-Christoph")
+                & (data.pathogen == "influenza")
+            )
         ],
         viral_reads=count_viral_reads(
             input_data[input_data.predictor_type == predictor_type]
