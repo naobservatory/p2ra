@@ -52,6 +52,8 @@ def adjust_axes(ax, predictor_type: str) -> None:
     ax.spines["top"].set_visible(False)
     ax.spines["left"].set_visible(False)
     # ax.set_xscale("log")
+    ax.vlines(ax.get_xticks()[1:-1], *ax.get_ylim(), linewidth=0.05,
+              color="black", zorder=-1)
     ax.set_xlabel(
         r"$RA"
         f"{predictor_type[0]}"
@@ -202,6 +204,7 @@ def plot_prevalence(
     )
     ax.set_xlim([-15, -7])
     ax.set_xticks(list(range(-15, -5, 2)))
+
     separate_viruses(ax)
     # TODO Get these values automatically
     num_rna_1 = 2
