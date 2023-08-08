@@ -51,8 +51,13 @@ def adjust_axes(ax, predictor_type: str) -> None:
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
     ax.spines["left"].set_visible(False)
-    ax.vlines(ax.get_xticks()[1:-1], *ax.get_ylim(), linewidth=0.05,
-              color="black", zorder=-1)
+    ax.vlines(
+        ax.get_xticks()[1:-1],
+        *ax.get_ylim(),
+        linewidth=0.05,
+        color="black",
+        zorder=-1,
+    )
     # ax.set_xscale("log")
     ax.set_xlabel(
         r"$RA"
