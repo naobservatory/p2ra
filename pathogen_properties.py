@@ -122,6 +122,7 @@ class Variable:
     taxid: Optional[TaxID] = None
     inputs: InitVar[Optional[Iterable["Variable"]]] = None
     all_inputs: set["Variable"] = field(default_factory=set)
+    is_pseudocount: Optional[bool] = None
 
     def __post_init__(
         self,
@@ -540,4 +541,4 @@ def by_taxids(
 #
 # It might be better to handle this in the modeling step, but by the time we
 # get to that point the granularity of the input data has been discarded.
-QUANTITY_WHEN_NONE_OBSERVED = 0.1
+QUANTITY_WHEN_NONE_OBSERVED = 0.001
