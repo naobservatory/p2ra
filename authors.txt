@@ -1,0 +1,16 @@
+Bengtsson-Palme: Johan Bengtsson-Palme, Rickard Hammarén, Chandan Pal, Marcus Östman, Berndt Björlenius, Carl-Fredrik Flach, Jerker Fick, Erik Kristiansson, Mats Tysklind, D G Joakim Larsson
+Brinch: Christian Brinch, Pimlapas Leekitcharoenphon, Ana S. R. Duarte, Christina A. Svendsen, Jacob D. Jensen, and Frank M. Aarestrup
+Brumfield: Kyle D. Brumfield, Menu Leddy, Moiz Usmani, Joseph A. Cotruvo, Ching-Tzone Tien, Suzanne Dorsey, Karlis Graubics, Brian Fanelli, Isaac Zhou, Nathaniel Registe, Manoj Dadlani, Malinda Wimalarante, Dilini Jinasena, Rushan Abayagunawardena, Chiran Withanachchi, Anwar Huq, Antarpreet Jutla, Rita R. Colwell
+Crits-Christoph: Alexander Crits-Christoph, Rose S. Kantor, Matthew R. Olm, Oscar N. Whitney, Basem Al-Shayeb, Yue Clare Lou, Avi Flamholz, Lauren C. Kennedy, Hannah Greenwald, Adrian Hinkle, Jonathan Hetzel, Sara Spitzer, Jeffery Koble, Asako Tan, Fred Hyde, Gary Schroth, Scott Kuersten, Jillian F. Banfield, and Kara L. Nelson
+Cui: Han Cui, Jing Wang, Xiaoyu Cai, Kun Feng, Guo-Jun Xie, Bing-Feng Liu, and Defeng Xing
+Fierer: Noah Fierer, Hannah Holland-Moritz, Alexandra Alexiev, Harpreet Batther, Nicholas B. Dragone, Liam Friar, Matthew J. Gebert, Sarah Gering, Jessica B. Henley, Sierra Jech, Emily M. Kibby, Tina Melie, William B. Patterson, Eric Peterson, Kyle Schutz, Elías Stallard-Olivera, John Sterrett, Corinne Walsh, Cresten Mansfeldt
+Hendriksen: Rene S. Hendriksen, Oksana Lukjancenko, Patrick Munk, Mathis H. Hjelmsø, Jennifer R. Verani, Eric Ng’eno, Godfrey Bigogo, Samuel Kiplangat, Traoré Oumar, Lasse Bergmark, Timo Röder, John C. Neatherlin, Onyango Clayton, Tine Hald, Susanne Karlsmose, Sünje J. Pamp, Barry Fields, Joel M. Montgomery, Frank M. Aarestrup
+Maritz: Julia M. Maritz, Theresa A. Ten Eyck, S. Elizabeth Alter, and Jane M. Carlton
+McCall: Camille McCall, Ryan A. Leo Elworth, Kristine M. Wylie, Todd N. Wylie, Katherine Dyson, Ryan Doughty, Todd J. Treangen, Loren Hopkins, Katherine Ensor, Lauren B. Stadler
+Munk: Patrick Munk, Christian Brinch, Frederik Duus Møller, Thomas N. Petersen, Rene S. Hendriksen, Anne Mette Seyfarth, Jette S. Kjeldgaard, Christina Aaby Svendsen, Bram van Bunnik, Fanny Berglund, the Global Sewage Surveillance Consortium, D. G. Joakim Larsson, Marion Koopmans, Mark Woolhouse, and Frank M. Aarestrup
+Ng: Charmaine Ng, Boonfei Tan, Xiao-Tao Jiang, Xiaoqiong Gu, Hongjie Chen, Bradley William Schmitz, Laurence Haller, Francis Rathinam Charles, Tong Zhang, Karina Gin
+Petersen: Thomas Nordahl Petersen, Simon Rasmussen, Henrik Hasman, Christian Carøe, Jacob Bælum, Anna Charlotte Schultz, Lasse Bergmark, Christina A. Svendsen, Ole Lund, Thomas Sicheritz-Pontén, and Frank M. Aarestrup
+Rothman: Jason A Rothman, Theresa B Loveless, Joseph Kapcia, Eric D Adams, Joshua A Steele, Amity G Zimmer-Faust, Kylie Langlois, David Wanless, Madison Griffith, Lucy Mao, Jeffrey Chokry, John F Griffith, Katrine L Whiteson
+Spurbeck: Rachel R. Spurbeck, Lindsay A. Catlin, Chiranjit Mukherjee, Anthony K. Smith, Angela Minard-Smith
+Wang: Changzhi Wang, David Mantilla-Calderon, Yanghui Xiong, Mohsen Alkahtani, Yasir M. Bashawri, Hamed Al Qarni, and Pei-Ying Hong
+Yang: Qian Yang, Pierre Rivailler, Shuangli Zhu, Dongmei Yan, Na Xie, Haishu Tang, Yong Zhang, Wenbo Xu

@@ -234,16 +234,18 @@ def estimate_incidences() -> list[IncidenceRate]:
                 (FLU_B, positive_b),
             ]:
                 adjusted_weekly_count = float(weekly_count)
-                if weekly_count == 0:
-                    # See comment on QUANTITY_WHEN_NONE_OBSERVED.
-                    adjusted_weekly_count = QUANTITY_WHEN_NONE_OBSERVED
-
                 if parsed_start.year <= 2019:
                     continue
 
                 underreporting = get_underreporting(parsed_start, parsed_end)
                 if not underreporting:
                     continue
+
+                is_pseudocount = False
+                if weekly_count == 0:
+                    # See comment on QUANTITY_WHEN_NONE_OBSERVED.
+                    adjusted_weekly_count = QUANTITY_WHEN_NONE_OBSERVED
+                    is_pseudocount = True
 
                 incidence = IncidenceAbsolute(
                     annual_infections=adjusted_weekly_count * 52,
@@ -263,6 +265,7 @@ def estimate_incidences() -> list[IncidenceRate]:
                             * underreporting
                         ),
                         taxid=taxid,
+                        is_pseudocount=is_pseudocount,
                     )
                 )
 

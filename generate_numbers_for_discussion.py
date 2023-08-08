@@ -29,6 +29,7 @@ with open("fits_summary.tsv") as inf:
         adjusted_relative_abundance = median if is_prevalence else median / 2
 
         print(pathogen, study)
+        print("  RA1%% %.0e" % median)
         print(
             "  Relative abundance of 1 in %.0e"
             % (1 / adjusted_relative_abundance)
