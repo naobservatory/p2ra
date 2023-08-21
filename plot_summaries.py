@@ -60,7 +60,7 @@ def adjust_axes(ax, predictor_type: str) -> None:
     )
     # ax.set_xscale("log")
     ax.set_xlabel(
-        r"$RA"
+        r"$\mathrm{RA}"
         f"{predictor_type[0]}"
         r"(1\%)$"
         ": expected relative abundance at 1% "
