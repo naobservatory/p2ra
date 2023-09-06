@@ -51,9 +51,16 @@ def adjust_axes(ax, predictor_type: str) -> None:
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
     ax.spines["left"].set_visible(False)
+    ax.vlines(
+        ax.get_xticks()[1:-1],
+        *ax.get_ylim(),
+        linewidth=0.05,
+        color="black",
+        zorder=-1,
+    )
     # ax.set_xscale("log")
     ax.set_xlabel(
-        r"$RA"
+        r"$\mathrm{RA}"
         f"{predictor_type[0]}"
         r"(1\%)$"
         ": expected relative abundance at 1% "
@@ -264,8 +271,13 @@ def plot_three_virus(
         # TODO Get these values automatically
         num_spurbeck = 10
         num_rothman = 8
+        num_crits_christoph = 4
         ax.hlines(
-            [num_spurbeck - 0.5, num_spurbeck + num_rothman - 0.5],
+            [
+                num_spurbeck - 0.5,
+                num_spurbeck + num_rothman - 0.5,
+                num_spurbeck + num_rothman + num_crits_christoph - 0.5,
+            ],
             *ax.get_xlim(),
             linestyle="solid",
             color="k",
@@ -286,6 +298,14 @@ def plot_three_virus(
                 "Crits-Christoph",
                 va="top",
             )
+            if predictor_type == "prevalence":
+                ax.text(
+                    x_text,
+                    num_spurbeck + num_rothman + num_crits_christoph - 0.4,
+                    "Brinch",
+                    va="top",
+                )
+
         adjust_axes(ax, predictor_type=predictor_type)
         ax.set_title(pathogen)
         ax.get_legend().remove()
@@ -352,6 +372,17 @@ def start() -> None:
     )
     save_plot(
         fig_three_virus_incidence, figdir, "by_location_incidence-violin"
+    )
+    prevalence_viruses = {
+        "JCV": (-14.0, -7.0),
+        "BKV": (-14.0, -7.0),
+        "MCV": (-14.0, -7.0),
+    }
+    fig_three_virus_prevalence = plot_three_virus(
+        fits_df, input_df, prevalence_viruses, "prevalence"
+    )
+    save_plot(
+        fig_three_virus_prevalence, figdir, "by_location_prevalence-violin"
     )
 
 
