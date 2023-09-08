@@ -68,15 +68,25 @@ def start():
                 color=color,
                 alpha=0.2,
             )
-        ax.set_title(virus)
-        ax.set_xlabel("Prevalence")
+        if virus == "SARS-COV-2":
+            title = "SARS-CoV-2"
+        else:
+            title = virus
+        ax.set_title(title)
         ax.grid()
         ax.set_xticks([1e-4, 1e-3, 1e-2, 1e-1])
+    # Note that this was chosen for simplicity for a report
+    # where we weren't distinguising between incidence and prevalence
+    # It assumes that prevalence is approximately weekly incidence
+    # ie that the recovery time is about a week
+    axes[1].set_xlabel("Prevalence")
     axes[0].set_ylabel("Reads required for detection")
     axes[-1].legend(
         title="Detection threshold", frameon=True, facecolor="w", framealpha=1
     )
-    fig.savefig("reads_per_prevalence.png", bbox_inches="tight")
+    fig.savefig(
+        "figures/reads_per_prevalence.png", bbox_inches="tight", dpi=600
+    )
 
 
 if __name__ == "__main__":
