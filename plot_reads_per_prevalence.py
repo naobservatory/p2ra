@@ -51,6 +51,11 @@ def start():
         lower = stats.percentiles[25]
         upper = stats.percentiles[75]
         incidence = np.logspace(-4, -1, 100)
+        placeholder_dict = {
+            200: "Rothman",
+            20: "Spurbeck",
+            2: "Crits-Christoph",
+        }
         for i, detection_threshold in enumerate([200, 20, 2]):
             # 0.01 = conversion from per 1% to true incidence
             scale_factor = detection_threshold * 0.01 / incidence
@@ -59,7 +64,7 @@ def start():
                 incidence,
                 scale_factor / median,
                 color=color,
-                label=f"{detection_threshold} reads",
+                label=f"{placeholder_dict[detection_threshold]}",
             )
             ax.fill_between(
                 incidence,
@@ -72,10 +77,17 @@ def start():
         ax.set_xlabel("Prevalence")
         ax.grid()
         ax.set_xticks([1e-4, 1e-3, 1e-2, 1e-1])
+    # set overall figure title
+    # move title up
+    fig.subplots_adjust(top=0.8)
+    fig.suptitle(
+        "Placeholder figure | Reads required for detection with different study protocols"
+    )
     axes[0].set_ylabel("Reads required for detection")
     axes[-1].legend(
         title="Detection threshold", frameon=True, facecolor="w", framealpha=1
     )
+
     fig.savefig("reads_per_prevalence.png", bbox_inches="tight")
 
 
