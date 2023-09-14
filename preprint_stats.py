@@ -104,9 +104,9 @@ def start():
         (zero_counts / len(human_virus_shares)) * 100, 2
     )
 
-    perc_gmean_viral_share = round(gmean(human_virus_shares) * 100, 8)
+    gmean_viral_share = round(gmean(human_virus_shares), 7)
 
-    return f"When dropping {zero_counts} samples without human reads ({perc_zero_human_read_samples}% of all samples), the geometric mean of samples' human read share is {perc_gmean_viral_share}%"
+    return f"When dropping {zero_counts} samples without human reads ({perc_zero_human_read_samples}% of all samples), the geometric mean of samples' human read share is {gmean_viral_share * 100}% \n Put differently 1 in {round(1 / gmean_viral_share)} reads in the wastewater samples are human reads"
 
 
 if __name__ == "__main__":
