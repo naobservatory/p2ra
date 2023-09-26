@@ -440,7 +440,7 @@ def start():
         figsize=(9, 11),
     )
 
-    gs = GridSpec(2, 2, height_ratios=[9, 6], figure=fig)
+    gs = GridSpec(2, 2, height_ratios=[9, 7], figure=fig)
 
     ax0 = fig.add_subplot(gs[0, :])
     ax1 = fig.add_subplot(gs[1, :])
@@ -460,11 +460,11 @@ def start():
     y_order = [text.get_text() for text in y_order]
 
     ax0_title = ax0.set_title("a", fontweight="bold")
-    ax0.set_xlabel("Relative Abundance among all reads")
+    ax0.set_xlabel("Log$_{10}$ Relative Abundance among all reads")
 
     x, y = ax0_title.get_position()
 
-    ax0_title.set_position((-0.18, 0))
+    ax0_title.set_position((-0.15, 0))
 
     ax0.set_ylabel("")
     ax0.tick_params(left=False, labelright=True, labelleft=False)
@@ -486,9 +486,9 @@ def start():
     studies = boxplot_df["study"].unique()
 
     ax0.legend(
-        loc=(0.0, -0.13),
+        loc=(0.09, -0.17),
         columnspacing=2.2,
-        ncol=4,
+        ncol=3,
         frameon=True,
         title="",
         fontsize=10,
@@ -537,9 +537,11 @@ def start():
 
     x, y = ax1_title.get_position()
 
-    ax1_title.set_position((-0.18, 0))
+    ax1_title.set_position((-0.15, 0))
 
-    ax1.set_xlabel("Relative Abundance among human-infecting viruses")
+    ax1.set_xlabel(
+        "Log$_{10}$ Relative Abundance among human-infecting viruses"
+    )
 
     ax1.tick_params(left=False)
 
@@ -556,10 +558,10 @@ def start():
     ax1.set_xlim(right=1, left=0)
 
     ax1.legend(
-        loc=(0.0, -0.37),
+        loc=(0.015, -0.32),
         ncol=4,
         frameon=True,
-        fontsize=9.6,
+        fontsize=9.1,
     )
 
     plt.tight_layout()
