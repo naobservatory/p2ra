@@ -266,7 +266,7 @@ def all_incidence_figure(
     df,
     sample_dates,
     ax2,
-    ax3,
+    # ax3,
     transform_study_name,
     virus_plot_colors,
     study_coverage_colors,
@@ -301,47 +301,59 @@ def all_incidence_figure(
     study_coverage_y_values = range(1, len(sample_dates) + 1)
 
     for study, dates in sample_dates.items():
+        ymax = ax2.get_ylim()[1]
+
         ax2.axvspan(
             min(dates),
             max(dates) + dt.timedelta(days=2),
-            ymin=0.035,
+            # ymin=0.035,
             facecolor=study_coverage_colors[study],
             alpha=0.1,
         )
-
-    for index, (study, dates) in zip(
-        study_coverage_y_values, sample_dates.items()
-    ):
-        ax3.plot(
-            [
-                min(dates),
-                max(dates) + dt.timedelta(days=2),
-            ],  # hacky, have to add two days so Crits-Cristoph shows up in the study coverage plot
-            [index, index],
-            color=study_coverage_colors[study],
-            # alpha = 0.4,
-            linewidth=5,
-            solid_capstyle="round",
-        )
-
-        x_offset = dt.timedelta(days=8)
-        ax3.text(
-            max(dates) + x_offset,
-            index,
+        ax2.text(
+            # middle value of dates
+            min(dates) + (max(dates) - min(dates)) / 2,
+            ymax,
             transform_study_name(study),
-            fontsize=10.5,
-            va="center",
-            # color=study_coverage_colors[study],
+            verticalalignment="bottom",
+            horizontalalignment="center",
+            color=study_coverage_colors[study],
+            weight="heavy",
         )
+
+    # for index, (study, dates) in zip(
+    #     study_coverage_y_values, sample_dates.items()
+    # ):
+    #     ax3.plot(
+    #         [
+    #             min(dates),
+    #             max(dates) + dt.timedelta(days=2),
+    #         ],  # hacky, have to add two days so Crits-Cristoph shows up in the study coverage plot
+    #         [index, index],
+    #         color=study_coverage_colors[study],
+    #         # alpha = 0.4,
+    #         linewidth=5,
+    #         solid_capstyle="round",
+    #     )
+
+    #     x_offset = dt.timedelta(days=8)
+    #     ax3.text(
+    #         max(dates) + x_offset,
+    #         index,
+    #         transform_study_name(study),
+    #         fontsize=10.5,
+    #         va="center",
+    #         # color=study_coverage_colors[study],
+    #     )
     ax2.spines["right"].set_visible(False)
     ax2.spines["top"].set_visible(False)
-    ax2.spines["bottom"].set_visible(False)
+    # ax2.spines["bottom"].set_visible(False)
     ax2.spines["left"].set_visible(False)
 
     ax2.xaxis.set_visible(True)
-    ax2.xaxis.set_ticks_position("none")
-    plt.setp(ax2.get_xticklabels(), visible=False)
-    ax2.axhline(0, color="black", linewidth=0.8)
+    # ax2.xaxis.set_ticks_position("none")
+    # plt.setp(ax2.get_xticklabels(), visible=False)
+    # ax2.axhline(0, color="black", linewidth=0.8)
 
     ax2.yaxis.set_ticks_position("none")
 
@@ -349,73 +361,75 @@ def all_incidence_figure(
         "b",
         fontweight="bold",
         loc="left",
+        # move title a bit up
     )
 
     ax2_title.set_position((-0.08, 0))
     x_min, _ = ax2.get_xlim()
-    last_date = df.dropna(
-        subset=["sars_cov_2", "influenza", "norovirus"], how="all"
-    )["date"].max()
+    last_date = df.dropna(subset=["sars_cov_2"], how="all")["date"].max()
 
     x_axis_max_offset = dt.timedelta(days=7)
 
     ax2.set_xlim(x_min, last_date + x_axis_max_offset)
 
-    for pathogen in ["sars_cov_2", "influenza", "norovirus"]:
-        last_incidence_value = (
-            df.sort_values(by="date")
-            .dropna(subset=[pathogen])[pathogen]
-            .iloc[-1]
-        )
-
-        last_date = ax2.get_xlim()[1]
-
-        ax2.text(
-            last_date,
-            last_incidence_value,
-            figure_labels[pathogen],
-            color=virus_plot_colors[pathogen],
-            verticalalignment="center",
-            fontsize=10,
-        )
-
-    ax3.text(  # title
-        dt.datetime(2020, 4, 16),
-        5,
-        "Study coverage",
-        fontsize=12,
-        va="center",
+    # for pathogen in ["sars_cov_2", "influenza", "norovirus"]:
+    last_incidence_value = (
+        df.sort_values(by="date")
+        .dropna(subset=["sars_cov_2"])["sars_cov_2"]
+        .iloc[-1]
     )
 
+    last_date = ax2.get_xlim()[1]
+
+    ax2.text(
+        last_date,
+        last_incidence_value,
+        figure_labels["sars_cov_2"],
+        color=virus_plot_colors["sars_cov_2"],
+        verticalalignment="center",
+        fontsize=10,
+    )
     ax2.yaxis.set_major_formatter(
         mticker.FuncFormatter(lambda x, p: format(int(x), ","))
     )
+    # ax3.text(  # title
+    #     dt.datetime(2020, 4, 16),
+    #     5,
+    #     "Study coverage",
+    #     fontsize=12,
+    #     va="center",
+    # )
 
-    ax3.spines["right"].set_visible(False)
-    ax3.spines["top"].set_visible(False)
-    ax3.set_ylim(0, max(study_coverage_y_values) + 1)
-    ax3.set_yticks([])
-    ax3.set_yticklabels([])
-
-    for y_loc in range(2000, 10001, 2000):
+    for y_loc in range(0, 10001, 2000):
         ax2.axhline(y_loc, color="gray", linestyle="-", lw=0.5, alpha=0.5)
 
-    ax3.xaxis.set_major_locator(mdates.YearLocator())
-    ax3.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax2.xaxis.set_major_locator(mdates.YearLocator())
+    ax2.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax2.xaxis.set_minor_locator(mdates.MonthLocator())
+    ax2.xaxis.set_minor_formatter("")
 
-    ax3.xaxis.set_minor_locator(mdates.MonthLocator())
-    ax3.xaxis.set_minor_formatter("")
+    # ax3.spines["right"].set_visible(False)
+    # ax3.spines["top"].set_visible(False)
+    # ax3.set_ylim(0, max(study_coverage_y_values) + 1)
+    # ax3.set_yticks([])
+    # ax3.set_yticklabels([])
+
+    # ax3.xaxis.set_major_locator(mdates.YearLocator())
+    # ax3.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+
+    # ax3.xaxis.set_minor_locator(mdates.MonthLocator())
+    # ax3.xaxis.set_minor_formatter("")
 
     # ax2.legend(loc="upper left", borderaxespad=0)
 
-    return ax2, ax3
+    return ax2
 
 
 def norovirus_influenza_figure(
     df,
     sample_dates,
     ax4,
-    ax5,
+    # ax5,
     transform_study_name,
     virus_plot_colors,
     study_coverage_colors,
@@ -447,6 +461,8 @@ def norovirus_influenza_figure(
     study_coverage_y_values = range(1, len(sample_dates) + 1)
 
     for study, dates in sample_dates.items():
+        ymax = ax4.get_ylim()[1]
+
         ax4.axvspan(
             min(dates),
             max(dates) + dt.timedelta(days=2),
@@ -454,35 +470,45 @@ def norovirus_influenza_figure(
             facecolor=study_coverage_colors[study],
             alpha=0.1,
         )
-
-    for index, (study, dates) in zip(
-        study_coverage_y_values, sample_dates.items()
-    ):
-        ax5.plot(
-            [
-                min(dates),
-                max(dates) + dt.timedelta(days=2),
-            ],  # hacky, have to add two days so Crits-Cristoph shows up in the study coverage plot
-            [index, index],
-            color=study_coverage_colors[study],
-            # alpha=0.2,
-            linewidth=5,
-            solid_capstyle="round",
-        )
-
-        x_offset = dt.timedelta(days=8)
-        ax5.text(
-            max(dates) + x_offset,
-            index,
+        ax4.text(
+            # middle value of dates
+            min(dates) + (max(dates) - min(dates)) / 2,
+            ymax,
             transform_study_name(study),
-            fontsize=10.5,
-            va="center",
-            # color=study_coverage_colors[study],
+            verticalalignment="bottom",
+            horizontalalignment="center",
+            color=study_coverage_colors[study],
+            weight="heavy",
         )
+
+    # for index, (study, dates) in zip(
+    #     study_coverage_y_values, sample_dates.items()
+    # ):
+    #     ax5.plot(
+    #         [
+    #             min(dates),
+    #             max(dates) + dt.timedelta(days=2),
+    #         ],  # hacky, have to add two days so Crits-Cristoph shows up in the study coverage plot
+    #         [index, index],
+    #         color=study_coverage_colors[study],
+    #         # alpha=0.2,
+    #         linewidth=5,
+    #         solid_capstyle="round",
+    #     )
+
+    #     x_offset = dt.timedelta(days=8)
+    #     ax5.text(
+    #         max(dates) + x_offset,
+    #         index,
+    #         transform_study_name(study),
+    #         fontsize=10.5,
+    #         va="center",
+    #         # color=study_coverage_colors[study],
+    #     )
 
     ax4.spines["right"].set_visible(False)
     ax4.spines["top"].set_visible(False)
-    ax4.spines["bottom"].set_visible(False)
+    # ax4.spines["bottom"].set_visible(False)
     ax4.spines["left"].set_visible(False)
 
     ax4.xaxis.set_visible(True)
@@ -490,7 +516,7 @@ def norovirus_influenza_figure(
     plt.setp(ax4.get_xticklabels(), visible=False)
     ax4.axhline(0, color="black", linewidth=0.8)
     # remove ticks on ax4 y axis, but still show labels on y axis
-    ax4.yaxis.set_ticks_position("none")
+    # ax4.yaxis.set_ticks_position("none")
 
     ax4_title = ax4.set_title(
         "c",
@@ -501,11 +527,12 @@ def norovirus_influenza_figure(
     ax4_title.set_position((-0.08, 0))
 
     x_min, _ = ax4.get_xlim()
+
+    x_axis_max_offset = dt.timedelta(days=7)
+
     last_date = df.dropna(subset=["influenza", "norovirus"], how="all")[
         "date"
     ].max()
-
-    x_axis_max_offset = dt.timedelta(days=7)
 
     ax4.set_xlim(x_min, last_date + x_axis_max_offset)
 
@@ -516,10 +543,10 @@ def norovirus_influenza_figure(
             .iloc[-1]
         )
 
-        last_date = ax4.get_xlim()[1]
+        xmax = ax4.get_xlim()[1]
 
         ax4.text(
-            last_date,
+            xmax,
             last_incidence_value,
             figure_labels[pathogen],
             color=virus_plot_colors[pathogen],
@@ -527,31 +554,38 @@ def norovirus_influenza_figure(
             fontsize=10,
         )
 
-    ax5.text(
-        dt.datetime(2020, 4, 16),
-        5,
-        "Study coverage",
-        fontsize=12,
-        va="center",
-    )
-
-    ax5.spines["right"].set_visible(False)
-    ax5.spines["top"].set_visible(False)
-    ax5.set_ylim(0, max(study_coverage_y_values) + 1)
-    ax5.set_yticks([])
-    ax5.set_yticklabels([])
-
     for y_loc in range(20, 161, 20):
         ax4.axhline(y_loc, color="gray", linestyle="-", lw=0.5, alpha=0.5)
 
-    ax5.xaxis.set_major_locator(mdates.YearLocator())
-    ax5.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-    ax5.xaxis.set_minor_locator(mdates.MonthLocator())
-    ax5.xaxis.set_minor_formatter("")
+    ax4.xaxis.set_major_locator(mdates.YearLocator())
+    ax4.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax4.xaxis.set_minor_locator(mdates.MonthLocator())
+    ax4.xaxis.set_minor_formatter("")
+
+    # set y tick label positions
+
+    # ax5.text(
+    #     dt.datetime(2020, 4, 16),
+    #     5,
+    #     "Study coverage",
+    #     fontsize=12,
+    #     va="center",
+    # )
+
+    # ax5.spines["right"].set_visible(False)
+    # ax5.spines["top"].set_visible(False)
+    # ax5.set_ylim(0, max(study_coverage_y_values) + 1)
+    # ax5.set_yticks([])
+    # ax5.set_yticklabels([])
+
+    # ax5.xaxis.set_major_locator(mdates.YearLocator())
+    # ax5.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    # ax5.xaxis.set_minor_locator(mdates.MonthLocator())
+    # ax5.xaxis.set_minor_formatter("")
 
     # ax4.legend(loc="upper left", borderaxespad=0)
 
-    return ax4, ax5
+    return (ax4,)  # ax5
 
 
 def start():
@@ -575,29 +609,29 @@ def start():
     fig = plt.figure(
         figsize=(9, 12),
     )
-    gs = fig.add_gridspec(5, 2, height_ratios=[7, 5, 1, 5, 1])
+    gs = fig.add_gridspec(3, 2, height_ratios=[7, 5, 5], hspace=0.05)
 
     ax1 = fig.add_subplot(gs[0, :])
-    ax3 = fig.add_subplot(gs[2, :])
-    ax2 = fig.add_subplot(gs[1, :], sharex=ax3)
-    ax5 = fig.add_subplot(gs[4, :])
-    ax4 = fig.add_subplot(gs[3, :], sharex=ax5)
+    # ax3 = fig.add_subplot(gs[2, :])
+    ax2 = fig.add_subplot(gs[1, :])  # , sharex=ax3)
+    # ax5 = fig.add_subplot(gs[4, :])
+    ax4 = fig.add_subplot(gs[2, :])  # , sharex=ax5)
 
     ax1 = prevalence_bar_chart(ax1, barplot_colors)
-    ax2, ax3 = all_incidence_figure(
+    ax2 = all_incidence_figure(
         df,
         sample_dates,
         ax2,
-        ax3,
+        # ax3,
         transform_study_name,
         virus_plot_colors,
         study_coverage_colors,
     )
-    ax4, ax5 = norovirus_influenza_figure(
+    ax4 = norovirus_influenza_figure(
         df,
         sample_dates,
         ax4,
-        ax5,
+        # ax5,
         transform_study_name,
         virus_plot_colors,
         study_coverage_colors,
