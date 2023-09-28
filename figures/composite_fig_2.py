@@ -1,572 +1,618 @@
-import os
-import gzip
-import json
-import subprocess
+import sys as sys
+import csv
+
+sys.path.append("..")
+
+import matplotlib as mpl
 import matplotlib.pyplot as plt  # type: ignore
+import matplotlib.dates as mdates
+import matplotlib.ticker as mticker
 from matplotlib.gridspec import GridSpec
-import matplotlib.ticker as ticker
 
-import pandas as pd
-from scipy.stats import gmean
+
+import datetime as dt
 import numpy as np
-from PIL import Image
-import seaborn as sns
+import pandas as pd
+from dataclasses import dataclass
 
 
-dashboard = os.path.expanduser("~/code/mgs-pipeline/dashboard/")
+import mgs
+import pathogens
+
+from populations import us_population
+
+sys.path.append("..")
+
+mpl.rcParams["pdf.fonttype"] = 42
+mpl.rcParams["ps.fonttype"] = 42
 
 
-with open(os.path.join(dashboard, "human_virus_sample_counts.json")) as inf:
-    human_virus_sample_counts = json.load(inf)
-
-with open(os.path.join(dashboard, "metadata_samples.json")) as inf:
-    metadata_samples = json.load(inf)
-
-with open(os.path.join(dashboard, "metadata_bioprojects.json")) as inf:
-    metadata_bioprojects = json.load(inf)
-
-with open(os.path.join(dashboard, "metadata_papers.json")) as inf:
-    metadata_papers = json.load(inf)
-
-with open(os.path.join(dashboard, "taxonomic_names.json")) as inf:
-    taxonomic_names = json.load(inf)
+def transform_study_name(s):
+    return "-".join([word.capitalize() for word in s.split("_")])
 
 
-studies = list(metadata_papers.keys())
+def get_averaged_incidence(df, pathogen_name):
+    averaged_incidence = []
 
+    for date, group in df[df["pathogen"] == pathogen_name].groupby("date"):
+        weights = group.apply(
+            lambda row: us_population(
+                row["date"].year,
+                row["county"],
+                row["state"],
+            ).people,
+            axis=1,
+        )
 
-target_taxa = {
-    10239: ("viruses", "Viruses"),
-    2731341: ("duplodnaviria", "DNA Viruses"),
-    2732004: ("varidnaviria", "DNA Viruses"),
-    2731342: ("monodnaviria", "DNA Viruses"),
-    2842242: ("ribozyviria", "RNA Viruses"),
-    687329: ("anelloviridae", "DNA Viruses"),
-    2559587: ("riboviria", "RNA Viruses"),
-    9999999999: ("human viruses", "Viruses"),  # placeholder tax id
-}  # excluded studies:
-# "Johnson 2023",  # unpublished data
-# "Cui 2023",  # untreated undigested sludge
-# "Wang 2022",  # COVID-19 hospital wastewater
-# "Petersen 2015",  # air plane waste
-# "Hendriksen 2019",  # man hole"
-# "Moritz 2019",  # university wastewater
-# "Wu 2020",  # lung sample
-# "Fierer 2022",  # university campus
-# "Bohl 2022",
+        incidence = np.average(group["incidence"], weights=weights)
+        averaged_incidence.append((date, incidence))
 
-
-def assemble_box_plot_data():
-    plotting_data = []
-    for study in studies:
-        # Dropping studies that aren't WTP based
-        if study not in [
-            "Bengtsson-Palme 2016",
-            "Munk 2022",
-            "Brinch 2020",
-            "Ng 2019",
-            "Maritz 2019",
-            "Brumfield 2022",
-            "Rothman 2021",
-            "Yang 2020",
-            "Spurbeck 2023",
-            "Crits-Christoph 2021",
-        ]:
-            continue
-
-        for bioproject in metadata_papers[study]["projects"]:
-            samples = metadata_bioprojects[bioproject]
-
-            if study == "Bengtsson-Palme 2016":
-                samples = [
-                    sample
-                    for sample in samples
-                    if metadata_samples[sample]["fine_location"].startswith(
-                        "Inlet"
-                    )
-                ]
-
-            if study == "Ng 2019":
-                samples = [
-                    sample
-                    for sample in samples
-                    if metadata_samples[sample]["fine_location"] == "Influent"
-                ]
-
-            for sample in samples:
-                modified_study = study
-                if metadata_samples[sample].get("enrichment") == "panel":
-                    continue
-                if study == "Brumfield 2022":
-                    if metadata_samples[sample]["na_type"] == "DNA":
-                        modified_study = "Brumfield 2022\n(DNA Subset)"
-
-                    else:
-                        modified_study = "Brumfield 2022\n(RNA Subset)"
-
-                humanreads = "%s.humanviruses.tsv" % sample
-
-                if not os.path.exists(f"../humanviruses/{humanreads}"):
-                    subprocess.check_call(
-                        [
-                            "aws",
-                            "s3",
-                            "cp",
-                            "s3://nao-mgs/%s/humanviruses/%s"
-                            % (bioproject, humanreads),
-                            "humanviruses/",
-                        ]
-                    )
-
-                with open(f"../humanviruses/{humanreads}") as inf:
-                    human_virus_reads = 0
-                    for line in inf:
-                        (
-                            line_taxid,
-                            clade_assignments,
-                            _,
-                        ) = line.strip().split("\t")
-                        clade_hits = int(clade_assignments)
-                        human_virus_reads += int(clade_hits)
-                    human_virus_relative_abundance = (
-                        human_virus_reads / metadata_samples[sample]["reads"]
-                    )
-
-                cladecounts = "%s.tsv.gz" % sample
-                if not os.path.exists(f"../cladecounts/{cladecounts}"):
-                    subprocess.check_call(
-                        [
-                            "aws",
-                            "s3",
-                            "cp",
-                            "s3://nao-mgs/%s/cladecounts/%s"
-                            % (bioproject, cladecounts),
-                            "cladecounts/",
-                        ]
-                    )
-                with gzip.open(f"../cladecounts/{cladecounts}") as inf:
-                    taxa_abundances = {
-                        "DNA Viruses": 0,
-                        "RNA Viruses": 0,
-                        "Viruses": 0,
-                    }
-                    for line in inf:
-                        (
-                            line_taxid,
-                            _,
-                            _,
-                            clade_assignments,
-                            _,
-                        ) = line.strip().split()
-                        taxid = int(line_taxid)
-                        clade_hits = int(clade_assignments)
-                        if taxid in target_taxa:
-                            nucleic_acid_type = target_taxa[taxid][1]
-                            relative_abundance = (
-                                clade_hits / metadata_samples[sample]["reads"]
-                            )
-
-                            taxa_abundances[
-                                nucleic_acid_type
-                            ] += relative_abundance
-
-                    plotting_data.append(
-                        {
-                            "study": modified_study,
-                            "sample": sample,
-                            "Human-Infecting Viruses": human_virus_relative_abundance,
-                            **taxa_abundances,
-                        }
-                    )
-    df = pd.DataFrame(plotting_data)
-
-    return df
-
-
-def return_boxplot_plotting_df():
-    df = assemble_box_plot_data()
-    df_w_o_zeroes = df[(df.drop(["study", "sample"], axis=1) != 0).all(1)]
-    df_plotting = df_w_o_zeroes.melt(
-        id_vars=[
-            "study",
-            "sample",
-        ],
-        value_vars=[
-            # "Viruses",
-            "DNA Viruses",
-            "RNA Viruses",
-            "Human-Infecting Viruses",
-        ],
-        var_name="Identifier",
-        value_name="Relative Abundance",
+    return pd.DataFrame(
+        averaged_incidence, columns=["date", f"{pathogen_name}"]
     )
 
-    # log the relative abundance values
-    df_plotting["Relative Abundance"] = df_plotting[
-        "Relative Abundance"
-    ].apply(lambda x: np.log10(x))
 
-    return df_plotting
+def assemble_incidence_data():
+    target_pathogens = ["sars_cov_2", "influenza", "norovirus"]
 
+    norovirus_added_days = dt.timedelta(days=15.5)
+    influenza_added_days = dt.timedelta(days=3.5)
 
-def assemble_bar_blot_data():
-    plotting_data = []
-    for study in studies:
-        # Dropping studies that aren't WTP based
-        if study not in [
-            "Bengtsson-Palme 2016",
-            "Munk 2022",
-            "Brinch 2020",
-            "Ng 2019",
-            "Maritz 2019",
-            "Brumfield 2022",
-            "Rothman 2021",
-            "Yang 2020",
-            "Spurbeck 2023",
-            "Crits-Christoph 2021",
-        ]:
-            continue
+    pathogen_predictors = []
+    for pathogen_name in target_pathogens:
+        for predictor in pathogens.pathogens[
+            pathogen_name
+        ].estimate_incidences():
+            if pathogen_name == "norovirus":
+                date = predictor.get_dates()[0] + norovirus_added_days
 
-        for bioproject in metadata_papers[study]["projects"]:
-            samples = metadata_bioprojects[bioproject]
+            elif pathogen_name == "influenza":
+                date = predictor.get_dates()[0] + influenza_added_days
 
-            if study == "Bengtsson-Palme 2016":
-                samples = [
-                    sample
-                    for sample in samples
-                    if metadata_samples[sample]["fine_location"].startswith(
-                        "Inlet"
-                    )
-                ]
+            elif pathogen_name == "sars_cov_2":
+                date = predictor.get_dates()[
+                    0
+                ]  # daily, so no need to add days to get to the middle of the time period
 
-            if study == "Ng 2019":
-                samples = [
-                    sample
-                    for sample in samples
-                    if metadata_samples[sample]["fine_location"] == "Influent"
-                ]
+            location = (*predictor.get_location(),)  # country, state, county
+            incidence = predictor.get_data()
 
-            for sample in samples:
-                if metadata_samples[sample].get("enrichment") == "panel":
-                    continue
-                modified_study = study
-                if study == "Brumfield 2022":
-                    if metadata_samples[sample]["na_type"] == "DNA":
-                        modified_study = "Brumfield 2022\n(DNA Subset)"
-                    else:
-                        modified_study = "Brumfield 2022\n(RNA Subset)"
+            if date < dt.date(2020, 5, 15) or date > dt.date(2022, 1, 15):
+                continue
 
-                humanreads = "%s.humanviruses.tsv" % sample
+            pathogen_predictors.append(
+                (
+                    pathogen_name,
+                    date,
+                    *location,
+                    incidence,
+                )
+            )
 
-                if not os.path.exists(f"../humanviruses/{humanreads}"):
-                    subprocess.check_call(
-                        [
-                            "aws",
-                            "s3",
-                            "cp",
-                            "s3://nao-mgs/%s/humanviruses/%s"
-                            % (bioproject, humanreads),
-                            "humanviruses/",
-                        ]
-                    )
-
-                with open(f"../humanviruses/{humanreads}") as inf:
-                    human_virus_counts = {}
-                    for line in inf:
-                        (
-                            line_taxid,
-                            clade_assignments,
-                            _,
-                        ) = line.strip().split("\t")
-                        clade_hits = int(clade_assignments)
-                        line_taxid = int(line_taxid)
-                        human_virus_counts[line_taxid] = clade_hits
-
-                    plotting_data.append(
-                        {
-                            "study": modified_study,
-                            "sample": sample,
-                            **human_virus_counts,
-                        }
-                    )
-    df = pd.DataFrame(plotting_data)
-
-    return df
-
-
-def load_taxonomic_data():
-    parents = {}
-    with open(os.path.join(dashboard, "nodes.dmp")) as inf:
-        for line in inf:
-            child_taxid, parent_taxid, child_rank, *_ = line.replace(
-                "\t|\n", ""
-            ).split("\t|\t")
-            parent_taxid = int(parent_taxid)
-            child_taxid = int(child_taxid)
-            child_rank = child_rank.strip()
-            parents[child_taxid] = (child_rank, parent_taxid)
-    return parents
-
-
-def get_family(taxid, parents):
-    iteration_count = 0
-
-    original_taxid = taxid
-
-    current_taxid, current_rank, parent_taxid = (
-        original_taxid,
-    ) + parents.get(taxid, (None, None))
-
-    while current_rank != "family" and parent_taxid is not None:
-        current_taxid = parent_taxid
-        current_rank, parent_taxid = parents.get(current_taxid, (None, None))
-        iteration_count += 1
-
-        if iteration_count > 100:
-            break
-    else:
-        family_taxid = current_taxid
-        return family_taxid
-
-
-def get_taxid_name(target_taxid, taxonomic_names):
-    tax_name = taxonomic_names[f"{target_taxid}"][0]
-    return tax_name
-
-
-def return_barplot_plotting_df():
-    df = assemble_bar_blot_data()
-
-    parents = load_taxonomic_data()
-
-    unique_numeric_cols = set(
-        col for col in df.columns if isinstance(col, int)
+    df = pd.DataFrame(
+        pathogen_predictors,
+        columns=[
+            "pathogen",
+            "date",
+            "country",
+            "state",
+            "county",
+            "incidence",
+        ],
     )
 
-    species_family_mapping = {
-        col: get_family(col, parents) for col in unique_numeric_cols
+    # Norovirus and Influenza have subtypes that we want to aggregate on, hence we are summing estimates with the same pathogen, date and location.
+    df = df.groupby(
+        ["pathogen", "country", "state", "county", "date"],
+        as_index=False,
+        dropna=False,
+    ).agg({"incidence": "sum"})
+
+    # sort by date
+    df = df.sort_values(by=["date"]).fillna("")
+
+    df_final = (
+        get_averaged_incidence(df, "sars_cov_2")
+        .merge(
+            get_averaged_incidence(df, "influenza"),
+            on="date",
+            how="outer",
+        )
+        .merge(
+            # no need to average, as data is already across the US
+            df[df["pathogen"] == "norovirus"][["date", "incidence"]].rename(
+                columns={"incidence": "norovirus"}
+            ),
+            on="date",
+            how="outer",
+        )
+    )
+    return df_final
+
+
+def prevalence_bar_chart(ax1, barplot_colors):
+    labels = []
+    us = []
+    dk = []
+    scores = []
+
+    for (
+        pathogen_name,
+        tidy_name,
+        predictor_type,
+        taxids,
+        predictors,
+    ) in pathogens.predictors_by_taxid():
+        (taxid,) = taxids
+
+        if predictor_type != "prevalence":
+            continue
+
+        us_predictor = None
+        dk_predictor = None
+        for predictor in predictors:
+            if predictor.state:
+                continue
+
+            if predictor.country == "Denmark":
+                if 2015 <= predictor.parsed_start.year <= 2018:
+                    if dk_predictor is None:
+                        dk_predictor = predictor
+                    elif (
+                        dk_predictor.infections_per_100k
+                        != predictor.infections_per_100k
+                    ):
+                        raise Exception("%s vs %s" % (dk_predictor, predictor))
+            elif predictor.country == "United States":
+                if 2020 <= predictor.parsed_start.year <= 2021:
+                    if us_predictor is None:
+                        us_predictor = predictor
+                    elif (
+                        us_predictor.infections_per_100k
+                        != predictor.infections_per_100k
+                    ):
+                        raise Exception("%s vs %s" % (us_predictor, predictor))
+
+        assert us_predictor is not None
+        assert dk_predictor is not None
+
+        labels.append(tidy_name)
+        # Convert per 100k to percent by dividing by 1000.
+        us.append(us_predictor.infections_per_100k / 1000)
+        dk.append(dk_predictor.infections_per_100k / 1000)
+
+        scores.append(
+            us_predictor.infections_per_100k + dk_predictor.infections_per_100k
+        )
+
+    # Sort rows by average prevalence.
+    labels = [x for _, x in sorted(zip(scores, labels))]
+    us = [x for _, x in sorted(zip(scores, us))]
+    dk = [x for _, x in sorted(zip(scores, dk))]
+    ax1.set_xlim(xmax=100)
+
+    width = 0.4
+    gap = 0.04
+
+    y_pos_dk = np.arange(len(labels))
+    y_pos_us = y_pos_dk + width
+
+    ax1.barh(
+        y_pos_us,
+        us,
+        width - gap,
+        color=barplot_colors[0],
+        label="United States, 2020-2021\n(Crits-Christoph, Rothman, Spurbeck)",
+    )
+    ax1.barh(
+        y_pos_dk,
+        dk,
+        width - gap,
+        label="Denmark, 2015-2018 (Brinch)",
+        color=barplot_colors[1],
+    )
+    ax1.set_yticks((y_pos_us + y_pos_dk) / 2, labels=labels, fontsize=9)
+
+    def pretty_percentage(v):
+        if v < 1:
+            return "%.2f%%" % v
+        if v < 10:
+            return "%.1f%%" % v
+        return "%.0f%%" % v
+
+    for y_pos, x_pos in zip(
+        np.concatenate((y_pos_us, y_pos_dk)) - 0.15, us + dk
+    ):
+        ax1.text(x_pos + 0.3, y_pos, pretty_percentage(x_pos))
+
+    ax1.spines["right"].set_visible(False)
+    ax1.spines["top"].set_visible(False)
+
+    ax1.legend(loc="lower right")
+    ax1.xaxis.set_major_formatter(mticker.PercentFormatter())
+    ax1_title = ax1.set_title(
+        "a",
+        fontweight="bold",
+        loc="left",
+    )
+
+    ax1_title.set_position((-0.08, 0))
+
+    return ax1
+
+
+def get_sample_dates():
+    mgs_data = mgs.MGSData.from_repo()
+    sample_dates = {
+        "rothman": [],
+        "crits_christoph": [],
+        "spurbeck": [],
+    }
+    for study, bioproject in sorted(mgs.target_bioprojects.items()):
+        if study in ["brinch"]:
+            continue
+
+        viral_samples = mgs_data.sample_attributes(
+            *bioproject,
+            enrichment=mgs.Enrichment.VIRAL,
+        )
+        sum = 0
+        for sample, sample_attributes in viral_samples.items():
+            sample_dates[study].append(sample_attributes.date)
+    return sample_dates
+
+
+def all_incidence_figure(
+    df,
+    sample_dates,
+    ax2,
+    ax3,
+    transform_study_name,
+    virus_plot_colors,
+    study_coverage_colors,
+):
+    figure_labels = {
+        "sars_cov_2": "SARS-CoV-2",
+        "influenza": "Influenza",
+        "norovirus": "Norovirus",
     }
 
-    df.rename(columns=species_family_mapping, inplace=True)
-
-    df_plotting = df.melt(
-        id_vars=[
-            "study",
-            "sample",
-        ],
-        value_vars=[
-            col
-            for col in df.columns
-            if col not in ["study", "sample"] and not pd.isna(col)
-        ],
-        var_name="family_taxid",
-        value_name="read_count",
+    ax2.plot(
+        df["date"],
+        df["sars_cov_2"],
+        label=figure_labels["sars_cov_2"],
+        color=virus_plot_colors["sars_cov_2"],
     )
 
-    grouped_df = df_plotting.groupby(
-        ["study", "family_taxid"]
-    ).read_count.sum()
+    # ax2.plot(
+    #     df.dropna(subset=["influenza"]).sort_values(by="date")["date"],
+    #     df.dropna(subset=["influenza"]).sort_values(by="date")["influenza"],
+    #     label=figure_labels["influenza"],
+    #     color=virus_plot_colors["influenza"],
+    # )
 
-    grouped_df_w_o_zeroes = grouped_df[grouped_df != 0]
+    # ax2.plot(
+    #     df.dropna(subset=["norovirus"]).sort_values(by="date")["date"],
+    #     df.dropna(subset=["norovirus"]).sort_values(by="date")["norovirus"],
+    #     label=figure_labels["norovirus"],
+    #     color=virus_plot_colors["norovirus"],
+    # )
 
-    df_pivot = grouped_df_w_o_zeroes.unstack(level=-1).fillna(0)
+    study_coverage_y_values = range(1, len(sample_dates) + 1)
 
-    df_normalized = df_pivot.div(df_pivot.sum(axis=1), axis=0)
+    for study, dates in sample_dates.items():
+        ax2.axvspan(
+            min(dates),
+            max(dates) + dt.timedelta(days=2),
+            ymin=0.035,
+            facecolor=study_coverage_colors[study],
+            alpha=0.1,
+        )
 
-    # taking the normal mean of three numbers:
+    for index, (study, dates) in zip(
+        study_coverage_y_values, sample_dates.items()
+    ):
+        ax3.plot(
+            [
+                min(dates),
+                max(dates) + dt.timedelta(days=2),
+            ],  # hacky, have to add two days so Crits-Cristoph shows up in the study coverage plot
+            [index, index],
+            color=study_coverage_colors[study],
+            # alpha = 0.4,
+            linewidth=5,
+            solid_capstyle="round",
+        )
 
-    N_BIGGEST_FAMILIES = 9
+        x_offset = dt.timedelta(days=8)
+        ax3.text(
+            max(dates) + x_offset,
+            index,
+            transform_study_name(study),
+            fontsize=10.5,
+            va="center",
+            # color=study_coverage_colors[study],
+        )
+    ax2.spines["right"].set_visible(False)
+    ax2.spines["top"].set_visible(False)
+    ax2.spines["bottom"].set_visible(False)
+    ax2.spines["left"].set_visible(False)
 
-    family_abundance_mean = df_normalized.apply(lambda x: np.mean(x), axis=0)
+    ax2.xaxis.set_visible(True)
+    ax2.xaxis.set_ticks_position("none")
+    plt.setp(ax2.get_xticklabels(), visible=False)
+    ax2.axhline(0, color="black", linewidth=0.8)
 
-    top_families = family_abundance_mean.nlargest(N_BIGGEST_FAMILIES).index
+    ax2.yaxis.set_ticks_position("none")
 
-    df_normalized["Other Viral Families"] = df_normalized.loc[
-        :, ~df_normalized.columns.isin(top_families)
-    ].sum(axis=1)
+    ax2_title = ax2.set_title(
+        "b",
+        fontweight="bold",
+        loc="left",
+    )
 
-    df_normalized = df_normalized.loc[
-        :, list(top_families) + ["Other Viral Families"]
-    ]
-    dict_family_name = {}
+    ax2_title.set_position((-0.08, 0))
+    x_min, _ = ax2.get_xlim()
+    last_date = df.dropna(
+        subset=["sars_cov_2", "influenza", "norovirus"], how="all"
+    )["date"].max()
 
-    for taxid in top_families.tolist():
-        dict_family_name[taxid] = get_taxid_name(taxid, taxonomic_names)
+    x_axis_max_offset = dt.timedelta(days=7)
 
-    df_viral_family_names = df_normalized.rename(columns=dict_family_name)
-    # return df_viral_family_names as csv
-    df_viral_family_names.to_csv("viral_family_abundance.csv")
+    ax2.set_xlim(x_min, last_date + x_axis_max_offset)
 
-    return df_viral_family_names
+    for pathogen in ["sars_cov_2", "influenza", "norovirus"]:
+        last_incidence_value = (
+            df.sort_values(by="date")
+            .dropna(subset=[pathogen])[pathogen]
+            .iloc[-1]
+        )
+
+        last_date = ax2.get_xlim()[1]
+
+        ax2.text(
+            last_date,
+            last_incidence_value,
+            figure_labels[pathogen],
+            color=virus_plot_colors[pathogen],
+            verticalalignment="center",
+            fontsize=10,
+        )
+
+    ax3.text(  # title
+        dt.datetime(2020, 4, 16),
+        5,
+        "Study coverage",
+        fontsize=12,
+        va="center",
+    )
+
+    ax2.yaxis.set_major_formatter(
+        mticker.FuncFormatter(lambda x, p: format(int(x), ","))
+    )
+
+    ax3.spines["right"].set_visible(False)
+    ax3.spines["top"].set_visible(False)
+    ax3.set_ylim(0, max(study_coverage_y_values) + 1)
+    ax3.set_yticks([])
+    ax3.set_yticklabels([])
+
+    for y_loc in range(2000, 10001, 2000):
+        ax2.axhline(y_loc, color="gray", linestyle="-", lw=0.5, alpha=0.5)
+
+    ax3.xaxis.set_major_locator(mdates.YearLocator())
+    ax3.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+
+    ax3.xaxis.set_minor_locator(mdates.MonthLocator())
+    ax3.xaxis.set_minor_formatter("")
+
+    # ax2.legend(loc="upper left", borderaxespad=0)
+
+    return ax2, ax3
+
+
+def norovirus_influenza_figure(
+    df,
+    sample_dates,
+    ax4,
+    ax5,
+    transform_study_name,
+    virus_plot_colors,
+    study_coverage_colors,
+):
+    figure_labels = {
+        "sars_cov_2": "SARS-CoV-2",
+        "influenza": "Influenza",
+        "norovirus": "Norovirus",
+    }
+
+    ax4.plot(
+        df.dropna(subset=["influenza"]).sort_values(by="date")["date"],
+        df.dropna(subset=["influenza"]).sort_values(by="date")["influenza"],
+        marker="o",
+        markersize=2.5,
+        label=f"{figure_labels['influenza']}\n(weekly data)",
+        color=virus_plot_colors["influenza"],
+    )
+
+    ax4.plot(
+        df.dropna(subset=["norovirus"]).sort_values(by="date")["date"],
+        df.dropna(subset=["norovirus"]).sort_values(by="date")["norovirus"],
+        marker="o",
+        markersize=3.5,
+        label=f"{figure_labels['norovirus']}\n(weekly data)",
+        color=virus_plot_colors["norovirus"],
+    )
+
+    study_coverage_y_values = range(1, len(sample_dates) + 1)
+
+    for study, dates in sample_dates.items():
+        ax4.axvspan(
+            min(dates),
+            max(dates) + dt.timedelta(days=2),
+            ymin=0.04,
+            facecolor=study_coverage_colors[study],
+            alpha=0.1,
+        )
+
+    for index, (study, dates) in zip(
+        study_coverage_y_values, sample_dates.items()
+    ):
+        ax5.plot(
+            [
+                min(dates),
+                max(dates) + dt.timedelta(days=2),
+            ],  # hacky, have to add two days so Crits-Cristoph shows up in the study coverage plot
+            [index, index],
+            color=study_coverage_colors[study],
+            # alpha=0.2,
+            linewidth=5,
+            solid_capstyle="round",
+        )
+
+        x_offset = dt.timedelta(days=8)
+        ax5.text(
+            max(dates) + x_offset,
+            index,
+            transform_study_name(study),
+            fontsize=10.5,
+            va="center",
+            # color=study_coverage_colors[study],
+        )
+
+    ax4.spines["right"].set_visible(False)
+    ax4.spines["top"].set_visible(False)
+    ax4.spines["bottom"].set_visible(False)
+    ax4.spines["left"].set_visible(False)
+
+    ax4.xaxis.set_visible(True)
+    ax4.xaxis.set_ticks_position("none")
+    plt.setp(ax4.get_xticklabels(), visible=False)
+    ax4.axhline(0, color="black", linewidth=0.8)
+    # remove ticks on ax4 y axis, but still show labels on y axis
+    ax4.yaxis.set_ticks_position("none")
+
+    ax4_title = ax4.set_title(
+        "c",
+        fontweight="bold",
+        loc="left",
+    )
+
+    ax4_title.set_position((-0.08, 0))
+
+    x_min, _ = ax4.get_xlim()
+    last_date = df.dropna(subset=["influenza", "norovirus"], how="all")[
+        "date"
+    ].max()
+
+    x_axis_max_offset = dt.timedelta(days=7)
+
+    ax4.set_xlim(x_min, last_date + x_axis_max_offset)
+
+    for pathogen in ["influenza", "norovirus"]:
+        last_incidence_value = (
+            df.sort_values(by="date")
+            .dropna(subset=[pathogen])[pathogen]
+            .iloc[-1]
+        )
+
+        last_date = ax4.get_xlim()[1]
+
+        ax4.text(
+            last_date,
+            last_incidence_value,
+            figure_labels[pathogen],
+            color=virus_plot_colors[pathogen],
+            verticalalignment="center",
+            fontsize=10,
+        )
+
+    ax5.text(
+        dt.datetime(2020, 4, 16),
+        5,
+        "Study coverage",
+        fontsize=12,
+        va="center",
+    )
+
+    ax5.spines["right"].set_visible(False)
+    ax5.spines["top"].set_visible(False)
+    ax5.set_ylim(0, max(study_coverage_y_values) + 1)
+    ax5.set_yticks([])
+    ax5.set_yticklabels([])
+
+    for y_loc in range(20, 161, 20):
+        ax4.axhline(y_loc, color="gray", linestyle="-", lw=0.5, alpha=0.5)
+
+    ax5.xaxis.set_major_locator(mdates.YearLocator())
+    ax5.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax5.xaxis.set_minor_locator(mdates.MonthLocator())
+    ax5.xaxis.set_minor_formatter("")
+
+    # ax4.legend(loc="upper left", borderaxespad=0)
+
+    return ax4, ax5
 
 
 def start():
-    boxplot_df = return_boxplot_plotting_df()
+    df = assemble_incidence_data()
+    sample_dates = get_sample_dates()
 
-    barplot_df = return_barplot_plotting_df()
-
-    study_nucleic_acid_mapping = {
-        study: metadata["na_type"]
-        for study, metadata in metadata_papers.items()
+    virus_plot_colors = {
+        "sars_cov_2": "#b13607",
+        "influenza": "#cf0a66",
+        "norovirus": "#2c8565",
     }
 
-    if "Brumfield 2022" in study_nucleic_acid_mapping:
-        study_nucleic_acid_mapping["Brumfield 2022\n(DNA Subset)"] = "DNA"
-        study_nucleic_acid_mapping["Brumfield 2022\n(RNA Subset)"] = "RNA"
-        del study_nucleic_acid_mapping["Brumfield 2022"]
+    study_coverage_colors = {
+        "crits_christoph": "#2ca02c",
+        "rothman": "#ff7f0e",
+        "spurbeck": "#1f77b4",
+    }
 
-    boxplot_df = boxplot_df.reset_index()
-    barplot_df = barplot_df.reset_index()
-
-    boxplot_df["na_type"] = boxplot_df["study"].map(study_nucleic_acid_mapping)
-    barplot_df["na_type"] = barplot_df["study"].map(study_nucleic_acid_mapping)
-
-    na_type_order = ["DNA", "RNA"]
-
-    boxplot_df = boxplot_df.sort_values(
-        by="na_type",
-        key=lambda col: col.map({k: i for i, k in enumerate(na_type_order)}),
-    )
-
-    barplot_df = barplot_df.sort_values(
-        by="na_type",
-        key=lambda col: col.map({k: i for i, k in enumerate(na_type_order)}),
-    )
-
-    boxplot_df["study"] = boxplot_df["study"].str.replace("-", "-\n")
-    barplot_df["study"] = barplot_df["study"].str.replace("-", "-\n")
+    barplot_colors = ["#8dd3c7", "#fdb462"]
 
     fig = plt.figure(
-        figsize=(9, 11),
+        figsize=(9, 12),
     )
+    gs = fig.add_gridspec(5, 2, height_ratios=[7, 5, 1, 5, 1])
 
-    gs = GridSpec(2, 2, height_ratios=[9, 7], figure=fig)
+    ax1 = fig.add_subplot(gs[0, :])
+    ax3 = fig.add_subplot(gs[2, :])
+    ax2 = fig.add_subplot(gs[1, :], sharex=ax3)
+    ax5 = fig.add_subplot(gs[4, :])
+    ax4 = fig.add_subplot(gs[3, :], sharex=ax5)
 
-    ax0 = fig.add_subplot(gs[0, :])
-    ax1 = fig.add_subplot(gs[1, :])
-
-    sns.boxplot(
-        data=boxplot_df,
-        y="study",
-        x="Relative Abundance",
-        hue="Identifier",
-        width=0.7,
-        showfliers=False,
-        ax=ax0,
+    ax1 = prevalence_bar_chart(ax1, barplot_colors)
+    ax2, ax3 = all_incidence_figure(
+        df,
+        sample_dates,
+        ax2,
+        ax3,
+        transform_study_name,
+        virus_plot_colors,
+        study_coverage_colors,
     )
-
-    y_order = ax0.get_yticklabels()
-
-    y_order = [text.get_text() for text in y_order]
-
-    ax0_title = ax0.set_title("a", fontweight="bold")
-    ax0.set_xlabel("Log$_{10}$ Relative Abundance among all reads")
-
-    x, y = ax0_title.get_position()
-
-    ax0_title.set_position((-0.15, 0))
-
-    ax0.set_ylabel("")
-    ax0.tick_params(left=False, labelright=True, labelleft=False)
-    for label in ax0.get_yticklabels():
-        label.set_ha("left")
-
-    ax0.yaxis.set_label_position("right")
-    formatter = ticker.FuncFormatter(
-        lambda y, _: "${{10^{{{:d}}}}}$".format(int(y))
-    )
-
-    ax0.xaxis.set_major_formatter(formatter)
-    # drop ticks on the right side
-
-    ax0.set_xlim(right=0, left=-8)
-
-    sns.despine(top=True, right=True, left=True, bottom=False)
-
-    studies = boxplot_df["study"].unique()
-
-    ax0.legend(
-        loc=(0.09, -0.17),
-        columnspacing=2.2,
-        ncol=3,
-        frameon=True,
-        title="",
-        fontsize=10,
-    )
-    # change x labels to log scale (8 -> 10^8)
-
-    for i in range(-7, 0):
-        ax0.axvline(i, color="grey", linewidth=0.3, linestyle=":")
-
-    for i in range(1, len(studies)):
-        if i == 6:
-            ax0.axhline(i - 0.5, color="black", linewidth=1, linestyle="-")
-
-        else:
-            ax0.axhline(i - 0.5, color="grey", linewidth=0.3, linestyle=":")
-
-    ax0.text(-8.1, 0.3, "DNA \nSequencing", ha="right")
-    ax0.text(-8.1, 6.3, "RNA \nSequencing", ha="right")
-
-    ten_color_palette = [
-        "#8dd3c7",
-        "#f1c232",
-        "#bebada",
-        "#fb8072",
-        "#80b1d3",
-        "#fdb462",
-        "#b3de69",
-        "#fccde5",
-        "#bc80bd",
-        "#d9d9d9",
-    ]
-
-    barplot_df.set_index("study", inplace=True)
-
-    barplot_df.loc[y_order].plot(
-        kind="barh",
-        stacked=True,
-        color=ten_color_palette,
-        ax=ax1,
-    )
-
-    # invert y axis
-    ax1.invert_yaxis()
-
-    ax1_title = ax1.set_title("b", fontweight="bold")
-
-    x, y = ax1_title.get_position()
-
-    ax1_title.set_position((-0.15, 0))
-
-    ax1.set_xlabel(
-        "Log$_{10}$ Relative Abundance among human-infecting viruses"
-    )
-
-    ax1.tick_params(left=False)
-
-    ax1.set_ylabel("")
-    ax1.tick_params(left=False, labelright=True, labelleft=False)
-    for label in ax0.get_yticklabels():
-        label.set_ha("left")
-
-    ax1.axhline(5.5, color="black", linewidth=1, linestyle="-")
-
-    ax1.text(-0.01, 0.5, "DNA \nSequencing", ha="right")
-    ax1.text(-0.01, 6.5, "RNA \nSequencing", ha="right")
-
-    ax1.set_xlim(right=1, left=0)
-
-    ax1.legend(
-        loc=(0.015, -0.32),
-        ncol=4,
-        frameon=True,
-        fontsize=9.1,
+    ax4, ax5 = norovirus_influenza_figure(
+        df,
+        sample_dates,
+        ax4,
+        ax5,
+        transform_study_name,
+        virus_plot_colors,
+        study_coverage_colors,
     )
 
     plt.tight_layout()
-    plt.savefig("composite_fig_1.pdf", bbox_inches="tight")
-    plt.savefig("composite_fig_1.png", dpi=600, bbox_inches="tight")
+    plt.savefig(
+        "composite_fig_2.pdf",
+        bbox_inches="tight",
+    )
+    plt.savefig(
+        "composite_fig_2.png",
+        bbox_inches="tight",
+        dpi=600,
+    )
 
 
 if __name__ == "__main__":
