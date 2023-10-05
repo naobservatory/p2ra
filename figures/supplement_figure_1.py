@@ -4,9 +4,10 @@ import json
 import subprocess
 import itertools
 import matplotlib.pyplot as plt  # type: ignore
+import matplotlib.ticker as ticker
 import pandas as pd
 import numpy as np
-from scipy.stats import gmean, mannwhitneyu
+from scipy.stats import mannwhitneyu
 import seaborn as sns
 
 
@@ -178,9 +179,7 @@ for combination in combinations:
         ],
     )
     p_values.append(p_value)
-    print(
-        f"p_value when comparing '{combination[0]}' and '{combination[1]}' = {p_value}"
-    )
+
 
 df_plotting["log_relative_abundance"] = np.log10(
     df_plotting["relative_abundance"]
@@ -196,6 +195,12 @@ plt.xlabel("Logged Relative Abundance")
 plt.ylabel("")
 ax = plt.gca()
 
+formatter = ticker.FuncFormatter(
+    lambda y, _: "${{10^{{{:d}}}}}$".format(int(y))
+)
+
+ax.xaxis.set_major_formatter(formatter)
+
 
 for i in range(0, 3):
     p_value = p_values[i]  # pulling out the respective p_value
@@ -207,3 +212,4 @@ for i in range(0, 3):
 
 plt.tight_layout()
 plt.savefig("supplement_figure_1.pdf")
+plt.savefig("supplement_figure_1.png", dpi=300)
