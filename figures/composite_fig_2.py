@@ -242,7 +242,7 @@ def prevalence_bar_chart(ax1, barplot_colors):
         loc="left",
     )
 
-    ax1_title.set_position((-0.08, 0))
+    ax1_title.set_position((-0.12, 0))
 
     return ax1
 
@@ -394,7 +394,7 @@ def all_incidence_figure(
         verticalalignment="center",
         fontsize=10,
     )
-    ax2.set_ylabel("Weekly Cases per 100,000", fontsize=10)
+    ax2.set_ylabel("Weekly Infections per 100,000", fontsize=10)
     ax2.yaxis.set_major_formatter(
         mticker.FuncFormatter(lambda x, p: format(int(x), ","))
     )
@@ -536,7 +536,7 @@ def norovirus_influenza_figure(
         fontweight="bold",
         loc="left",
     )
-    ax4.set_ylabel("Weekly Cases per 100,000", fontsize=10)
+    ax4.set_ylabel("Weekly Infections per 100,000", fontsize=10)
     ylabel_object = plt.gca().get_yaxis().get_label()
     x, y = ylabel_object.get_position()
     print(x, y)
