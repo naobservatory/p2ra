@@ -1,16 +1,15 @@
+#!/usr/bin/env python3
+
 import os
 import gzip
 import json
 import subprocess
 import matplotlib.pyplot as plt  # type: ignore
-from matplotlib.gridspec import GridSpec
-import matplotlib.ticker as ticker
-
+from matplotlib.gridspec import GridSpec  # type: ignore
+import matplotlib.ticker as ticker  # type: ignore
 import pandas as pd
-from scipy.stats import gmean
 import numpy as np
-from PIL import Image
-import seaborn as sns
+import seaborn as sns  # type: ignore
 
 
 dashboard = os.path.expanduser("~/code/mgs-pipeline/dashboard/")
@@ -43,21 +42,13 @@ target_taxa = {
     2842242: ("ribozyviria", "RNA Viruses"),
     687329: ("anelloviridae", "DNA Viruses"),
     2559587: ("riboviria", "RNA Viruses"),
-    9999999999: ("human viruses", "Viruses"),  # placeholder tax id
-}  # excluded studies:
-# "Johnson 2023",  # unpublished data
-# "Cui 2023",  # untreated undigested sludge
-# "Wang 2022",  # COVID-19 hospital wastewater
-# "Petersen 2015",  # air plane waste
-# "Hendriksen 2019",  # man hole"
-# "Moritz 2019",  # university wastewater
-# "Wu 2020",  # lung sample
-# "Fierer 2022",  # university campus
-# "Bohl 2022",
+    9999999999: ("human viruses", "Viruses"),
+}
 
 
-def assemble_box_plot_data():
-    plotting_data = []
+def assemble_plotting_dfs():
+    box_plot_data = []
+    bar_plot_data = []
     for study in studies:
         # Dropping studies that aren't WTP based
         if study not in [
@@ -119,6 +110,7 @@ def assemble_box_plot_data():
                     )
 
                 with open(f"../humanviruses/{humanreads}") as inf:
+                    human_virus_counts = {}
                     human_virus_reads = 0
                     for line in inf:
                         (
@@ -127,9 +119,21 @@ def assemble_box_plot_data():
                             _,
                         ) = line.strip().split("\t")
                         clade_hits = int(clade_assignments)
+                        line_taxid = int(line_taxid)
+
+                        human_virus_counts[line_taxid] = clade_hits
                         human_virus_reads += int(clade_hits)
+
                     human_virus_relative_abundance = (
                         human_virus_reads / metadata_samples[sample]["reads"]
+                    )
+
+                    bar_plot_data.append(
+                        {
+                            "study": modified_study,
+                            "sample": sample,
+                            **human_virus_counts,
+                        }
                     )
 
                 cladecounts = "%s.tsv.gz" % sample
@@ -170,7 +174,7 @@ def assemble_box_plot_data():
                                 nucleic_acid_type
                             ] += relative_abundance
 
-                    plotting_data.append(
+                    box_plot_data.append(
                         {
                             "study": modified_study,
                             "sample": sample,
@@ -178,15 +182,13 @@ def assemble_box_plot_data():
                             **taxa_abundances,
                         }
                     )
-    df = pd.DataFrame(plotting_data)
+    boxplot_df = pd.DataFrame(box_plot_data)
 
-    return df
-
-
-def return_boxplot_plotting_df():
-    df = assemble_box_plot_data()
-    df_w_o_zeroes = df[(df.drop(["study", "sample"], axis=1) != 0).all(1)]
-    df_plotting = df_w_o_zeroes.melt(
+    boxplot_df = boxplot_df[
+        (boxplot_df.drop(["study", "sample"], axis=1) != 0).all(
+            1
+        )  # dropping samples where any value is zero
+    ].melt(
         id_vars=[
             "study",
             "sample",
@@ -202,96 +204,99 @@ def return_boxplot_plotting_df():
     )
 
     # log the relative abundance values
-    df_plotting["Relative Abundance"] = df_plotting[
-        "Relative Abundance"
-    ].apply(lambda x: np.log10(x))
+    boxplot_df["Relative Abundance"] = boxplot_df["Relative Abundance"].apply(
+        lambda x: np.log10(x)
+    )
 
-    return df_plotting
+    barplot_df = pd.DataFrame(bar_plot_data)
 
+    taxid_parents = load_taxonomic_data()
 
-def assemble_bar_blot_data():
-    plotting_data = []
-    for study in studies:
-        # Dropping studies that aren't WTP based
-        if study not in [
-            "Bengtsson-Palme 2016",
-            "Munk 2022",
-            "Brinch 2020",
-            "Ng 2019",
-            "Maritz 2019",
-            "Brumfield 2022",
-            "Rothman 2021",
-            "Yang 2020",
-            "Spurbeck 2023",
-            "Crits-Christoph 2021",
-        ]:
-            continue
+    unique_numeric_cols = set(
+        col for col in barplot_df.columns if isinstance(col, int)
+    )
 
-        for bioproject in metadata_papers[study]["projects"]:
-            samples = metadata_bioprojects[bioproject]
+    species_family_mapping = {
+        col: get_family(col, taxid_parents) for col in unique_numeric_cols
+    }
 
-            if study == "Bengtsson-Palme 2016":
-                samples = [
-                    sample
-                    for sample in samples
-                    if metadata_samples[sample]["fine_location"].startswith(
-                        "Inlet"
-                    )
-                ]
+    barplot_df.rename(columns=species_family_mapping, inplace=True)
 
-            if study == "Ng 2019":
-                samples = [
-                    sample
-                    for sample in samples
-                    if metadata_samples[sample]["fine_location"] == "Influent"
-                ]
+    melted_df = barplot_df.melt(
+        id_vars=["study", "sample"],
+        value_vars=[
+            col
+            for col in barplot_df.columns
+            if col not in ["study", "sample"] and not pd.isna(col)
+        ],
+        var_name="family_taxid",
+        value_name="read_count",
+    )
 
-            for sample in samples:
-                if metadata_samples[sample].get("enrichment") == "panel":
-                    continue
-                modified_study = study
-                if study == "Brumfield 2022":
-                    if metadata_samples[sample]["na_type"] == "DNA":
-                        modified_study = "Brumfield 2022\n(DNA Subset)"
-                    else:
-                        modified_study = "Brumfield 2022\n(RNA Subset)"
+    grouped_df = melted_df.groupby(["study", "family_taxid"]).read_count.sum()
 
-                humanreads = "%s.humanviruses.tsv" % sample
+    grouped_df_w_o_zeroes = grouped_df[grouped_df != 0]
 
-                if not os.path.exists(f"../humanviruses/{humanreads}"):
-                    subprocess.check_call(
-                        [
-                            "aws",
-                            "s3",
-                            "cp",
-                            "s3://nao-mgs/%s/humanviruses/%s"
-                            % (bioproject, humanreads),
-                            "humanviruses/",
-                        ]
-                    )
+    df_normalized = grouped_df_w_o_zeroes.unstack(level=-1).fillna(0)
 
-                with open(f"../humanviruses/{humanreads}") as inf:
-                    human_virus_counts = {}
-                    for line in inf:
-                        (
-                            line_taxid,
-                            clade_assignments,
-                            _,
-                        ) = line.strip().split("\t")
-                        clade_hits = int(clade_assignments)
-                        line_taxid = int(line_taxid)
-                        human_virus_counts[line_taxid] = clade_hits
+    df_normalized = df_normalized.div(df_normalized.sum(axis=1), axis=0)
 
-                    plotting_data.append(
-                        {
-                            "study": modified_study,
-                            "sample": sample,
-                            **human_virus_counts,
-                        }
-                    )
-    df = pd.DataFrame(plotting_data)
+    N_BIGGEST_FAMILIES = 9
 
-    return df
+    family_mean_across_studies = df_normalized.apply(
+        lambda x: np.mean(x), axis=0
+    )
+
+    top_families = family_mean_across_studies.nlargest(
+        N_BIGGEST_FAMILIES
+    ).index
+
+    df_normalized["Other Viral Families"] = df_normalized.loc[
+        :, ~df_normalized.columns.isin(top_families)
+    ].sum(axis=1)
+
+    df_normalized = df_normalized.loc[
+        :, list(top_families) + ["Other Viral Families"]
+    ]
+    dict_family_name = {}
+
+    for taxid in top_families.tolist():
+        dict_family_name[taxid] = get_taxid_name(taxid, taxonomic_names)
+
+    barplot_df = df_normalized.rename(columns=dict_family_name)
+
+    study_nucleic_acid_mapping = {
+        study: metadata["na_type"]
+        for study, metadata in metadata_papers.items()
+    }
+
+    if "Brumfield 2022" in study_nucleic_acid_mapping:
+        study_nucleic_acid_mapping["Brumfield 2022\n(DNA Subset)"] = "DNA"
+        study_nucleic_acid_mapping["Brumfield 2022\n(RNA Subset)"] = "RNA"
+        del study_nucleic_acid_mapping["Brumfield 2022"]
+
+    boxplot_df = boxplot_df.reset_index()
+    barplot_df = barplot_df.reset_index()
+
+    boxplot_df["na_type"] = boxplot_df["study"].map(study_nucleic_acid_mapping)
+    barplot_df["na_type"] = barplot_df["study"].map(study_nucleic_acid_mapping)
+
+    na_type_order = ["DNA", "RNA"]
+
+    boxplot_df = boxplot_df.sort_values(
+        by="na_type",
+        key=lambda col: col.map({k: i for i, k in enumerate(na_type_order)}),
+    )
+
+    barplot_df = barplot_df.sort_values(
+        by="na_type",
+        key=lambda col: col.map({k: i for i, k in enumerate(na_type_order)}),
+    )
+
+    boxplot_df["study"] = boxplot_df["study"].str.replace("-", "-\n")
+    barplot_df["study"] = barplot_df["study"].str.replace("-", "-\n")
+
+    return boxplot_df, barplot_df
 
 
 def load_taxonomic_data():
@@ -334,107 +339,8 @@ def get_taxid_name(target_taxid, taxonomic_names):
     return tax_name
 
 
-def return_barplot_plotting_df():
-    df = assemble_bar_blot_data()
-
-    parents = load_taxonomic_data()
-
-    unique_numeric_cols = set(
-        col for col in df.columns if isinstance(col, int)
-    )
-
-    species_family_mapping = {
-        col: get_family(col, parents) for col in unique_numeric_cols
-    }
-
-    df.rename(columns=species_family_mapping, inplace=True)
-
-    df_plotting = df.melt(
-        id_vars=[
-            "study",
-            "sample",
-        ],
-        value_vars=[
-            col
-            for col in df.columns
-            if col not in ["study", "sample"] and not pd.isna(col)
-        ],
-        var_name="family_taxid",
-        value_name="read_count",
-    )
-
-    grouped_df = df_plotting.groupby(
-        ["study", "family_taxid"]
-    ).read_count.sum()
-
-    grouped_df_w_o_zeroes = grouped_df[grouped_df != 0]
-
-    df_pivot = grouped_df_w_o_zeroes.unstack(level=-1).fillna(0)
-
-    df_normalized = df_pivot.div(df_pivot.sum(axis=1), axis=0)
-
-    # taking the normal mean of three numbers:
-
-    N_BIGGEST_FAMILIES = 9
-
-    family_abundance_mean = df_normalized.apply(lambda x: np.mean(x), axis=0)
-
-    top_families = family_abundance_mean.nlargest(N_BIGGEST_FAMILIES).index
-
-    df_normalized["Other Viral Families"] = df_normalized.loc[
-        :, ~df_normalized.columns.isin(top_families)
-    ].sum(axis=1)
-
-    df_normalized = df_normalized.loc[
-        :, list(top_families) + ["Other Viral Families"]
-    ]
-    dict_family_name = {}
-
-    for taxid in top_families.tolist():
-        dict_family_name[taxid] = get_taxid_name(taxid, taxonomic_names)
-
-    df_viral_family_names = df_normalized.rename(columns=dict_family_name)
-    # return df_viral_family_names as csv
-    df_viral_family_names.to_csv("viral_family_abundance.csv")
-
-    return df_viral_family_names
-
-
 def start():
-    boxplot_df = return_boxplot_plotting_df()
-
-    barplot_df = return_barplot_plotting_df()
-
-    study_nucleic_acid_mapping = {
-        study: metadata["na_type"]
-        for study, metadata in metadata_papers.items()
-    }
-
-    if "Brumfield 2022" in study_nucleic_acid_mapping:
-        study_nucleic_acid_mapping["Brumfield 2022\n(DNA Subset)"] = "DNA"
-        study_nucleic_acid_mapping["Brumfield 2022\n(RNA Subset)"] = "RNA"
-        del study_nucleic_acid_mapping["Brumfield 2022"]
-
-    boxplot_df = boxplot_df.reset_index()
-    barplot_df = barplot_df.reset_index()
-
-    boxplot_df["na_type"] = boxplot_df["study"].map(study_nucleic_acid_mapping)
-    barplot_df["na_type"] = barplot_df["study"].map(study_nucleic_acid_mapping)
-
-    na_type_order = ["DNA", "RNA"]
-
-    boxplot_df = boxplot_df.sort_values(
-        by="na_type",
-        key=lambda col: col.map({k: i for i, k in enumerate(na_type_order)}),
-    )
-
-    barplot_df = barplot_df.sort_values(
-        by="na_type",
-        key=lambda col: col.map({k: i for i, k in enumerate(na_type_order)}),
-    )
-
-    boxplot_df["study"] = boxplot_df["study"].str.replace("-", "-\n")
-    barplot_df["study"] = barplot_df["study"].str.replace("-", "-\n")
+    boxplot_df, barplot_df = assemble_plotting_dfs()
 
     fig = plt.figure(
         figsize=(9, 11),
@@ -462,8 +368,6 @@ def start():
     ax0_title = ax0.set_title("a", fontweight="bold")
     ax0.set_xlabel("Log$_{10}$ Relative Abundance among all reads")
 
-    x, y = ax0_title.get_position()
-
     ax0_title.set_position((-0.15, 0))
 
     ax0.set_ylabel("")
@@ -477,7 +381,6 @@ def start():
     )
 
     ax0.xaxis.set_major_formatter(formatter)
-    # drop ticks on the right side
 
     ax0.set_xlim(right=0, left=-8)
 
@@ -539,9 +442,7 @@ def start():
 
     ax1_title.set_position((-0.15, 0))
 
-    ax1.set_xlabel(
-        "Log$_{10}$ Relative Abundance among human-infecting viruses"
-    )
+    ax1.set_xlabel("% Relative Abundance among human-infecting viruses")
 
     ax1.tick_params(left=False)
 
