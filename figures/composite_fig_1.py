@@ -72,8 +72,8 @@ def shape_boxplot_df(boxplot_df: pd.DataFrame) -> pd.DataFrame:
         id_vars=["study", "sample"],
         value_vars=[
             "Viruses",
-            "RNA Viruses",
             "DNA Viruses",
+            "RNA Viruses",
             "Human-Infecting Viruses",
         ],
         var_name="Identifier",
@@ -368,7 +368,7 @@ def boxplot(
         y="study",
         x="Relative Abundance",
         hue="Identifier",
-        hue_order=order,
+        # hue_order=order,
         width=0.7,
         showfliers=False,
         ax=ax,
