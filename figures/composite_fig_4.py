@@ -307,7 +307,7 @@ def composite_figure(
 def save_plot(fig, figdir: Path, name: str) -> None:
     for ext in ["pdf", "png"]:
         fig.savefig(
-            figdir / f"asdfadsfdsafdasfsd{name}.{ext}",
+            figdir / f"{name}.{ext}",
             bbox_inches="tight",
             dpi=600,
         )
@@ -332,7 +332,7 @@ def start() -> None:
 
     fig = composite_figure(fits_df, input_df)
 
-    save_plot(fig, figdir, "composite_fig_3")
+    save_plot(fig, figdir, "composite_fig_4")
 
 
 if __name__ == "__main__":
