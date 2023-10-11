@@ -43,6 +43,7 @@ target_taxa = {
     2842242: ("ribozyviria", "RNA Viruses"),
     687329: ("anelloviridae", "DNA Viruses"),
     2559587: ("riboviria", "RNA Viruses"),
+    2840022: ("adnaviria", "DNA Viruses"),
     9999999999: ("human viruses", "Viruses"),
 }
 
