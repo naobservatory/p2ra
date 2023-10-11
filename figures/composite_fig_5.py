@@ -146,6 +146,7 @@ def plot_three_virus(
     input_data: pd.DataFrame,
     viruses: dict[str, tuple[float, float]],
     predictor_type: str,
+    fig_title: str,
     axes: list[plt.Axes, plt.Axes, plt.Axes],
 ) -> list[plt.Axes, plt.Axes, plt.Axes]:
     final_axes = []
@@ -165,7 +166,6 @@ def plot_three_virus(
             hatch_zero_counts=True,
         )
         ax.set_xlim(xlim)
-        # TODO Get these values automatically
         num_spurbeck = 10
         num_rothman = 8
         num_crits_christoph = 4
@@ -180,6 +180,13 @@ def plot_three_virus(
             color="k",
             linewidth=0.5,
         )
+        if i == 0:
+            sub_fig_title = ax.set_title(
+                fig_title,
+                fontweight="bold",
+                loc="left",
+            )
+            sub_fig_title.set_position((-0.35, 1.05))
         if i == 2:
             x_text = ax.get_xlim()[1] + 0.1
             ax.text(x_text, -0.4, "Spurbeck", va="top")
@@ -204,7 +211,7 @@ def plot_three_virus(
                 )
 
         adjust_axes(ax, predictor_type=predictor_type)
-        ax.set_title(pathogen)
+        plot_title = ax.set_title(pathogen)
         ax.get_legend().remove()
         if i != 1:
             ax.set_xlabel("")
@@ -253,11 +260,12 @@ def composite_figure(
         "Norovirus (GI)": (-9.0, -2.0),
         "SARS-COV-2": (-11.0, -5.0),
     }
-    ax1, ax2, ax3 = plot_three_virus(
+    plot_three_virus(
         data,
         input_data,
         incidence_viruses,
         "incidence",
+        "a",
         [
             fig.add_subplot(gs[0, 0]),
             fig.add_subplot(gs[0, 1]),
@@ -270,11 +278,12 @@ def composite_figure(
         "BKV": (-14.0, -7.0),
         "MCV": (-14.0, -7.0),
     }
-    ax4, ax5, ax6 = plot_three_virus(
+    plot_three_virus(
         data,
         input_data,
         prevalence_viruses,
         "prevalence",
+        "b",
         [
             fig.add_subplot(gs[1, 0]),
             fig.add_subplot(gs[1, 1]),
