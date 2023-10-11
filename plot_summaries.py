@@ -76,7 +76,7 @@ def plot_violin(
     y: str,
     sorting_order: list[str],
     ascending: list[bool],
-    hatch_zero_counts: bool = False,
+    hatch_zero_counts: bool = True,
     violin_scale=1.0,
 ) -> None:
     assert len(sorting_order) == len(ascending)
@@ -114,7 +114,7 @@ def plot_violin(
             path.vertices[:, 1] = (
                 violin_scale * (path.vertices[:, 1] - y_mid) + y_mid
             )
-            if (not hatch_zero_counts) and (num_reads == 0):
+            if (hatch_zero_counts) and (num_reads == 0):
                 color = patches.get_facecolor()
                 y_max = np.max(path.vertices[:, 1])
                 y_min = np.min(path.vertices[:, 1])
@@ -265,7 +265,7 @@ def plot_three_virus(
             sorting_order=["study", "location"],
             ascending=[False, True],
             violin_scale=2.5,
-            hatch_zero_counts=True,
+            hatch_zero_counts=False,
         )
         ax.set_xlim(xlim)
         # TODO Get these values automatically
