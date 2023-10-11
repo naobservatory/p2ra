@@ -163,7 +163,7 @@ def plot_three_virus(
             sorting_order=["study", "location"],
             ascending=[False, True],
             violin_scale=2.5,
-            hatch_zero_counts=True,
+            hatch_zero_counts=False,
         )
         ax.set_xlim(xlim)
         num_spurbeck = 10
