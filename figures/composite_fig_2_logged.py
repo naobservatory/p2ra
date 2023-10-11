@@ -384,7 +384,7 @@ def all_incidence_figure(
             fontsize=10,
         )
 
-    ax2.set_ylabel("Weekly Cases per 100,000", fontsize=10)
+    ax2.set_ylabel("Weekly Infections per 100,000", fontsize=10)
     ax2.yaxis.set_major_formatter(
         mticker.FuncFormatter(lambda x, p: format(int(x), ","))
     )
