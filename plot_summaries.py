@@ -166,7 +166,7 @@ def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
         ascending=[False, True, False, True, False],
         violin_scale=2.0,
     )
-    ax.set_xlim([-13, -3])
+    ax.set_xlim((-13, -3))
     separate_viruses(ax)
     adjust_axes(ax, predictor_type=predictor_type)
     legend = ax.legend(
@@ -207,7 +207,7 @@ def plot_prevalence(
         ascending=[False, True, False, True, False],
         violin_scale=1.5,
     )
-    ax.set_xlim([-15, -7])
+    ax.set_xlim((-15, -7))
     ax.set_xticks(list(range(-15, -5, 2)))
     separate_viruses(ax)
     # TODO Get these values automatically
