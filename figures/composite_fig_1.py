@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 
-import os
-from pathlib import Path
 import gzip
 import json
+import os
 import subprocess
-import matplotlib.pyplot as plt  # type: ignore
-from matplotlib.gridspec import GridSpec  # type: ignore
-import matplotlib.ticker as ticker  # type: ignore
-import pandas as pd
-import numpy as np
-import seaborn as sns  # type: ignore
+from pathlib import Path
 
+import matplotlib.pyplot as plt  # type: ignore
+import matplotlib.ticker as ticker  # type: ignore
+import numpy as np
+import pandas as pd
+import seaborn as sns  # type: ignore
+from matplotlib.gridspec import GridSpec  # type: ignore
 
 dashboard = os.path.expanduser("~/code/mgs-pipeline/dashboard/")
 
