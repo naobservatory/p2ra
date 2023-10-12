@@ -41,7 +41,7 @@ def start():
     data = read_data()
     viruses = [
         ("Norovirus (GII)", "incidence"),
-        ("SARS-COV-2", "incidence"),
+        ("SARS-CoV-2", "incidence"),
         ("HIV", "prevalence"),
     ]
     study_labels = {
@@ -58,21 +58,19 @@ def start():
             upper = stats.percentiles[75]
             cumulative_incidence = np.logspace(-4, -1, 100)
             detection_threshold = 100
-            # for i, detection_threshold in enumerate([200, 20, 2]):
-            # 0.01 = conversion from per 1% to true incidence
-            # scale_factor = detection_threshold * 0.01
+
             color = f"C{i}"
 
             ax.loglog(
                 cumulative_incidence,
-                (detection_threshold * 100 * median) * cumulative_incidence,
+                detection_threshold / (100 * median * cumulative_incidence),
                 color=color,
                 label=f"{study_labels[study]}",
             )
             ax.fill_between(
                 cumulative_incidence,
-                (detection_threshold * 100 * lower) * cumulative_incidence,
-                (detection_threshold * 100 * upper) * cumulative_incidence,
+                detection_threshold / (100 * lower * cumulative_incidence),
+                detection_threshold / (100 * upper * cumulative_incidence),
                 color=color,
                 alpha=0.2,
             )
@@ -81,22 +79,21 @@ def start():
             ax.grid()
             ax.set_xticks([1e-4, 1e-3, 1e-2, 1e-1])
 
-    # set overall figure title
-    # move title up
     fig.subplots_adjust(top=0.8)
-    # disable y ticks (though keep labels)
     for ax_number in 1, 2:
         axes[ax_number].tick_params(
             axis="y", which="both", left=False, right=False
         )
 
-    fig.suptitle("Reads required for detection with different study protocols")
+    plt.gca().invert_yaxis()
+
     axes[0].set_ylabel("Reads required for detection")
-    axes[1].legend(
-        title="Study",
+    legend = axes[1].legend(
+        loc=(-0.5, -0.42),
         frameon=True,
         facecolor="w",
         framealpha=1,
+        ncol=3,
     )
 
     fig.savefig("reads_per_prevalence.png", bbox_inches="tight", dpi=600)
