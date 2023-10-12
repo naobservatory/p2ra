@@ -60,19 +60,19 @@ def start():
             detection_threshold = 100
             # for i, detection_threshold in enumerate([200, 20, 2]):
             # 0.01 = conversion from per 1% to true incidence
-            scale_factor = detection_threshold * 0.01
+            # scale_factor = detection_threshold * 0.01
             color = f"C{i}"
 
             ax.loglog(
                 cumulative_incidence,
-                (detection_threshold * median) * cumulative_incidence,
+                (detection_threshold * 100 * median) * cumulative_incidence,
                 color=color,
                 label=f"{study_labels[study]}",
             )
             ax.fill_between(
                 cumulative_incidence,
-                (detection_threshold * lower) * cumulative_incidence,
-                (detection_threshold * upper) * cumulative_incidence,
+                (detection_threshold * 100 * lower) * cumulative_incidence,
+                (detection_threshold * 100 * upper) * cumulative_incidence,
                 color=color,
                 alpha=0.2,
             )
@@ -80,12 +80,16 @@ def start():
             ax.set_xlabel("Cumulative Incidence")
             ax.grid()
             ax.set_xticks([1e-4, 1e-3, 1e-2, 1e-1])
-            # if i > 1:
-            #     ax.set_yticks([])
 
     # set overall figure title
     # move title up
     fig.subplots_adjust(top=0.8)
+    # disable y ticks (though keep labels)
+    for ax_number in 1, 2:
+        axes[ax_number].tick_params(
+            axis="y", which="both", left=False, right=False
+        )
+
     fig.suptitle("Reads required for detection with different study protocols")
     axes[0].set_ylabel("Reads required for detection")
     axes[1].legend(
@@ -95,7 +99,7 @@ def start():
         framealpha=1,
     )
 
-    fig.savefig("reads_per_prevalence.png", bbox_inches="tight")
+    fig.savefig("reads_per_prevalence.png", bbox_inches="tight", dpi=600)
 
 
 if __name__ == "__main__":
