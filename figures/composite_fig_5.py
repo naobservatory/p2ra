@@ -81,7 +81,7 @@ def plot_violin(
     sorting_order: list[str],
     ascending: list[bool],
     hatch_zero_counts: bool = False,
-    violin_scale=1.0,
+    violin_scale=2.0,
 ) -> None:
     assert len(sorting_order) == len(ascending)
     plotting_order = viral_reads.sort_values(
@@ -165,7 +165,12 @@ def plot_three_virus(
             violin_scale=2.5,
             hatch_zero_counts=False,
         )
-        ax.set_xlim(xlim)
+
+        if predictor_type == "incidence":
+            ax.set_xlim([-12, -2])
+
+        if predictor_type == "prevalence":
+            ax.set_xlim([-14, -7])
         num_spurbeck = 10
         num_rothman = 8
         num_crits_christoph = 4
