@@ -41,7 +41,7 @@ def start():
     data = read_data()
     viruses = [
         ("Norovirus (GII)", "incidence"),
-        ("SARS-CoV-2", "incidence"),
+        ("SARS-COV-2", "incidence"),
         ("HIV", "prevalence"),
     ]
     study_labels = {
@@ -84,8 +84,6 @@ def start():
         axes[ax_number].tick_params(
             axis="y", which="both", left=False, right=False
         )
-
-    plt.gca().invert_yaxis()
 
     axes[0].set_ylabel("Reads required for detection")
     legend = axes[1].legend(
