@@ -44,48 +44,55 @@ def start():
         ("SARS-COV-2", "incidence"),
         ("HIV", "prevalence"),
     ]
+    study_labels = {
+        "rothman": "Rothman",
+        "crits_christoph": "Crits-Christoph",
+        "spurbeck": "Spurbeck",
+    }
     fig, axes = plt.subplots(1, len(viruses), sharey=True, figsize=(9, 2.75))
     for (virus, predictor_type), ax in zip(viruses, axes):
-        stats = data[virus, predictor_type, "rothman", "Overall"]
-        median = stats.percentiles[50]
-        lower = stats.percentiles[25]
-        upper = stats.percentiles[75]
-        incidence = np.logspace(-4, -1, 100)
-        placeholder_dict = {
-            200: "Rothman",
-            20: "Spurbeck",
-            2: "Crits-Christoph",
-        }
-        for i, detection_threshold in enumerate([200, 20, 2]):
+        for i, study in enumerate(study_labels.keys()):
+            stats = data[virus, predictor_type, study, "Overall"]
+            median = stats.percentiles[50]
+            lower = stats.percentiles[25]
+            upper = stats.percentiles[75]
+            cumulative_incidence = np.logspace(-4, -1, 100)
+            detection_threshold = 100
+            # for i, detection_threshold in enumerate([200, 20, 2]):
             # 0.01 = conversion from per 1% to true incidence
-            scale_factor = detection_threshold * 0.01 / incidence
+            scale_factor = detection_threshold * 0.01
             color = f"C{i}"
+
             ax.loglog(
-                incidence,
-                scale_factor / median,
+                cumulative_incidence,
+                (detection_threshold * median) * cumulative_incidence,
                 color=color,
-                label=f"{placeholder_dict[detection_threshold]}",
+                label=f"{study_labels[study]}",
             )
             ax.fill_between(
-                incidence,
-                scale_factor / upper,
-                scale_factor / lower,
+                cumulative_incidence,
+                (detection_threshold * lower) * cumulative_incidence,
+                (detection_threshold * upper) * cumulative_incidence,
                 color=color,
                 alpha=0.2,
             )
-        ax.set_title(virus)
-        ax.set_xlabel("Prevalence")
-        ax.grid()
-        ax.set_xticks([1e-4, 1e-3, 1e-2, 1e-1])
+            ax.set_title(virus)
+            ax.set_xlabel("Cumulative Incidence")
+            ax.grid()
+            ax.set_xticks([1e-4, 1e-3, 1e-2, 1e-1])
+            # if i > 1:
+            #     ax.set_yticks([])
+
     # set overall figure title
     # move title up
     fig.subplots_adjust(top=0.8)
-    fig.suptitle(
-        "Placeholder figure | Reads required for detection with different study protocols"
-    )
+    fig.suptitle("Reads required for detection with different study protocols")
     axes[0].set_ylabel("Reads required for detection")
-    axes[-1].legend(
-        title="Detection threshold", frameon=True, facecolor="w", framealpha=1
+    axes[1].legend(
+        title="Study",
+        frameon=True,
+        facecolor="w",
+        framealpha=1,
     )
 
     fig.savefig("reads_per_prevalence.png", bbox_inches="tight")
