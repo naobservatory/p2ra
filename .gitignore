@@ -79,6 +79,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+figures/*.ipynb
 
 # IPython
 profile_default/
@@ -145,5 +146,18 @@ settings.json
 # Model output
 fits.tsv
 fig/*
-
 figures/*.png
+figures/*.pdf
+figures/archive/*
+fits_summary.tsv
+input.tsv
+
+# MGS Dashboard downloads
+cladecounts/*
+humanviruses/*
+
+# Manual figures
+manual_figures/*
+
+# Jupyter notebooks
+figures/*.ipynb
