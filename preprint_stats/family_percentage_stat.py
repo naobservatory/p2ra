@@ -252,8 +252,6 @@ def start():
         f"the fraction of human-infecting virus reads mapping to Caliciviridae varied from {round(caliciviridae_rothman * 100)}% (Rothman 2022) to {round(caliciviridae_spurbeck * 100)}% (Spurbeck 2023), and Polyomaviridae relative abundance varied from {round(polyomaviridae_brumfield * 100)}% (Brumfield 2022 (DNA Subset)) to {round(polyomaviridae_munk*100)}% (Munk 2022)."
     )
 
-    print(caliciviridae_rothman)
-
 
 if __name__ == "__main__":
     start()
