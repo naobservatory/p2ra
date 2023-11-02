@@ -147,3 +147,9 @@ fits.tsv
 fig/*
 
 figures/*.png
+figures/archive/*
+manual_figures/*
+
+# MGS ouput
+cladecounts/*
+humanviruses/*
