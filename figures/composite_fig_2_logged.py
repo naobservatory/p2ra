@@ -274,12 +274,6 @@ def all_incidence_figure(
     virus_plot_colors,
     study_coverage_colors,
 ):
-    figure_labels = {
-        "sars_cov_2": "SARS-CoV-2",
-        "influenza": "Influenza",
-        "norovirus": "Norovirus",
-    }
-
     ax2.plot(
         df["date"],
         df["sars_cov_2"],
@@ -368,7 +362,11 @@ def all_incidence_figure(
 
     last_date = ax2.get_xlim()[1]
 
-    for pathogen in ["influenza", "sars_cov_2", "norovirus"]:
+    for pathogen, figure_label in {
+        "influenza": "Flu A/B",
+        "sars_cov_2": "SARS-CoV-2",
+        "norovirus": "Norovirus",
+    }.items():
         last_incidence_value = (
             df.sort_values(by="date")
             .dropna(subset=[pathogen])[pathogen]
@@ -378,7 +376,7 @@ def all_incidence_figure(
         ax2.text(
             last_date,
             last_incidence_value,
-            figure_labels[pathogen],
+            figure_label,
             color=virus_plot_colors[pathogen],
             verticalalignment="center",
             fontsize=10,
@@ -404,9 +402,9 @@ def start():
     sample_dates = get_sample_dates()
 
     virus_plot_colors = {
-        "sars_cov_2": "#b13607",
-        "influenza": "#cf0a66",
-        "norovirus": "#2c8565",
+        "sars_cov_2": "#1b9e77",
+        "influenza": "#7570b3",
+        "norovirus": "#d95f02",
     }
 
     study_coverage_colors = {
@@ -441,6 +439,7 @@ def start():
         virus_plot_colors,
         study_coverage_colors,
     )
+    # show figures
 
     plt.tight_layout()
     plt.savefig(
