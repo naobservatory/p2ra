@@ -39,8 +39,11 @@ def read_data() -> dict[tuple[str, str, str, str], SummaryStats]:
 
 def start():
     data = read_data()
-    TARGET_INCIDENCE = 0.01
+    TARGET_INCIDENCE = [0.01, 0.001
     TARGET_THRESHOLDS = [100, 1000]
+
+    DOLLAR_PER_1B_READS = 8000
+    weeks_per_year = 52
     viruses = [
         ("Norovirus (GII)", "incidence"),
         ("SARS-COV-2", "incidence"),
@@ -51,7 +54,7 @@ def start():
         "spurbeck": "Spurbeck",
     }
 
-    with open("read_estimates.tsv", mode="w", newline="") as file:
+    with open("cost_estimates.tsv", mode="w", newline="") as file:
         tsv_writer = csv.writer(file, delimiter="\t")
         tsv_writer.writerow(
             [
@@ -63,37 +66,48 @@ def start():
                 "Detection Threshold",
             ]
         )
-        for virus, predictor_type in viruses:
-            for threshold in TARGET_THRESHOLDS:
+        for threshold in TARGET_THRESHOLDS:
+            for virus, predictor_type in viruses:
                 for study in study_labels.keys():
                     stats = data[virus, predictor_type, study, "Overall"]
                     median = stats.percentiles[50]
                     lower = stats.percentiles[25]
                     upper = stats.percentiles[75]
                     cumulative_incidence = np.logspace(-4, -1, 100)
+                    median_cost = round(
+                        threshold
+                        / (100 * median * TARGET_INCIDENCE)
+                        * weeks_per_year
+                        * DOLLAR_PER_1B_READS
+                        / 1e9
+                    )
+                    lower_cost = round(
+                        threshold
+                        / (100 * lower * TARGET_INCIDENCE)
+                        * weeks_per_year
+                        * DOLLAR_PER_1B_READS
+                        / 1e9
+                    )
+                    upper_cost = round(
+                        threshold
+                        / (100 * upper * TARGET_INCIDENCE)
+                        * weeks_per_year
+                        * DOLLAR_PER_1B_READS
+                        / 1e9
+                    )
 
-                    median_detection = round(
-                        threshold / (100 * median * TARGET_INCIDENCE)
-                    )
-                    lower_detection = round(
-                        threshold / (100 * lower * TARGET_INCIDENCE)
-                    )
-                    upper_detection = round(
-                        threshold / (100 * upper * TARGET_INCIDENCE)
-                    )
+                    tidy_median_cost = f"${median_cost} (50%)"
+                    tidy_lower_cost = f"${lower_cost} (25%)"
+                    tidy_upper_cost = f"${upper_cost} (75%)"
 
-                    tidy_median = "${:.2e} reads (50%)".format(
-                        median_detection
-                    )
-                    tidy_lower = "${:.2e} reads (25%)".format(lower_detection)
-                    tidy_upper = "${:.2e} reads (75%)".format(upper_detection)
+                    # Write each estimate as a new row in the TSV.
                     tsv_writer.writerow(
                         [
                             virus,
                             study_labels[study],
-                            tidy_median,
-                            tidy_lower,
-                            tidy_upper,
+                            tidy_median_cost,
+                            tidy_lower_cost,
+                            tidy_upper_cost,
                             threshold,
                         ]
                     )
