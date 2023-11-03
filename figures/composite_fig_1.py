@@ -353,15 +353,56 @@ def assemble_plotting_dfs() -> tuple[pd.DataFrame, pd.DataFrame]:
     return boxplot_df, barplot_df
 
 
+def return_study_order(boxplot_df: pd.DataFrame) -> list[str]:
+    study_nucleic_acid_mapping = get_study_nucleic_acid_mapping()
+    df["na_type"] = df["study"].map(study_nucleic_acid_mapping)
+    order = (
+        df[df["na_type"] == "DNA"]["study"].unique()
+        + df[df["na_type"] == "RNA"]["study"].unique()
+    )
+
+
+# currently not working
+# def move_brumfield(target, index, studies):
+#     target_study = [study for study in studies if target in study][0]
+
+#     studies.insert(index, studies.pop(studies.index(target_study)))
+#     return studies
+
+
+# def return_study_order(df: pd.DataFrame) -> list[str]:
+#     study_nucleic_acid_mapping = get_study_nucleic_acid_mapping()
+#     df["na_type"] = df["study"].map(study_nucleic_acid_mapping)
+
+#     dna_studies = move_brumfield(
+#         "Brumfield", 4, df[df["na_type"] == "DNA"]["study"].unique().tolist()
+#     )
+
+#     rna_studies = move_brumfield(
+#         "Brumfield", 0, df[df["na_type"] == "RNA"]["study"].unique().tolist()
+#     )
+
+#     study_order = dna_studies + rna_studies
+#     print(study_order)
+#     return study_order
+
+
 def boxplot(
     ax: plt.Axes,
     boxplot_df: pd.DataFrame,
 ) -> plt.Axes:
     order = [
-        "Viruses",
-        "DNA Viruses",
-        "RNA Viruses",
-        "Human-Infecting Viruses",
+        "Bengtsson-\nPalme 2016",
+        "Munk 2022",
+        "Brinch 2020",
+        "Ng 2019",
+        "Maritz 2019",
+        "Brumfield 2022\n(DNA Subset)",
+        "Brumfield 2022\n(RNA Subset)",
+        "Rothman 2021",
+        "Yang 2020",
+        "Spurbeck 2023",
+        "Crits-\nChristoph 2021",
     ]
 
     sns.boxplot(
@@ -373,6 +414,7 @@ def boxplot(
         width=0.7,
         showfliers=False,
         ax=ax,
+        order=order,
     )
 
     ax_title = ax.set_title("a", fontweight="bold")
