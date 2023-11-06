@@ -82,11 +82,9 @@ def start():
                         threshold / (100 * upper * TARGET_INCIDENCE)
                     )
 
-                    tidy_median = "${:.2e} reads (50%)".format(
-                        median_detection
-                    )
-                    tidy_lower = "${:.2e} reads (25%)".format(lower_detection)
-                    tidy_upper = "${:.2e} reads (75%)".format(upper_detection)
+                    tidy_median = "{:.2e} reads".format(median_detection)
+                    tidy_lower = "{:.2e} reads ".format(lower_detection)
+                    tidy_upper = "{:.2e} reads ".format(upper_detection)
                     tsv_writer.writerow(
                         [
                             virus,
