@@ -67,7 +67,7 @@ def start():
                 lower = stats.percentiles[25]
                 upper = stats.percentiles[75]
                 cumulative_incidence = np.logspace(-4, -1, 100)
-                detection_threshold = 100 if axes is top_axes else 1000
+                detection_threshold = 1000 if axes is top_axes else 100
                 fig.text(
                     0.5,
                     0.94 if axes is top_axes else 0.47,
@@ -79,7 +79,6 @@ def start():
 
                 color = f"C{i}"
                 ax.set_box_aspect(0.9)
-
                 ax.loglog(
                     cumulative_incidence,
                     detection_threshold
