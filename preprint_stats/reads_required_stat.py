@@ -2,7 +2,7 @@
 
 import csv
 from dataclasses import dataclass
-
+from scipy.stats import gmean
 
 import numpy as np
 
@@ -37,20 +37,71 @@ def read_data() -> dict[tuple[str, str, str, str], SummaryStats]:
     return data
 
 
+def get_reads_required(
+    data=dict,
+    cumulative_incidence=int,
+    detection_threshold=np.ndarray,
+    virus=str,
+    predictor_type=str,
+    study=str,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    stats = data[virus, predictor_type, study, "Overall"]
+
+    median_reads = detection_threshold / (
+        100 * stats.percentiles[50] * cumulative_incidence
+    )
+    lower_reads = detection_threshold / (
+        100 * stats.percentiles[25] * cumulative_incidence
+    )
+    upper_reads = detection_threshold / (
+        100 * stats.percentiles[75] * cumulative_incidence
+    )
+
+    return median_reads, lower_reads, upper_reads
+
+
+def tidy_number(reads_required=int) -> str:
+    sci_notation = f"{reads_required:.2e}"
+
+    coefficient, exponent = sci_notation.split("e")
+
+    # Remove the leading '+' from the exponent
+    exponent = exponent.replace("+", "")
+    # Remove the leading zero from the exponent if it's there
+    if exponent.startswith("0") and len(exponent) > 1:
+        exponent = exponent[1:]
+
+    # Now replace the digits with superscript characters
+    exponent = (
+        exponent.replace("0", "⁰")
+        .replace("1", "¹")
+        .replace("2", "²")
+        .replace("3", "³")
+        .replace("4", "⁴")
+        .replace("5", "⁵")
+        .replace("6", "⁶")
+        .replace("7", "⁷")
+        .replace("8", "⁸")
+        .replace("9", "⁹")
+    )
+
+    return f"{coefficient} x 10{exponent}"
+
+
+# def tidy_number(reads_required=int) -> str:
+#     scientific_notation = "{:.2e} reads".format(round(reads_required))
+
+
 def start():
     data = read_data()
     TARGET_INCIDENCE = 0.01
-    TARGET_THRESHOLDS = [100, 1000]
-    viruses = [
-        ("Norovirus (GII)", "incidence"),
-        ("SARS-COV-2", "incidence"),
-    ]
+    TARGET_THRESHOLDS = [10, 100, 1000]
+    viruses = ["Norovirus (GII)", "SARS-COV-2"]
     study_labels = {
-        "rothman": "Rothman",
         "crits_christoph": "Crits-Christoph",
+        "rothman": "Rothman",
         "spurbeck": "Spurbeck",
     }
-
     with open("read_estimates.tsv", mode="w", newline="") as file:
         tsv_writer = csv.writer(file, delimiter="\t")
         tsv_writer.writerow(
@@ -63,28 +114,35 @@ def start():
                 "Detection Threshold",
             ]
         )
-        for virus, predictor_type in viruses:
-            for threshold in TARGET_THRESHOLDS:
-                for study in study_labels.keys():
-                    stats = data[virus, predictor_type, study, "Overall"]
-                    median = stats.percentiles[50]
-                    lower = stats.percentiles[25]
-                    upper = stats.percentiles[75]
-                    cumulative_incidence = np.logspace(-4, -1, 100)
+        for detection_threshold in TARGET_THRESHOLDS:
+            for virus in viruses:
+                geomean_dict = {
+                    "median": [],
+                    "lower": [],
+                    "upper": [],
+                }
+                studies = study_labels.keys()
+                for i, study in enumerate(studies):
+                    (
+                        study_median,
+                        study_lower,
+                        study_upper,
+                    ) = get_reads_required(
+                        data,
+                        cumulative_incidence=TARGET_INCIDENCE,
+                        detection_threshold=detection_threshold,
+                        virus=virus,
+                        predictor_type="incidence",
+                        study=study,
+                    )
 
-                    median_detection = round(
-                        threshold / (100 * median * TARGET_INCIDENCE)
-                    )
-                    lower_detection = round(
-                        threshold / (100 * lower * TARGET_INCIDENCE)
-                    )
-                    upper_detection = round(
-                        threshold / (100 * upper * TARGET_INCIDENCE)
-                    )
+                    geomean_dict["median"].append(study_median)
+                    geomean_dict["lower"].append(study_lower)
+                    geomean_dict["upper"].append(study_upper)
 
-                    tidy_median = "{:.2e} reads".format(median_detection)
-                    tidy_lower = "{:.2e} reads ".format(lower_detection)
-                    tidy_upper = "{:.2e} reads ".format(upper_detection)
+                    tidy_median = tidy_number(study_median)
+                    tidy_lower = tidy_number(study_lower)
+                    tidy_upper = tidy_number(study_upper)
                     tsv_writer.writerow(
                         [
                             virus,
@@ -92,9 +150,28 @@ def start():
                             tidy_median,
                             tidy_lower,
                             tidy_upper,
-                            threshold,
+                            detection_threshold,
                         ]
                     )
+                    if i == len(studies) - 1:
+                        geomean_median = gmean(geomean_dict["median"])
+                        geomean_lower = gmean(geomean_dict["lower"])
+                        geomean_upper = gmean(geomean_dict["upper"])
+
+                        tidy_median = tidy_number(geomean_median)
+                        tidy_lower = tidy_number(geomean_lower)
+                        tidy_upper = tidy_number(geomean_upper)
+
+                        tsv_writer.writerow(
+                            [
+                                virus,
+                                "Mean (geometric)",
+                                tidy_median,
+                                tidy_lower,
+                                tidy_upper,
+                                detection_threshold,
+                            ]
+                        )
 
 
 if __name__ == "__main__":

@@ -2,8 +2,7 @@
 
 import csv
 from dataclasses import dataclass
-
-
+from scipy.stats import gmean
 import numpy as np
 
 PERCENTILES = [5, 25, 50, 75, 95]
@@ -37,23 +36,41 @@ def read_data() -> dict[tuple[str, str, str, str], SummaryStats]:
     return data
 
 
-def start():
-    data = read_data()
-    TARGET_INCIDENCE = [0.01, 0.001
-    TARGET_THRESHOLDS = [100, 1000]
-
+def get_cost(
+    reads_required=list, detection_threshold=int, TARGET_INCIDENCE=float
+):
     DOLLAR_PER_1B_READS = 8000
     weeks_per_year = 52
-    viruses = [
-        ("Norovirus (GII)", "incidence"),
-        ("SARS-COV-2", "incidence"),
-    ]
+
+    costs = []
+
+    for reads in reads_required:
+        cost = round(
+            detection_threshold
+            / (100 * reads * TARGET_INCIDENCE)
+            * weeks_per_year
+            * DOLLAR_PER_1B_READS
+            / 1e9
+        )
+
+        tidy_cost = f"${cost:,}"
+        costs.append(tidy_cost)
+    tidy_median_cost, tidy_lower_cost, tidy_upper_cost = costs
+
+    return tidy_median_cost, tidy_lower_cost, tidy_upper_cost
+
+
+def start():
+    data = read_data()
+    TARGET_INCIDENCE = 0.01
+    TARGET_THRESHOLDS = [10, 100, 1000]
+
+    viruses = ["Norovirus (GII)", "SARS-COV-2"]
     study_labels = {
-        "rothman": "Rothman",
         "crits_christoph": "Crits-Christoph",
+        "rothman": "Rothman",
         "spurbeck": "Spurbeck",
     }
-
     with open("cost_estimates.tsv", mode="w", newline="") as file:
         tsv_writer = csv.writer(file, delimiter="\t")
         tsv_writer.writerow(
@@ -66,41 +83,35 @@ def start():
                 "Detection Threshold",
             ]
         )
-        for threshold in TARGET_THRESHOLDS:
-            for virus, predictor_type in viruses:
-                for study in study_labels.keys():
-                    stats = data[virus, predictor_type, study, "Overall"]
-                    median = stats.percentiles[50]
-                    lower = stats.percentiles[25]
-                    upper = stats.percentiles[75]
-                    cumulative_incidence = np.logspace(-4, -1, 100)
-                    median_cost = round(
-                        threshold
-                        / (100 * median * TARGET_INCIDENCE)
-                        * weeks_per_year
-                        * DOLLAR_PER_1B_READS
-                        / 1e9
-                    )
-                    lower_cost = round(
-                        threshold
-                        / (100 * lower * TARGET_INCIDENCE)
-                        * weeks_per_year
-                        * DOLLAR_PER_1B_READS
-                        / 1e9
-                    )
-                    upper_cost = round(
-                        threshold
-                        / (100 * upper * TARGET_INCIDENCE)
-                        * weeks_per_year
-                        * DOLLAR_PER_1B_READS
-                        / 1e9
+        for detection_threshold in TARGET_THRESHOLDS:
+            for virus in viruses:
+                geomean_dict = {
+                    "median": [],
+                    "lower": [],
+                    "upper": [],
+                }
+                studies = study_labels.keys()
+
+                for i, study in enumerate(studies):
+                    stats = data[virus, "incidence", study, "Overall"]
+                    study_median = stats.percentiles[50]
+                    study_lower = stats.percentiles[25]
+                    study_upper = stats.percentiles[75]
+
+                    geomean_dict["median"].append(study_median)
+                    geomean_dict["lower"].append(study_lower)
+                    geomean_dict["upper"].append(study_upper)
+
+                    (
+                        tidy_median_cost,
+                        tidy_lower_cost,
+                        tidy_upper_cost,
+                    ) = get_cost(
+                        [study_median, study_lower, study_upper],
+                        detection_threshold,
+                        TARGET_INCIDENCE,
                     )
 
-                    tidy_median_cost = f"${median_cost} (50%)"
-                    tidy_lower_cost = f"${lower_cost} (25%)"
-                    tidy_upper_cost = f"${upper_cost} (75%)"
-
-                    # Write each estimate as a new row in the TSV.
                     tsv_writer.writerow(
                         [
                             virus,
@@ -108,9 +119,34 @@ def start():
                             tidy_median_cost,
                             tidy_lower_cost,
                             tidy_upper_cost,
-                            threshold,
+                            detection_threshold,
                         ]
                     )
+                    if i == len(studies) - 1:
+                        geomean_median = gmean(geomean_dict["median"])
+                        geomean_lower = gmean(geomean_dict["lower"])
+                        geomean_upper = gmean(geomean_dict["upper"])
+
+                        (
+                            tidy_median_cost,
+                            tidy_lower_cost,
+                            tidy_upper_cost,
+                        ) = get_cost(
+                            [geomean_median, geomean_lower, geomean_upper],
+                            detection_threshold,
+                            TARGET_INCIDENCE,
+                        )
+
+                        tsv_writer.writerow(
+                            [
+                                virus,
+                                "Mean (geometric)",
+                                tidy_median_cost,
+                                tidy_lower_cost,
+                                tidy_upper_cost,
+                                detection_threshold,
+                            ]
+                        )
 
 
 if __name__ == "__main__":
