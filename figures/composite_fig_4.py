@@ -146,7 +146,7 @@ def plot_incidence(
     data: pd.DataFrame, input_data: pd.DataFrame, ax: plt.Axes
 ) -> plt.Axes:
     predictor_type = "incidence"
-
+    ax.set_xlim([-15, -3])
     plot_violin(
         ax=ax,
         data=data[
@@ -171,7 +171,6 @@ def plot_incidence(
         ascending=[False, True, False, True, False],
         violin_scale=2.0,
     )
-    ax.set_xlim([-15, -3])
     ax.set_xticks(list(range(-15, -1, 2)))
 
     separate_viruses(ax)
@@ -195,7 +194,11 @@ def plot_prevalence(
     data: pd.DataFrame, input_data: pd.DataFrame, ax: plt.Axes
 ) -> plt.Axes:
     predictor_type = "prevalence"
+<<<<<<< HEAD
 
+=======
+    ax.set_xlim([-15, -3])
+>>>>>>> simon-comp-fig-2
     plot_violin(
         ax=ax,
         data=data[
@@ -216,7 +219,10 @@ def plot_prevalence(
         ascending=[False, True, False, True, False],
         violin_scale=1.5,
     )
+<<<<<<< HEAD
     ax.set_xlim([-15, -3])
+=======
+>>>>>>> simon-comp-fig-2
     ax.set_xticks(list(range(-15, -1, 2)))
     separate_viruses(ax)
     # TODO Get these values automatically

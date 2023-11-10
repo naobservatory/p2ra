@@ -1,13 +1,12 @@
-import sys as sys
+import sys
 
 
 sys.path.append("..")
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt  # type: ignore
-import matplotlib.dates as mdates
-import matplotlib.ticker as mticker
-from matplotlib.gridspec import GridSpec
+import matplotlib.dates as mdates  # type: ignore
+import matplotlib.ticker as mticker  # type: ignore
 
 
 import datetime as dt
@@ -213,6 +212,8 @@ def prevalence_bar_chart(ax1, barplot_colors):
     )
     ax1.set_yticks((y_pos_us + y_pos_dk) / 2, labels=labels, fontsize=9)
 
+    ax1.set_xlabel("Prevalence", fontsize=10)
+
     def pretty_percentage(v):
         if v < 1:
             return "%.2f%%" % v
@@ -223,7 +224,12 @@ def prevalence_bar_chart(ax1, barplot_colors):
     for y_pos, x_pos in zip(
         np.concatenate((y_pos_us, y_pos_dk)) - 0.15, us + dk
     ):
-        ax1.text(x_pos + 0.3, y_pos, pretty_percentage(x_pos))
+        ax1.text(
+            x_pos + 0.3,
+            y_pos,
+            pretty_percentage(x_pos),
+            fontsize=8,
+        )
 
     ax1.spines["right"].set_visible(False)
     ax1.spines["top"].set_visible(False)
@@ -236,7 +242,7 @@ def prevalence_bar_chart(ax1, barplot_colors):
         loc="left",
     )
 
-    ax1_title.set_position((-0.08, 0))
+    ax1_title.set_position((-0.12, 0))
 
     return ax1
 
@@ -318,7 +324,6 @@ def all_incidence_figure(
             verticalalignment="bottom",
             horizontalalignment="center",
             color=study_coverage_colors[study],
-            weight="heavy",
         )
 
     # for index, (study, dates) in zip(
@@ -364,7 +369,7 @@ def all_incidence_figure(
         # move title a bit up
     )
 
-    ax2_title.set_position((-0.08, 0))
+    ax2_title.set_position((-0.12, 0))
     x_min, _ = ax2.get_xlim()
     last_date = df.dropna(subset=["sars_cov_2"], how="all")["date"].max()
 
@@ -389,9 +394,15 @@ def all_incidence_figure(
         verticalalignment="center",
         fontsize=10,
     )
+    ax2.set_ylabel("Weekly Infections per 100,000", fontsize=10)
     ax2.yaxis.set_major_formatter(
         mticker.FuncFormatter(lambda x, p: format(int(x), ","))
     )
+
+    ylabel_object = plt.gca().get_yaxis().get_label()
+    x, y = ylabel_object.get_position()
+    print(x, y)
+
     # ax3.text(  # title
     #     dt.datetime(2020, 4, 16),
     #     5,
@@ -458,6 +469,9 @@ def norovirus_influenza_figure(
         color=virus_plot_colors["norovirus"],
     )
 
+    for y_loc in range(0, 176, 25):
+        ax4.axhline(y_loc, color="gray", linestyle="-", lw=0.5, alpha=0.5)
+
     study_coverage_y_values = range(1, len(sample_dates) + 1)
 
     for study, dates in sample_dates.items():
@@ -478,7 +492,6 @@ def norovirus_influenza_figure(
             verticalalignment="bottom",
             horizontalalignment="center",
             color=study_coverage_colors[study],
-            weight="heavy",
         )
 
     # for index, (study, dates) in zip(
@@ -512,19 +525,23 @@ def norovirus_influenza_figure(
     ax4.spines["left"].set_visible(False)
 
     ax4.xaxis.set_visible(True)
-    ax4.xaxis.set_ticks_position("none")
-    plt.setp(ax4.get_xticklabels(), visible=False)
-    ax4.axhline(0, color="black", linewidth=0.8)
+    # ax4.xaxis.set_ticks_position("none")
+    # plt.setp(ax4.get_xticklabels(), visible=False)
+    # ax4.axhline(0, color="black", linewidth=0.8)
     # remove ticks on ax4 y axis, but still show labels on y axis
-    # ax4.yaxis.set_ticks_position("none")
+    ax4.yaxis.set_ticks_position("none")
 
     ax4_title = ax4.set_title(
         "c",
         fontweight="bold",
         loc="left",
     )
+    ax4.set_ylabel("Weekly Infections per 100,000", fontsize=10)
+    ylabel_object = plt.gca().get_yaxis().get_label()
+    x, y = ylabel_object.get_position()
+    print(x, y)
 
-    ax4_title.set_position((-0.08, 0))
+    ax4_title.set_position((-0.12, 0))
 
     x_min, _ = ax4.get_xlim()
 
@@ -553,9 +570,6 @@ def norovirus_influenza_figure(
             verticalalignment="center",
             fontsize=10,
         )
-
-    for y_loc in range(20, 161, 20):
-        ax4.axhline(y_loc, color="gray", linestyle="-", lw=0.5, alpha=0.5)
 
     ax4.xaxis.set_major_locator(mdates.YearLocator())
     ax4.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
@@ -609,7 +623,7 @@ def start():
     fig = plt.figure(
         figsize=(9, 12),
     )
-    gs = fig.add_gridspec(3, 2, height_ratios=[7, 5, 5], hspace=0.05)
+    gs = fig.add_gridspec(3, 2, height_ratios=[7, 5, 5], hspace=0.3)
 
     ax1 = fig.add_subplot(gs[0, :])
     # ax3 = fig.add_subplot(gs[2, :])
