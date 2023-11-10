@@ -150,6 +150,7 @@ def start():
         cellLoc="center",
         loc="upper left",
     )
+    fig.show() 
     fig.savefig("matching-reads-table.png", dpi=180)
     plt.clf()
 
