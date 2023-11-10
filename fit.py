@@ -22,10 +22,12 @@ def summarize_output(coeffs: pd.DataFrame) -> pd.DataFrame:
 
 
 def start(num_samples: int, plot: bool) -> None:
+    branch = "simon-validation-exclusion-run"
+    print("Using mgs-pipeline branch simon-validation-exclusion-run") 
     figdir = Path("fig")
     if plot:
         figdir.mkdir(exist_ok=True)
-    mgs_data = MGSData.from_repo()
+    mgs_data = MGSData.from_repo(ref=branch)
     input_data = []
     output_data = []
     for (
