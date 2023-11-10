@@ -223,7 +223,7 @@ def start():
 
     fig.tight_layout
     fig.show()
-    fig.savefig("geomean_reads_required.png", bbox_inches="tight", dpi=600)
+    fig.savefig("composite_fig_6.png", bbox_inches="tight", dpi=600)
 
 
 if __name__ == "__main__":
