@@ -76,7 +76,7 @@ def plot_violin(
     y: str,
     sorting_order: list[str],
     ascending: list[bool],
-    hatch_zero_counts: bool = False,
+    hatch_zero_counts: bool = True,
     violin_scale=1.0,
 ) -> None:
     assert len(sorting_order) == len(ascending)
@@ -114,7 +114,7 @@ def plot_violin(
             path.vertices[:, 1] = (
                 violin_scale * (path.vertices[:, 1] - y_mid) + y_mid
             )
-            if (not hatch_zero_counts) and (num_reads == 0):
+            if (hatch_zero_counts) and (num_reads == 0):
                 color = patches.get_facecolor()
                 y_max = np.max(path.vertices[:, 1])
                 y_min = np.min(path.vertices[:, 1])
@@ -166,7 +166,7 @@ def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
         ascending=[False, True, False, True, False],
         violin_scale=2.0,
     )
-    ax.set_xlim([-13, -3])
+    ax.set_xlim(-13.0, -3.0)
     separate_viruses(ax)
     adjust_axes(ax, predictor_type=predictor_type)
     legend = ax.legend(
@@ -176,8 +176,8 @@ def plot_incidence(data: pd.DataFrame, input_data: pd.DataFrame) -> plt.Figure:
         borderaxespad=0,
         frameon=False,
     )
-    for legend_handle in legend.legend_handles:
-        legend_handle.set_edgecolor(legend_handle.get_facecolor())
+    for legend_handle in legend.legend_handles:  # type: ignore
+        legend_handle.set_edgecolor(legend_handle.get_facecolor())  # type: ignore
     return fig
 
 
@@ -207,7 +207,7 @@ def plot_prevalence(
         ascending=[False, True, False, True, False],
         violin_scale=1.5,
     )
-    ax.set_xlim([-15, -7])
+    ax.set_xlim(-15, -7)
     ax.set_xticks(list(range(-15, -5, 2)))
     separate_viruses(ax)
     # TODO Get these values automatically
@@ -239,8 +239,8 @@ def plot_prevalence(
         borderaxespad=0,
         frameon=False,
     )
-    for legend_handle in legend.legend_handles:
-        legend_handle.set_edgecolor(legend_handle.get_facecolor())
+    for legend_handle in legend.legend_handles:  # type: ignore
+        legend_handle.set_edgecolor(legend_handle.get_facecolor())  # type: ignore
     return fig
 
 
@@ -265,7 +265,7 @@ def plot_three_virus(
             sorting_order=["study", "location"],
             ascending=[False, True],
             violin_scale=2.5,
-            hatch_zero_counts=True,
+            hatch_zero_counts=False,
         )
         ax.set_xlim(xlim)
         # TODO Get these values automatically
