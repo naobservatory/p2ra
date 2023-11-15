@@ -10,15 +10,6 @@ import pandas as pd
 PERCENTILES = [5, 25, 50, 75, 95]
 
 
-@dataclass
-class SummaryStats:
-    mean: float
-    std: float
-    min: float
-    percentiles: dict[int, float]
-    max: float
-
-
 def read_data() -> pd.DataFrame:
     data = {
         "predictor_type": [],
