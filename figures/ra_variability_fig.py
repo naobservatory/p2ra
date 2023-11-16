@@ -10,7 +10,7 @@ import pandas as pd
 PERCENTILES = [5, 25, 50, 75, 95]
 
 
-def read_data() -> pd.DataFrame:
+def fits_df() -> pd.DataFrame:
     data = {
         "predictor_type": [],
         "virus": [],
@@ -44,6 +44,26 @@ def read_data() -> pd.DataFrame:
     return df
 
 
+def reads_df() -> pd.DataFrame:
+    df = pd.read_csv("input.tsv", sep="\t")
+    return df
+
+
+def count_viral_reads(
+    df: pd.DataFrame, by_location: bool = False
+) -> pd.DataFrame:
+    groups = [
+        "pathogen",
+        "study",
+        "tidy_name",
+    ]
+    reads_by_study_and_pathogen = (
+        df.groupby(groups)[["viral_reads"]].sum().reset_index()
+    )
+
+    return reads_by_study_and_pathogen
+
+
 def compute_diffs(df: pd.DataFrame) -> pd.DataFrame:
     viruses = df["virus"].unique()
     results_data = {
@@ -56,6 +76,11 @@ def compute_diffs(df: pd.DataFrame) -> pd.DataFrame:
 
     for virus in viruses:
         virus_df = df[df["virus"] == virus]
+        if (virus_df["viral_reads"] == 0).sum() >= 3:
+            continue
+
+        virus_df = virus_df[virus_df["viral_reads"] != 0]
+
         predictor_type = virus_df["predictor_type"].unique()
 
         min_median_index = virus_df["50%"].idxmin()
@@ -73,6 +98,8 @@ def compute_diffs(df: pd.DataFrame) -> pd.DataFrame:
             virus_df.loc[min_median_index, "95%"]
             - virus_df.loc[max_median_index, "5%"]
         )
+        print(low_diff, high_diff)
+
         results_data["virus"].append(virus)
         results_data["diff_median"].append(diff_median)
         results_data["low_diff"].append(low_diff)
@@ -82,20 +109,21 @@ def compute_diffs(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-df = compute_diffs(read_data())
-
-
-def plot_custom_dot_plot(df):
+def plot_df(df: pd.DataFrame) -> None:
+    df = df.sort_values(by="diff_median", ascending=False).reset_index(
+        drop=True
+    )
+    df = df.sort_values(by="predictor_type", ascending=False).reset_index(
+        drop=True
+    )
     fig, ax = plt.subplots()
-    # sort df by diff_median
-    # df = df.sort_values(by=["diff_median"])
+
     scatter = ax.scatter(
         x=df["diff_median"],
         y=range(len(df)),
         alpha=0.6,
         edgecolors="w",
     )
-    # add vertical lines across the plot.
 
     for i in range(len(df)):
         ax.plot(
@@ -111,14 +139,34 @@ def plot_custom_dot_plot(df):
     ax.set_yticks(range(len(df)))
     ax.set_yticklabels(df["virus"])
 
-    ax.set_title("RA(1%) Difference (median, 5%, 95%)")
-    ax.set_xlabel("OOM difference between most variable study estimates")
-    # Show the plot
+    ax.set_title("RA(1%) Difference (median, 90% CI)")
+    ax.set_xlabel(
+        "OOM difference between lowest and highest study estimate (based on median location)"
+    )
+
     plt.show()
     plt.clf()
 
 
-plot_custom_dot_plot(df)
+def start():
+    reads_data = reads_df()
+    fits_data = fits_df()
+
+    viral_counts = count_viral_reads(reads_data)
+    print(viral_counts.columns)
+    print(fits_data.columns)
+    # end script execution here:
+
+    fits_data_w_reads = pd.merge(
+        fits_data,
+        viral_counts,
+        how="left",
+        left_on=["virus", "study"],
+        right_on=["tidy_name", "study"],
+    )
+    diffs_df = compute_diffs(fits_data_w_reads)
+    plot_df(diffs_df)
 
 
-# plot_dotwhiskers(df)
+if __name__ == "__main__":
+    start()
