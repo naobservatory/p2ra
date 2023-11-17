@@ -54,7 +54,6 @@ def adjust_axes(ax, predictor_type: str) -> None:
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
     ax.spines["left"].set_visible(False)
-    print(ax.get_xticks()[1:-1])
     ax.vlines(
         ax.get_xticks()[1:-1],
         *ax.get_ylim(),
@@ -284,22 +283,11 @@ def composite_figure(
     input_data: pd.DataFrame,
 ) -> plt.Figure:
     fig = plt.figure(
-        figsize=(7, 12),
+        figsize=(5, 8),
     )
     gs = fig.add_gridspec(2, 1, height_ratios=[5, 12], hspace=0.2)
     plot_incidence(data, input_data, fig.add_subplot(gs[0, 0]))
     plot_prevalence(data, input_data, fig.add_subplot(gs[1, 0]))
-
-    # comp_x_lims = [
-    #     min(ax_0.get_xlim() + ax_1.get_xlim()),
-    #     max(ax_0.get_xlim() + ax_1.get_xlim()),
-    # ]
-    # print(comp_x_lims)
-    # fig.axs[0].set_xlim(comp_x_lims)
-    # fig.axs[1].set_xlim(comp_x_lims)
-    # # ax_0.set_xlim(comp_x_lims)
-    # # ax_1.set_xlim(comp_x_lims)
-
     return fig
 
 
@@ -330,7 +318,7 @@ def start() -> None:
     input_df["location"] = input_df.fine_location
 
     fig = composite_figure(fits_df, input_df)
-
+    fig.show()
     save_plot(fig, figdir, "composite_fig_4")
 
 
