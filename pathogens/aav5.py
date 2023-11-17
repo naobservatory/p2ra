@@ -113,14 +113,10 @@ def estimate_prevalences() -> list[Prevalence]:
         date_source=Variable(date="2018"),
         location_source=Variable(country="Denmark"),
     )
-    return [
-        us_2020,
-        us_2021,
-        dk_2015,
-        dk_2016,
-        dk_2017,
-        dk_2018,
-    ]
+    return []
+    # Dropped, because of zero counts across all studies; lends little
+    # additonal information to the preprint (and complicates explantion
+    # of how we selected viruses.)
 
 
 def estimate_incidences() -> list[IncidenceRate]:
