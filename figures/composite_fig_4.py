@@ -185,7 +185,7 @@ def plot_incidence(
         legend_handle.set_edgecolor(legend_handle.get_facecolor())
 
     ax_title = ax.set_title("a", fontweight="bold")
-    ax_title.set_position((-0.16, 0))
+    ax_title.set_position((-0.22, 0))
     return ax
 
 
@@ -250,7 +250,7 @@ def plot_prevalence(
         legend_handle.set_edgecolor(legend_handle.get_facecolor())
 
     ax_title = ax.set_title("b", fontweight="bold")
-    ax_title.set_position((-0.16, 0))
+    ax_title.set_position((-0.22, 0))
 
     return ax
 
