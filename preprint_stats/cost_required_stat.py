@@ -37,11 +37,12 @@ def read_data() -> dict[tuple[str, str, str, str], SummaryStats]:
 
 
 def get_cost(
-    reads_required=list, detection_threshold=int, TARGET_INCIDENCE=float
+    reads_required=list,
+    detection_threshold=int,
+    TARGET_INCIDENCE=float,
+    DOLLAR_PER_1B_READS=int,
+    weeks_per_year=int,
 ):
-    DOLLAR_PER_1B_READS = 8000
-    weeks_per_year = 52
-
     costs = []
 
     for reads in reads_required:
@@ -62,6 +63,9 @@ def get_cost(
 
 def start():
     data = read_data()
+    DOLLAR_PER_1B_READS = 8000
+    weeks_per_year = 52
+
     TARGET_INCIDENCE = 0.01
     TARGET_THRESHOLDS = [10, 100, 1000]
 
@@ -71,7 +75,11 @@ def start():
         "rothman": "Rothman",
         "spurbeck": "Spurbeck",
     }
-    with open("cost_estimates.tsv", mode="w", newline="") as file:
+    with open(
+        f"cost_estimates_${DOLLAR_PER_1B_READS}_per_b.tsv",
+        mode="w",
+        newline="",
+    ) as file:
         tsv_writer = csv.writer(file, delimiter="\t")
         tsv_writer.writerow(
             [
@@ -110,6 +118,8 @@ def start():
                         [study_median, study_lower, study_upper],
                         detection_threshold,
                         TARGET_INCIDENCE,
+                        DOLLAR_PER_1B_READS,
+                        weeks_per_year,
                     )
 
                     tsv_writer.writerow(
@@ -135,6 +145,8 @@ def start():
                             [geomean_median, geomean_lower, geomean_upper],
                             detection_threshold,
                             TARGET_INCIDENCE,
+                            DOLLAR_PER_1B_READS,
+                            weeks_per_year,
                         )
 
                         tsv_writer.writerow(
