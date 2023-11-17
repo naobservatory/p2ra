@@ -416,13 +416,13 @@ def start():
     barplot_colors = ["#8dd3c7", "#fdb462"]
 
     fig = plt.figure(
-        figsize=(9, 9),
+        figsize=(8, 10),
     )
     gs = fig.add_gridspec(
         2,
         2,
-        height_ratios=[6, 6],
-        hspace=0.2,
+        height_ratios=[5, 7],
+        hspace=0.33,
     )
 
     ax1 = fig.add_subplot(gs[0, :])
@@ -440,7 +440,7 @@ def start():
         study_coverage_colors,
     )
     # show figures
-
+    # plt.show()
     plt.tight_layout()
     plt.savefig(
         "composite_fig_2.pdf",
