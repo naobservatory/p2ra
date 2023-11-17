@@ -58,7 +58,7 @@ class TestPathogens(unittest.TestCase):
                     self.assertIsInstance(estimate, IncidenceRate)
                     saw_estimate = True
 
-                if pathogen_name in ["aav6", "hbv", "hsv_2"]:
+                if pathogen_name in ["aav", "aav6", "hbv", "hsv_2"]:
                     # It's expected that these pathogens have no estimates; see
                     # https://docs.google.com/document/d/1IIeOFKNqAwf9NTJeVFRSl_Q9asvu9_TGc_HSrlXg8PI/edit
                     self.assertFalse(saw_estimate)
