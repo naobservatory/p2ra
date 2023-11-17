@@ -255,7 +255,7 @@ def composite_figure(
     input_data: pd.DataFrame,
 ) -> plt.Figure:
     fig = plt.figure(
-        figsize=(8, 12),
+        figsize=(7, 10),
     )
 
     gs = fig.add_gridspec(2, 3, height_ratios=[7, 7], hspace=0.2)
