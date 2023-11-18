@@ -73,7 +73,14 @@ def create_tsv():
 
     sorted_viruses = sorted(viruses, key=lambda x: (x[1], x[0]))
 
-    headers = ["Virus", "Predictor Type", "Study", "Median", "Lower", "Upper"]
+    study_tidy = {
+        "rothman": "Rothman",
+        "crits_christoph": "Crits-Christoph",
+        "spurbeck": "Spurbeck",
+        "brinch": "Brinch",
+    }
+
+    headers = ["Virus", "Study", "Median", "Lower", "Upper"]
 
     with open("output_summary.tsv", "w", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=headers, delimiter="\t")
@@ -88,8 +95,7 @@ def create_tsv():
                 writer.writerow(
                     {
                         "Virus": virus,
-                        "Predictor Type": predictor_type,
-                        "Study": study,
+                        "Study": study_tidy[study],
                         "Median": stats.percentiles[50],
                         "Lower": stats.percentiles[5],
                         "Upper": stats.percentiles[95],
