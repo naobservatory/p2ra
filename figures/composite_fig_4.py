@@ -316,7 +316,8 @@ def start() -> None:
     input_df["observed?"] = input_df.viral_reads > 0
     # For consistency between dataframes (TODO: fix that elsewhere)
     input_df["location"] = input_df.fine_location
-
+    fits_df = fits_df[fits_df["pathogen"] != "aav5"]  # FIX ME
+    input_df = input_df[input_df["pathogen"] != "aav5"]  # FIX ME
     fig = composite_figure(fits_df, input_df)
     fig.show()
     save_plot(fig, figdir, "composite_fig_4")
