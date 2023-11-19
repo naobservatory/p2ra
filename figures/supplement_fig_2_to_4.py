@@ -302,7 +302,7 @@ def composite_figure(
     target_x: str,
 ) -> plt.Figure:
     fig = plt.figure(
-        figsize=(7, 12),
+        figsize=(5, 8),
     )
     gs = fig.add_gridspec(2, 1, height_ratios=[5, 12], hspace=0.2)
     plot_incidence(data, input_data, fig.add_subplot(gs[0, 0]), target_x)
@@ -339,6 +339,9 @@ def start() -> None:
 
     fits_df["log10ra"] = np.log10(fits_df.ra_at_1in100)
 
+    fits_df = fits_df[fits_df["pathogen"] != "aav5"]  # FIX ME
+    input_df = input_df[input_df["pathogen"] != "aav5"]  # FIX ME
+
     for target_x, change_factor in [
         ("log10ra_at_1in1000", -1),
         ("log10ra_at_1in10000", -2),
@@ -347,10 +350,6 @@ def start() -> None:
         fits_df[target_x] = fits_df.log10ra + change_factor
         fig = composite_figure(fits_df, input_df, target_x)
         save_plot(fig, figdir, f"supplement_fig_2_{target_x}")
-
-    fig = composite_figure(fits_df, input_df)
-
-    save_plot(fig, figdir, "supplement_fig_2")
 
 
 if __name__ == "__main__":
