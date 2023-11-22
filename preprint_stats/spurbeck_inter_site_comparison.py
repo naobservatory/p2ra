@@ -84,7 +84,7 @@ def start():
 
     variance_df = compute_geo_mean_ratio(df_fits)
 
-    variance_df.to_csv("variance.tsv", sep="\t", index=False)
+    variance_df.to_csv("spurbeck_variance.tsv", sep="\t", index=False)
 
 
 if __name__ == "__main__":

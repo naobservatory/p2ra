@@ -66,6 +66,7 @@ def read_data() -> dict[tuple[str, str, str, str], SummaryStats]:
 
 def create_tsv():
     data = read_data()
+
     viruses = set()
     for entry in data.keys():
         virus, predictor_type = entry[:2]
