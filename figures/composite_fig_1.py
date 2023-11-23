@@ -73,9 +73,9 @@ def shape_boxplot_df(boxplot_df: pd.DataFrame) -> pd.DataFrame:
         id_vars=["study", "sample"],
         value_vars=[
             "Viruses",
-            "DNA Viruses",
-            "RNA Viruses",
             "Human-Infecting Viruses",
+            "RNA Viruses",
+            "DNA Viruses",
         ],
         var_name="Identifier",
         value_name="Relative Abundance",
@@ -362,31 +362,6 @@ def return_study_order(boxplot_df: pd.DataFrame) -> list[str]:
     )
 
 
-# currently not working
-# def move_brumfield(target, index, studies):
-#     target_study = [study for study in studies if target in study][0]
-
-#     studies.insert(index, studies.pop(studies.index(target_study)))
-#     return studies
-
-
-# def return_study_order(df: pd.DataFrame) -> list[str]:
-#     study_nucleic_acid_mapping = get_study_nucleic_acid_mapping()
-#     df["na_type"] = df["study"].map(study_nucleic_acid_mapping)
-
-#     dna_studies = move_brumfield(
-#         "Brumfield", 4, df[df["na_type"] == "DNA"]["study"].unique().tolist()
-#     )
-
-#     rna_studies = move_brumfield(
-#         "Brumfield", 0, df[df["na_type"] == "RNA"]["study"].unique().tolist()
-#     )
-
-#     study_order = dna_studies + rna_studies
-#     print(study_order)
-#     return study_order
-
-
 def boxplot(
     ax: plt.Axes,
     boxplot_df: pd.DataFrame,
@@ -418,7 +393,7 @@ def boxplot(
     )
 
     ax_title = ax.set_title("a", fontweight="bold")
-    ax.set_xlabel("Log$_{10}$ Relative Abundance among all reads")
+    ax.set_xlabel("Relative abundance among all reads")
 
     ax_title.set_position((-0.15, 0))
 
@@ -444,9 +419,9 @@ def boxplot(
         loc=(0.00, -0.17),
         columnspacing=2.2,
         ncol=4,
-        frameon=True,
         title="",
         fontsize=10,
+        frameon=False,
     )
     # change x labels to log scale (8 -> 10^8)
 
@@ -497,7 +472,7 @@ def barplot(
 
     ax_title.set_position((-0.15, 0))
 
-    ax.set_xlabel("% Relative Abundance among human-infecting viruses")
+    ax.set_xlabel("Relative abundance among human-infecting viruses")
 
     ax.tick_params(left=False)
 
@@ -516,8 +491,8 @@ def barplot(
     ax.legend(
         loc=(0.015, -0.32),
         ncol=4,
-        frameon=True,
         fontsize=9.1,
+        frameon=False,
     )
 
     sns.despine(top=True, right=True, left=True, bottom=False)
@@ -527,7 +502,7 @@ def barplot(
 
 def save_plot(fig, figdir: Path, name: str) -> None:
     for ext in ["pdf", "png"]:
-        fig.savefig(figdir / f"{name}.{ext}", bbox_inches="tight", dpi=600)
+        fig.savefig(figdir / f"{name}.{ext}", bbox_inches="tight", dpi=900)
 
 
 def start():
@@ -553,7 +528,6 @@ def start():
     barplot(fig.add_subplot(gs[1, :]), barplot_df, study_order)
 
     plt.tight_layout()
-
     save_plot(fig, figdir, "composite_fig_1")
 
 
