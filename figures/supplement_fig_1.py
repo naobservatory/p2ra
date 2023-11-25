@@ -6,8 +6,8 @@ import itertools
 import matplotlib.pyplot as plt  # type: ignore
 import pandas as pd
 import numpy as np
-from scipy.stats import gmean, mannwhitneyu
-import seaborn as sns
+from scipy.stats import gmean, mannwhitneyu  # type: ignore
+import seaborn as sns  # type: ignore
 
 
 dashboard = os.path.expanduser("~/code/mgs-pipeline/dashboard/")
