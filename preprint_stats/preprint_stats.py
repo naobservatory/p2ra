@@ -2,7 +2,7 @@ import os
 import json
 import subprocess
 import numpy as np
-from scipy.stats import gmean
+from scipy.stats import gmean  # type: ignore
 
 
 dashboard = os.path.expanduser("~/code/mgs-pipeline/dashboard/")

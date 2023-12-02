@@ -2,7 +2,7 @@
 
 import csv
 from dataclasses import dataclass
-from scipy.stats import gmean
+from scipy.stats import gmean  # type: ignore
 import numpy as np
 
 PERCENTILES = [5, 25, 50, 75, 95]

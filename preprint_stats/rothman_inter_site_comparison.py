@@ -1,6 +1,6 @@
 import csv
 import pandas as pd
-from scipy.stats import gmean
+from scipy.stats import gmean  # type: ignore
 from math import log
 from collections import defaultdict
 
@@ -13,12 +13,7 @@ def reads_df() -> pd.DataFrame:
 
 
 def rothman_fits_data() -> pd.DataFrame:
-    data = {
-        "predictor_type": [],
-        "virus": [],
-        "study": [],
-        "location": [],
-    }
+    data = defaultdict(list)
     for p in PERCENTILES:
         data[f"{p}"] = []
 
@@ -63,9 +58,7 @@ def compute_geo_mean_ratio(df: pd.DataFrame) -> pd.DataFrame:
         for quantile in PERCENTILES:
             non_htp_quantile_gm = (gmean(non_htp_df[quantile].dropna()),)
             htp_quantile = gmean(htp_df[quantile].dropna())
-            print(non_htp_quantile_gm, htp_quantile)
             variance = float(htp_quantile - non_htp_quantile_gm)
-            # print(variance)
 
             gmean_variance[f"variance_{quantile}"].append(round(variance, 2))
 

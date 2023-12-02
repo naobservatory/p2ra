@@ -1,6 +1,6 @@
 import csv
 import pandas as pd
-from scipy.stats import gmean
+from scipy.stats import gmean  # type: ignore
 from math import log
 from collections import defaultdict
 
@@ -13,13 +13,7 @@ def reads_df() -> pd.DataFrame:
 
 
 def spurbeck_fits_data() -> pd.DataFrame:
-    data = {
-        "predictor_type": [],
-        "virus": [],
-        "study": [],
-        "location": [],
-        "enriched": [],
-    }
+    data = defaultdict(list)
     for p in PERCENTILES:
         data[f"{p}"] = []
 
@@ -59,7 +53,6 @@ def compute_geo_mean_ratio(df: pd.DataFrame) -> pd.DataFrame:
     ]
     gmean_variance = defaultdict(list)
     for virus in df["virus"].unique():
-        print(virus)
         if virus not in target_viruses:
             continue
         virus_df = df[df["virus"] == virus]
@@ -72,7 +65,6 @@ def compute_geo_mean_ratio(df: pd.DataFrame) -> pd.DataFrame:
                 gmean(non_enriched_virus_df[quantile].dropna()),
             )
             variance = float(enriched_gm - non_enriched_gm)
-            print(variance)
 
             gmean_variance[f"variance_{quantile}"].append(round(variance, 2))
 
