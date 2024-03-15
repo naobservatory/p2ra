@@ -1,3 +1,5 @@
+import datetime
+import dataclasses
 from typing import Optional
 
 from pathogen_properties import Population, prevalence_data_filename
@@ -29,9 +31,17 @@ def load_location_populations():
 def us_population(
     year: int, county: Optional[str] = None, state: Optional[str] = None
 ) -> Population:
+
+    if year in [2023, 2024]:
+        pop_2022 = us_population(2022, county, state)
+        return dataclasses.replace(
+            pop_2022,
+            parsed_start=datetime.date(year, 7, 1),
+            parsed_end=datetime.date(year, 7, 1))
+    
     if year not in [2020, 2021, 2022]:
         raise Exception("Unsupported year: %s" % year)
-
+    
     total_people = 0
     # All estimates are July 1st, specifically.
     pop_date = "%s-07-01" % year

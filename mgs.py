@@ -1,3 +1,4 @@
+import os
 import json
 import urllib.request
 from collections import Counter
@@ -14,7 +15,7 @@ from tree import Tree
 
 MGS_REPO_DEFAULTS = {
     "user": "naobservatory",
-    "repo": "mgs-pipeline",
+    "repo": "mgs-restricted",
     "ref": "data-2023-07-21",
 }
 
@@ -23,10 +24,8 @@ Sample = NewType("Sample", str)
 
 
 target_bioprojects = {
-    "crits_christoph": [BioProject("PRJNA661613")],
-    "rothman": [BioProject("PRJNA729801")],
-    "spurbeck": [BioProject("PRJNA924011")],
-    "brinch": [BioProject("PRJEB13832"), BioProject("PRJEB34633")],
+    "johnson": [BioProject("MJ-2024-02-12"),
+                BioProject("MJ-2024-03-04")],
 }
 
 
@@ -37,18 +36,9 @@ class GitHubRepo:
     ref: str
 
     def get_file(self, path: str) -> str:
-        file_url = (
-            f"https://raw.githubusercontent.com/"
-            f"{self.user}/{self.repo}/{self.ref}/{path}"
-        )
-        with urllib.request.urlopen(file_url) as response:
-            if response.status == 200:
-                return response.read()
-            else:
-                raise ValueError(
-                    f"Failed to download {file_url}. "
-                    f"Response status code: {response.status}"
-                )
+        with open(os.path.expanduser(
+                f"~/code/{self.repo}/{path}")) as inf:
+            return inf.read()
 
 
 def load_bioprojects(repo: GitHubRepo) -> dict[BioProject, list[Sample]]:
@@ -68,20 +58,33 @@ class SampleAttributes(BaseModel):
     country: str
     state: Optional[str] = None
     county: Optional[str] = None
-    location: str
+    location: Optional[str] = None
     fine_location: Optional[str] = None
     # Fixme: Not all the dates are real dates
     date: date | str
     reads: int
+    edta_treated: Optional[bool|str] = False
+    readlengths: Optional[dict] = None
+    ribofrac: Optional[float] = None
+    nuclease_treated: Optional[bool|str] = False
+    sample_volume_ml: Optional[str] = None
     enrichment: Optional[Enrichment] = None
+    concentration_method: Optional[str] = None
     method: Optional[str] = None
+    airport: Optional[str] = None
+    collection: Optional[str] = None
+
 
 
 def load_sample_attributes(repo: GitHubRepo) -> dict[Sample, SampleAttributes]:
     data = json.loads(repo.get_file("dashboard/metadata_samples.json"))
-    return {
-        Sample(s): SampleAttributes(**attribs) for s, attribs in data.items()
-    }
+    sa = {Sample(s): SampleAttributes(**attribs)
+          for s, attribs in data.items()}
+    for a in sa.values():
+        a.location = "n/a"
+        a.fine_location = "n/a"
+
+    return sa
 
 
 SampleCounts = dict[TaxID, dict[Sample, int]]
@@ -153,14 +156,14 @@ class MGSData:
         samples = {
             s: self.sample_attrs[s] for s in self.bioprojects[bioproject]
         }
-        if enrichment:
-            return {
-                s: attrs
-                for s, attrs in samples.items()
-                if attrs.enrichment == enrichment
-            }
-        else:
-            return samples
+        return {
+            s: attrs
+            for s, attrs in samples.items()
+            # remove them from the second run when it was True/False, but not
+            # the first run when it was Yes/No.  The second run it was much to
+            # agressive.
+            if not attrs.edta_treated == True
+        }
 
     def total_reads(self, bioproject: BioProject) -> dict[Sample, int]:
         return {
