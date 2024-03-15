@@ -38,7 +38,7 @@ seroprevalence_women_us_2009 = Prevalence(
     country="United States",
     date="2009",
     active=Active.LATENT,
-    source="https://academic.oup.com/jnci/article/101/21/1510/963538#:~:text=A%20cut%20point%20of%2015%E2%80%89000%20median%20fluorescent%20intensity%20units%20was%20chosen%20as%20described%20above%20and%20used%20to%20identify%20268%20(59.4%25)%20of%20the%20451%20control%20subjects%20as%20seropositive%20for%20MCPyV%20VP1%3B%20this%20percentage%20was%20similar%20to%20that%20among%20women%20in%20control%20group%201%20(ie%2C%2053%25)."
+    source="https://academic.oup.com/jnci/article/101/21/1510/963538#:~:text=A%20cut%20point%20of%2015%E2%80%89000%20median%20fluorescent%20intensity%20units%20was%20chosen%20as%20described%20above%20and%20used%20to%20identify%20268%20(59.4%25)%20of%20the%20451%20control%20subjects%20as%20seropositive%20for%20MCPyV%20VP1%3B%20this%20percentage%20was%20similar%20to%20that%20among%20women%20in%20control%20group%201%20(ie%2C%2053%25).",
     # Other studies give numbers that are up to 20 percentage points smaller
     # or larger:
     # "In an early study from the United States (US), MCPyV seroprevalence in

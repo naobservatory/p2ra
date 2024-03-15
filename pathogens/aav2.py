@@ -29,7 +29,7 @@ seroprevalence_hemophilia_global_2021 = Prevalence(
     # (93K%2C%20docx)-,Supplemental%20data%3A,-Click%20here%20to
     date="2022",
     active=Active.LATENT,
-    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=Seropositivity%20for%20(A)%20the%20global%20population"
+    source="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9063149/#:~:text=Seropositivity%20for%20(A)%20the%20global%20population",
     # This number matches AAV-2 seroprevalence in a study of 101 males with
     # Duchenne Muscular Dystrophy, showing a seroprevalence of 56%:
     # "https://pubmed.ncbi.nlm.nih.gov/36324212/#:~:text=We%20prospectively%20enrolled,and%20AAV8%20(47%25)."

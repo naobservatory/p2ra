@@ -89,7 +89,7 @@ copenhagen_population_2022 = Population(
     people=652_221,
     country="Denmark",
     date="2022",
-    source="https://kk.statistikbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KKBEF1"
+    source="https://kk.statistikbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KKBEF1",
     # Search variables: Copenhagen in total, Gender in general, Age in total,
     # 2022 Q4
 )
