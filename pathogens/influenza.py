@@ -140,6 +140,19 @@ infections_2021_2022 = IncidenceAbsolute(
     source="https://www.cdc.gov/flu/about/burden/2021-2022.htm#:~:text=The%20overall%20burden%20of%20influenza%20(flu)%20for%20the%202021%2D2022%20season%20was%20an%20estimated%C2%A09%20million%C2%A0flu%20illnesses",
 )
 
+infections_2023_2024 = IncidenceAbsolute(
+    annual_infections=41_500_000,
+    confidence_interval=(29_000_000, 54_000_000),
+    # The estimate is only part of the year, but the code that works with these
+    # understands start and end dates.
+    start_date="2023-10-01",
+    end_date="2024-03-09",
+    tag="us-2023-2024",
+    country="United States",
+    # "CDC estimates that, from October 1, 2023 through March 9, 2024, there
+    # have been: 29 – 54 million flu illnesses"
+    source="https://www.cdc.gov/flu/about/burden/preliminary-in-season-estimates.htm"
+)
 
 def compare_incidence_to_positive_tests(
     official_incidence: IncidenceAbsolute, weekly_data: WeeklyData
@@ -190,6 +203,9 @@ def estimate_incidences() -> list[IncidenceRate]:
     underreporting_2021_2022 = compare_incidence_to_positive_tests(
         infections_2021_2022, weekly_data
     )
+    underreporting_2023_2024 = compare_incidence_to_positive_tests(
+        infections_2023_2024, weekly_data
+    )
 
     # The CDC didn't estimate an annual infections for 2020-2021, but assume
     # underreporting is the average of the two years we do have.
@@ -220,11 +236,16 @@ def estimate_incidences() -> list[IncidenceRate]:
             and start <= infections_2021_2022.parsed_start
         ):
             return underreporting_2020_2021
+        elif (
+            start >= infections_2023_2024.parsed_start
+            and start <= infections_2023_2024.parsed_end
+        ):
+            return underreporting_2023_2024
         else:
             return None
 
     incidences = []
-    for state in ["California", "Ohio"]:
+    for state in ["Missouri"]:
         for parsed_start in weekly_data[state]:
             positive_a, positive_b = weekly_data[state][parsed_start]
             parsed_end = parsed_start + datetime.timedelta(weeks=1)
