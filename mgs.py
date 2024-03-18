@@ -106,9 +106,11 @@ def make_count_tree(
     taxtree: Tree[TaxID], sample_counts: SampleCounts
 ) -> Tree[tuple[TaxID, Counter[Sample]]]:
     return taxtree.map(
-        lambda taxid: (taxid, Counter(sample_counts[taxid]))
-        if taxid in sample_counts
-        else (taxid, Counter()),
+        lambda taxid: (
+            (taxid, Counter(sample_counts[taxid]))
+            if taxid in sample_counts
+            else (taxid, Counter())
+        ),
     )
 
 

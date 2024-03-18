@@ -86,9 +86,9 @@ def start():
                 matching_reads = mgs_data.viral_reads(bioproject, taxids)
                 viral_samples = mgs_data.sample_attributes(
                     bioproject,
-                    enrichment=None
-                    if study == "brinch"
-                    else mgs.Enrichment.VIRAL,
+                    enrichment=(
+                        None if study == "brinch" else mgs.Enrichment.VIRAL
+                    ),
                 )
                 n_samples += len(viral_samples)
                 counts = [

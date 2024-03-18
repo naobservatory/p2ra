@@ -57,7 +57,7 @@ us_2007_seroprevalence = Prevalence(
     date="2007",
     # Study is from 2009, sera are from 2007
     active=Active.LATENT,
-    source="https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1000363#:~:text=We%20found%20the%20seroprevalence%20(%2B/%E2%88%92%201%25)%20in%20healthy%20adult%20blood%20donors%20(1501)%20was%20SV40%20(9%25)%2C%20BKV%20(82%25)%2C%20JCV%20(39%25)%2C%20LPV"
+    source="https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1000363#:~:text=We%20found%20the%20seroprevalence%20(%2B/%E2%88%92%201%25)%20in%20healthy%20adult%20blood%20donors%20(1501)%20was%20SV40%20(9%25)%2C%20BKV%20(82%25)%2C%20JCV%20(39%25)%2C%20LPV",
     # A tabular breakdown can be found here: "https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1000363#:~:text=original%20image-,Table%201.,-Seroprevalence%20of%20polyomaviruses"
 )
 

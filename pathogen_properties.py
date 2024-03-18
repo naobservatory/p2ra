@@ -301,8 +301,7 @@ class Scalar(Variable):
 
 class Predictor(abc.ABC, Variable):
     @abc.abstractmethod
-    def get_data(self) -> float:
-        ...
+    def get_data(self) -> float: ...
 
 
 @dataclass(kw_only=True, eq=True, frozen=True)
